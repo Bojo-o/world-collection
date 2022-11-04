@@ -32,6 +32,9 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
         
+    from .database import db
+    db.init_app(app)
+
     #register api blueprint to app
     from .API import api
     app.register_blueprint(api.bp)
