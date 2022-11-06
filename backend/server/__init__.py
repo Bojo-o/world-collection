@@ -30,10 +30,18 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/hello')
     def hello():
-        return 'Hello, World!'
+        return ' World!'
+
         
     from .database import db
     db.init_app(app)
+
+    @app.route('/waypoints')
+    def get_all_waypoints():      
+        result = db.get_all_from_db()
+        return result
+        #print(result)
+        #return result
 
     #register api blueprint to app
     from .API import api

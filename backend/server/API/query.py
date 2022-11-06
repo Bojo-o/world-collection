@@ -1,18 +1,12 @@
 # https://rdflib.github.io/sparqlwrapper/
 
 import sys
+import json
+import collections
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 endpoint_url = "https://query.wikidata.org/sparql"
 
-query = """#Cats
-SELECT ?item ?itemLabel ?geo
-WHERE 
-{
-  ?item wdt:P31 wd:Q6256.
-  ?item wdt:P625 ?geo.
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-}"""
 
 
 def get_results(endpoint_url, query):
@@ -23,8 +17,28 @@ def get_results(endpoint_url, query):
     sparql.setReturnFormat(JSON)
     return sparql.query().convert()
 
+def get_query_results(endpoint_url, query):
+    user_agent = "WorldCollection/%s.%s" % (sys.version_info[0], sys.version_info[1])
+    # TODO adjust user agent; see https://w.wiki/CX6
+    sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    result = sparql.query().convert()
 
-results = get_results(endpoint_url, query)
+    data = result['results']['bindings']
+    formattedData = []
+    for item in data:
+      d = collections.OrderedDict()
+      d["QNumber"] = item['item']['value'].removeprefix("http://www.wikidata.org/entity/")
+      d["name"] = item["itemLabel"]["value"]
+      coords = item['geo']["value"].removeprefix("Point(").removesuffix(")").split(' ')
+      d["lati"] = coords[0]
+      d["long"] = coords[1]
+      formattedData.append(d)
+            
+      
+    return json.dumps(formattedData)
 
 
-print(results)
+
+

@@ -3,6 +3,9 @@ import sqlite3
 import click
 from flask import current_app, g
 
+import json
+import collections
+
 
 def get_db():
     if 'db' not in g:
@@ -36,3 +39,43 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(insert_to_db)
+
+@click.command('insert')
+@click.argument("name")
+@click.argument("lati")
+@click.argument("long")
+def insert_to_db(name,lati,long):
+    db = get_db()
+    try:
+        db.execute(
+            "INSERT INTO waypoints (name, latitude, longitude) VALUES (?, ?, ?)",
+            (name,lati,long)
+        )
+        db.commit()
+    except db.IntegrityError:
+        click.echo(f'error, somehthing went wrong')
+    else:      
+        click.echo(f'Insert {name} with: {long}, {lati}')
+
+def get_all_from_db():
+    db = get_db()
+    try:
+        waypoints = db.execute(
+            "SELECT * FROM waypoints",
+        ).fetchall()
+
+        list_of_waypoints = []
+        for waypoint in waypoints:
+            d = collections.OrderedDict()
+            d["id"] = waypoint["id"]
+            d["name"] = waypoint["name"]
+            d["lati"] = waypoint["latitude"]
+            d["long"] = waypoint["longitude"]
+            list_of_waypoints.append(d)
+            
+        return json.dumps(list_of_waypoints)
+        #return waypoints
+    except db.IntegrityError:
+        print(f'error, somehthing went wrong')     
+        

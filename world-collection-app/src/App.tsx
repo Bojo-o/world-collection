@@ -3,53 +3,87 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 
-function App() {
-    const [data, setdata] = useState({
-      name: "",
-      age: 0,
-      date: "",
-      programming: "",
-     });
+class App extends React.Component {
+  state = {
+    isLoading: true,
+    waypoints: [],
+    error: null
+  };
 
-     useEffect(() => {
-      // Using fetch to fetch the api from 
-      // flask server it will be redirected to proxy
-      fetch("/data").then((res) =>
-          res.json().then((data) => {
-              // Setting a data from api
-              setdata({
-                  name: data.Name,
-                  age: data.Age,
-                  date: data.Date,
-                  programming: data.programming,
-              });
-          })
-      );
-  }, []);
+  getFetchWaypoints() {
+    this.setState({
+      loading: true
+    }, () => {
+      fetch("/waypoints").then((response) => response.json()).then((jsonData) => {       
+        this.setState({
+          waypoints: jsonData
+        })
+      })
+    });
+  }
+  componentDidMount() {
+    this.getFetchWaypoints();
+  }
+
+  render(): React.ReactNode {
+    const {
+      waypoints,
+      error
+    } = this.state;
 
     return (
-      /*
-      <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />         
-      </MapContainer>
-      */
-      <div className="App">
-      <header className="App-header">
-          <h1>React and flask</h1>
-          {/* Calling a data from setdata for showing */}
-          <p>{data.name}</p>
-          <p>{data.age}</p>
-          <p>{data.date}</p>
-          <p>{data.programming}</p>
+      <React.Fragment>
+        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {
+            waypoints.map(waypoint => {
+              const {
+                id,
+                name,
+                lati,
+                long
+              } = waypoint;
+              return (
 
-      </header>
-  </div>
+                <Marker
+                  key={id}
+                  position={[long, lati]}>
+                </Marker>
+
+              )
+            })
+          }
+          <Marker position={[50, 50]}>
+            <Popup>
+              'adad'
+            </Popup>
+          </Marker>
+          <Marker position={[40, 50]}>
+            <Popup>
+              'adad'
+            </Popup>
+          </Marker>
+        </MapContainer>
+      </React.Fragment>
     );
+  }
+
+
+  //fetch("/waypoints").then((response) => response.json()).then((jsonData) => {console.log(jsonData)})
+
+  /*
+  fetch("/waypoints").then(res => res.json()).then(result =>  this.setState({
+    loading: false,
+    waypoints: result
+  })).catch(console.log);
+  console.log(this.state.waypoint)
+  */
+
 }
-  
+
 
 
 export default App;
