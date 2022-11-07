@@ -58,6 +58,20 @@ def insert_to_db(name,lati,long):
     else:      
         click.echo(f'Insert {name} with: {long}, {lati}')
 
+def insert_to_database(name,lati,long):
+    db = get_db()
+    try:
+        db.execute(
+            "INSERT INTO waypoints (name, latitude, longitude) VALUES (?, ?, ?)",
+            (name,lati,long)
+        )
+        db.commit()
+    except db.IntegrityError:
+        print(f'error, somehthing went wrong')
+    else:      
+        print(f'Insert {name} with: {long}, {lati}')
+
+
 def get_all_from_db():
     db = get_db()
     try:
