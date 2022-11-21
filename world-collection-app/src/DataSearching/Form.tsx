@@ -1,8 +1,13 @@
 import React from "react";
+import CollectiblesClassSearcher from "./ColletiblesClassSearch";
 
 function Form() {
+
     return(
-        <h1>Form</h1>
+        <React.Fragment>
+            <h1>World collectibles searcher</h1>
+            <CollectiblesClassSearcher />
+        </React.Fragment>
     )
 }
 
