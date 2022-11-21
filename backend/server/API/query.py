@@ -13,18 +13,19 @@ def get_query_results(endpoint_url, query):
     sparql.setReturnFormat(JSON)
     result = sparql.query().convert()
 
-    data = result['results']['bindings']
-    formattedData = []
-    for item in data:
-      d = collections.OrderedDict()
-      d["QNumber"] = item['item']['value'].removeprefix("http://www.wikidata.org/entity/")
-      d["name"] = item["itemLabel"]["value"]
-      coords = item['geo']["value"].removeprefix("Point(").removesuffix(")").split(' ')
-      d["lati"] = coords[0]
-      d["long"] = coords[1]
-      formattedData.append(d)
+    #data = result['results']['bindings']
+    #formattedData = []
+    #for item in data:
+    #  d = collections.OrderedDict()
+    #  d["QNumber"] = item['item']['value'].removeprefix("http://www.wikidata.org/entity/")
+    #  d["name"] = item["itemLabel"]["value"]
+    #  coords = item['geo']["value"].removeprefix("Point(").removesuffix(")").split(' ')
+    #  d["lati"] = coords[0]
+    #  d["long"] = coords[1]
+    #  formattedData.append(d)
               
-    return json.dumps(formattedData)
+    #return json.dumps(formattedData)
+    return result
 
 
 

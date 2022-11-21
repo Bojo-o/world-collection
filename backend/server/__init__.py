@@ -36,6 +36,8 @@ def create_app(test_config=None):
     from .database import db
     db.init_app(app)
 
+    
+
     @app.route('/waypoints')
     def get_all_waypoints():      
         result = db.get_all_from_db()
