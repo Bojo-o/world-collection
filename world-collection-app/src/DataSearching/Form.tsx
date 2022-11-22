@@ -5,8 +5,10 @@ function Form() {
 
     return(
         <React.Fragment>
-            <h1>World collectibles searcher</h1>
-            <CollectiblesClassSearcher />
+            <div className="container mt -1 mb -3">
+                <h1>World collectibles searcher</h1>
+                <CollectiblesClassSearcher />
+            </div>           
         </React.Fragment>
     )
 }
