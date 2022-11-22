@@ -1,3 +1,4 @@
+import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
 
 const url = "API/search/classes";
 
@@ -16,11 +17,20 @@ function checkStatus(response: any){
         throw new Error(errorMessage);
     }
 }
+function parseJson(response : Response){
+    return response.json();
+}
+
+function convertToCollectiblesBaseDataModels(data: any[]) : CollectiblesBaseData[] {
+    let collectibles : CollectiblesBaseData[] = data.map((d : any) => new CollectiblesBaseData(d));
+    return collectibles;
+}
 const SearchAPI = {
     get(searchWord : string){
-        return fetch(`${url}`)
+        return fetch(`${url}?word=${searchWord}`)
         .then(checkStatus)
-        .then((response : any) => response.json())
+        .then(parseJson)
+        .then(convertToCollectiblesBaseDataModels)
         .catch((e : TypeError) => {
             console.log('log client error ' + e);
             throw new Error(

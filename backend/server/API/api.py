@@ -18,13 +18,18 @@ bp = Blueprint('API', __name__, url_prefix='/API')
 endpoint_url = "https://query.wikidata.org/sparql"
 
 # search satisfying class
-@bp.route('/search/classes')
+@bp.route('/search/classes', methods=['GET'])
 def search_class():
-    builder = SearchQueryBuilder.SearchQueryBuilder("cave")
-    builder.set_parent_class("wd:Q2221906")
-    queryText = builder.build()
-    result = query.get_query_results(endpoint_url,queryText)
-    return Formater.formatToJson(result)
+    word = request.args.get("word")
+    if word is not None:
+
+        builder = SearchQueryBuilder.SearchQueryBuilder(word)
+        builder.set_parent_class("wd:Q2221906")
+        queryText = builder.build()
+        result = query.get_query_results(endpoint_url,queryText)
+        return Formater.formatToJson(result)
+    
+    return "Invalid request"
 
 
 @bp.route('/wikidata/query')
