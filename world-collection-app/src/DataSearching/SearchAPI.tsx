@@ -1,6 +1,7 @@
 import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
 
-const url = "API/search/classes";
+const urlCollectiblesType = "API/search/classes";
+const urlAdministrativeArea = "API/search/administrative_area";
 
 function checkStatus(response: any){
     if (response.ok){
@@ -25,8 +26,14 @@ function convertToCollectiblesBaseDataModels(data: any[]) : CollectiblesBaseData
     let collectibles : CollectiblesBaseData[] = data.map((d : any) => new CollectiblesBaseData(d));
     return collectibles;
 }
-const SearchAPI = {
-    get(searchWord : string){
+export class SearchAPI {
+    static getTypeOfCollectibles(searchWord : string){
+        return this.fetchData(searchWord,urlCollectiblesType);
+    }
+    static getAdministrativeArea(searchWord : string){
+        return this.fetchData(searchWord,urlAdministrativeArea);
+    }
+    private static fetchData(searchWord : string,url : string){
         return fetch(`${url}?word=${searchWord}`)
         .then(checkStatus)
         .then(parseJson)
@@ -40,4 +47,3 @@ const SearchAPI = {
     }
 }
 
-export {SearchAPI}

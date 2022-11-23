@@ -13,6 +13,8 @@ function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSea
     const [display, setDisplay] = React.useState(false);
     const [searchWord, setSearchWord] = React.useState("");
 
+    const searchTypeRef = React.useRef<HTMLUListElement>(null);
+
     const handleChange = (event : FormEvent<HTMLInputElement>) => {
         let input = event.currentTarget.value;
         setOptions([])
@@ -23,13 +25,26 @@ function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSea
     const handleClick = (event : FormEvent<HTMLInputElement>) => {
         setDisplay(true);
     }
+    
+    React.useEffect(() => {
+        const closeSearchingBar = (event : any) => {
+            if(searchTypeRef.current && !searchTypeRef.current.contains(event.target)){
+                setDisplay(false);
+            }
+        };
+
+        document.body.addEventListener('mousedown', closeSearchingBar);
+
+        return () => document.body.removeEventListener('mousedown', closeSearchingBar);
+    }, []);
 
     React.useEffect(() => {
         if (searchWord.length < 3){
             return;
         }
         setLoading(true)
-        SearchAPI.get(searchWord).then((data) => {
+        
+        SearchAPI.getAdministrativeArea(searchWord).then((data) => {
             setLoading(false)
             setOptions(data);
         }).catch()
@@ -39,7 +54,8 @@ function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSea
         <React.Fragment>
                 <div className="search-bar-dropdown">
                     <input type="text" className="form-control" placeholder="Search type of collectibles" onChange={handleChange} onClick={handleClick} />
-                    <ul id="searchedResults" className="list-group">
+
+                    <ul ref={searchTypeRef} id="searchedResults" className="list-group">
                         {loading && ( <button type="button" className="list-group-item list-group-item-action">Loading...</button>)}
                         {!loading && display && options.map((option,index) => {
                             return (
@@ -55,7 +71,8 @@ function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSea
                                 </button>
                             );
                         })}                        
-                    </ul>      
+                    </ul>  
+  
                 </div>
                 
         </React.Fragment>
