@@ -4,10 +4,10 @@ import RenderSearchInfo from "./RenderSearchInfo";
 import { SearchAPI } from "./SearchAPI";
 
 
-interface CollectiblesClassSearcherProps{
-    inputChange : () => void;
+interface CollectiblesClassSearcherProps{   
+    setCollectiblesClass : (data : CollectiblesBaseData) => void;
 }
-function CollectiblesClassSearcher() {
+function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSearcherProps) {
     const [options, setOptions] = React.useState<CollectiblesBaseData[]>([]);
     const [loading, setLoading] = React.useState(false);
     const [display, setDisplay] = React.useState(false);
@@ -17,9 +17,7 @@ function CollectiblesClassSearcher() {
         let input = event.currentTarget.value;
         setOptions([])
         
-        if (input.length > 2){          
-            setSearchWord(input)
-        }              
+        setSearchWord(input)         
     }
 
     const handleClick = (event : FormEvent<HTMLInputElement>) => {
@@ -27,6 +25,9 @@ function CollectiblesClassSearcher() {
     }
 
     React.useEffect(() => {
+        if (searchWord.length < 3){
+            return;
+        }
         setLoading(true)
         SearchAPI.get(searchWord).then((data) => {
             setLoading(false)
@@ -45,7 +46,11 @@ function CollectiblesClassSearcher() {
                                 <button    
                                 type="button"                  
                                 key={index}
-                                className="list-group-item list-group-item-action">
+                                className="list-group-item list-group-item-action"
+                                onClick={() => {
+                                    setCollectiblesClass(option);
+                                    setDisplay(false)
+                                }}>
                                 <RenderSearchInfo colletible={option}/>
                                 </button>
                             );

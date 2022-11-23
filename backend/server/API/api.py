@@ -24,13 +24,28 @@ def search_class():
     if word is not None:
 
         builder = SearchQueryBuilder.SearchQueryBuilder(word)
-        builder.set_parent_class("wd:Q2221906")
+        builder.set_parent_class("wd:Q2221906") # geographic location
         queryText = builder.build()
+        #print(queryText)
         result = query.get_query_results(endpoint_url,queryText)
         return Formater.formatToJson(result)
     
     return "Invalid request"
 
+@bp.route('/search/administrative_area', methods=['GET'])
+def search_instance_administrative_area():
+    word = request.args.get("word")
+    if word is not None:
+
+        builder = SearchQueryBuilder.SearchQueryBuilder(word)
+        builder.set_parent_class("wd:Q56061") # administrative territorial entity 
+        builder.set_minus_parent_class("wd:Q15642566") # non-political administrative territorial entity
+        builder.set_searing_for_instances()
+        queryText = builder.build()
+        print(queryText)
+        result = query.get_query_results(endpoint_url,queryText)
+        return Formater.formatToJson(result)
+    return "Invalid request"
 
 @bp.route('/wikidata/query')
 def get_results_from_wikidata():    
