@@ -3,11 +3,16 @@ import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
 import RenderSearchInfo from "./RenderSearchInfo";
 import { SearchAPI } from "./SearchAPI";
 
-
+export enum TypeOfSearch {
+    collectiblesCLass,
+    administrativeArea,
+}
 interface CollectiblesClassSearcherProps{   
     setCollectiblesClass : (data : CollectiblesBaseData) => void;
+    placeHolder : string;
+    typeOfSearch : TypeOfSearch;
 }
-function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSearcherProps) {
+function CollectiblesClassSearcher({setCollectiblesClass,placeHolder, typeOfSearch} : CollectiblesClassSearcherProps) {
     const [options, setOptions] = React.useState<CollectiblesBaseData[]>([]);
     const [loading, setLoading] = React.useState(false);
     const [display, setDisplay] = React.useState(false);
@@ -43,18 +48,25 @@ function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSea
             return;
         }
         setLoading(true)
+        if (typeOfSearch === TypeOfSearch.collectiblesCLass){
+            SearchAPI.getTypeOfCollectibles(searchWord).then((data) => { 
+                setLoading(false)
+                setOptions(data);
+            }).catch()
+        }
+        if (typeOfSearch === TypeOfSearch.administrativeArea){
+            SearchAPI.getAdministrativeArea(searchWord).then((data) => { 
+                setLoading(false)
+                setOptions(data);
+            }).catch()
+        }
         
-        SearchAPI.getAdministrativeArea(searchWord).then((data) => {
-            setLoading(false)
-            setOptions(data);
-        }).catch()
     }, [searchWord]);
 
     return (
         <React.Fragment>
                 <div className="search-bar-dropdown">
-                    <input type="text" className="form-control" placeholder="Search type of collectibles" onChange={handleChange} onClick={handleClick} />
-
+                    <input type="text" className="form-control" placeholder={placeHolder} onChange={handleChange} onClick={handleClick} />
                     <ul ref={searchTypeRef} id="searchedResults" className="list-group">
                         {loading && ( <button type="button" className="list-group-item list-group-item-action">Loading...</button>)}
                         {!loading && display && options.map((option,index) => {
@@ -71,8 +83,7 @@ function CollectiblesClassSearcher({setCollectiblesClass} : CollectiblesClassSea
                                 </button>
                             );
                         })}                        
-                    </ul>  
-  
+                    </ul>   
                 </div>
                 
         </React.Fragment>

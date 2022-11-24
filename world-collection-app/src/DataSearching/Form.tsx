@@ -1,8 +1,9 @@
 import React from "react";
 import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
 import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
-import CollectiblesClassSearcher from "./ColletiblesClassSearch";
+import SearcherBar, { TypeOfSearch } from "./ColletiblesClassSearch";
 import RenderCollectiblesQuery from "./RenderCollectiblesQuery";
+import { SearchAPI } from "./SearchAPI";
 
 function Form() {
 
@@ -15,11 +16,21 @@ function Form() {
             return newQuery;
         })
     }
+
+    const setRestrictionAdministrativeArea = (data : CollectiblesBaseData) => {
+        setQuery((q) => {
+            let newQuery = new CollectiblesQuery({...q});
+            newQuery.setRestrictionAdministrativeArea(data.name,data.qNumber);
+            return newQuery;
+        })
+    };
     return(
         <React.Fragment>
             <div className="container mt -1 mb -3">
                 <h1>World collectibles searcher</h1>
-                <CollectiblesClassSearcher setCollectiblesClass={setCollectiblesClass}/>
+                <SearcherBar setCollectiblesClass={setCollectiblesClass} placeHolder={"Search type of collectibles"} typeOfSearch={TypeOfSearch.collectiblesCLass} />
+                <br/>
+                <SearcherBar setCollectiblesClass={setRestrictionAdministrativeArea} placeHolder={"Search for administrative area"} typeOfSearch={TypeOfSearch.administrativeArea} />
                 <RenderCollectiblesQuery queryObject={query} />
             </div>           
         </React.Fragment>
