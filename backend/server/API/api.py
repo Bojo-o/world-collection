@@ -1,10 +1,12 @@
 import functools
 
 from . import query
-from .Query.wikiDataQuery import WikiDataQuery
+
 
 from ..database.db import insert_to_database
 from .SearchQuery import SearchQueryBuilder
+
+from .Query.wikiDataQuery import WikiDataQueryBuilder
 
 from . import Formater
 
@@ -26,7 +28,7 @@ def search_class():
         builder = SearchQueryBuilder.SearchQueryBuilder(word)
         builder.set_parent_class("wd:Q2221906") # geographic location
         queryText = builder.build()
-        #print(queryText)
+        print(queryText)
         result = query.get_query_results(endpoint_url,queryText)
         return Formater.formatToJson(result)
     
@@ -42,26 +44,43 @@ def search_instance_administrative_area():
         builder.set_minus_parent_class("wd:Q15642566") # non-political administrative territorial entity
         builder.set_searing_for_instances()
         queryText = builder.build()
-        print(queryText)
+        #print(queryText)
         result = query.get_query_results(endpoint_url,queryText)
         return Formater.formatToJson(result)
     return "Invalid request"
 
 @bp.route('/wikidata/query')
 def get_results_from_wikidata():    
+    classes = request.args.get("classes")
+    minus_classes = request.args.get("minus_classes")
+    locations = request.args.get("locations")
+    minus_locations = request.args.get("minus_locations")
 
-    endpoint_url = "https://query.wikidata.org/sparql"
+    if classes is not None and locations is not None:
+        classes = classes.split(",")
+        locations = locations.split(",")
 
-    write_to_db = request.args.get("database")
-    
+        builder = WikiDataQueryBuilder(classes.pop(0))
 
-    query_builder = WikiDataQuery("countries")
-    queryText = query_builder.build()
-    if queryText is None:
-        return "Provided Query is invalid"
-    result = query.get_query_results(endpoint_url,queryText)
+        if len(classes) != 0:
+            for item in classes:
+                builder.add_child_of_class(item)
 
-    if write_to_db is not None:
-        if write_to_db == "true":
-            print(result)
-    return result
+        if minus_classes is not None:
+            minus_classes = minus_classes.split(",")
+            for item in minus_classes:
+                builder.add_minus_child_of_class(item)
+        for item in locations:
+            builder.add_location(item)
+
+        if minus_locations is not None:
+            minus_locations = minus_locations.split(",")
+            for item in minus_locations:
+                builder.add_minus_location(item)
+        
+        queryText = builder.build()
+        print(queryText)
+        #result = query.get_query_results(endpoint_url,queryText)
+
+
+    return "Invalid request"

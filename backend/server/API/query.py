@@ -22,8 +22,7 @@ def get_query_results(endpoint_url, query):
     #  coords = item['geo']["value"].removeprefix("Point(").removesuffix(")").split(' ')
     #  d["lati"] = coords[0]
     #  d["long"] = coords[1]
-    #  formattedData.append(d)
-              
+    #  formattedData.append(d)             
     #return json.dumps(formattedData)
     return result
 

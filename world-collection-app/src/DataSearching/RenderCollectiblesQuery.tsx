@@ -5,14 +5,14 @@ interface RenderCollectiblesQueryProps{
     queryObject : CollectiblesQuery;
 }
 function RenderCollectiblesQuery({queryObject} :RenderCollectiblesQueryProps) {
-    let locationText : string = queryObject.restrictionAdministrativeAreaQNumber !== null ? "in the administrative teritorial of "
-    + queryObject.restrictionAdministrativeAreaLabel + " (" + queryObject.restrictionAdministrativeAreaQNumber +" )" : " anywhere in the world.";
+    let locationText : string = queryObject.restrictionAdministrativeAreaQNumber !== null ? " in the administrative teritorial of "
+    + queryObject.restrictionAdministrativeAreaLabel + " (" + queryObject.restrictionAdministrativeAreaQNumber +")" : " anywhere in the world.";
     return (
         <React.Fragment>
             {queryObject.typeOfCollectiblesQNumber !== null && 
                 (<p>
-                    Search for collectibles, which are type of {queryObject.typeOfCollectiblesLabel} ({queryObject.typeOfCollectiblesQNumber}) located 
-                    {locationText}
+                    Search for collectibles, which are type of <strong>{queryObject.typeOfCollectiblesLabel} ({queryObject.typeOfCollectiblesQNumber})</strong> located 
+                    <strong>{locationText}</strong>
                 </p>)
             }
         </React.Fragment>

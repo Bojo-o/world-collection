@@ -28,9 +28,10 @@ function Form() {
         <React.Fragment>
             <div className="container mt -1 mb -3">
                 <h1>World collectibles searcher</h1>
-                <SearcherBar setCollectiblesClass={setCollectiblesClass} placeHolder={"Search type of collectibles"} typeOfSearch={TypeOfSearch.collectiblesCLass} />
+                <SearcherBar setDataToQuery={setCollectiblesClass} placeHolder={"Search type of collectibles"} typeOfSearch={TypeOfSearch.collectiblesCLass} />
                 <br/>
-                <SearcherBar setCollectiblesClass={setRestrictionAdministrativeArea} placeHolder={"Search for administrative area"} typeOfSearch={TypeOfSearch.administrativeArea} />
+                <SearcherBar setDataToQuery={setRestrictionAdministrativeArea} placeHolder={"Search for administrative area"} typeOfSearch={TypeOfSearch.administrativeArea} />
+                <br/>
                 <RenderCollectiblesQuery queryObject={query} />
             </div>           
         </React.Fragment>

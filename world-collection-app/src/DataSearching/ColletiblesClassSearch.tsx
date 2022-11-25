@@ -8,11 +8,11 @@ export enum TypeOfSearch {
     administrativeArea,
 }
 interface CollectiblesClassSearcherProps{   
-    setCollectiblesClass : (data : CollectiblesBaseData) => void;
+    setDataToQuery : (data : CollectiblesBaseData) => void;
     placeHolder : string;
     typeOfSearch : TypeOfSearch;
 }
-function CollectiblesClassSearcher({setCollectiblesClass,placeHolder, typeOfSearch} : CollectiblesClassSearcherProps) {
+function CollectiblesClassSearcher({setDataToQuery: setCollectiblesClass,placeHolder, typeOfSearch} : CollectiblesClassSearcherProps) {
     const [options, setOptions] = React.useState<CollectiblesBaseData[]>([]);
     const [loading, setLoading] = React.useState(false);
     const [display, setDisplay] = React.useState(false);
