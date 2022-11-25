@@ -1,7 +1,11 @@
 import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
+import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
+import { ResultData } from "../Data/ResultsData";
 
 const urlCollectiblesType = "API/search/classes";
 const urlAdministrativeArea = "API/search/administrative_area";
+
+const urlQuery = "API/wikidata/query";
 
 function checkStatus(response: any){
     if (response.ok){
@@ -26,7 +30,26 @@ function convertToCollectiblesBaseDataModels(data: any[]) : CollectiblesBaseData
     let collectibles : CollectiblesBaseData[] = data.map((d : any) => new CollectiblesBaseData(d));
     return collectibles;
 }
+
+function convertToResultDataModels(data : any[]) : ResultData[] {
+    let resultData : ResultData[] = data.map((d : any) => new ResultData(d));
+    return resultData;
+}
 export class SearchAPI {
+    static getQueryResult(data : CollectiblesQuery){
+        let postFixUrl = `classes=${data.typeOfCollectiblesQNumber}&locations=${data.restrictionAdministrativeAreaQNumber}`
+        return fetch(`${urlQuery}?${postFixUrl}`)
+        .then(checkStatus)
+        .then(parseJson)
+        .then(convertToResultDataModels)
+        .catch((e : TypeError) => {
+            console.log('log client error ' + e);
+            throw new Error(
+            'There was an error retrieving the data. Please try again.'
+            );
+        })
+    }
+
     static getTypeOfCollectibles(searchWord : string){
         return this.fetchData(searchWord,urlCollectiblesType);
     }
@@ -42,7 +65,7 @@ export class SearchAPI {
             console.log('log client error ' + e);
             throw new Error(
             'There was an error retrieving the data. Please try again.'
-        );
+            );
         })
     }
 }

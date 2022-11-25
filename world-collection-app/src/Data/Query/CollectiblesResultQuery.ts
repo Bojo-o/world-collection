@@ -23,4 +23,11 @@ export class CollectiblesQuery{
         this.restrictionAdministrativeAreaLabel = label;
         this.restrictionAdministrativeAreaQNumber = qNumber;
     }
+
+    isReady() {
+        if (this.typeOfCollectiblesQNumber !== null && this.restrictionAdministrativeAreaQNumber !== null){
+            return true;
+        }
+        return false;
+    }
 }

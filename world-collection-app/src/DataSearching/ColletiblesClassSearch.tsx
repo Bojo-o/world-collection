@@ -77,7 +77,8 @@ function CollectiblesClassSearcher({setDataToQuery: setCollectiblesClass,placeHo
                                 className="list-group-item list-group-item-action"
                                 onClick={() => {
                                     setCollectiblesClass(option);
-                                    setDisplay(false)
+                                    //setSearchWord(option.name)
+                                    setDisplay(false)                                   
                                 }}>
                                 <RenderSearchInfo colletible={option}/>
                                 </button>

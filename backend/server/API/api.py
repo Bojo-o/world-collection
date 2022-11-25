@@ -79,8 +79,11 @@ def get_results_from_wikidata():
                 builder.add_minus_location(item)
         
         queryText = builder.build()
+        try:
+            result = query.get_query_results(endpoint_url,queryText)
+            return Formater.formatToJson(result)
+        except:
+            return "Query failed"
         
-        result = query.get_query_results(endpoint_url,queryText)
-        return Formater.formatToJson(result)
 
     return "Invalid request"
