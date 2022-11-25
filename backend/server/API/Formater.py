@@ -17,5 +17,11 @@ def formatToJson(input):
                     d["name"] = item["itemLabel"]["value"]
                 case "description":
                     d["description"] = item["description"]["value"]
+                case "coord":
+                    coords = item['coord']["value"].removeprefix("Point(").removesuffix(")").split(' ')
+                    d["lati"] = coords[0]
+                    d["long"] = coords[1]
+                case "instancesResult":
+                    d["instanceOf"] = item["instancesResult"]["value"]
         formatted_data.append(d)
     return json.dumps(formatted_data)
