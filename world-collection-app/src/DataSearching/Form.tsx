@@ -16,7 +16,7 @@ function Form() {
     const setCollectiblesClass = (data : CollectiblesBaseData) => {
         setQuery((q) => {
             let newQuery = new CollectiblesQuery({...q});
-            newQuery.setType(data.name,data.qNumber);
+            newQuery.setType(data.name,data.QNumber);
             return newQuery;
         })
     }
@@ -24,7 +24,7 @@ function Form() {
     const setRestrictionAdministrativeArea = (data : CollectiblesBaseData) => {
         setQuery((q) => {
             let newQuery = new CollectiblesQuery({...q});
-            newQuery.setRestrictionAdministrativeArea(data.name,data.qNumber);
+            newQuery.setRestrictionAdministrativeArea(data.name,data.QNumber);
             return newQuery;
         })
     };
@@ -54,7 +54,7 @@ function Form() {
                     <button type="button" className="btn btn-success" onClick={invokeQueryToGetResultsData}>Search</button>
                 )}
                 {loading && (<p>Searching data ...</p>)}
-                {!loading && resultData !== null && <ResultsTable results={resultData}/>}               
+                {!loading && resultData !== null && <ResultsTable results={resultData} />}               
             </div>           
         </React.Fragment>
     )
