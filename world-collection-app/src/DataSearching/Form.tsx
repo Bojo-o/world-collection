@@ -2,6 +2,7 @@ import React from "react";
 import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
 import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
 import { ResultData } from "../Data/ResultsData";
+import ViewMap from "../Map/ViewMap";
 import SearcherBar, { TypeOfSearch } from "./ColletiblesClassSearch";
 import RenderCollectiblesQuery from "./RenderCollectiblesQuery";
 import ResultsTable from "./ResultsTable";
@@ -40,6 +41,12 @@ function Form() {
         })
     }
 
+    const removeItem = (qNumber : string) => {      
+        setResultData((prevData) =>    
+            prevData === null ? null : prevData.filter((item) => item.QNumber != qNumber)
+        );
+    }
+
     return(
         <React.Fragment>
             <div className="container mt -1 mb -3">
@@ -53,8 +60,10 @@ function Form() {
                 {query.isReady() && (
                     <button type="button" className="btn btn-success" onClick={invokeQueryToGetResultsData}>Search</button>
                 )}
-                {loading && (<p>Searching data ...</p>)}
-                {!loading && resultData !== null && <ResultsTable results={resultData} />}               
+                <h3>Results</h3>
+                {loading && (<p>Searching data ...</p>)}  
+                {!loading && resultData !== null && <ResultsTable results={resultData}/>}                 
+                {!loading && resultData !== null && <ViewMap waypoints={resultData} remove={removeItem}/>}               
             </div>           
         </React.Fragment>
     )
