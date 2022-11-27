@@ -1,5 +1,10 @@
 import React from "react";
 import { ResultData } from "../Data/ResultsData";
+import ResultsTableFooter from "./ResultsTableFooter";
+
+function countPages(results: number,rowsPerPage : number) : number {
+    return Math.ceil(results / rowsPerPage);
+}
 
 export interface ResultsTableProps{
     results : ResultData[];
@@ -9,10 +14,39 @@ function ResultsTable ({results} : ResultsTableProps) {
     const [data,setData] = React.useState<ResultData[]>(results);
     const [edited,setEdited] = React.useState<ResultData>(new ResultData);
 
-    React.useEffect(() => {
-        
-    })
+    const [rowsPerPage,setRowsPerPage] = React.useState(25);
+    const [pages,setPages] = React.useState(countPages(results.length,rowsPerPage));
+    const [resultsCount, setResultsCount] = React.useState(results.length);
+    const [currPage,setCurrPage] = React.useState(1);
 
+    React.useEffect(() => {
+        let newPages = countPages(data.length,rowsPerPage);
+        setResultsCount(data.length);
+        setPages(newPages)
+        if (currPage > newPages){
+            setCurrPage((prev) => prev === 1 ? 0 : newPages)
+        }
+    },[data,rowsPerPage])
+
+    const nextPage = () => {
+        if (currPage !== pages){
+            setCurrPage((prev)=> prev + 1);
+        }
+    }
+    const prevPage = () => {
+        if (currPage !== 1){
+            setCurrPage((prev)=> prev - 1);
+        }
+    }
+    const lastPage = () => {
+        setCurrPage(pages);
+    }
+    const firstPage = () => {
+        setCurrPage(1);
+    }
+    const setRecordsPerPage = (value : number) => {
+        setRowsPerPage(value);
+    }
 
     const removeItem = (qNumber : string) =>{      
         setData((prevData) => {           
@@ -59,11 +93,12 @@ function ResultsTable ({results} : ResultsTableProps) {
 
             <tbody>
                 {
+                    
 
-                    data.slice(0,1000).map((row,index) => {
+                    data.slice(currPage * rowsPerPage - rowsPerPage,currPage * rowsPerPage).map((row,index) => {
                         return (
                             <tr key={index}>
-                                <th scope="row">{index+1}</th>
+                                <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 
                                 {edited.QNumber === row.QNumber && 
                                     (
@@ -91,13 +126,7 @@ function ResultsTable ({results} : ResultsTableProps) {
                 }
             </tbody>
         </table>
-
-        <select>
-            <option selected value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-        </select>
+        <ResultsTableFooter nextPage={nextPage} prevPage={prevPage} firstPage={firstPage} lastPage={lastPage} setRowsPerPage={setRecordsPerPage} pages={pages} currPage={currPage}/>     
         </React.Fragment>
     );
 }
