@@ -5,6 +5,7 @@ import { ResultData } from "../Data/ResultsData";
 import ViewMap from "../Map/ViewMap";
 import SearcherBar, { TypeOfSearch } from "./ColletiblesClassSearch";
 import RenderCollectiblesQuery from "./RenderCollectiblesQuery";
+import Result from "./Results";
 import ResultsTable from "./ResultsTable";
 import { SearchAPI } from "./SearchAPI";
 
@@ -40,16 +41,13 @@ function Form() {
             setResultData(data);
         })
     }
-
-    const removeItem = (qNumber : string) => {      
-        setResultData((prevData) =>    
-            prevData === null ? null : prevData.filter((item) => item.QNumber != qNumber)
-        );
+    const a = () =>{
+        console.log("AAA")
     }
 
     return(
         <React.Fragment>
-            <div className="container mt -1 mb -3">
+            <div className="container mt -1 mb -3">                               
                 <h1>World collectibles searcher</h1>
                 <SearcherBar setDataToQuery={setCollectiblesClass} placeHolder={"Search type of collectibles"} typeOfSearch={TypeOfSearch.collectiblesCLass} />
                 <br/>
@@ -60,10 +58,9 @@ function Form() {
                 {query.isReady() && (
                     <button type="button" className="btn btn-success" onClick={invokeQueryToGetResultsData}>Search</button>
                 )}
-                <h3>Results</h3>
+
                 {loading && (<p>Searching data ...</p>)}  
-                {!loading && resultData !== null && <ResultsTable results={resultData}/>}                 
-                {!loading && resultData !== null && <ViewMap waypoints={resultData} remove={removeItem}/>}               
+                {!loading && resultData !== null && <Result data={resultData}/>}                
             </div>           
         </React.Fragment>
     )

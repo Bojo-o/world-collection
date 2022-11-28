@@ -8,10 +8,12 @@ function countPages(results: number,rowsPerPage : number) : number {
 
 export interface ResultsTableProps{
     results : ResultData[];
+    removeItem : (qNumber : string) => void;
+    saveItem : (edited : ResultData) => void;
 }
 
-function ResultsTable ({results} : ResultsTableProps) {
-    const [data,setData] = React.useState<ResultData[]>(results);
+function ResultsTable ({results,removeItem,saveItem} : ResultsTableProps) {
+    //const [data,setData] = React.useState<ResultData[]>(results);
     const [edited,setEdited] = React.useState<ResultData>(new ResultData);
 
     const [rowsPerPage,setRowsPerPage] = React.useState(25);
@@ -20,13 +22,13 @@ function ResultsTable ({results} : ResultsTableProps) {
     const [currPage,setCurrPage] = React.useState(1);
 
     React.useEffect(() => {
-        let newPages = countPages(data.length,rowsPerPage);
-        setResultsCount(data.length);
+        let newPages = countPages(results.length,rowsPerPage);
+        setResultsCount(results.length);
         setPages(newPages)
         if (currPage > newPages){
             setCurrPage((prev) => prev === 1 ? 0 : newPages)
         }
-    },[data,rowsPerPage])
+    },[results,rowsPerPage])
 
     const nextPage = () => {
         if (currPage !== pages){
@@ -47,29 +49,19 @@ function ResultsTable ({results} : ResultsTableProps) {
     const setRecordsPerPage = (value : number) => {
         setRowsPerPage(value);
     }
-
-    const removeItem = (qNumber : string) =>{      
-        setData((prevData) => {           
-            return prevData.filter((item) => item.QNumber != qNumber)
-        });
-    }
+    
     const editItem = (row : ResultData) => {
         setEdited(new ResultData(row));     
     }
     const handleCancel = () => {
         setEdited(new ResultData)
     }
+    
     const handleSave = (event:any) => {
-        setData((data) => {
-            return data.map((d) => {
-                if (d.QNumber === edited.QNumber){
-                    return edited;
-                }
-                return d;
-            })
-        })
+        saveItem(edited);
         setEdited(new ResultData)
     }
+    
     const handleChange = (event : any) => {
         const value = event.target.value;
         
@@ -95,7 +87,7 @@ function ResultsTable ({results} : ResultsTableProps) {
                 {
                     
 
-                    data.slice(currPage * rowsPerPage - rowsPerPage,currPage * rowsPerPage).map((row,index) => {
+                    results.slice(currPage * rowsPerPage - rowsPerPage,currPage * rowsPerPage).map((row,index) => {
                         return (
                             <tr key={index}>
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>

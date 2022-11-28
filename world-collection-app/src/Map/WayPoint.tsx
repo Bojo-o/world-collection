@@ -4,15 +4,15 @@ import { ResultData } from '../Data/ResultsData';
 
 export interface WayPointProps {
     data: ResultData;
-    remove : (qNumber : string) => void;
+    removeItem : (qNumber : string) => void;
 }
-function WayPoint({data,remove} : WayPointProps){
+function WayPoint({data,removeItem} : WayPointProps){
     return (
         <React.Fragment>
             <Marker position={[data.long,data.lati]}>
                 <Popup>                    
                     {data.name}
-                    <button onClick={() => remove(data.QNumber)} >aa</button>
+                    <button onClick={() => removeItem(data.QNumber)} >aa</button>
                 </Popup>
             </Marker>
         </React.Fragment>
