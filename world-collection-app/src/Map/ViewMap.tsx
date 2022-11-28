@@ -8,9 +8,15 @@ import MapOptions from "./MapOptions";
 
 export interface ViewMapProps {
     waypoints : ResultData[];
+    edited : ResultData;
     removeItem : (qNumber : string) => void;
+    editItem : (row : ResultData) => void;
+    cancelItem : () => void;
+    saveItem : (edited : ResultData) => void;
+    handleChange : (event : any) => void;
 }
-function ViewMap({waypoints,removeItem}: ViewMapProps) {   
+function ViewMap({waypoints,edited,removeItem,editItem,cancelItem,saveItem,handleChange}: ViewMapProps) {  
+    
     return (
         <React.Fragment>
             <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
@@ -19,7 +25,7 @@ function ViewMap({waypoints,removeItem}: ViewMapProps) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
                 {waypoints.map((waypoint,index) => {                  
-                    return <WayPoint data={waypoint} removeItem={removeItem}/>
+                    return <WayPoint key={index} data={waypoint} removeItem={removeItem} edited={edited} editItem={editItem} cancelItem={cancelItem} saveItem={saveItem} handleChange={handleChange}/>
                 })}
                 <MapOptions waypoints={waypoints}/>
             </MapContainer>

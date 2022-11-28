@@ -15,6 +15,15 @@ function Result({data} : ResultProps) {
     const [resultData,setResultData]  = React.useState<ResultData[]>(data);
     const [viewType,setViewType] = React.useState<View>(View.Table);
 
+    const [edited,setEdited] = React.useState<ResultData>(new ResultData);
+
+    const editItem = (row : ResultData) => {
+        setEdited(new ResultData(row));     
+    }
+    const cancelItem = () => {
+        setEdited(new ResultData)
+    }
+
     const setView = (view : View) => {
         setViewType(view);
     }
@@ -22,6 +31,16 @@ function Result({data} : ResultProps) {
         setResultData((prevData) =>    
             prevData.filter((item) => item.QNumber != qNumber)
         );
+    }
+    const handleChange = (event : any) => {
+        const value = event.target.value;
+        
+        const change = {
+            name: value,
+        };
+        setEdited((prev) => {
+            return new ResultData({...prev,...change});
+        });
     }
     const saveItem = (edited : ResultData) => {
         setResultData((data) => {
@@ -32,6 +51,7 @@ function Result({data} : ResultProps) {
                 return d;
             })
         })
+        setEdited(new ResultData)
     }
     return (
         <React.Fragment>
@@ -45,7 +65,8 @@ function Result({data} : ResultProps) {
                     <li><a className="dropdown-item" onClick={() => setView(View.Map)}>Map</a></li>                    
                 </ul>         
             </div>
-            {viewType === View.Table ? < ResultsTable results={resultData} removeItem={removeItem} saveItem={saveItem}/> : <ViewMap waypoints={resultData} removeItem={removeItem}/>}     
+            {viewType === View.Table ? < ResultsTable results={resultData} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
+            : <ViewMap waypoints={resultData} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
         </React.Fragment>
     );
 }

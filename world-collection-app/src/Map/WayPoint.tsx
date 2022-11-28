@@ -5,14 +5,33 @@ import { ResultData } from '../Data/ResultsData';
 export interface WayPointProps {
     data: ResultData;
     removeItem : (qNumber : string) => void;
+    edited : ResultData;
+    editItem : (row : ResultData) => void;
+    cancelItem : () => void;
+    saveItem : (edited : ResultData) => void;
+    handleChange : (event : any) => void;
+    
 }
-function WayPoint({data,removeItem} : WayPointProps){
+function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleChange} : WayPointProps){
     return (
         <React.Fragment>
             <Marker position={[data.long,data.lati]}>
                 <Popup>                    
-                    {data.name}
-                    <button onClick={() => removeItem(data.QNumber)} >aa</button>
+                    
+                    {edited.QNumber === data.QNumber ? (
+                        <React.Fragment>
+                            <input type="text" className="form-control" value={edited.name} onChange={handleChange}/>
+                            <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
+                            <button type="button" className="btn btn-danger" onClick={() => cancelItem}>Cancel</button>
+                        </React.Fragment> 
+                    ) : (
+                        <React.Fragment>
+                            {data.name}
+                            <button type="button" className="btn btn-primary" onClick={() => editItem(data)}>Edit</button>
+                            <button type="button" className="btn btn-danger" onClick={() => removeItem(data.QNumber)}>Remove</button>
+                        </React.Fragment> 
+                    ) }
+                    
                 </Popup>
             </Marker>
         </React.Fragment>

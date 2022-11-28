@@ -41,9 +41,7 @@ function Form() {
             setResultData(data);
         })
     }
-    const a = () =>{
-        console.log("AAA")
-    }
+
 
     return(
         <React.Fragment>

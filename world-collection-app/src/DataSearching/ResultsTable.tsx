@@ -8,13 +8,17 @@ function countPages(results: number,rowsPerPage : number) : number {
 
 export interface ResultsTableProps{
     results : ResultData[];
+    edited : ResultData;
     removeItem : (qNumber : string) => void;
+    editItem : (row : ResultData) => void;
+    cancelItem : () => void;
     saveItem : (edited : ResultData) => void;
+    handleChange : (event : any) => void;
 }
 
-function ResultsTable ({results,removeItem,saveItem} : ResultsTableProps) {
+function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeItem,saveItem} : ResultsTableProps) {
     //const [data,setData] = React.useState<ResultData[]>(results);
-    const [edited,setEdited] = React.useState<ResultData>(new ResultData);
+    //const [edited,setEdited] = React.useState<ResultData>(new ResultData);
 
     const [rowsPerPage,setRowsPerPage] = React.useState(25);
     const [pages,setPages] = React.useState(countPages(results.length,rowsPerPage));
@@ -50,28 +54,7 @@ function ResultsTable ({results,removeItem,saveItem} : ResultsTableProps) {
         setRowsPerPage(value);
     }
     
-    const editItem = (row : ResultData) => {
-        setEdited(new ResultData(row));     
-    }
-    const handleCancel = () => {
-        setEdited(new ResultData)
-    }
     
-    const handleSave = (event:any) => {
-        saveItem(edited);
-        setEdited(new ResultData)
-    }
-    
-    const handleChange = (event : any) => {
-        const value = event.target.value;
-        
-        const change = {
-            name: value,
-        };
-        setEdited((prev) => {
-            return new ResultData({...prev,...change});
-        });
-    }
     return (
         <React.Fragment>
         <table className="table table-striped table-hover">
@@ -97,8 +80,8 @@ function ResultsTable ({results,removeItem,saveItem} : ResultsTableProps) {
                                         <React.Fragment>
                                             <td><input type="text" className="form-control" value={edited.name} onChange={handleChange}/></td>
                                             <td>{row.instanceOf.replaceAll("/"," , ")}</td>
-                                            <td><button type="button" className="btn btn-success" onClick={handleSave}>Save</button></td>
-                                            <td><button key={index} type="button" className="btn btn-danger" onClick={handleCancel}>Cancel</button></td>
+                                            <td><button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button></td>
+                                            <td><button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button></td>
                                         </React.Fragment>
                                     )
                                 }
