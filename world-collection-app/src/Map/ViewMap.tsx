@@ -9,7 +9,7 @@ import MapOptions from "./MapOptions";
 export interface ViewMapProps {
     waypoints : ResultData[];
     edited : ResultData;
-    removeItem : (qNumber : string) => void;
+    removeItem : (item : ResultData) => void;
     editItem : (row : ResultData) => void;
     cancelItem : () => void;
     saveItem : (edited : ResultData) => void;

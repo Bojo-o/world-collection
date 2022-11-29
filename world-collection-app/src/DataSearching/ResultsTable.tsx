@@ -9,7 +9,7 @@ function countPages(results: number,rowsPerPage : number) : number {
 export interface ResultsTableProps{
     results : ResultData[];
     edited : ResultData;
-    removeItem : (qNumber : string) => void;
+    removeItem : (item : ResultData) => void;
     editItem : (row : ResultData) => void;
     cancelItem : () => void;
     saveItem : (edited : ResultData) => void;
@@ -91,7 +91,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                             <td>{row.name}</td>
                                             <td>{row.instanceOf.replaceAll("/"," , ")}</td>
                                             <td><button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button></td>
-                                            <td><button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row.QNumber)}>Remove</button></td>
+                                            <td><button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button></td>
                                         </React.Fragment>    
                                     )
                                 }                               

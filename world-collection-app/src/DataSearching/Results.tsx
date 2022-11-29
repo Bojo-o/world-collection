@@ -3,6 +3,8 @@ import { ResultData } from '../Data/ResultsData';
 import ViewMap from '../Map/ViewMap';
 import ResultsTable from './ResultsTable';
 import './Results.css'
+import { Caretaker } from './Undo/Caretaker';
+import { TypeOfChange } from './Undo/ResultState';
 
 export interface ResultProps{
     data : ResultData[];
@@ -12,6 +14,7 @@ enum View {
     Map,
 }
 function Result({data} : ResultProps) {
+    const [resultDataaa,setResultDataaa]  = React.useState<ResultData[]>(data);
     const [resultData,setResultData]  = React.useState<ResultData[]>(data);
     const [resultsToRender,setResultsToRender] = React.useState<ResultData[]>(data);
     const [viewType,setViewType] = React.useState<View>(View.Table);
@@ -19,6 +22,8 @@ function Result({data} : ResultProps) {
     const [edited,setEdited] = React.useState<ResultData>(new ResultData);
     const [nameFilter,setNameFilter] = React.useState<string>('');
     const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
+
+    const [resultsStateCaretaker,setResultsStateCaretaker] = React.useState<Caretaker>(new Caretaker(data));
 
     const editItem = (row : ResultData) => {
         setEdited(new ResultData(row));     
@@ -30,10 +35,11 @@ function Result({data} : ResultProps) {
     const setView = (view : View) => {
         setViewType(view);
     }
-    const removeItem = (qNumber : string) => {      
+    const removeItem = (item : ResultData) => {      
         setResultData((prevData) =>    
-            prevData.filter((item) => item.QNumber != qNumber)
+            prevData.filter((result) => result.QNumber != item.QNumber)
         );
+        resultsStateCaretaker.saveState(item,TypeOfChange.REMOVE);
     }
     const handleChange = (event : any) => {
         const value = event.target.value;
@@ -49,11 +55,13 @@ function Result({data} : ResultProps) {
         setResultData((data) => {
             return data.map((d) => {
                 if (d.QNumber === edited.QNumber){
+                    resultsStateCaretaker.saveState(d,TypeOfChange.EDIT);
                     return edited;
                 }
                 return d;
             })
         })
+        //resultsStateCaretaker.saveState(edited,TypeOfChange.EDIT);
         setEdited(new ResultData)
     }
     const handleResultsSearch = (event : any) => {
@@ -64,6 +72,13 @@ function Result({data} : ResultProps) {
         const value = event.target.value;
         setSubTypeFilter(value);
     } 
+    const handleUndo = () =>{
+        setResultData(resultsStateCaretaker.undoState());       
+    }
+    React.useEffect(() => {
+        resultsStateCaretaker.changeResults(resultData);
+    },[resultData])
+
     React.useEffect(() =>{
         setResultsToRender(resultData);
         if (nameFilter !== ''){
@@ -73,7 +88,7 @@ function Result({data} : ResultProps) {
             setResultsToRender((prev) => prev.filter((result) => result.instanceOf.toLocaleLowerCase().includes(subTypeFilter.toLocaleLowerCase())));
         }
         
-    },[nameFilter,subTypeFilter])
+    },[nameFilter,subTypeFilter,resultData])
     return (
         <React.Fragment>
             <h3>Results</h3>
@@ -88,6 +103,7 @@ function Result({data} : ResultProps) {
             </div>
             <input type="text" className="form-control" placeholder={"Search for name"} onChange={handleResultsSearch}/>
             <input type="text" className="form-control" placeholder={"Search for sub-type"} onChange={handleResultSearchSubType}/>
+            <button type='button' className='btn btn-info' onClick={handleUndo}>Undo</button>
             <h4>{resultsToRender.length} results</h4>
             {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
             : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     

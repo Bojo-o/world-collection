@@ -4,7 +4,7 @@ import { ResultData } from '../Data/ResultsData';
 
 export interface WayPointProps {
     data: ResultData;
-    removeItem : (qNumber : string) => void;
+    removeItem : (item : ResultData) => void;
     edited : ResultData;
     editItem : (row : ResultData) => void;
     cancelItem : () => void;
@@ -28,7 +28,7 @@ function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleCha
                         <React.Fragment>
                             {data.name}
                             <button type="button" className="btn btn-primary" onClick={() => editItem(data)}>Edit</button>
-                            <button type="button" className="btn btn-danger" onClick={() => removeItem(data.QNumber)}>Remove</button>
+                            <button type="button" className="btn btn-danger" onClick={() => removeItem(data)}>Remove</button>
                         </React.Fragment> 
                     ) }
                     
