@@ -17,7 +17,8 @@ function Result({data} : ResultProps) {
     const [viewType,setViewType] = React.useState<View>(View.Table);
 
     const [edited,setEdited] = React.useState<ResultData>(new ResultData);
-    const [nameFilter,setNameFilter] = React.useState<string>('')
+    const [nameFilter,setNameFilter] = React.useState<string>('');
+    const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
 
     const editItem = (row : ResultData) => {
         setEdited(new ResultData(row));     
@@ -59,13 +60,20 @@ function Result({data} : ResultProps) {
         const value = event.target.value;
         setNameFilter(value);  
     }
+    const handleResultSearchSubType = (event : any) => {
+        const value = event.target.value;
+        setSubTypeFilter(value);
+    } 
     React.useEffect(() =>{
+        setResultsToRender(resultData);
         if (nameFilter !== ''){
-            setResultsToRender(resultData.filter((result) => result.name.includes(nameFilter)))
-        }else{
-            setResultsToRender(resultData);
+            setResultsToRender((prev) => prev.filter((result) => result.name.toLocaleLowerCase().includes(nameFilter.toLocaleLowerCase())));
         }
-    },[nameFilter])
+        if (subTypeFilter !== ''){
+            setResultsToRender((prev) => prev.filter((result) => result.instanceOf.toLocaleLowerCase().includes(subTypeFilter.toLocaleLowerCase())));
+        }
+        
+    },[nameFilter,subTypeFilter])
     return (
         <React.Fragment>
             <h3>Results</h3>
@@ -79,6 +87,8 @@ function Result({data} : ResultProps) {
                 </ul>         
             </div>
             <input type="text" className="form-control" placeholder={"Search for name"} onChange={handleResultsSearch}/>
+            <input type="text" className="form-control" placeholder={"Search for sub-type"} onChange={handleResultSearchSubType}/>
+            <h4>{resultsToRender.length} results</h4>
             {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
             : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
         </React.Fragment>

@@ -3,7 +3,7 @@ import { ResultData } from "../Data/ResultsData";
 import ResultsTableFooter from "./ResultsTableFooter";
 
 function countPages(results: number,rowsPerPage : number) : number {
-    return Math.ceil(results / rowsPerPage);
+    return results === 0 ? 1 : Math.ceil(results / rowsPerPage);
 }
 
 export interface ResultsTableProps{
