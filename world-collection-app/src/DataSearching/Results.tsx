@@ -13,9 +13,11 @@ enum View {
 }
 function Result({data} : ResultProps) {
     const [resultData,setResultData]  = React.useState<ResultData[]>(data);
+    const [resultsToRender,setResultsToRender] = React.useState<ResultData[]>(data);
     const [viewType,setViewType] = React.useState<View>(View.Table);
 
     const [edited,setEdited] = React.useState<ResultData>(new ResultData);
+    const [nameFilter,setNameFilter] = React.useState<string>('')
 
     const editItem = (row : ResultData) => {
         setEdited(new ResultData(row));     
@@ -53,6 +55,17 @@ function Result({data} : ResultProps) {
         })
         setEdited(new ResultData)
     }
+    const handleResultsSearch = (event : any) => {
+        const value = event.target.value;
+        setNameFilter(value);  
+    }
+    React.useEffect(() =>{
+        if (nameFilter !== ''){
+            setResultsToRender(resultData.filter((result) => result.name.includes(nameFilter)))
+        }else{
+            setResultsToRender(resultData);
+        }
+    },[nameFilter])
     return (
         <React.Fragment>
             <h3>Results</h3>
@@ -65,8 +78,9 @@ function Result({data} : ResultProps) {
                     <li><a className="dropdown-item" onClick={() => setView(View.Map)}>Map</a></li>                    
                 </ul>         
             </div>
-            {viewType === View.Table ? < ResultsTable results={resultData} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
-            : <ViewMap waypoints={resultData} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
+            <input type="text" className="form-control" placeholder={"Search for name"} onChange={handleResultsSearch}/>
+            {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
+            : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
         </React.Fragment>
     );
 }
