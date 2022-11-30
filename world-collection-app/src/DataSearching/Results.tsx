@@ -23,7 +23,7 @@ function Result({data} : ResultProps) {
     const [nameFilter,setNameFilter] = React.useState<string>('');
     const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
 
-    const [resultsStateCaretaker,setResultsStateCaretaker] = React.useState<Caretaker>(new Caretaker(data));
+    const [resultsStateCaretaker,setResultsStateCaretaker] = React.useState<Caretaker>(new Caretaker(data,5));
 
     const editItem = (row : ResultData) => {
         setEdited(new ResultData(row));     
@@ -35,12 +35,17 @@ function Result({data} : ResultProps) {
     const setView = (view : View) => {
         setViewType(view);
     }
-    const removeItem = (item : ResultData) => {      
+    const removeItem = (item : ResultData) => {  
         setResultData((prevData) =>    
-            prevData.filter((result) => result.QNumber != item.QNumber)
-        );
-        resultsStateCaretaker.saveState(item,TypeOfChange.REMOVE);
-    }
+            prevData.filter((result,index) => {
+                if (result.QNumber != item.QNumber){
+                    return true;
+                }
+                resultsStateCaretaker.saveState(result,TypeOfChange.REMOVE,index);
+                return false;
+            })
+        );}
+        
     const handleChange = (event : any) => {
         const value = event.target.value;
         
@@ -52,10 +57,11 @@ function Result({data} : ResultProps) {
         });
     }
     const saveItem = (edited : ResultData) => {
+        let itemIndex : number = 0;
         setResultData((data) => {
-            return data.map((d) => {
+            return data.map((d,index) => {
                 if (d.QNumber === edited.QNumber){
-                    resultsStateCaretaker.saveState(d,TypeOfChange.EDIT);
+                    resultsStateCaretaker.saveState(d,TypeOfChange.EDIT,index);
                     return edited;
                 }
                 return d;
@@ -103,7 +109,9 @@ function Result({data} : ResultProps) {
             </div>
             <input type="text" className="form-control" placeholder={"Search for name"} onChange={handleResultsSearch}/>
             <input type="text" className="form-control" placeholder={"Search for sub-type"} onChange={handleResultSearchSubType}/>
-            <button type='button' className='btn btn-info' onClick={handleUndo}>Undo</button>
+            {resultsStateCaretaker.isUndoAvailable() ? 
+                ( <button type='button' className='btn btn-info' onClick={handleUndo} >Undo</button>) :
+                ( <button type='button' className='btn btn-info' onClick={handleUndo} disabled>Undo</button>)}
             <h4>{resultsToRender.length} results</h4>
             {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
             : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
