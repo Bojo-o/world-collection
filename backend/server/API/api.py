@@ -10,6 +10,9 @@ from .Query.wikiDataQuery import WikiDataQueryBuilder
 
 from . import Formater
 
+from .ItemDetail.wikipediaLink import WikiPediaLinkQuery
+from .ItemDetail.entityDetailsQueryBuilder import EntityDetailsQueryBuilder
+
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -49,7 +52,7 @@ def search_instance_administrative_area():
         return Formater.formatToJson(result)
     return "Invalid request"
 
-@bp.route('/wikidata/query')
+@bp.route('/wikidata/query', methods=['GET'])
 def get_results_from_wikidata():    
     classes = request.args.get("classes")
     minus_classes = request.args.get("minus_classes")
@@ -87,3 +90,38 @@ def get_results_from_wikidata():
         
 
     return "Invalid request"
+
+
+@bp.route('/wikidata/detail/link_to_wikipedia' , methods=['GET'])
+def get_wikipedia_link():
+    entity = request.args.get("entity")
+
+    if entity is None:
+        return "Invalid request, entity=<Qnumber> must be provided"
+
+    queryBuilder = WikiPediaLinkQuery(entity)
+    queryText = queryBuilder.build()
+    try:
+        result = query.get_query_results(endpoint_url,queryText)
+        return Formater.toJson(result)
+    except:
+        return "Query failed"
+
+@bp.route('/wikidata/detail/details' , methods=['GET'])
+def get_entity_details():
+    entity = request.args.get("entity")
+
+    if entity is None:
+        return "Invalid request, entity=<Qnumber> must be provided"
+
+    PROPERIES = ["P18","P1448","P131","P571","P2044","P3018","P2046","P2048","P2043","P149","P84","P1329","P968","P856","P17","P1082"]
+    queryBuilder = EntityDetailsQueryBuilder(entity)
+    for property in PROPERIES:
+        queryBuilder.add_property(property)
+    queryText = queryBuilder.build()
+    print(queryText)
+    try:
+        result = query.get_query_results(endpoint_url,queryText)
+        return Formater.toJson(result)
+    except:
+        return "Query failed"
