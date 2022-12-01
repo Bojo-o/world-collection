@@ -113,8 +113,9 @@ def get_entity_details():
 
     if entity is None:
         return "Invalid request, entity=<Qnumber> must be provided"
-
+    
     PROPERIES = ["P18","P1448","P131","P571","P2044","P3018","P2046","P2048","P2043","P149","P84","P1329","P968","P856","P17","P1082"]
+    # in order 
     queryBuilder = EntityDetailsQueryBuilder(entity)
     for property in PROPERIES:
         queryBuilder.add_property(property)

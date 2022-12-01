@@ -10,7 +10,7 @@ class  EntityDetailsQueryBuilder:
             list.append("(p:" + item + ")")
         return "" . join(list)
     def build(self) -> str:
-        query =  ''' SELECT (?wdLabel AS ?statement) (GROUP_CONCAT( DISTINCT ?valueLabel;separator="</>") AS ?value) WHERE{
+        query =  ''' SELECT (?wdLabel AS ?statement)(GROUP_CONCAT( DISTINCT ?valueLabel;separator="</>") AS ?value) WHERE{
                         VALUES (?item) {(%s)}
                         VALUES (?statments) {%s}
                         
