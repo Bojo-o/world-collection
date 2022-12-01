@@ -1,5 +1,6 @@
 import React from "react";
 import { ResultData } from "../Data/ResultsData";
+import Details from "./Details";
 import ResultsTableFooter from "./ResultsTableFooter";
 
 function countPages(results: number,rowsPerPage : number) : number {
@@ -9,14 +10,16 @@ function countPages(results: number,rowsPerPage : number) : number {
 export interface ResultsTableProps{
     results : ResultData[];
     edited : ResultData;
+    detailShowing : ResultData;
     removeItem : (item : ResultData) => void;
     editItem : (row : ResultData) => void;
     cancelItem : () => void;
     saveItem : (edited : ResultData) => void;
     handleChange : (event : any) => void;
+    showDetails : (item : ResultData) => void;
 }
 
-function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeItem,saveItem} : ResultsTableProps) {
+function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeItem,saveItem,showDetails,detailShowing} : ResultsTableProps) {
     //const [data,setData] = React.useState<ResultData[]>(results);
     //const [edited,setEdited] = React.useState<ResultData>(new ResultData);
 
@@ -72,7 +75,8 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
 
                     results.slice(currPage * rowsPerPage - rowsPerPage,currPage * rowsPerPage).map((row,index) => {
                         return (
-                            <tr key={index}>
+                            <React.Fragment>
+                                <tr key={index}>
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 
                                 {edited.QNumber === row.QNumber && 
@@ -90,12 +94,34 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                         <React.Fragment>
                                             <td>{row.name}</td>
                                             <td>{row.instanceOf.replaceAll("/"," , ")}</td>
-                                            <td><button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button></td>
-                                            <td><button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button></td>
+                                            {detailShowing.QNumber !== row.QNumber ? 
+                                            (
+                                                <React.Fragment>    
+                                                    <td><button type="button" className="btn btn-info" onClick={() => showDetails(row)}>Details</button></td>
+                                                    <td><button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button></td>
+                                                    <td><button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button></td>
+                                                </React.Fragment>    
+                                            )
+                                            :
+                                            (
+                                                <React.Fragment>    
+                                                    <td><button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button></td>                                                   
+                                                </React.Fragment>   
+                                            )
+                                            }
+                                            
                                         </React.Fragment>    
                                     )
                                 }                               
                             </tr>
+                            {detailShowing.QNumber === row.QNumber && (
+                                <tr>
+                                    <th colSpan={4}>
+                                        <Details entity={row} />
+                                    </th>
+                                </tr>
+                            )}
+                            </React.Fragment>
                         );
                     })
                 }

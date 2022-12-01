@@ -5,6 +5,8 @@ import ResultsTable from './ResultsTable';
 import './Results.css'
 import { Caretaker } from './Undo/Caretaker';
 import { TypeOfChange } from './Undo/ResultState';
+import { EntityDetailsData } from '../Data/EntityDetailsData';
+import { SearchAPI } from './SearchAPI';
 
 export interface ResultProps{
     data : ResultData[];
@@ -13,6 +15,7 @@ enum View {
     Table,
     Map,
 }
+
 function Result({data} : ResultProps) {
     const [resultDataaa,setResultDataaa]  = React.useState<ResultData[]>(data);
     const [resultData,setResultData]  = React.useState<ResultData[]>(data);
@@ -20,6 +23,8 @@ function Result({data} : ResultProps) {
     const [viewType,setViewType] = React.useState<View>(View.Table);
 
     const [edited,setEdited] = React.useState<ResultData>(new ResultData);
+    const [showedDetails,setShowedDetails] = React.useState<ResultData>(new ResultData)
+
     const [nameFilter,setNameFilter] = React.useState<string>('');
     const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
 
@@ -30,6 +35,7 @@ function Result({data} : ResultProps) {
     }
     const cancelItem = () => {
         setEdited(new ResultData)
+        setShowedDetails(new ResultData)
     }
 
     const setView = (view : View) => {
@@ -81,6 +87,11 @@ function Result({data} : ResultProps) {
     const handleUndo = () =>{
         setResultData(resultsStateCaretaker.undoState());       
     }
+
+    const showDetails = (item : ResultData) => {
+        setShowedDetails(item);  
+    }
+
     React.useEffect(() => {
         resultsStateCaretaker.changeResults(resultData);
     },[resultData])
@@ -113,7 +124,7 @@ function Result({data} : ResultProps) {
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} >Undo</button>) :
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} disabled>Undo</button>)}
             <h4>{resultsToRender.length} results</h4>
-            {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} removeItem={removeItem} saveItem={saveItem}/>
+            {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  detailShowing={showedDetails} editItem={editItem} removeItem={removeItem} saveItem={saveItem} showDetails={showDetails}/>
             : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
         </React.Fragment>
     );
