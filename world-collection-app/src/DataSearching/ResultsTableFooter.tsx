@@ -14,7 +14,7 @@ function ResultsTableFooter({nextPage,prevPage,firstPage,lastPage,setRowsPerPage
     const last = ">>"
     return (
         <React.Fragment>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex flex-row justify-content-center">
                 <button type="button" className="btn btn-outline-secondary" onClick={firstPage}>{first}</button>
                 <button type="button" className="btn btn-outline-secondary" onClick={prevPage}>prev</button>  
                 <p>{currPage} / {pages}</p>

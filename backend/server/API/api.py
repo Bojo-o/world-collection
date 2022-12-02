@@ -31,7 +31,6 @@ def search_class():
         builder = SearchQueryBuilder.SearchQueryBuilder(word)
         builder.set_parent_class("wd:Q2221906") # geographic location
         queryText = builder.build()
-        print(queryText)
         result = query.get_query_results(endpoint_url,queryText)
         return Formater.formatToJson(result)
     

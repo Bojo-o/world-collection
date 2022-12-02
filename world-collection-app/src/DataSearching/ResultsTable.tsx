@@ -60,12 +60,13 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
     
     return (
         <React.Fragment>
-        <table className="table table-striped table-hover">
+        <table className="table table-light table-bordered table-striped table-hover">
             <thead>
-                <tr>
+                <tr className="table-dark">
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Sub-Type of</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
 
@@ -84,8 +85,12 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                         <React.Fragment>
                                             <td><input type="text" className="form-control" value={edited.name} onChange={handleChange}/></td>
                                             <td>{row.instanceOf.replaceAll("/"," , ")}</td>
-                                            <td><button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button></td>
-                                            <td><button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button></td>
+
+                                            <td className="d-flex flex-row justify-content-center">
+                                                <button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button>
+                                                <button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button>
+                                            </td>
+                                            
                                         </React.Fragment>
                                     )
                                 }
@@ -97,15 +102,20 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                             {detailShowing.QNumber !== row.QNumber ? 
                                             (
                                                 <React.Fragment>    
-                                                    <td><button type="button" className="btn btn-info" onClick={() => showDetails(row)}>Details</button></td>
-                                                    <td><button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button></td>
-                                                    <td><button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button></td>
+                                                    <td className="d-flex flex-row justify-content-center">
+                                                        <button type="button" className="btn btn-info" onClick={() => showDetails(row)}>Details</button>
+                                                        <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
+                                                        <button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button>
+                                                    </td>
+                                                    
                                                 </React.Fragment>    
                                             )
                                             :
                                             (
                                                 <React.Fragment>    
-                                                    <td><button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button></td>                                                   
+                                                    <td className="d-flex flex-row justify-content-center">
+                                                        <button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button>
+                                                    </td>                                                   
                                                 </React.Fragment>   
                                             )
                                             }
