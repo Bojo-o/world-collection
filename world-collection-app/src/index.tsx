@@ -16,6 +16,7 @@ root.render(
   <React.StrictMode>
     {/*<App />*/}
     {/*<Form />*/}
+    <App />
   </React.StrictMode>
 );
 
