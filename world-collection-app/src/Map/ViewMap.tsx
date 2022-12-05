@@ -1,5 +1,5 @@
 import React from "react";
-import './ViewMap.css';
+import './Map.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import { ResultData } from "../Data/ResultsData";
 import WayPoint from "./WayPoint";

@@ -1,9 +1,26 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import Map from './Map/Map';
+import Form from './DataSearching/Form';
+import HomeState from './AppStates/HomeState';
+
+const homeState = () => {
+  return (
+    <HomeState />
+  )
+}
+
+const collectiblesSearcherState = () => {
+  return (
+    <Form />
+  );
+}
+
 
 function App() {
+  const [appState,setAppState] = useState<JSX.Element>(homeState);
+
+  
   return (
     <React.Fragment>
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark '>
@@ -13,15 +30,15 @@ function App() {
         </div>
         <ul className='navbar-nav'>
             <div className='d-flex mx-5'>
-              <button type='button' className='btn btn-light btn-lg me-3'>Home</button>
-              <button type='button' className='btn btn-light btn-lg me-3'>Find collectibles</button>
+              <button type='button' className='btn btn-light btn-lg me-3' onClick={() => {setAppState(homeState)}}>Home</button>
+              <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(collectiblesSearcherState)}}>Find collectibles</button>
             </div>
           </ul>
         
       </nav>
-
+      
       <div>
-        <Map />
+        {appState}
       </div>
       
     </React.Fragment>  
