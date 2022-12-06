@@ -49,4 +49,8 @@ def create_app(test_config=None):
     from .API import api
     app.register_blueprint(api.bp)
 
+    #register database api/gateway to app
+    from .database import db_gateway
+    app.register_blueprint(db_gateway.bp_db_gateway)
+
     return app

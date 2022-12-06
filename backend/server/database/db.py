@@ -41,7 +41,7 @@ def init_db_command():
 def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
-    app.cli.add_command(insert_to_db)
+    app.cli.add_command(insert_Collection_to_database)
 
 @click.command('insert')
 @click.argument("name")
@@ -60,12 +60,14 @@ def insert_to_db(name,lati,long):
     else:      
         click.echo(f'Insert {name} with: {long}, {lati}')
 
+@click.command('insert_collection')
+@click.argument("name")
 def insert_Collection_to_database(name : str):
     db = get_db()
     try:
         db.execute(
             "INSERT INTO Collections (name) VALUES (?)",
-            (name)
+            (name,)
         )
         db.commit()
     except db.IntegrityError:
@@ -86,6 +88,21 @@ def insert_Collectible_to_database(qNumber : int,collectionID : int,name : str,t
     else:      
         print(f'Insert {name} to Collectibles table')
 
+def get_collections_from_db():
+    db=get_db()
+    try:
+        existing_collections = db.execute("SELECT * FROM Collections").fetchall()
+
+        list_of_collections = []
+        for collection in existing_collections:
+            d = collections.OrderedDict()
+            d["collectionID"] = collection["collectionID"]
+            d["name"] = collection["name"]
+            list_of_collections.append(d)
+        return json.dumps(list_of_collections)
+
+    except db.IntegrityError:
+        print(f'error, somehthing went wrong')  
 
 def get_all_from_db():
     db = get_db()

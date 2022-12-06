@@ -3,7 +3,7 @@ import functools
 from . import query
 
 
-from ..database.db import insert_to_database
+#from ..database.db import insert_to_database
 from .SearchQuery import SearchQueryBuilder
 
 from .Query.wikiDataQuery import WikiDataQueryBuilder
