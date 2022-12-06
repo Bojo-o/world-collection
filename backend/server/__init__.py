@@ -11,7 +11,7 @@ def create_app(test_config=None):
     #sets default configuration that the app will use
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'waypoints.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'WorldCollectionDatabase.sqlite'),
     )
 
     if test_config is None:

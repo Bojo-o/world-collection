@@ -26,7 +26,9 @@ def close_db(e=None):
 
 def init_db():
     db = get_db()
-    with current_app.open_resource('database/waypoint_schema.sql') as f:
+    with current_app.open_resource('database/Collectibles_data_schemas/Collectibles_schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+    with current_app.open_resource('database/Collectibles_data_schemas/Collections_schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
 
@@ -58,18 +60,31 @@ def insert_to_db(name,lati,long):
     else:      
         click.echo(f'Insert {name} with: {long}, {lati}')
 
-def insert_to_database(name,lati,long):
+def insert_Collection_to_database(name : str):
     db = get_db()
     try:
         db.execute(
-            "INSERT INTO waypoints (name, latitude, longitude) VALUES (?, ?, ?)",
-            (name,lati,long)
+            "INSERT INTO Collections (name) VALUES (?)",
+            (name)
         )
         db.commit()
     except db.IntegrityError:
         print(f'error, somehthing went wrong')
     else:      
-        print(f'Insert {name} with: {long}, {lati}')
+        print(f'Insert {name} to Collections table')
+
+def insert_Collectible_to_database(qNumber : int,collectionID : int,name : str,type : str,latitude : float,longitude : float):
+    db = get_db()
+    try:
+        db.execute(
+            "INSERT INTO Collectibles (qNumber,collection,name,type,latitude,longitude) VALUES (?,?,?,?,?,?)",
+            (qNumber,collectionID,name,type,latitude,longitude)
+        )
+        db.commit()
+    except db.IntegrityError:
+        print(f'error, somehthing went wrong')
+    else:      
+        print(f'Insert {name} to Collectibles table')
 
 
 def get_all_from_db():

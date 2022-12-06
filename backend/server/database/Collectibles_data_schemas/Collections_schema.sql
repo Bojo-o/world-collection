@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS Collections;
+
+CREATE TABLE Collections(
+  collectionID INTEGER UNIQUE NOT NULL AUTOINCREMENT,
+  name TEXT NOT NULL,
+  PRIMARY KEY (collectionID)
+);
