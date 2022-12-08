@@ -1,3 +1,9 @@
 #homeState-Container{
     width: inherit;
 }
+
+#collectionsList {
+    list-style: none;
+    overflow:hidden; overflow-y:scroll;
+    height: 80vh;
+}

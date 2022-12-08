@@ -7,6 +7,8 @@ import { Caretaker } from './Undo/Caretaker';
 import { TypeOfChange } from './Undo/ResultState';
 import { EntityDetailsData } from '../Data/EntityDetailsData';
 import { SearchAPI } from './SearchAPI';
+import ResultsSaveFrom from './ResultsSaveForm';
+import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
 
 export interface ResultProps{
     data : ResultData[];
@@ -17,7 +19,7 @@ enum View {
 }
 
 function Result({data} : ResultProps) {
-    const [resultDataaa,setResultDataaa]  = React.useState<ResultData[]>(data);
+    //const [resultDataaa,setResultDataaa]  = React.useState<ResultData[]>(data);
     const [resultData,setResultData]  = React.useState<ResultData[]>(data);
     const [resultsToRender,setResultsToRender] = React.useState<ResultData[]>(data);
     const [viewType,setViewType] = React.useState<View>(View.Table);
@@ -29,6 +31,8 @@ function Result({data} : ResultProps) {
     const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
 
     const [resultsStateCaretaker,setResultsStateCaretaker] = React.useState<Caretaker>(new Caretaker(data,5));
+
+    const [saveProcess,setSaveProcess] = React.useState(false);
 
     const editItem = (row : ResultData) => {
         setEdited(new ResultData(row));     
@@ -92,6 +96,18 @@ function Result({data} : ResultProps) {
         setShowedDetails(item);  
     }
 
+    const openSaveProcess = () => {
+        setSaveProcess(true);
+    }
+
+    const closeSaveProcess = () => {
+        setSaveProcess(false);
+    }
+
+    const saveResults = (collectionName : string) => {
+        DatabaseAPI.postCollectibles(collectionName,resultData)
+    }
+
     React.useEffect(() => {
         resultsStateCaretaker.changeResults(resultData);
     },[resultData])
@@ -123,6 +139,9 @@ function Result({data} : ResultProps) {
             {resultsStateCaretaker.isUndoAvailable() ? 
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} >Undo</button>) :
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} disabled>Undo</button>)}
+
+            <button type="button" className="btn btn-success" onClick={openSaveProcess}>Save Collectibles</button>
+            {saveProcess && (<ResultsSaveFrom handleSave={saveResults} handleCancel={closeSaveProcess}/>)}
             <h4>{resultsToRender.length} results</h4>
             {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  detailShowing={showedDetails} editItem={editItem} removeItem={removeItem} saveItem={saveItem} showDetails={showDetails}/>
             : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
