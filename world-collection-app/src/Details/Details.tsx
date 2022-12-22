@@ -1,11 +1,13 @@
 import React from "react";
 import { EntityDetailsData } from "../Data/EntityDetailsData";
 import { ResultData } from "../Data/ResultsData";
-import { SearchAPI } from "./SearchAPI";
+import { SearchAPI } from "../DataSearching/SearchAPI";
 import './Details.css';
 
 export interface DetailsProps{
-    entity : ResultData;
+    QNumber : string;
+    name : string;
+    type : string;
 }
 
 function ProcessValue(name: string,value : string) {
@@ -31,7 +33,7 @@ function ProcessValue(name: string,value : string) {
         </React.Fragment>
     );
 }
-function Details({entity} : DetailsProps){
+function Details({QNumber,name,type} : DetailsProps){
 
     const [details,setDetails] = React.useState<EntityDetailsData>();
     const [areDetailsLoaded,setAreDetailsLoaded] = React.useState(false);
@@ -40,36 +42,50 @@ function Details({entity} : DetailsProps){
     const [isWikipediaLinkLoaded,setWikipediaLinkLoaded] = React.useState(false);
 
     React.useEffect(() => {
-        SearchAPI.getEntityDetails(entity).then((details) => {
+        SearchAPI.getEntityDetails(QNumber).then((details) => {
+            console.log(details)
             setDetails(details);
             setAreDetailsLoaded(true);
+        })
+
+        SearchAPI.getEntityWikipediaLink(QNumber).then((data) => {
+            if (data[0]['link'] !== undefined){ 
+                setWikipediaLink(data[0]['link']);
+                setWikipediaLinkLoaded(true)
+            }
         })
     },[]);
 
     return(
         <React.Fragment>
-            <h4>Details :</h4>
-            {areDetailsLoaded ? (
-                <React.Fragment>                   
-                    {details?.details.length == 0 ? (<p>No Details</p>) : 
-                        <React.Fragment>
-                            
-                            <ul>
-                                {details?.details.map((detail,index) => {
-                                    if (detail.name === "image" ){                                       
-                                        return (<img src={detail.value} className="image img-thumbnail" alt="image"/>);
-                                    }
-                                    
-                                    return (<li key={index}><strong>{detail.name} : </strong>{ProcessValue(detail.name,detail.value)}</li>)
-                                })}
-                            </ul>
 
-                            
+            <div className="card">
+                {details?.image != '' && (
+                    <img src={details?.image}  className="card-img-top" alt="image"/>
+                )}
+                <div className="card-body">
+                    <h5 className="card-title">{name}</h5>
+                    <h6 className="card-subtitle mb-2 text-muted">{type.replaceAll('/',', ')}</h6>
+                    {areDetailsLoaded ? (
+                        <React.Fragment>
+                            <p className="card-title">Details:</p>
+                            <ul className="list-group list-group-flush">
+                                {details?.details.map((detail,index) => {                                   
+                                    return (<li key={index} className="list-group-item"><strong>{detail.name} : </strong>{ProcessValue(detail.name,detail.value)}</li>)
+                                })}
+                                {isWikipediaLinkLoaded && (
+                                    <li className="list-group-item"><strong>Wikipedia : </strong><a href={wikipediaLink} target="_blank">Link</a></li>
+                                )}
+                            </ul>
                         </React.Fragment>
-                    }
-                </React.Fragment>
-            ) : (<h4>Loading details</h4>)
-            }
+                    ) : (
+                        <p className="card-title">Loading details</p>
+                    )}
+
+                    
+                </div>
+                
+            </div>
         </React.Fragment> 
     );
 }

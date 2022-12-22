@@ -6,6 +6,7 @@ import { ResultData } from "../Data/ResultsData";
 const urlCollectiblesType = "API/search/classes";
 const urlAdministrativeArea = "API/search/administrative_area";
 const urlEntityDetails = "API/wikidata/detail/details";
+const urlEntityWikipediaLink = "API/wikidata/detail/link_to_wikipedia";
 
 const urlQuery = "API/wikidata/query";
 
@@ -42,8 +43,8 @@ function convertToResultDataModels(data : any[]) : ResultData[] {
     return resultData;
 }
 export class SearchAPI {
-    static getEntityDetails(entity : ResultData){
-        let urlParameters = `entity=${entity.QNumber}`;
+    static getEntityDetails(QNumber: string){
+        let urlParameters = `entity=${QNumber}`;
         return fetch(`${urlEntityDetails}?${urlParameters}`)
         .then(checkStatus)
         .then(parseJson)
@@ -54,6 +55,10 @@ export class SearchAPI {
             'There was an error retrieving the data. Please try again.'
             );
         })
+    }
+    static getEntityWikipediaLink(QNumber : string){
+        let param = `entity=${QNumber}`;
+        return this.fetchaData(urlEntityWikipediaLink,param);
     }
     static getQueryResult(data : CollectiblesQuery){
         let postFixUrl = `classes=${data.typeOfCollectiblesQNumber}&locations=${data.restrictionAdministrativeAreaQNumber}`
@@ -80,6 +85,18 @@ export class SearchAPI {
         .then(checkStatus)
         .then(parseJson)
         .then(convertToCollectiblesBaseDataModels)
+        .catch((e : TypeError) => {
+            console.log('log client error ' + e);
+            throw new Error(
+            'There was an error retrieving the data. Please try again.'
+            );
+        })
+    }
+
+    private static fetchaData(url : string,param : string){
+        return fetch(`${url}?${param}`)
+        .then(checkStatus)
+        .then(parseJson)
         .catch((e : TypeError) => {
             console.log('log client error ' + e);
             throw new Error(

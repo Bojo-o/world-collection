@@ -1,6 +1,6 @@
 import React from "react";
 import { ResultData } from "../Data/ResultsData";
-import Details from "./Details";
+import Details from "../Details/Details";
 import ResultsTableFooter from "./ResultsTableFooter";
 
 function countPages(results: number,rowsPerPage : number) : number {
@@ -127,7 +127,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                             {detailShowing.QNumber === row.QNumber && (
                                 <tr>
                                     <th colSpan={4}>
-                                        <Details entity={row} />
+                                        <Details QNumber={row.QNumber} name={row.name} type={row.instanceOf} />
                                     </th>
                                 </tr>
                             )}
