@@ -108,9 +108,12 @@ def get_collections_from_db():
     db=get_db()
     try:
         existing_collections = db.execute("SELECT * FROM Collections").fetchall()
-
+        print(existing_collections)
         list_of_collections = []
         for collection in existing_collections:
+            a = collection.keys()
+            for b in a:
+                print(b)
             d = collections.OrderedDict()
             d["collectionID"] = collection["collectionID"]
             d["name"] = collection["name"]
