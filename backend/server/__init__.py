@@ -33,9 +33,10 @@ def create_app(test_config=None):
         return ' World!'
 
         
-    from .database import db
-    db.init_app(app)
-
+    #from .database import db
+    #db.init_app(app)
+    from .database.Database_operations import db_initiazition
+    db_initiazition.init_app(app)
     
 
     @app.route('/waypoints')
@@ -50,7 +51,10 @@ def create_app(test_config=None):
     app.register_blueprint(api.bp)
 
     #register database api/gateway to app
-    from .database import db_gateway
-    app.register_blueprint(db_gateway.bp_db_gateway)
+    #from .database import db_gateway
+    #app.register_blueprint(db_gateway.bp_db_gateway)
+
+    from .database.Gateway import db_gateway
+    app.register_blueprint(db_gateway.bp_database_gateway)
 
     return app

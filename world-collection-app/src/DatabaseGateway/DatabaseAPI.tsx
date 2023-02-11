@@ -2,7 +2,7 @@ import { Collection } from "../Data/Database/Colection";
 import { Collectible } from "../Data/Database/Collectible";
 import { ResultData } from "../Data/ResultsData";
 
-const baseUrl = "DatabaseAPI/";
+const baseUrl = "DatabaseGateway/";
 const getCollectionsUrl = "get/collections"
 const getCollectiblessUrl = "get/collectibles"
 
@@ -41,6 +41,7 @@ export class DatabaseAPI {
     }
 
     public static getCollectiblesInCollection(collectionID : Number){
+        console.log(collectionID)
         return this.fetchData(baseUrl + getCollectiblessUrl,`collectionID=${collectionID}`).then(convertToCollectiblesDataModel)
     }
     private static fetchData(url : string,param : string){

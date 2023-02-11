@@ -4,7 +4,7 @@ export class Collection {
         
     constructor(initializer?: any){
         if(!initializer) return;
-        if (initializer.collectionID) this.collectionID = initializer.collectionID;
+        if (initializer.collection_id) this.collectionID = initializer.collection_id;
         if (initializer.name) this.name = initializer.name;       
     }
 }

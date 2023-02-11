@@ -2,7 +2,7 @@ import click
 import json
 import collections
 
-from db_access import get_db
+from .db_access import get_db
 
 def execute_command(sql : str,parameter :  any):
     db = get_db()
@@ -86,7 +86,7 @@ def get_collection_id(collection_name : str):
 def create_collectible(q_number : str,collection_id : str,name : str,instance_of : str,latitude : float,longitude : float):
     status = execute_command("INSERT INTO Collectibles (q_number,collection_id,name,instance_of,latitude,longitude) VALUES (?,?,?,?,?,?)", (q_number,collection_id,name,instance_of,latitude,longitude,))
     if status is True:
-        print(f'Creates {name} and inserts into Collectibles table')
+        print(f'Creates {name} and inserts into database')
     return status
     
 # delete
@@ -100,7 +100,7 @@ def delete_collectible(q_number : int, collection_id : int):
 # read
 
 def get_all_collectibles_in_collection(collection_id : int):
-    data = execute_and_fetch_all("SELECT * FROM Collectibles WHERE collection_id=?"(collection_id,))
+    data = execute_and_fetch_all("SELECT * FROM Collectibles WHERE collection_id=?",(collection_id,))
     if data is None:
         print(f'error, something went wrong') 
     return data

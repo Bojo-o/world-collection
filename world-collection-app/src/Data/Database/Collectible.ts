@@ -9,10 +9,10 @@ export class Collectible{
         
     constructor(initializer?: any){
         if(!initializer) return;
-        if (initializer.QNUmber) this.QNumber = initializer.QNumber;    
-        if (initializer.collectionID) this.collectionID = initializer.collectionID;
+        if (initializer.q_number) this.QNumber = initializer.q_number;    
+        if (initializer.collection_id) this.collectionID = initializer.collection_id;
         if (initializer.name) this.name = initializer.name; 
-        if (initializer.type) this.type = initializer.type;    
+        if (initializer.instance_of) this.type = initializer.instance_of;    
         if (initializer.latitude) this.latitude = initializer.latitude;    
         if (initializer.longitude) this.longitude = initializer.longitude;          
     }
