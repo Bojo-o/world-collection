@@ -5,6 +5,7 @@ export class Collectible{
     type : string ='';
     latitude : number = 0;
     longitude : number = 0;
+    isVisit : boolean = false;
 
         
     constructor(initializer?: any){
@@ -14,6 +15,8 @@ export class Collectible{
         if (initializer.name) this.name = initializer.name; 
         if (initializer.instance_of) this.type = initializer.instance_of;    
         if (initializer.latitude) this.latitude = initializer.latitude;    
-        if (initializer.longitude) this.longitude = initializer.longitude;          
+        if (initializer.longitude) this.longitude = initializer.longitude;  
+        if (initializer.is_visit) this.isVisit = initializer.is_visit;
+
     }
 }

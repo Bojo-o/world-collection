@@ -59,7 +59,7 @@ function Details({QNumber,name,type} : DetailsProps){
     return(
         <React.Fragment>
 
-            <div className="card">
+            <div className="card ">
                 {details?.image != '' && (
                     <img src={details?.image}  className="card-img-top" alt="image"/>
                 )}

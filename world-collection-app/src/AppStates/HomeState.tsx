@@ -20,7 +20,6 @@ function HomeState() {
     }
 
     const handleCollectionSelect = (collectionID : Number) => {
-        console.log(collectionID)
         DatabaseAPI.getCollectiblesInCollection(collectionID).then((collectibles) => {
             setCollectiblesToShow(collectibles);
             console.log(collectibles)

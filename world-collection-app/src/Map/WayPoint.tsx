@@ -1,6 +1,7 @@
 import React from 'react'
 import { Marker, Popup} from 'react-leaflet';
 import { ResultData } from '../Data/ResultsData';
+import Details from '../Details/Details';
 
 export interface WayPointProps {
     data: ResultData;
@@ -14,15 +15,14 @@ export interface WayPointProps {
 }
 function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleChange} : WayPointProps){
     return (
-        <React.Fragment>
+        <>
             <Marker position={[data.long,data.lati]}>
                 <Popup>                    
-                    
                     {edited.QNumber === data.QNumber ? (
                         <React.Fragment>
                             <input type="text" className="form-control" value={edited.name} onChange={handleChange}/>
                             <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
-                            <button type="button" className="btn btn-danger" onClick={() => cancelItem}>Cancel</button>
+                            <button type="button" className="btn btn-danger" onClick={() => cancelItem()}>Cancel</button>
                         </React.Fragment> 
                     ) : (
                         <React.Fragment>
@@ -34,7 +34,7 @@ function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleCha
                     
                 </Popup>
             </Marker>
-        </React.Fragment>
+        </>
     )
 }
 
