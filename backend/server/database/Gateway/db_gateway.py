@@ -47,3 +47,16 @@ def insert_collection_with_collectibles_to_db():
 
     return "Succesfully saved"
 
+@bp_database_gateway.route('/post/set_visit', methods=['POST'])
+def set_visit_of_collectible():
+    req_data = request.get_json()
+    data = json.loads(req_data['body'])
+    is_visit = 0
+    visition = data['isVisit']
+    if visition.__eq__("True"):
+        is_visit = 1
+
+    status =  db_CRUD.update_collectible_visit(data['QNumber'],is_visit)
+    if status:
+        return "Succesfully saved"
+    return "Something went wrong"

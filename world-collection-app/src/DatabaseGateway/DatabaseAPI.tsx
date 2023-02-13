@@ -6,7 +6,9 @@ const baseUrl = "DatabaseGateway/";
 const getCollectionsUrl = "get/collections"
 const getCollectiblessUrl = "get/collectibles"
 
+
 const postCollectiblesIntoCollection = "post/collectibles"
+const postVisitation = "post/set_visit"
 
 function checkStatus(response: any){
     if (response.ok){
@@ -32,6 +34,7 @@ function convertToCollectionsDataModel(data : any[]) : Collection[] {
     return collections;
 }
 function convertToCollectiblesDataModel(data : any[]) : Collectible[] {
+    console.log(data)
     let collections : Collectible[] = data.map((d : any) => new Collectible(d));
     return collections;
 }
@@ -41,7 +44,6 @@ export class DatabaseAPI {
     }
 
     public static getCollectiblesInCollection(collectionID : Number){
-        console.log(collectionID)
         return this.fetchData(baseUrl + getCollectiblessUrl,`collectionID=${collectionID}`).then(convertToCollectiblesDataModel)
     }
     private static fetchData(url : string,param : string){
@@ -54,6 +56,9 @@ export class DatabaseAPI {
             'There was an error retrieving the data. Please try again.'
             );
         })
+    }
+    public static postVisitation(QNumberOfCollectible : string,isVisit : boolean){
+        this.postData(baseUrl + postVisitation,"Set visitation",JSON.stringify({'QNumber': QNumberOfCollectible,'isVisit' : isVisit}));
     }
     public static postCollectibles(collectionName : string,collectibles : ResultData[]){
         this.postData(baseUrl + postCollectiblesIntoCollection,"Insert collectibles into: " + collectionName,JSON.stringify(collectibles));

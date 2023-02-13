@@ -1,8 +1,8 @@
 import L, { Point } from "leaflet";
 
-export function GetIcon(){
+export function GetIcon(icon : string){
     return L.icon({
-        iconUrl : require('../static/Icons/unvisit.png'),
+        iconUrl : require('../static/Icons/'+icon+'.png'),
         iconSize : [30,40],
     })
 }

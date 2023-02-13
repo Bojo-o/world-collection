@@ -16,7 +16,13 @@ export class Collectible{
         if (initializer.instance_of) this.type = initializer.instance_of;    
         if (initializer.latitude) this.latitude = initializer.latitude;    
         if (initializer.longitude) this.longitude = initializer.longitude;  
-        if (initializer.is_visit) this.isVisit = initializer.is_visit;
+        if (initializer.is_visited) {
+            if (initializer.is_visited === 1){
+                this.isVisit = true;
+            }else{
+                this.isVisit = false;
+            }
+        }
 
     }
 }

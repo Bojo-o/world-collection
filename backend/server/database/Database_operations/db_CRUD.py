@@ -25,7 +25,6 @@ def execute_and_fetch_all(sql: str,parameter : any):
             keys = row.keys()
             for key in keys:
                 d[key] = row[key]
-
             data.append(d)
         return json.dumps(data)
     except db.IntegrityError:
@@ -84,6 +83,7 @@ def get_collection_id(collection_name : str):
 # create
 
 def create_collectible(q_number : str,collection_id : str,name : str,instance_of : str,latitude : float,longitude : float):
+
     status = execute_command("INSERT INTO Collectibles (q_number,collection_id,name,instance_of,latitude,longitude) VALUES (?,?,?,?,?,?)", (q_number,collection_id,name,instance_of,latitude,longitude,))
     if status is True:
         print(f'Creates {name} and inserts into database')
@@ -122,7 +122,7 @@ def update_collectible_collection(q_number : int,collection_id : int,new_collect
     return status
 
 # visit, date 
-def update_collectible_visit(q_number : int, is_visited : bool, date: str = None) :
+def update_collectible_visit(q_number : int, is_visited : int, date: str = None) :
     date_of_visit = "NULL" if date is None else date
     status = execute_command("UPDATE Collectibles SET is_visited=?, date_of_visit=?  WHERE q_number=?",(is_visited,date_of_visit,q_number,))
     if status is True:
