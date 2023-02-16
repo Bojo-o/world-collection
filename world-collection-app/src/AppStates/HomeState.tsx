@@ -26,6 +26,10 @@ function HomeState() {
         })
     }
 
+    const convertStatus = (collection : Collection) => {
+        let sum = +collection.visited + +collection.notVisited
+        return  collection.visited.toString()+'/'+sum.toString()
+    }
     useEffect(() => {
         setCollectionLoading(true);
         DatabaseAPI.getCollections().then( (collections) => {
@@ -49,7 +53,7 @@ function HomeState() {
             <div className='d-flex w-100'> 
                 <div className='d-flex flex-column w-25 border border-dark border-2 rounded-end'>
                     <h1>Colections</h1>
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search" onChange={handleCollectionSearch} />
+                    <input className="form-control mr-sm-2" type="search" placeholder="Search for collection" onChange={handleCollectionSearch} />
 
                     
                     {collectionLoading ? (
@@ -60,10 +64,12 @@ function HomeState() {
                                 return (
                                     <div key={index} className="d-flex flex-row">
                                         <li>
-                                            <input className="form-check-input" type="radio" name="flexRadioDefault" id={"flexRadioDefault"+collection.collectionID} onChange={() => handleCollectionSelect(collection.collectionID)}/>
-                                            <label className="form-check-label" htmlFor={"flexRadioDefault"+collection.collectionID}>
-                                                {collection.name}
-                                            </label>                                           
+                                            <div className='d-flex '>
+                                                <input className="form-check-input" type="radio" name="flexRadioDefault" id={"flexRadioDefault"+collection.collectionID} onChange={() => handleCollectionSelect(collection.collectionID)}/>
+                                                <label className="form-check-label" htmlFor={"flexRadioDefault"+collection.collectionID}>
+                                                    {collection.name +" - "+ convertStatus(collection)}
+                                                </label>                                                 
+                                            </div>                                
                                         </li>
                                     </div>
                                 );

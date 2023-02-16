@@ -31,6 +31,7 @@ function parseJson(response : Response){
 
 function convertToCollectionsDataModel(data : any[]) : Collection[] {
     let collections : Collection[] = data.map((d : any) => new Collection(d));
+    console.log(collections)
     return collections;
 }
 function convertToCollectiblesDataModel(data : any[]) : Collectible[] {

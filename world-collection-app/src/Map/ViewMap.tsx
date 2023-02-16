@@ -5,6 +5,7 @@ import { ResultData } from "../Data/ResultsData";
 import WayPoint from "./WayPoint";
 import { map } from "leaflet";
 import MapOptions from "./MapOptions";
+import { convertToMapDataModel } from "./ConvertToMapData";
 
 export interface ViewMapProps {
     waypoints : ResultData[];
@@ -27,7 +28,7 @@ function ViewMap({waypoints,edited,removeItem,editItem,cancelItem,saveItem,handl
                 {waypoints.map((waypoint,index) => {                  
                     return <WayPoint key={index} data={waypoint} removeItem={removeItem} edited={edited} editItem={editItem} cancelItem={cancelItem} saveItem={saveItem} handleChange={handleChange}/>
                 })}
-                <MapOptions waypoints={waypoints}/>
+                <MapOptions waypoints={convertToMapDataModel(waypoints)}/>
             </MapContainer>
         </React.Fragment>
     );

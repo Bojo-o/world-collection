@@ -12,7 +12,15 @@ bp_database_gateway = Blueprint('DatabaseGateway', __name__, url_prefix='/Databa
 
 @bp_database_gateway.route('/get/collections', methods=['GET'])
 def get_collections():
-    return db_CRUD.get_all_collections()
+    data = json.loads(db_CRUD.get_all_collections()) 
+    i = 0
+    for collection in data:
+        collection_id = collection['collection_id']
+        status = json.loads(db_CRUD.get_collection_status(collection_id))
+        data[i]['visited'] = status['visited']
+        data[i]['notVisited'] = status['notVisited']
+        i+=1
+    return json.dumps(data)
 
 @bp_database_gateway.route('/get/collectibles',methods=['GET'])
 def get_collectibles_in_collection():

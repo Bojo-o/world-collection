@@ -3,7 +3,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { Collectible } from '../Data/Database/Collectible';
 import CollectibleWayPoint from './CollectibleWayPoint';
+import { convertToMapDataModel } from './ConvertToMapData';
 import './Map.css';
+import MapOptions from './MapOptions';
 
 export interface MapProps{
     collectiblesToShow : Collectible[]
@@ -26,7 +28,7 @@ function Map ({collectiblesToShow} : MapProps){
                         return (<CollectibleWayPoint key={index} collectible={collectible}/>)
                     })
                 }
-
+                <MapOptions waypoints={convertToMapDataModel(collectiblesToShow)}/>
             </MapContainer>
             
         </React.Fragment>

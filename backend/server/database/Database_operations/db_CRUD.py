@@ -30,7 +30,18 @@ def execute_and_fetch_all(sql: str,parameter : any):
     except db.IntegrityError:
         print(f'error, something went wrong')  
         return None
-
+def execute_and_fetch_one(sql: str,parameter : any):
+    db=get_db()
+    try:
+        row = db.execute(sql,parameter).fetchone()
+        d = collections.OrderedDict()
+        keys = row.keys()
+        for key in keys:
+            d[key] = row[key]
+        return json.dumps(d)
+    except db.IntegrityError:
+        print(f'error, something went wrong')  
+        return None
 # collections
 
 # create
@@ -65,6 +76,18 @@ def get_all_collections():
         print(f'error, something went wrong') 
     return data
     
+def get_collection_status(collection_id : int):
+    query = "SELECT COUNT(name) FROM Collectibles WHERE collection_id=? AND is_visited=?"
+    visited = execute_and_fetch_one(query,(collection_id,1))
+    not_visited = execute_and_fetch_one(query,(collection_id,0))
+    
+    if visited is None or not_visited is None:
+        print(f'error, something went wrong') 
+
+    d = collections.OrderedDict()
+    d['visited'] = json.loads(visited)['COUNT(name)']
+    d['notVisited'] = json.loads(not_visited)['COUNT(name)']
+    return json.dumps(d)
 #
 def get_collection_id(collection_name : str):
     db=get_db()

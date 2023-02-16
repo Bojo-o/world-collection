@@ -1,17 +1,17 @@
 import { latLngBounds, LatLngBoundsExpression } from 'leaflet';
 import React from 'react'
 import { useMap } from 'react-leaflet';
-import { ResultData } from '../Data/ResultsData';
+import { MapData } from '../Data/MapData/MapData';
 
 export interface MapOptionsProps {
-    waypoints : ResultData[]
+    waypoints : MapData[]
 }
 function MapOptions({waypoints}: MapOptionsProps) {
     const map = useMap(); 
     const bounds = React.useMemo(() => {
         const b = latLngBounds([])
         waypoints.forEach((waypoint) => {
-            b.extend([waypoint.long,waypoint.lati])
+            b.extend([waypoint.longitude,waypoint.latitude])
         })
         return b
     }, [waypoints])
