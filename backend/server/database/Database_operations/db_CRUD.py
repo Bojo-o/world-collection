@@ -26,7 +26,7 @@ def execute_and_fetch_all(sql: str,parameter : any):
             for key in keys:
                 d[key] = row[key]
             data.append(d)
-        return json.dumps(data)
+        return json.dumps(data,default=str)
     except db.IntegrityError:
         print(f'error, something went wrong')  
         return None
@@ -38,7 +38,7 @@ def execute_and_fetch_one(sql: str,parameter : any):
         keys = row.keys()
         for key in keys:
             d[key] = row[key]
-        return json.dumps(d)
+        return json.dumps(d,default=str)
     except db.IntegrityError:
         print(f'error, something went wrong')  
         return None
@@ -145,9 +145,16 @@ def update_collectible_collection(q_number : int,collection_id : int,new_collect
     return status
 
 # visit, date 
-def update_collectible_visit(q_number : int, is_visited : int, date: str = None) :
-    date_of_visit = "NULL" if date is None else date
-    status = execute_command("UPDATE Collectibles SET is_visited=?, date_of_visit=?  WHERE q_number=?",(is_visited,date_of_visit,q_number,))
+def update_collectible_visit(q_number : int, is_visited : int) :
+    status = execute_command("UPDATE Collectibles SET is_visited=?  WHERE q_number=?",
+    (is_visited,q_number))
+    if status is True:
+        print(f'Update visit of the collectible with Q number : Q{q_number}')
+    return status
+
+def update_collectible_visit_date(q_number : int,date_format : str = None,date_from: str = None,date_to : str = None) :
+    status = execute_command("UPDATE Collectibles SET visit_date_from=?, visit_date_to=?, visit_date_format=?  WHERE q_number=?",
+    (date_from,date_to,date_format,q_number))
     if status is True:
         print(f'Update visit of the collectible with Q number : Q{q_number}')
     return status

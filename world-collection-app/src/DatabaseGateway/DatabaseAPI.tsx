@@ -1,3 +1,4 @@
+import { CustomDate } from "../Data/CustomDate";
 import { Collection } from "../Data/Database/Colection";
 import { Collectible } from "../Data/Database/Collectible";
 import { ResultData } from "../Data/ResultsData";
@@ -31,13 +32,12 @@ function parseJson(response : Response){
 
 function convertToCollectionsDataModel(data : any[]) : Collection[] {
     let collections : Collection[] = data.map((d : any) => new Collection(d));
-    console.log(collections)
     return collections;
 }
 function convertToCollectiblesDataModel(data : any[]) : Collectible[] {
-    console.log(data)
-    let collections : Collectible[] = data.map((d : any) => new Collectible(d));
-    return collections;
+    let collectibles : Collectible[] = data.map((d : any) => new Collectible(d));
+    console.log(collectibles)
+    return collectibles;
 }
 export class DatabaseAPI {
     public static getCollections(){
@@ -58,8 +58,23 @@ export class DatabaseAPI {
             );
         })
     }
-    public static postVisitation(QNumberOfCollectible : string,isVisit : boolean){
-        this.postData(baseUrl + postVisitation,"Set visitation",JSON.stringify({'QNumber': QNumberOfCollectible,'isVisit' : isVisit}));
+    public static postVisitation(QNumberOfCollectible : string,isVisit : boolean,dateFormat : string|null=null,dateFrom : CustomDate|null=null,dateTo : CustomDate|null=null){
+        let dateFromString  : string = 'null'
+        let dateToString  : string = 'null'
+        if (dateFrom != null){
+            dateFromString = dateFrom.GetDate();
+        }
+        if (dateTo != null){
+            dateToString = dateTo.GetDate();
+        }
+        this.postData(baseUrl + postVisitation,"Set visitation",JSON.stringify(
+            {
+            'QNumber': QNumberOfCollectible,
+            'isVisit' : isVisit,
+            'dateFormat' : dateFormat,
+            'dateFrom' : dateFromString,
+            'dateTo' : dateToString
+        }));
     }
     public static postCollectibles(collectionName : string,collectibles : ResultData[]){
         this.postData(baseUrl + postCollectiblesIntoCollection,"Insert collectibles into: " + collectionName,JSON.stringify(collectibles));

@@ -59,12 +59,21 @@ def insert_collection_with_collectibles_to_db():
 def set_visit_of_collectible():
     req_data = request.get_json()
     data = json.loads(req_data['body'])
+    
     is_visit = 0
     visition = data['isVisit']
-    if visition.__eq__("True"):
+    if visition:
         is_visit = 1
 
-    status =  db_CRUD.update_collectible_visit(data['QNumber'],is_visit)
-    if status:
+    date_format = None if data['dateFormat'] == 'null' else data['dateFormat']
+    date_from = None if data['dateFrom'] == 'null' else data['dateFrom'] 
+    date_to = None if data['dateTo'] == 'null' else data['dateTo']  
+    
+    status_visit =  db_CRUD.update_collectible_visit(data['QNumber'],is_visit)
+    status_date =  db_CRUD.update_collectible_visit_date(data['QNumber'],date_format,date_from,date_to)
+    
+    if status_date and status_visit:
         return "Succesfully saved"
+
+    
     return "Something went wrong"
