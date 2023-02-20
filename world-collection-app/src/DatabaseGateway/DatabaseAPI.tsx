@@ -10,6 +10,7 @@ const getCollectiblessUrl = "get/collectibles"
 
 const postCollectiblesIntoCollection = "post/collectibles"
 const postVisitation = "post/set_visit"
+const postCollectionUpdateRename = "post/collection_update_rename"
 
 function checkStatus(response: any){
     if (response.ok){
@@ -79,6 +80,15 @@ export class DatabaseAPI {
     public static postCollectibles(collectionName : string,collectibles : ResultData[]){
         this.postData(baseUrl + postCollectiblesIntoCollection,"Insert collectibles into: " + collectionName,JSON.stringify(collectibles));
     }
+    public static postCollectionUpdateRename(updatedCollectionID : Number,newName : string){
+        this.postData(baseUrl + postCollectionUpdateRename,"Rename collection: " + updatedCollectionID,JSON.stringify(
+            {
+                'CollectionID' : updatedCollectionID,
+                'newName' : newName
+            }
+        ));
+    }
+
     private static postData(url : string,title: string,data : string){
         fetch(url,
         {

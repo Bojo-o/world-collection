@@ -1,7 +1,7 @@
 import React from "react";
 import { ResultData } from "../Data/ResultsData";
 import Details from "../Details/Details";
-import ResultsTableFooter from "./ResultsTableFooter";
+import TableFooter from "./TableFooter";
 
 function countPages(results: number,rowsPerPage : number) : number {
     return results === 0 ? 1 : Math.ceil(results / rowsPerPage);
@@ -137,7 +137,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                 }
             </tbody>
         </table>
-        <ResultsTableFooter nextPage={nextPage} prevPage={prevPage} firstPage={firstPage} lastPage={lastPage} setRowsPerPage={setRecordsPerPage} pages={pages} currPage={currPage}/>     
+        <TableFooter nextPage={nextPage} prevPage={prevPage} firstPage={firstPage} lastPage={lastPage} setRowsPerPage={setRecordsPerPage} pages={pages} currPage={currPage}/>     
         </React.Fragment>
     );
 }

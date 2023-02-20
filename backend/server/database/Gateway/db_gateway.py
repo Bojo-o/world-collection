@@ -77,3 +77,16 @@ def set_visit_of_collectible():
 
     
     return "Something went wrong"
+
+@bp_database_gateway.route('/post/collection_update_rename',methods=['POST'])
+def update_collection():
+    req_data = request.get_json()
+    data = json.loads(req_data['body'])
+    
+    status = db_CRUD.update_collection(data['CollectionID'],data['newName'])
+
+    if status:
+        return "Succesfully saved"
+
+    
+    return "Something went wrong"

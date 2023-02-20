@@ -9,7 +9,7 @@ export interface ResultsTableFooterProps {
     currPage : number;
     pages : number;
 }
-function ResultsTableFooter({nextPage,prevPage,firstPage,lastPage,setRowsPerPage,currPage,pages} : ResultsTableFooterProps) {
+function TableFooter({nextPage,prevPage,firstPage,lastPage,setRowsPerPage,currPage,pages} : ResultsTableFooterProps) {
     const first = "<<";
     const last = ">>"
     return (
@@ -32,4 +32,4 @@ function ResultsTableFooter({nextPage,prevPage,firstPage,lastPage,setRowsPerPage
     );     
 }
 
-export default ResultsTableFooter;
+export default TableFooter;

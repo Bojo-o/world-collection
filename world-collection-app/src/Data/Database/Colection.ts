@@ -10,5 +10,12 @@ export class Collection {
         if (initializer.name) this.name = initializer.name;    
         if (initializer.visited) this.visited = initializer.visited;       
         if (initializer.notVisited) this.notVisited = initializer.notVisited;   
+
+        //
+        if (initializer.collectionID) this.collectionID = initializer.collectionID;        
+    }
+
+    GetCountOfCollectibles = () => {       
+        return +this.visited + +this.notVisited;
     }
 }

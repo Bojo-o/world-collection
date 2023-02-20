@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Map from './Map/Map';
 import Form from './DataSearching/Form';
 import HomeState from './AppStates/HomeState';
+import Editation from './AppStates/Editation';
 
 const homeState = () => {
   return (
@@ -13,6 +14,14 @@ const homeState = () => {
 const collectiblesSearcherState = () => {
   return (
     <Form />
+  );
+}
+
+const editCollectionsState = () => {
+  return(
+    <>
+      <Editation />
+    </>
   );
 }
 
@@ -32,6 +41,7 @@ function App() {
             <div className='d-flex mx-5'>
               <button type='button' className='btn btn-light btn-lg me-3' onClick={() => {setAppState(homeState)}}>Home</button>
               <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(collectiblesSearcherState)}}>Find collectibles</button>
+              <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(editCollectionsState)}}>Edit collections</button>
             </div>
           </ul>
         
