@@ -58,6 +58,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
         collectible.dateFormat = DateOption[dateOption];
         collectible.dateFrom = dateFrom;
         collectible.dateTo = dateTo;
+        setEdititationOfVisit(false)
 
     }
     const handleDate = (e: any,d : DatesRange) =>{

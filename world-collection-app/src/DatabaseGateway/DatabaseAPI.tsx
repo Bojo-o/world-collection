@@ -12,6 +12,8 @@ const askForExistanceOfCollections = "/get/exists_collections"
 const postCollectiblesIntoCollection = "post/collectibles"
 const postVisitation = "post/set_visit"
 const postCollectionUpdateRename = "post/collection_update_rename"
+const postCollectionUpdateDelete = "post/collection_update_delete"
+const postCollectionUpdateMerge = "post/collection_update_merge"
 
 function checkStatus(response: any){
     if (response.ok){
@@ -85,6 +87,7 @@ export class DatabaseAPI {
             'dateTo' : dateToString
         }));
     }
+    
     public static postCollectibles(collectionName : string,collectibles : ResultData[]){
         this.postData(baseUrl + postCollectiblesIntoCollection,"Insert collectibles into: " + collectionName,JSON.stringify(collectibles));
     }
@@ -96,7 +99,21 @@ export class DatabaseAPI {
             }
         ));
     }
-
+    public static postCollectionUpdateDelete(CollectionID : Number){
+        this.postData(baseUrl + postCollectionUpdateDelete,"Delete collection: " + CollectionID,JSON.stringify(
+            {
+                'CollectionID' : CollectionID
+            }
+        ));
+    }
+    public static postCollectionUpdateMerge(CollectionID : Number,newCollectionID : Number){
+        this.postData(baseUrl + postCollectionUpdateMerge,"Merge collection " + CollectionID + " into " + newCollectionID ,JSON.stringify(
+            {
+                'CollectionID' : CollectionID,
+                'NewCollectionID' : newCollectionID
+            }
+        ));
+    }
     private static postData(url : string,title: string,data : string){
         fetch(url,
         {

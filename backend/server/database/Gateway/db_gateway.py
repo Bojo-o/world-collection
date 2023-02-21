@@ -96,6 +96,30 @@ def update_collection():
 
     if status:
         return "Succesfully saved"
+    return "Something went wrong"
+
+@bp_database_gateway.route('/post/collection_update_delete',methods=['POST'])
+def remove_collection():
+    req_data = request.get_json()
+    data = json.loads(req_data['body'])
+    
+    status = db_CRUD.delete_collection(data['CollectionID'])
+
+    if status:
+        return "Succesfully saved"
 
     
     return "Something went wrong"
+
+@bp_database_gateway.route('/post/collection_update_merge',methods=['POST'])
+def merge_collection():
+    req_data = request.get_json()
+    data = json.loads(req_data['body'])
+    if data['CollectionID'] == data['NewCollectionID']:
+        return "Same"
+    collectibles = json.loads(db_CRUD.get_all_collectibles_in_collection(data['CollectionID']))
+    for collectible in collectibles:
+        db_CRUD.update_collectible_collection(collectible['q_number'],data['CollectionID'],data['NewCollectionID'])
+    
+    db_CRUD.delete_collection(data['CollectionID'])
+    return "Merged"

@@ -11,14 +11,20 @@ export interface EditationTableProps{
     edited : Collection;
     editItem: (row : Collection) => void;
     cancelEditation: () => void;
+    removeItem: (row : Collection) => void;
     handleChange : (event : any) => void;
     saveItem : (edited : Collection) => void;
     canSaveItem : boolean;
+    merge : (collectionID : Number,intoCollectionID : Number) => void;
+    mergeItem : (row : Collection) => void;
+    merging : Collection;
 }
-function EditationTable ({collections,edited,editItem,cancelEditation,handleChange,saveItem,canSaveItem} : EditationTableProps){
+function EditationTable ({collections,edited,editItem,cancelEditation,removeItem,handleChange,saveItem,canSaveItem,merge,mergeItem,merging} : EditationTableProps){
     const [rowsPerPage,setRowsPerPage] = useState(25);
     const [pages,setPages] = useState(countPages(collections.length,rowsPerPage));
     const [currPage,setCurrPage] = useState(1);
+
+    const [selectedCollection,setSelectedCollection] = useState(-1)
 
     useEffect(() => {
         let newPages = countPages(collections.length,rowsPerPage);
@@ -47,6 +53,15 @@ function EditationTable ({collections,edited,editItem,cancelEditation,handleChan
     const setRecordsPerPage = (value : number) => {
         setRowsPerPage(value);
     }
+
+    const handleCollectionSelection = (e : any) => {
+        let value = e.target.value;
+        setSelectedCollection(value)
+    }
+    useEffect(() => {
+        setSelectedCollection(-1)
+    },[merging,edited]) 
+
     return (
         <>
         <table className="table table-light table-bordered table-striped table-hover">
@@ -67,19 +82,51 @@ function EditationTable ({collections,edited,editItem,cancelEditation,handleChan
                                 <tr key={index}>
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 
-                                {edited.collectionID !== row.collectionID ? (
+                                {edited.collectionID !== row.collectionID && merging.collectionID !== row.collectionID &&(
                                     <>
                                         <td>{row.name}</td>
                                         <td>{row.GetCountOfCollectibles().toString()}</td>
                                         <td>
                                             <div className="d-flex flex-row justify-content-center">
                                                 <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
-                                                <button type="button" className="btn btn-warning" >Merge</button>
-                                                <button key={index} type="button" className="btn btn-danger">Remove</button>
+                                                <button type="button" className="btn btn-warning" onClick={() => mergeItem(row)}>Merge</button>
+                                                <button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button>
                                             </div>
                                         </td>
                                     </>     
-                                ) : (
+                                )}
+                                {merging.collectionID === row.collectionID && (
+                                    <>
+                                        <td>{row.name}</td>
+                                        <td>{row.GetCountOfCollectibles().toString()}</td>
+                                        <td>
+                                            <div className="d-flex flex-row justify-content-center">
+                                                <p>Merge into collection:</p>
+                                                <select className="form-select" onChange={handleCollectionSelection} >
+                                                    {collections.map((item,index) => {
+                                                        if (item.collectionID === row.collectionID){
+                                                            return (<></>)
+                                                        }
+                                                        return (
+                                                        <>
+                                                            <option value={item.collectionID.toString()} key={index}>{item.name}</option>
+                                                        </>
+                                                        )
+                                                    })}
+                                                </select>
+                                                <></>
+                                                {selectedCollection === -1 ? (
+                                                    <button type="button" className="btn btn-success" disabled onClick={() => merge(row.collectionID,0)}>Merge</button>
+                                                ) : (
+                                                    <button type="button" className="btn btn-success" onClick={() => merge(row.collectionID,selectedCollection)}>Merge</button>
+                                                )}
+                                                <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancle</button>
+                                            </div>
+                                        </td>
+                                    </>
+                                )}
+                                {edited.collectionID === row.collectionID &&
+                                (
                                     <>
                                         <td>
                                             
