@@ -32,12 +32,25 @@ def execute_and_fetch_all(sql: str,parameter : any):
         return None
 def execute_and_fetch_one(sql: str,parameter : any):
     db=get_db()
+    
     try:
         row = db.execute(sql,parameter).fetchone()
         d = collections.OrderedDict()
         keys = row.keys()
         for key in keys:
             d[key] = row[key]
+        return json.dumps(d,default=str)
+    except db.IntegrityError:
+        print(f'error, something went wrong')  
+        return None
+
+def execute_and_ask(sql: str,parameter : any):
+    db=get_db()
+    try:
+        row = db.execute(sql,parameter).fetchone()
+        d = collections.OrderedDict()
+        key = row.keys()[0]
+        d['result'] = row[key]         
         return json.dumps(d,default=str)
     except db.IntegrityError:
         print(f'error, something went wrong')  
@@ -100,6 +113,14 @@ def get_collection_id(collection_name : str):
         print(f'error, something went wrong')
         return 'error'  
 #
+
+def exist_collection_with_name(name : str):
+    ask = "SELECT EXISTS(SELECT * FROM Collections WHERE name=?)"
+    data = execute_and_ask(ask,(name,))
+    if data is None:
+        print(f'error, something went wrong') 
+    return data
+
 
 # collectibles
 

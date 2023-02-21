@@ -9,18 +9,23 @@ function Editation(){
     const [edited,setEdited] = useState<Collection>(new Collection);
     const [filter,setfilter] = useState<string>('');
 
+    const [canSaveCollection,setCanSaveCollection] = useState(false);
+
     const handleSearch = (event : any) => {
         const value = event.target.value;
         setfilter(value);  
     }
     useEffect(() => {
+        fetchCollections()
+    },[])
+    const fetchCollections = () => {
         setCollectionsLoading(true);
         DatabaseAPI.getCollections().then( (collections) => {
             setCollectionsLoading(false);
             setCollections(collections);            
         }        
         );
-    },[])
+    }
 
     const editItem = (row : Collection) => {  
         setEdited(new Collection(row));   
@@ -29,7 +34,7 @@ function Editation(){
         setEdited(new Collection) 
     }
     const handleChange = (event : any) => {
-        const value = event.target.value;
+        const value : string = event.target.value;
         
         const change = {
             name: value,
@@ -37,9 +42,21 @@ function Editation(){
         setEdited((prev) => {
             return new Collection({...prev,...change});
         });
+
+        DatabaseAPI.askIfExistsCollections(value).then((r) => {
+            if (value.length > 2){
+                setCanSaveCollection(!r)
+            }else{
+                setCanSaveCollection(false)
+            }
+        })
+        
     }
     const saveItem = (edited : Collection) => {
+        
         DatabaseAPI.postCollectionUpdateRename(edited.collectionID,edited.name)
+        cancelEditation();
+        fetchCollections();
     }
     return (
         <>
@@ -51,7 +68,7 @@ function Editation(){
                 <input className="form-control mr-sm-2" type="search" placeholder="Search for collection" onChange={handleSearch} />
                 <h3>Collections:</h3>
                 <EditationTable collections={collections.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))} edited={edited}
-                editItem={editItem} cancelEditation={cancelEditation} handleChange={handleChange} saveItem={saveItem}/>
+                editItem={editItem} cancelEditation={cancelEditation} handleChange={handleChange} saveItem={saveItem} canSaveItem={canSaveCollection}/>
                 </>
             )}
         </>

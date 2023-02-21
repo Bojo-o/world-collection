@@ -13,8 +13,9 @@ export interface EditationTableProps{
     cancelEditation: () => void;
     handleChange : (event : any) => void;
     saveItem : (edited : Collection) => void;
+    canSaveItem : boolean;
 }
-function EditationTable ({collections,edited,editItem,cancelEditation,handleChange,saveItem} : EditationTableProps){
+function EditationTable ({collections,edited,editItem,cancelEditation,handleChange,saveItem,canSaveItem} : EditationTableProps){
     const [rowsPerPage,setRowsPerPage] = useState(25);
     const [pages,setPages] = useState(countPages(collections.length,rowsPerPage));
     const [currPage,setCurrPage] = useState(1);
@@ -70,21 +71,35 @@ function EditationTable ({collections,edited,editItem,cancelEditation,handleChan
                                     <>
                                         <td>{row.name}</td>
                                         <td>{row.GetCountOfCollectibles().toString()}</td>
-                                        <td className="d-flex flex-row justify-content-center">
-                                            <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
-                                            <button type="button" className="btn btn-warning" >Merge</button>
-                                            <button key={index} type="button" className="btn btn-danger">Remove</button>
+                                        <td>
+                                            <div className="d-flex flex-row justify-content-center">
+                                                <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
+                                                <button type="button" className="btn btn-warning" >Merge</button>
+                                                <button key={index} type="button" className="btn btn-danger">Remove</button>
+                                            </div>
                                         </td>
                                     </>     
                                 ) : (
                                     <>
                                         <td>
-                                            <input type="text" className="form-control" value={edited.name} onChange={handleChange}/>
+                                            
+                                            <input type="text" className="form-control" aria-describedby="collectionNameHelp" value={edited.name} onChange={handleChange}/>
+                                            {!canSaveItem && (
+                                                <div id="collectionNameHelp" className="form-text">{edited.name.length > 2 ? "That name has already used" : "Mame must be at least 3 character long."}</div>
+                                            )}
+                                            
                                         </td>
                                         <td>{row.GetCountOfCollectibles().toString()}</td>
-                                        <td className="d-flex flex-row justify-content-center">
-                                            <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
-                                            <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancle</button>
+                                        <td >
+                                            <div className="d-flex flex-row justify-content-center">
+                                                {canSaveItem ? (
+                                                    <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
+                                                ) : (
+                                                    <button type="button" className="btn btn-success"  disabled onClick={() => saveItem(edited)}>Save</button>
+                                                )}
+                                                
+                                                <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancle</button>
+                                            </div>
                                         </td>
                                     </>
                                 )}

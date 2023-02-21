@@ -31,6 +31,15 @@ def get_collectibles_in_collection():
 
     return db_CRUD.get_all_collectibles_in_collection(collection_id)
 
+@bp_database_gateway.route('/get/exists_collections',methods=['GET'])
+def exists_collections():
+    collection_name = request.args.get("name")
+    if collection_name is None:
+        return "Invalid request, name=<name of collection,which will be tested> must be provided"
+
+    result = db_CRUD.exist_collection_with_name(collection_name)
+    return result
+
 # post 
 
 @bp_database_gateway.route('/post/collectibles', methods=['POST'])

@@ -6,6 +6,7 @@ import { ResultData } from "../Data/ResultsData";
 const baseUrl = "DatabaseGateway/";
 const getCollectionsUrl = "get/collections"
 const getCollectiblessUrl = "get/collectibles"
+const askForExistanceOfCollections = "/get/exists_collections"
 
 
 const postCollectiblesIntoCollection = "post/collectibles"
@@ -40,7 +41,14 @@ function convertToCollectiblesDataModel(data : any[]) : Collectible[] {
     console.log(collectibles)
     return collectibles;
 }
+function convertToAskedResultModel(data : any) : boolean {
+    let result = data['result'];
+    return (result == "1") ? true : false;
+}
 export class DatabaseAPI {
+    public static askIfExistsCollections(name : string){
+        return this.fetchData(baseUrl + askForExistanceOfCollections,`name=${name}`).then(convertToAskedResultModel);
+    }
     public static getCollections(){
         return this.fetchData(baseUrl + getCollectionsUrl,"").then(convertToCollectionsDataModel);
     }
