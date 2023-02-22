@@ -1,7 +1,8 @@
 import React from "react";
 import { ResultData } from "../Data/ResultsData";
 import Details from "../Details/Details";
-import TableFooter from "./TableFooter";
+import Table from "../Table/Table";
+import TableFooter from "../Table/TableFooter";
 
 function countPages(results: number,rowsPerPage : number) : number {
     return results === 0 ? 1 : Math.ceil(results / rowsPerPage);
@@ -20,60 +21,22 @@ export interface ResultsTableProps{
 }
 
 function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeItem,saveItem,showDetails,detailShowing} : ResultsTableProps) {
-    //const [data,setData] = React.useState<ResultData[]>(results);
-    //const [edited,setEdited] = React.useState<ResultData>(new ResultData);
 
-    const [rowsPerPage,setRowsPerPage] = React.useState(25);
-    const [pages,setPages] = React.useState(countPages(results.length,rowsPerPage));
-    const [resultsCount, setResultsCount] = React.useState(results.length);
-    const [currPage,setCurrPage] = React.useState(1);
+    const renderHead = () => {
+        return (
+            <>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sub-Type of</th>
+                <th scope="col"></th>
+            </>
+        )
+    }
 
-    React.useEffect(() => {
-        let newPages = countPages(results.length,rowsPerPage);
-        setResultsCount(results.length);
-        setPages(newPages)
-        if (currPage > newPages){
-            setCurrPage((prev) => prev === 1 ? 0 : newPages)
-        }
-    },[results,rowsPerPage])
-
-    const nextPage = () => {
-        if (currPage !== pages){
-            setCurrPage((prev)=> prev + 1);
-        }
-    }
-    const prevPage = () => {
-        if (currPage !== 1){
-            setCurrPage((prev)=> prev - 1);
-        }
-    }
-    const lastPage = () => {
-        setCurrPage(pages);
-    }
-    const firstPage = () => {
-        setCurrPage(1);
-    }
-    const setRecordsPerPage = (value : number) => {
-        setRowsPerPage(value);
-    }
-    
-    
-    return (
-        <React.Fragment>
-        <table className="table table-light table-bordered table-striped table-hover">
-            <thead>
-                <tr className="table-dark">
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Sub-Type of</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {
-                    
-
+    const renderBody = (currPage : number,rowsPerPage : number) => {
+        return(
+            <>
+                {                   
                     results.slice(currPage * rowsPerPage - rowsPerPage,currPage * rowsPerPage).map((row,index) => {
                         return (
                             <React.Fragment>
@@ -135,10 +98,13 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                         );
                     })
                 }
-            </tbody>
-        </table>
-        <TableFooter nextPage={nextPage} prevPage={prevPage} firstPage={firstPage} lastPage={lastPage} setRowsPerPage={setRecordsPerPage} pages={pages} currPage={currPage}/>     
-        </React.Fragment>
+            </>
+        )
+    }
+    return (
+        <>
+            <Table rowsCount={results.length} renderHead={renderHead} renderBody={renderBody} />
+        </>
     );
 }
 
