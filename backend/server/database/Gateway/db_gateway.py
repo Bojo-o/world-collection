@@ -123,3 +123,23 @@ def merge_collection():
     
     db_CRUD.delete_collection(data['CollectionID'])
     return "Merged"
+
+@bp_database_gateway.route('/post/collectible_delete',methods=['POST'])
+def delete_collectible():
+    req_data = request.get_json()
+    data = json.loads(req_data['body'])
+    status = db_CRUD.delete_collectible(data['q_number'],data['CollectionID'])
+
+    if status:
+        return "Succesfully deleted collectible"
+    return "Something went wrong"
+
+@bp_database_gateway.route('/post/collectible_update_name',methods=['POST'])
+def update_collectible_name():
+    req_data = request.get_json()
+    data = json.loads(req_data['body'])
+    status = db_CRUD.update_collectible_name(data['q_number'],data['name'])
+
+    if status:
+        return "Succesfully updated"
+    return "Something went wrong"

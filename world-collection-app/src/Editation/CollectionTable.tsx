@@ -19,8 +19,9 @@ export interface EditationTableProps{
     merge : (collectionID : Number,intoCollectionID : Number) => void;
     mergeItem : (row : Collection) => void;
     merging : Collection;
+    editCollectibles : (row : Collection) => void;
 }
-function EditationTable ({collections,edited,editItem,cancelEditation,removeItem,handleChange,saveItem,canSaveItem,merge,mergeItem,merging} : EditationTableProps){
+function CollectionTable ({collections,edited,editItem,cancelEditation,removeItem,handleChange,saveItem,canSaveItem,merge,mergeItem,merging,editCollectibles} : EditationTableProps){
     const [selectedCollection,setSelectedCollection] = useState(-1)
 
     const handleCollectionSelection = (e : any) => {
@@ -55,6 +56,7 @@ function EditationTable ({collections,edited,editItem,cancelEditation,removeItem
                                 <td>{row.GetCountOfCollectibles().toString()}</td>
                                 <td>
                                     <div className="d-flex flex-row justify-content-center">
+                                        <button type="button" className="btn btn-info" onClick={() => editCollectibles(row)}>Edit Collectibles</button>
                                         <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
                                         <button type="button" className="btn btn-warning" onClick={() => mergeItem(row)}>Merge</button>
                                         <button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button>
@@ -98,7 +100,7 @@ function EditationTable ({collections,edited,editItem,cancelEditation,removeItem
                                 <td>         
                                     <input type="text" className="form-control" aria-describedby="collectionNameHelp" value={edited.name} onChange={handleChange}/>
                                     {!canSaveItem && (
-                                        <div id="collectionNameHelp" className="form-text">{edited.name.length > 2 ? "That name has already used" : "Mame must be at least 3 character long."}</div>
+                                        <div id="collectionNameHelp" className="form-text">{edited.name.length > 2 ? "That name has already used" : "Name must be at least 3 character long."}</div>
                                     )}
                                     
                                 </td>
@@ -130,4 +132,4 @@ function EditationTable ({collections,edited,editItem,cancelEditation,removeItem
         </>
     );
 }
-export default EditationTable
+export default CollectionTable

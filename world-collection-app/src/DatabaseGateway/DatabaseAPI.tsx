@@ -15,6 +15,9 @@ const postCollectionUpdateRename = "post/collection_update_rename"
 const postCollectionUpdateDelete = "post/collection_update_delete"
 const postCollectionUpdateMerge = "post/collection_update_merge"
 
+const postCollectibleDelete="/post/collectible_delete"
+const postCollectibleUpdateName="/post/collectible_update_name"
+
 function checkStatus(response: any){
     if (response.ok){
         return response;
@@ -113,6 +116,22 @@ export class DatabaseAPI {
                 'NewCollectionID' : newCollectionID
             }
         ));
+    }
+    public static postCollectibleDeletion(collectibleQNumber : string,CollectionID : Number){
+        this.postData(baseUrl + postCollectibleDelete,"Delete collectible",JSON.stringify(
+            {
+                'q_number' : collectibleQNumber,
+                'CollectionID' : CollectionID
+            }
+        ))
+    }
+    public static postCollectibleUpdateName(collectibleQNumber : string,newName : string){
+        this.postData(baseUrl + postCollectibleUpdateName,"Update collectible name",JSON.stringify(
+            {
+                'q_number' : collectibleQNumber,
+                'name' : newName
+            }
+        ))
     }
     private static postData(url : string,title: string,data : string){
         fetch(url,
