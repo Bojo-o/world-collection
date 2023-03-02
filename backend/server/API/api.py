@@ -81,6 +81,8 @@ def get_results_from_wikidata():
                 builder.add_minus_location(item)
         
         queryText = builder.build()
+        print(queryText)
+        print("aaa")
         try:
             result = query.get_query_results(endpoint_url,queryText)
             return Formater.formatToJson(result)
