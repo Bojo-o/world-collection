@@ -1,4 +1,4 @@
-export class CollectiblesBaseData {
+export class SearchData {
     QNumber : string = '';
     name : string = '';
     desc : string = '';

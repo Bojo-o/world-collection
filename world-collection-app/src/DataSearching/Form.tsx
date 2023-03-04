@@ -1,13 +1,15 @@
 import React from "react";
-import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
+import { SearchData } from "../Data/SearchData/SearchData";
 import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
 import { ResultData } from "../Data/ResultsData";
 import ViewMap from "../Map/ViewMap";
-import SearcherBar, { TypeOfSearch } from "./ColletiblesClassSearch";
+
 import RenderCollectiblesQuery from "./RenderCollectiblesQuery";
 import Result from "./Results";
 import ResultsTable from "./ResultsTable";
 import { SearchAPI } from "./SearchAPI";
+import SearcherBar, { TypeOfSearch } from "./ColletiblesClassSearch";
+
 
 function Form() {
 
@@ -15,7 +17,7 @@ function Form() {
     const [resultData,setResultData]  = React.useState<ResultData[]|null>(null);
     const [loading,setLoading] = React.useState(false);
 
-    const setCollectiblesClass = (data : CollectiblesBaseData) => {
+    const setCollectiblesClass = (data : SearchData) => {
         setQuery((q) => {
             let newQuery = new CollectiblesQuery({...q});
             newQuery.setType(data.name,data.QNumber);
@@ -23,7 +25,7 @@ function Form() {
         })
     }
 
-    const setRestrictionAdministrativeArea = (data : CollectiblesBaseData) => {
+    const setRestrictionAdministrativeArea = (data : SearchData) => {
         setQuery((q) => {
             let newQuery = new CollectiblesQuery({...q});
             newQuery.setRestrictionAdministrativeArea(data.name,data.QNumber);

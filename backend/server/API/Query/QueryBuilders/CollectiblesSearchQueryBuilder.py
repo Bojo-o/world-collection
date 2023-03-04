@@ -1,4 +1,5 @@
-from .QueyBuilders import QueryAroundSearchBuilder
+from .AroundQueyBuilder import QueryAroundSearchBuilder
+from .AreaQueryBuilder import QueryAreaSearchBuilder
 
 class CollectiblesSearchQueryBuilder:
     
@@ -7,3 +8,6 @@ class CollectiblesSearchQueryBuilder:
     
     def search_around_point(self) -> QueryAroundSearchBuilder:
         return QueryAroundSearchBuilder(self._super_class)
+
+    def search_in_administrative_area(self) -> QueryAreaSearchBuilder:
+        return QueryAreaSearchBuilder(self._super_class)

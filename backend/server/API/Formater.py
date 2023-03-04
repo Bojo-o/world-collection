@@ -2,7 +2,7 @@ import collections
 import json
 
 
-def formatToJson(input):
+def convertToJson(input):
     vars = input['head']['vars']
     data = input['results']['bindings']
 

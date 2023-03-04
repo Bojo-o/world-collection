@@ -1,5 +1,5 @@
 import React, { FormEvent, SyntheticEvent } from "react";
-import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
+import { SearchData } from "../Data/SearchData/SearchData";
 import RenderSearchInfo from "./RenderSearchInfo";
 import { SearchAPI } from "./SearchAPI";
 
@@ -7,13 +7,13 @@ export enum TypeOfSearch {
     collectiblesCLass,
     administrativeArea,
 }
-interface CollectiblesClassSearcherProps{   
-    setDataToQuery : (data : CollectiblesBaseData) => void;
+interface SearcherBarProps{   
+    setDataToQuery : (data : SearchData) => void;
     placeHolder : string;
     typeOfSearch : TypeOfSearch;
 }
-function CollectiblesClassSearcher({setDataToQuery: setCollectiblesClass,placeHolder, typeOfSearch} : CollectiblesClassSearcherProps) {
-    const [options, setOptions] = React.useState<CollectiblesBaseData[]>([]);
+function SearcherBar({setDataToQuery: setCollectiblesClass,placeHolder, typeOfSearch} : SearcherBarProps) {
+    const [options, setOptions] = React.useState<SearchData[]>([]);
     const [loading, setLoading] = React.useState(false);
     const [display, setDisplay] = React.useState(false);
     const [searchWord, setSearchWord] = React.useState("");
@@ -76,11 +76,10 @@ function CollectiblesClassSearcher({setDataToQuery: setCollectiblesClass,placeHo
                                 key={index}
                                 className="list-group-item list-group-item-action"
                                 onClick={() => {
-                                    setCollectiblesClass(option);
-                                    //setSearchWord(option.name)
+                                    setCollectiblesClass(option);                               
                                     setDisplay(false)                                   
                                 }}>
-                                <RenderSearchInfo colletible={option}/>
+                                <RenderSearchInfo result={option}/>
                                 </button>
                             );
                         })}                        
@@ -90,4 +89,4 @@ function CollectiblesClassSearcher({setDataToQuery: setCollectiblesClass,placeHo
         </React.Fragment>
     )
 }
-export default CollectiblesClassSearcher;
+export default SearcherBar;

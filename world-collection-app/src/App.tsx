@@ -4,6 +4,7 @@ import Map from './Map/Map';
 import Form from './DataSearching/Form';
 import HomeState from './AppStates/HomeState';
 import Editation from './AppStates/Editation';
+import CollectibleSearching from './AppStates/CollectiblesSearching';
 
 const homeState = () => {
   return (
@@ -13,7 +14,8 @@ const homeState = () => {
 
 const collectiblesSearcherState = () => {
   return (
-    <Form />
+    //<Form />
+    <CollectibleSearching />
   );
 }
 
@@ -31,6 +33,7 @@ function App() {
 
   
   return (
+    
     <React.Fragment>
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark '>
         <div className='d-flex flex-row mx-4'>

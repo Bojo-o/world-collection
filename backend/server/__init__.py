@@ -27,10 +27,6 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return ' World!'
 
         
     #from .database import db
@@ -39,16 +35,13 @@ def create_app(test_config=None):
     db_initiazition.init_app(app)
     
 
-    @app.route('/waypoints')
-    def get_all_waypoints():      
-        result = db.get_all_from_db()
-        return result
-        #print(result)
-        #return result
 
     #register api blueprint to app
-    from .API import api
-    app.register_blueprint(api.bp)
+    from .API import API
+    app.register_blueprint(API.bp)
+
+    from .API import WikidataAPI
+    app.register_blueprint(WikidataAPI.API)
 
     #register database api/gateway to app
     #from .database import db_gateway

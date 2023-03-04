@@ -1,17 +1,17 @@
 import React from "react";
-import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
+import { SearchData } from "../Data/SearchData/SearchData";
 
 interface RenderSearchInfo{
-    colletible : CollectiblesBaseData;
+    result : SearchData;
 }
-function RenderSearchInfo({colletible} : RenderSearchInfo) {
+function RenderSearchInfo({result} : RenderSearchInfo) {
 
     return (
         <React.Fragment>
             <p className="h5">
-                {colletible.name}
+                {result.name}
                 <br />
-                <small className="text-muted">{colletible.desc}</small>
+                <small className="text-muted">{result.desc}</small>
             </p>
         </React.Fragment>
     );

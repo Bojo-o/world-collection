@@ -1,4 +1,4 @@
-import { CollectiblesBaseData } from "../Data/ColletiblesBaseData";
+import { SearchData } from "../Data/SearchData/SearchData";
 import { EntityDetailsData } from "../Data/EntityDetailsData";
 import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
 import { ResultData } from "../Data/ResultsData";
@@ -9,6 +9,7 @@ const urlEntityDetails = "API/wikidata/detail/details";
 const urlEntityWikipediaLink = "API/wikidata/detail/link_to_wikipedia";
 
 const urlQuery = "API/wikidata/query";
+
 
 function checkStatus(response: any){
     if (response.ok){
@@ -33,8 +34,8 @@ function convertToEntityDetailsDataModel(data : any[]) : EntityDetailsData {
     return details;
 }
 
-function convertToCollectiblesBaseDataModels(data: any[]) : CollectiblesBaseData[] {
-    let collectibles : CollectiblesBaseData[] = data.map((d : any) => new CollectiblesBaseData(d));
+function convertToCollectiblesBaseDataModels(data: any[]) : SearchData[] {
+    let collectibles : SearchData[] = data.map((d : any) => new SearchData(d));
     return collectibles;
 }
 

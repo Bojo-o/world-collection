@@ -1,6 +1,5 @@
 import React from "react";
 import { EntityDetailsData } from "../Data/EntityDetailsData";
-import { ResultData } from "../Data/ResultsData";
 import { SearchAPI } from "../DataSearching/SearchAPI";
 import './Details.css';
 
