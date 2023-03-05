@@ -5,7 +5,7 @@ import { Collectible } from '../Data/Database/Collectible';
 import CollectibleWayPoint from './CollectibleWayPoint';
 import { convertToMapDataModel } from './ConvertToMapData';
 import './Map.css';
-import MapOptions from './MapOptions';
+import MapOptions from './MapOptions/MapOptions';
 
 export interface MapProps{
     collectiblesToShow : Collectible[]

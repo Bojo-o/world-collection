@@ -5,7 +5,6 @@ interface RenderSearchInfo{
     result : SearchData;
 }
 function RenderSearchInfo({result} : RenderSearchInfo) {
-
     return (
         <React.Fragment>
             <p className="h5">

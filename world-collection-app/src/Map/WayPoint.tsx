@@ -16,7 +16,7 @@ export interface WayPointProps {
 function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleChange} : WayPointProps){
     return (
         <>
-            <Marker position={[data.long,data.lati]}>
+            <Marker position={[data.lati,data.long]}>
                 <Popup>                    
                     {edited.QNumber === data.QNumber ? (
                         <React.Fragment>

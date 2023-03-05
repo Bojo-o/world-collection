@@ -1,6 +1,7 @@
 import { SearchData } from "../Data/SearchData/SearchData";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
+const urlPlaces = "WikidataAPI/search/places";
 
 export class WikiDataAPI {
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
@@ -23,10 +24,16 @@ export class WikiDataAPI {
     private static parseJson(response : Response){
         return response.json();
     }
-    static async getTypesOfCollectibles(searchWord : string){
+    static async searchForTypesOfCollectibles(searchWord : string){
         let param = new Map<string,string>();
         param.set("key_word",searchWord)
         const data = await this.fetchData(urlCollectiblesType, param);
+        return this.convertToSearchDataModel(data);
+    }
+    static async searchForPlaces(searchWord : string){
+        let param = new Map<string,string>();
+        param.set("key_word",searchWord)
+        const data = await this.fetchData(urlPlaces, param);
         return this.convertToSearchDataModel(data);
     }
     private static async fetchData(url : string,params : Map<string,string>){

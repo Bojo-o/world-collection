@@ -4,7 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 import { ResultData } from "../Data/ResultsData";
 import WayPoint from "./WayPoint";
 import { map } from "leaflet";
-import MapOptions from "./MapOptions";
+import MapOptions from "./MapOptions/MapOptions";
 import { convertToMapDataModel } from "./ConvertToMapData";
 
 export interface ViewMapProps {

@@ -19,8 +19,8 @@ def convertToJson(input):
                     d["description"] = item["description"]["value"]
                 case "coord":
                     coords = item['coord']["value"].removeprefix("Point(").removesuffix(")").split(' ')
-                    d["lati"] = coords[0]
-                    d["long"] = coords[1]
+                    d["long"] = coords[0]
+                    d["lati"] = coords[1]
                 case "instancesResult":
                     d["instanceOf"] = item["instancesResult"]["value"]
         formatted_data.append(d)

@@ -1,4 +1,4 @@
-from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder
+from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
 from . import Formater
 
@@ -40,5 +40,15 @@ def search_for_classes():
 
     return process_query(builder.build())
 
-
+@API.route('/search/places',methods=['GET'])
+def search_for_locations():
+    searched_word = request.args.get("key_word")
+    if searched_word is None:
+        return "Invalid request,param: key_word must be provided"
     
+    builder = SearchInstancesQueryBuilder()
+    builder.set_seach_by_word(searched_word)
+    builder.add_super_class(SUPER_CLASS)
+    builder.set_geo_obtaining()
+    print(builder.build())
+    return process_query(builder.build())

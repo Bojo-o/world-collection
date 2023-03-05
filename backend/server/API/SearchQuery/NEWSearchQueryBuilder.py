@@ -11,6 +11,7 @@ class SearchBaseQueryBuilder(ABC):
         self._super_classes = set()
         self._exceptions_classes = set()
         self._statment : str = statment
+        self._geo_flag : bool = False
 
     def convert_set(self,set : set):
         list = []
@@ -18,6 +19,9 @@ class SearchBaseQueryBuilder(ABC):
             list.append("wd:" + item + " ")
         return "" . join(list)
     
+    def set_geo_obtaining(self):
+        self._geo_flag = True
+
     def set_seach_by_word(self,word : str):
         self._searched_word = word
 
@@ -28,7 +32,8 @@ class SearchBaseQueryBuilder(ABC):
         self._exceptions_classes.add(Qnumber_of_class)
 
     def __append_header(self):
-        self._query.append("SELECT DISTINCT  ?item ?itemLabel ?description")
+        geo = "?coord" if self._geo_flag else ""
+        self._query.append("SELECT DISTINCT  ?item ?itemLabel ?description " + geo)
         self._query.append("WHERE {")
 
     def __append_footer(self):
@@ -67,6 +72,9 @@ class SearchBaseQueryBuilder(ABC):
         # exceptions
         if self._exceptions_classes.__len__() != 0:
             self.__build_predicate("exceptionClasses",self._exceptions_classes,True)
+
+        if self._geo_flag:
+            self._query.append("?item wdt:P625 ?coord .")
 
         self.__append_footer()
 

@@ -7,8 +7,9 @@ import RenderSearchInfo from "../RenderSearchInfo";
 interface SearchBarProps{   
     placeHolder : string;
     handleClickedResult : (data : SearchData) => void;
+    dataGetter : (searchWord : string) => Promise<SearchData[]>;
 }
-function SearchBar({placeHolder,handleClickedResult} : SearchBarProps) {
+function SearchBar({placeHolder,handleClickedResult,dataGetter} : SearchBarProps) {
     const [results, setResults] = useState<SearchData[]>([]);
     const [loading, setLoading] = useState(false);
     const [isError,setIsError] = useState(false);
@@ -49,7 +50,7 @@ function SearchBar({placeHolder,handleClickedResult} : SearchBarProps) {
         setLoading(true)
         setIsError(false);
 
-        WikiDataAPI.getTypesOfCollectibles(searchWord).then(
+        dataGetter(searchWord).then(
             (data) => {
                 setLoading(false)
                 setResults(data);
