@@ -1,0 +1,25 @@
+
+.button-area-choosing{
+    
+    width: 500px;
+    height: 500px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 40px;
+    text-align: center;
+    font-size: 32px;
+    font-weight:bolder;
+    color:crimson;
+}
+.button-area-choosing:hover{
+    opacity: 0.5;
+}
+
+#button-radius-area {
+    background-image: url("../static/Images/radius_area_image.png");
+}
+
+#button-administrative-area {
+    background-image: url("../static/Images/administrative_area_image.png");
+}

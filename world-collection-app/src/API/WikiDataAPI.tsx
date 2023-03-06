@@ -2,6 +2,7 @@ import { SearchData } from "../Data/SearchData/SearchData";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
+const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
 
 export class WikiDataAPI {
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
@@ -48,6 +49,12 @@ export class WikiDataAPI {
         let param = new Map<string,string>();
         param.set("key_word",searchWord)
         const data = await this.fetchData(urlPlaces, param);
+        return this.convertToSearchDataModel(data);
+    }
+    static async searchForAdministrativeAreas(searchWord : string){
+        let param = new Map<string,string>();
+        param.set("key_word",searchWord)
+        const data = await this.fetchData(urlAdministrativeAreas, param);
         return this.convertToSearchDataModel(data);
     }
     private static async fetchData(url : string,params : Map<string,string>){

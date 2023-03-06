@@ -11,13 +11,18 @@ export class SearchCollectiblesBuilderQuery{
         this.exceptionsCollectibleType = initializer.exceptionsCollectibleType; 
     }
 
-    public setType(QNumber : string,name : string) {
-        this.collectibleType = new Entity(QNumber,name);
+    public setType(entity : Entity) {
+        this.collectibleType = entity;
+        this.exceptionsCollectibleType = [];
         return new SearchCollectiblesBuilderQuery(this);
     }
 
-    public addTypeException(QNumber : string,name : string){
-        this.exceptionsCollectibleType.push(new Entity(QNumber,name));
+    public addTypeException(entity : Entity){
+        this.exceptionsCollectibleType.push(entity);
+        return new SearchCollectiblesBuilderQuery(this);
+    }
+    public removeTypeException(index : number){
+        this.exceptionsCollectibleType.splice(index);
         return new SearchCollectiblesBuilderQuery(this);
     }
     public isTypeSet(){
@@ -26,22 +31,13 @@ export class SearchCollectiblesBuilderQuery{
     public getType(){
         return this.collectibleType;
     }
-    public render(){
-        return (
-            <div className="d-flex">
-                {this.collectibleType != null && (
-                    <>
-                        <h3>Search for collectibles of type {this.collectibleType.GetName()}</h3>
-                        <ul className="list-group">
-                            {this.exceptionsCollectibleType.map((type) => {
-                                return(
-                                    <li className="list-group-item">{type.GetName()}</li>
-                                )
-                            })}
-                        </ul>
-                    </>
-                )}
-            </div>
-        )
+    public getTypeExceptions(){
+        let newArr : Entity[] = [];
+        this.exceptionsCollectibleType.forEach((type) => {
+            newArr.push(type);
+        })
+        return newArr;
     }
+    
+
 }

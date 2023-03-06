@@ -13,6 +13,9 @@ endpoint_url = "https://query.wikidata.org/sparql"
 
 # constants
 SUPER_CLASS : str = "Q2221906" # geographic location
+ADMINISTRATIVE_AREA : str = "Q56061" # administrative territorial entity
+#
+NOT_ADMINISTRATIVE_AREA : str = "Q15642566" # non-political administrative territorial entity
 
 def process_query(query : str):
     try:
@@ -56,4 +59,16 @@ def search_for_locations():
     builder.add_super_class(SUPER_CLASS)
     builder.set_geo_obtaining()
     print(builder.build())
+    return process_query(builder.build())
+
+@API.route('/search/administrative_areas',methods=['GET'])
+def search_for_administrative_areas():
+    searched_word = request.args.get("key_word")
+    if searched_word is None:
+        return "Invalid request,param: key_word must be provided"
+    
+    builder = SearchInstancesQueryBuilder()
+    builder.set_seach_by_word(searched_word)
+    builder.add_super_class(ADMINISTRATIVE_AREA)
+    builder.add_exception_class(NOT_ADMINISTRATIVE_AREA)
     return process_query(builder.build())
