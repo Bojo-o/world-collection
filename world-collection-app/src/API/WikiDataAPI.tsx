@@ -24,6 +24,20 @@ export class WikiDataAPI {
     private static parseJson(response : Response){
         return response.json();
     }
+    static async searchForTypesOfCollectiblesExceptions(searchWord : string,superClass : string|undefined,exceptionsClasses : string[]){
+        let param = new Map<string,string>();
+        if (searchWord !== ""){
+            param.set("key_word",searchWord)
+        }
+        if (superClass != undefined){
+            param.set("super_class",superClass)
+        }
+        
+        param.set("exceptions",exceptionsClasses.join(","))
+    
+        const data = await this.fetchData(urlCollectiblesType, param);
+        return this.convertToSearchDataModel(data);
+    }
     static async searchForTypesOfCollectibles(searchWord : string){
         let param = new Map<string,string>();
         param.set("key_word",searchWord)
@@ -39,7 +53,7 @@ export class WikiDataAPI {
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";
         for (let [key, value] of params) {
-            parameters = parameters.concat(`${key}=${value}`)        
+            parameters = parameters.concat(`${key}=${value}&`)        
         }
         try {
             const response = await fetch(`${url}?${parameters}`);

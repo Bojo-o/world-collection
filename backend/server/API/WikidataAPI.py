@@ -25,6 +25,7 @@ def process_query(query : str):
 def search_for_classes():
     # argumnets 
     searched_word = request.args.get("key_word")
+    super_class = request.args.get("super_class")
     exceptions_classes = request.args.get("exceptions")
 
     builder = SearchClassesQueryBuilder()
@@ -32,7 +33,11 @@ def search_for_classes():
     if searched_word is not None:
         builder.set_seach_by_word(searched_word)
 
-    builder.add_super_class(SUPER_CLASS)
+    if super_class is not None:
+        builder.add_super_class(super_class)
+    else:
+        builder.add_super_class(SUPER_CLASS)
+    
 
     if exceptions_classes is not None:
         for item in exceptions_classes.split(','):
