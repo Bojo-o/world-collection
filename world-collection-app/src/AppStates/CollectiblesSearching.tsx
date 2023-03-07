@@ -13,25 +13,25 @@ export enum CollectiblesSearchingStates{
     AreaChoosing,
     RadiusArea,
     AdministrativeArea,
+    HeritageSelection,
 }
 function CollectibleSearching(){
     const [searchQuery,setSearchQuery] = useState<SearchCollectiblesBuilderQuery>(new SearchCollectiblesBuilderQuery());
-    const [showTypeException,setShowTypeException] = useState(false);
     const [state,setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.TypePicking)
-    const [nextStepFlag,setNextStepFlag] = useState(false);
 
     const handleCollectibleType = (data : SearchData) => {
         setSearchQuery(searchQuery.setType(new Entity(data.QNumber,data.name)));
-        setNextStepFlag(true);
         //setSearchState(chooseAreaTypeState)
     }
     const handleAdministrativeArea = (data : SearchData) => {
-        setSearchQuery(searchQuery.setType(new Entity(data.QNumber,data.name)));
-        setNextStepFlag(true);
+        setSearchQuery(searchQuery.setAdministrativeArea(new Entity(data.QNumber,data.name)));
         //setSearchState(chooseAreaTypeState)
     }
     const handleExceptionType = (data : SearchData) => {
         setSearchQuery(searchQuery.addTypeException(new Entity(data.QNumber,data.name)));
+    }
+    const handleExceptionArea = (data : SearchData) => {
+        setSearchQuery(searchQuery.addAdministrativeAreaException(new Entity(data.QNumber,data.name)));
         
     }
     const typesDataGetter = (searchWord : string) => {
@@ -40,11 +40,20 @@ function CollectibleSearching(){
     const administrativeAreaDataGetter = (searchWord : string) => {
         return WikiDataAPI.searchForAdministrativeAreas(searchWord);
     }
+    const administrativeAreaExceptionsDataGetter = (seachWord : string) => {
+        let QNumbersOfAreaExceptions = searchQuery.getAdministrativeAreaExceptions().map((type) => { return type.GetQNumber()})
+        return WikiDataAPI.searchForAdministrativeAreasExceptions(seachWord,searchQuery.getAdministrativeArea()?.GetQNumber(),QNumbersOfAreaExceptions)
+    }
     const typesExceptionsDataGetter = (searchWord : string) => {
-        return WikiDataAPI.searchForTypesOfCollectiblesExceptions(searchWord,searchQuery.getType()?.GetQNumber(),[]);
+        let QNumbersOfTypesExceptions = searchQuery.getTypeExceptions().map((type) => { return type.GetQNumber()})
+        return WikiDataAPI.searchForTypesOfCollectiblesExceptions(searchWord,searchQuery.getType()?.GetQNumber(),QNumbersOfTypesExceptions);
     }
     const handleTypeExceptionRemove = (index : number) => {
         setSearchQuery(searchQuery.removeTypeException(index));
+    }
+    const handleAreaExceptionRemove = (index : number) => {
+        setSearchQuery(searchQuery.removeAdministrativeAreaException(index));
+        
     }
     const searchTypeState = () => {
         return(
@@ -52,11 +61,13 @@ function CollectibleSearching(){
                 <div className="d-flex flex-column">
                     <h1>Choose what type of collectibles you want to search for</h1>
                     <SearchBar placeHolder={"Type type of collectibles"} handleClickedResult={handleCollectibleType} dataGetter={typesDataGetter} emptySearchingFlag={false}/>  
-                    {showTypeException && (
+                    {searchQuery.isTypeSet() && (
                         <>
                             <h2>You can choose some exception types</h2>
-                            <SearchBar placeHolder={"Type type of collectibles"} handleClickedResult={handleExceptionType} dataGetter={typesExceptionsDataGetter} emptySearchingFlag={true}/> 
+                            <SearchBar placeHolder={"Type type of collectibles"} handleClickedResult={handleExceptionType} dataGetter={typesExceptionsDataGetter} emptySearchingFlag={true}/>
+                            <button type="button" className="btn btn-success" onClick={() => handleNextStep(CollectiblesSearchingStates.AreaChoosing)}>Continue to area selection</button> 
                         </>
+                        
                     )}
                 </div>
             </>
@@ -75,11 +86,14 @@ function CollectibleSearching(){
             </>
         );
     }
-
+    const handleRadiusArea = (center : {lat : number,lng : number}, radius : number) => {
+        setSearchQuery(searchQuery.setRadius(center,radius));
+        handleNextStep(CollectiblesSearchingStates.HeritageSelection)
+    }
     const radiusAreaState = () => {
         return (
             <>
-                <SearchByRadius />
+                <SearchByRadius handleRadiusArea={handleRadiusArea}/>
             </>
         )
     }
@@ -90,19 +104,29 @@ function CollectibleSearching(){
                 <div className="d-flex flex-column">
                     <h1>Choose the administrative area, in which collectibles will be searched</h1>
                     <SearchBar placeHolder={"Type administrative area, country"} handleClickedResult={handleAdministrativeArea} dataGetter={administrativeAreaDataGetter} emptySearchingFlag={false}/>  
+                    {searchQuery.isAdministrativeAreaSet() && (
+                        <>
+                            <h2>You can choose some exception areas</h2>
+                            <SearchBar placeHolder={"Type administrative area"} handleClickedResult={handleExceptionArea} dataGetter={administrativeAreaExceptionsDataGetter} emptySearchingFlag={true}/>
+                            <button type="button" className="btn btn-success" onClick={() => handleNextStep(CollectiblesSearchingStates.HeritageSelection)}>Save area and continue</button>
+                        </>
+                    )}
                 </div>
             </>
         )
     }
-
+    const heritageSelectionState = () => {
+        return (
+            <>
+                <h1>You may choose Heritage of collectibles</h1>
+            </>
+        )
+    }
     const handleNextStep = (newState: CollectiblesSearchingStates) => {
-        setNextStepFlag(false);
         setState(newState);
     }
 
-    useEffect(() => {
-        setShowTypeException(searchQuery.isTypeSet())
-    },[searchQuery])
+
     return(
         <>
             <div >
@@ -110,12 +134,8 @@ function CollectibleSearching(){
                 { state === CollectiblesSearchingStates.AreaChoosing && chooseAreaTypeState()}
                 { state === CollectiblesSearchingStates.RadiusArea && radiusAreaState()}
                 { state === CollectiblesSearchingStates.AdministrativeArea && administrativeAreaState()}
-                <SearchCollectiblesQueryRenderer searchQueryBuilder={searchQuery} handleTypeExceptionRemove={handleTypeExceptionRemove}/>
-                {nextStepFlag && state === CollectiblesSearchingStates.TypePicking && (
-                    <>
-                        <button type="button" className="btn btn-success" onClick={() => handleNextStep(CollectiblesSearchingStates.AreaChoosing)}>Next step</button>
-                    </>
-                )}
+                { state === CollectiblesSearchingStates.HeritageSelection && heritageSelectionState()}
+                <SearchCollectiblesQueryRenderer searchQueryBuilder={searchQuery} handleTypeExceptionRemove={handleTypeExceptionRemove} handleAreaExceptionRemove={handleAreaExceptionRemove}/>
             </div>
         </>
     )

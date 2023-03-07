@@ -14,6 +14,7 @@ endpoint_url = "https://query.wikidata.org/sparql"
 # constants
 SUPER_CLASS : str = "Q2221906" # geographic location
 ADMINISTRATIVE_AREA : str = "Q56061" # administrative territorial entity
+FORMAR_AREA : str = "Q19832712" #historical administrative division
 #
 NOT_ADMINISTRATIVE_AREA : str = "Q15642566" # non-political administrative territorial entity
 
@@ -64,11 +65,30 @@ def search_for_locations():
 @API.route('/search/administrative_areas',methods=['GET'])
 def search_for_administrative_areas():
     searched_word = request.args.get("key_word")
-    if searched_word is None:
-        return "Invalid request,param: key_word must be provided"
-    
+    located_in_area = request.args.get("located_in_area")
+    not_located_in_area = request.args.get("not_located_in_area")
+    exceptions_classes = request.args.get("exceptions")
+
     builder = SearchInstancesQueryBuilder()
-    builder.set_seach_by_word(searched_word)
+
+    if searched_word is not None:
+        builder.set_seach_by_word(searched_word)
+        builder.set_recursive_searching_for_located_in_area()
+    
     builder.add_super_class(ADMINISTRATIVE_AREA)
     builder.add_exception_class(NOT_ADMINISTRATIVE_AREA)
+    builder.add_exception_class(FORMAR_AREA)
+
+    if exceptions_classes is not None:
+        for item in exceptions_classes.split(','):
+            builder.add_exception_class(item)
+
+    if located_in_area is not None:
+        builder.add_located_in_area(located_in_area)
+
+    if not_located_in_area is not None:
+        for item in not_located_in_area.split(','):
+            builder.add_not_located_in_area(item)
+            
+    print(builder.build())
     return process_query(builder.build())

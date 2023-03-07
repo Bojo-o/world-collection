@@ -13,7 +13,10 @@ const center = {
     lat: 51.505,
     lng: -0.09,
 }
-function SearchByRadius(){
+export interface SearchByRadiusProps{
+    handleRadiusArea : (center : {lat : number,lng : number} , radius : number) => void;
+}
+function SearchByRadius({handleRadiusArea} : SearchByRadiusProps){
     const [positionOfMarker,setPositionOfMarker] = useState<{lat : number,lng : number}>(center)
     const [radius,setRadius] = useState(1);
     const fillBlueOptions = { fillColor: 'blue' }
@@ -43,6 +46,7 @@ function SearchByRadius(){
                     <h5>Current radius : {radius}</h5>
                 </label>
                 <input type="range" className="form-range" min={1} max ={250} value={radius} id="radiusRange" onChange={handleRangeSlider}/>
+                <button type='button' className='btn btn-success' onClick={() => handleRadiusArea(positionOfMarker,radius)}>Save radius area and continue</button>
             </div>
             
             <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>

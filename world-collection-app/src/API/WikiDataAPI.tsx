@@ -39,6 +39,20 @@ export class WikiDataAPI {
         const data = await this.fetchData(urlCollectiblesType, param);
         return this.convertToSearchDataModel(data);
     }
+    static async searchForAdministrativeAreasExceptions(searchWord : string,locatedInArea : string|undefined,notLocatedInAreas : string[]){
+        let param = new Map<string,string>();
+        if (searchWord !== ""){
+            param.set("key_word",searchWord)
+        }
+        if (locatedInArea != undefined){
+            param.set("located_in_area",locatedInArea)
+        }
+        
+        param.set("not_located_in_area",notLocatedInAreas.join(","))
+    
+        const data = await this.fetchData(urlAdministrativeAreas, param);
+        return this.convertToSearchDataModel(data);
+    }
     static async searchForTypesOfCollectibles(searchWord : string){
         let param = new Map<string,string>();
         param.set("key_word",searchWord)

@@ -44,13 +44,13 @@ function SearchBar({placeHolder,handleClickedResult,dataGetter,emptySearchingFla
         return () => document.body.removeEventListener('mousedown', closeSearchingBar);
     }, []);
     const handleShowAll = () => {
-        fetchData()
+        fetchData("")
     }
-    const fetchData = () => {
+    const fetchData = (word : string) => {
         setLoading(true)
         setIsError(false);
 
-        dataGetter(searchWord).then(
+        dataGetter(word).then(
             (data) => {
                 setLoading(false)
                 setResults(data);
@@ -63,7 +63,7 @@ function SearchBar({placeHolder,handleClickedResult,dataGetter,emptySearchingFla
         if (searchWord.length < 3){
             return;
         }
-        fetchData()
+        fetchData(searchWord)
     }, [searchWord]);
     return (
         <React.Fragment>
