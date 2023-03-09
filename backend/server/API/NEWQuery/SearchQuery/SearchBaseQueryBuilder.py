@@ -12,7 +12,7 @@ class SearchBaseQueryBuilder(QueryBuilder,ABC):
         self._searched_word : str|None = None
 
 
-        self.select_variable("?item",True)
+        self.select_variable("?item","?QNumber",True,"?name")
         self.select_variable("?description")
         self.set_distinct(True)
 
@@ -42,8 +42,10 @@ class SearchBaseQueryBuilder(QueryBuilder,ABC):
         self.add_triple("?item","schema:description","?description")
         self.add_filter("lang(?description) = \"en\"")
         # add label service
-        self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\".")
+        #self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\".")
+        self.add_label_servise()
 
     @abstractmethod
     def build_seach_body(self):
         pass
+

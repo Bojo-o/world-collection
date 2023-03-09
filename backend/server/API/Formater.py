@@ -26,20 +26,25 @@ def convertToJson(input):
         formatted_data.append(d)
     return json.dumps(formatted_data)
 
-def toJson(input,withTypesFlaf=False):
-    vars = input['head']['vars']
+def toJson(input):
+    
     data = input['results']['bindings']
-
     formatted_data = []
+    print(input)
     for item in data:
         d = collections.OrderedDict()
         for bindings_in_item in item:
-            if withTypesFlaf is True:
-                inner = collections.OrderedDict()
-                inner["value"] = item[bindings_in_item]['value']
-                inner["type"] = item[bindings_in_item]['type']
-                d[bindings_in_item] = inner
-            else:
-                d[bindings_in_item] = item[bindings_in_item]['value']
+            type = item[bindings_in_item]['type']
+            value : str = item[bindings_in_item]['value']
+            match type:
+                case "literal":
+                    d[bindings_in_item] = value
+                case "uri":
+                    temp : str = value.split('/')[-1]
+                    if temp.startswith("ontology#"):
+                        temp = temp.lstrip("ontology#")
+                    d[bindings_in_item] = temp
+            
+            
         formatted_data.append(d)
     return json.dumps(formatted_data)

@@ -1,10 +1,11 @@
 from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
 from . import Formater
-from .NEWQuery.SearchQuery.SearchQueryBuilders import SearchCollectibleTypesQueryBuilder , SearchAreaQueryBuilder
+from .NEWQuery.SearchQuery.SearchAreaQueryBuilders import SearchCollectibleTypesQueryBuilder , SearchAreaQueryBuilder
 from flask import (
     Blueprint,request
 )
+from .NEWQuery.FilterQuery.FilterSearchQueryBuilder import FilterSearchQueryBuilder
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -12,7 +13,7 @@ API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 endpoint_url = "https://query.wikidata.org/sparql"
 
 # constants
-SUPER_CLASS : str = "Q2221906" # geographic location
+GEO_LOCATION : str = "Q2221906" # geographic location
 ADMINISTRATIVE_AREA : str = "Q56061" # administrative territorial entity
 FORMAR_AREA : str = "Q19832712" #historical administrative division
 #
@@ -21,7 +22,7 @@ NOT_ADMINISTRATIVE_AREA : str = "Q15642566" # non-political administrative terri
 def process_query(query : str):
     try:
         result = SparqlPoint.get_query_results(endpoint_url,query)
-        return Formater.convertToJson(result)
+        return Formater.toJson(result)
     except:
         return "invalid query"
 
@@ -40,7 +41,7 @@ def search_for_classes():
     if super_class is not None:
         builder.add_super_class(super_class)
     else:
-        builder.add_super_class(SUPER_CLASS)
+        builder.add_super_class(GEO_LOCATION)
     
 
     if exceptions_classes is not None:
@@ -57,7 +58,7 @@ def search_for_locations():
     
     builder = SearchAreaQueryBuilder()
     builder.set_seach_by_word(searched_word)
-    builder.add_super_class(SUPER_CLASS)
+    builder.add_super_class(GEO_LOCATION)
     builder.set_recursive_searching(True)
     builder.set_geo_obtaining()
     print(builder.build())
@@ -71,7 +72,7 @@ def search_for_administrative_areas():
     exceptions_classes = request.args.get("exceptions")
 
     builder = SearchAreaQueryBuilder()
-
+    builder.set_recursive_searching(True)
     if searched_word is not None:
         builder.set_seach_by_word(searched_word)
         builder.set_recursive_searching_for_located_in_area()
@@ -93,3 +94,16 @@ def search_for_administrative_areas():
             
     print(builder.build())
     return process_query(builder.build())
+
+@API.route('/get/filters',methods=['GET'])
+def get_filters():
+    type = request.args.get("type")
+
+    builder = FilterSearchQueryBuilder()
+    
+    if type is not None:
+        builder.set_type_for_search_filter(type)
+
+    print(builder.build())
+    return process_query(builder.build())
+    

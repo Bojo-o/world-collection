@@ -8,6 +8,7 @@ class QueryBuilder(ABC):
     def __init__(self):
         self._query = []
         self._select_variables = set()
+        self._select_variable_label = set()
         self._distinct_flag = False
         self._order_by_variables = set()
 
@@ -20,10 +21,11 @@ class QueryBuilder(ABC):
     def set_distinct(self,flag : bool):
         self._distinct_flag = flag
 
-    def select_variable(self,variable : str,with_label_flag : bool = False):
-        self._select_variables.add(variable)
+    def select_variable(self,variable : str,name_as : str = None,with_label_flag : bool = False,name_label_as : str = None):
+        self._select_variables.add(variable if name_as is None else "({} AS {})".format(variable,name_as))
         if with_label_flag:
-            self._select_variables.add(variable+"Label")
+            self._select_variable_label.add(variable)
+            self._select_variables.add(variable+"Label" if name_as is None else "({} AS {})".format(variable+"Label",name_as + "Label" if name_label_as is None else name_label_as))
     
     def add_order_by_(self,variable : str):
         self._order_by_variables.add(variable)
@@ -37,12 +39,24 @@ class QueryBuilder(ABC):
     def add_service(self,service : str,body : str):
         self._query.append("SERVICE {} ".format(service) + "{ " + body + " }")
 
+    def add_label_servise(self):
+        temp  = []
+        for variable  in self._select_variable_label:
+            temp.append(" {} rdfs:label {} .".format(variable,variable + "Label"))
+        self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\"." + "" . join(temp))
+        
+
     def add_hint(self):
         self._query.append("hint:Prior hint:gearing \"forward\".")
 
     def add_filter(self,body : str):
         self._query.append("FILTER ({})".format(body))
-
+    def get_coordinates_of_object(self,object : str):
+        self.add_triple(object,"p:P625","?coord")
+        self.add_triple("?coord","psv:P625","?coord_node")
+        self.add_triple("?coord_node","wikibase:geoLongitude","?lon")
+        self.add_triple("?coord_node","wikibase:geoLatitude","?lat")
+    
     def __build_select(self):
         if self._query.__len__() != 0 :
             raise QueryBuildeException("SELECT must be call as the first")
@@ -51,7 +65,7 @@ class QueryBuilder(ABC):
         self._query.append("WHERE {")
 
     def __build_footer(self):
-        self._query.append("} " + "ORDER BY " + self.convert_set(self._order_by_variables) if self._order_by_variables.__len__() != 0 else "")
+        self._query.append("} ORDER BY " + self.convert_set(self._order_by_variables) if self._order_by_variables.__len__() != 0 else "}")
 
     def build(self) -> str:
         self._query.clear()
