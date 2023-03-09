@@ -1,13 +1,14 @@
-from abc import ABS, abstractmethod
+from abc import ABC, abstractmethod
 
 class QueryBuildeException(Exception):
     def __init__(self, message : str) -> None:
         super().__init__(message)
 
-class QueryBuilder(ABS):
+class QueryBuilder(ABC):
     def __init__(self):
         self._query = []
         self._select_variables = set()
+        self._distinct_flag = False
         self._order_by_variables = set()
 
     def convert_set(self,set : set,prefix : str = ""):
@@ -16,6 +17,9 @@ class QueryBuilder(ABS):
             list.append(prefix + item + " ")
         return "" . join(list)
     
+    def set_distinct(self,flag : bool):
+        self._distinct_flag = flag
+
     def select_variable(self,variable : str,with_label_flag : bool = False):
         self._select_variables.add(variable)
         if with_label_flag:
@@ -27,8 +31,8 @@ class QueryBuilder(ABS):
     def add_triple(self,subject : str,predicate : str,object :str):
         self._query.append("{} {} {} .".format(subject,predicate,object))
 
-    def define_values_variable(self,variable_name : str,values : set):
-        self._query.append(" VALUES " + variable_name + " {" + self.convert_set(values) + " }")
+    def define_values_variable(self,variable_name : str,values : set,values_prefix : str = ""):
+        self._query.append(" VALUES " + variable_name + " {" + self.convert_set(values,values_prefix) + " }")
 
     def add_service(self,service : str,body : str):
         self._query.append("SERVICE {} ".format(service) + "{ " + body + " }")
@@ -39,15 +43,15 @@ class QueryBuilder(ABS):
     def add_filter(self,body : str):
         self._query.append("FILTER ({})".format(body))
 
-    def __build_select(self,distinct_flag : bool = True):
+    def __build_select(self):
         if self._query.__len__() != 0 :
             raise QueryBuildeException("SELECT must be call as the first")
         
-        self._query.append("SELECT {} {}".format("DISTINCT" if distinct_flag else "",self.convert_set(self._select_variables),))
+        self._query.append("SELECT {} {}".format("DISTINCT" if self._distinct_flag else "",self.convert_set(self._select_variables),))
         self._query.append("WHERE {")
 
     def __build_footer(self):
-        self._query.append("} {}".format("ORDER BY " + self.convert_set(self._order_by_variables) if self._order_by_variables.__len__() != 0 else ""))
+        self._query.append("} " + "ORDER BY " + self.convert_set(self._order_by_variables) if self._order_by_variables.__len__() != 0 else "")
 
     def build(self) -> str:
         self._query.clear()
@@ -56,7 +60,7 @@ class QueryBuilder(ABS):
 
         self.build_where_body()
 
-        self.__build_footer
+        self.__build_footer()
 
         return '\n'.join(self._query)
 

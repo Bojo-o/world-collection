@@ -89,7 +89,11 @@ class SearchBaseQueryBuilder(ABC):
             self.__build_predicate("locatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._located_in_area,False,True if self._recursive_flag_for_located_in_area else False)
             
         if self._not_located_in_area.__len__() != 0:
-            self.__build_predicate("notLocatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._not_located_in_area,True,True if self._recursive_flag_for_located_in_area else False)
+            self.__build_predicate("notLocatedInAreas",
+                                self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,
+                                self._not_located_in_area,
+                                True,
+                                True if self._recursive_flag_for_located_in_area else False)
 
         if self._geo_flag:
             self._query.append("?item wdt:P625 ?coord .")
