@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../API/WikiDataAPI";
+import FiltersSelection from "../CollectiblesSearching/Filters/FiltersSelection";
+import TimeFilter from "../CollectiblesSearching/Filters/TimeFilter";
 import SearchByRadius from "../CollectiblesSearching/SeachByRadius";
 import { SearchCollectiblesBuilderQuery } from "../CollectiblesSearching/SearchCollectiblesQueryBuilder";
 import SearchCollectiblesQueryRenderer from "../CollectiblesSearching/SearchCollectiblesQueryRenderer";
@@ -13,11 +15,11 @@ export enum CollectiblesSearchingStates{
     AreaChoosing,
     RadiusArea,
     AdministrativeArea,
-    HeritageSelection,
+    FiltersSelection,
 }
 function CollectibleSearching(){
     const [searchQuery,setSearchQuery] = useState<SearchCollectiblesBuilderQuery>(new SearchCollectiblesBuilderQuery());
-    const [state,setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.TypePicking)
+    const [state,setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.FiltersSelection)
 
     const handleCollectibleType = (data : SearchData) => {
         setSearchQuery(searchQuery.setType(new Entity(data.QNumber,data.name)));
@@ -88,7 +90,7 @@ function CollectibleSearching(){
     }
     const handleRadiusArea = (center : {lat : number,lng : number}, radius : number) => {
         setSearchQuery(searchQuery.setRadius(center,radius));
-        handleNextStep(CollectiblesSearchingStates.HeritageSelection)
+        handleNextStep(CollectiblesSearchingStates.FiltersSelection)
     }
     const radiusAreaState = () => {
         return (
@@ -108,17 +110,17 @@ function CollectibleSearching(){
                         <>
                             <h2>You can choose some exception areas</h2>
                             <SearchBar placeHolder={"Type administrative area"} handleClickedResult={handleExceptionArea} dataGetter={administrativeAreaExceptionsDataGetter} emptySearchingFlag={true}/>
-                            <button type="button" className="btn btn-success" onClick={() => handleNextStep(CollectiblesSearchingStates.HeritageSelection)}>Save area and continue</button>
+                            <button type="button" className="btn btn-success" onClick={() => handleNextStep(CollectiblesSearchingStates.FiltersSelection)}>Save area and continue</button>
                         </>
                     )}
                 </div>
             </>
         )
     }
-    const heritageSelectionState = () => {
+    const FiltersSelectionState = () => {
         return (
             <>
-                <h1>You may choose Heritage of collectibles</h1>
+                <FiltersSelection filtersForType={new Entity("Q23413","castle")}/>
             </>
         )
     }
@@ -134,7 +136,7 @@ function CollectibleSearching(){
                 { state === CollectiblesSearchingStates.AreaChoosing && chooseAreaTypeState()}
                 { state === CollectiblesSearchingStates.RadiusArea && radiusAreaState()}
                 { state === CollectiblesSearchingStates.AdministrativeArea && administrativeAreaState()}
-                { state === CollectiblesSearchingStates.HeritageSelection && heritageSelectionState()}
+                { state === CollectiblesSearchingStates.FiltersSelection && FiltersSelectionState()}
                 <SearchCollectiblesQueryRenderer searchQueryBuilder={searchQuery} handleTypeExceptionRemove={handleTypeExceptionRemove} handleAreaExceptionRemove={handleAreaExceptionRemove}/>
             </div>
         </>

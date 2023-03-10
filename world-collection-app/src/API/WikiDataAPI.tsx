@@ -1,12 +1,18 @@
+import { FiltersData } from "../Data/FiltersData/FiltersData";
 import { SearchData } from "../Data/SearchData/SearchData";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
 const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
+const urlSearchFilters = "WikidataAPI/get/filters";
 
 export class WikiDataAPI {
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
         let results : SearchData[] = data.map((d : any) => new SearchData(d));
+        return results;
+    }
+    private static convertToFiltersDataModel(data : any[]) : FiltersData[] {
+        let results : FiltersData[] = data.map((d : any) => new FiltersData(d));
         return results;
     }
     private static checkStatus(response: any){
@@ -71,6 +77,14 @@ export class WikiDataAPI {
         const data = await this.fetchData(urlAdministrativeAreas, param);
         return this.convertToSearchDataModel(data);
     }
+
+    static async searchForFilters(QNumberOfType :  string){
+        let param = new Map<string,string>();
+        param.set("type",QNumberOfType)
+        const data = await this.fetchData(urlSearchFilters, param);
+        return this.convertToFiltersDataModel(data);
+    }
+
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";
         for (let [key, value] of params) {

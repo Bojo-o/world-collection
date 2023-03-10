@@ -6,6 +6,7 @@ from flask import (
     Blueprint,request
 )
 from .NEWQuery.FilterQuery.FilterSearchQueryBuilder import FilterSearchQueryBuilder
+from .NEWQuery.FilterQuery.FilterTypeDataQueryBuilder import FilterTypeDataQueryBuilder , DATATYPES
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -106,4 +107,27 @@ def get_filters():
 
     print(builder.build())
     return process_query(builder.build())
+
+@API.route('/get/filter_data',methods=['GET'])
+def get_filter_data():
+    property = request.args.get('property')
+    data_type = request.args.get('data_type')
+
+    if property is None or data_type is None:
+        return "Invalid request,params: property and data_type must be provided"
     
+    type : DATATYPES = None
+    match data_type:
+        case "Quantity":
+            type = DATATYPES.QUANTITY
+        case "Time":
+            type = DATATYPES.TIME
+        case "WikibaseItem":
+            type = DATATYPES.WIKIBASEITEM
+
+    if type is None :
+        return "Invalid request, data_type param value-constraints : Quantity, Time or WikibaseItem "
+    
+    builder = FilterTypeDataQueryBuilder(property,type)
+    print(builder.build())
+    return process_query(builder.build())
