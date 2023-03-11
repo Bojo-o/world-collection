@@ -5,6 +5,7 @@ export class Entity{
         this.QNumber = QNumber;
         this.name = name;
     }
+
     public GetQNumber(){
         return this.QNumber;
     }

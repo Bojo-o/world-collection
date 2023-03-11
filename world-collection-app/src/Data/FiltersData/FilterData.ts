@@ -4,7 +4,7 @@ export enum FilterDataType{
     WikibaseItem = "Item",
     NotSupported = "Not supported"
 }
-export class FiltersData {
+export class FilterData {
     PNumber : string = '';
     name : string = '';
     desc : string = '';
@@ -12,7 +12,7 @@ export class FiltersData {
     
     constructor(initializer?: any){
         if(!initializer) return;
-        if (initializer.PNumber) this.PNumber = initializer.QNumber;
+        if (initializer.PNumber) this.PNumber = initializer.PNumber;
         if (initializer.name) this.name = initializer.name;
         if (initializer.description) this.desc = initializer.description;
         if (initializer.dataType) {

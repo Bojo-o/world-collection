@@ -1,20 +1,32 @@
-import { FiltersData } from "../Data/FiltersData/FiltersData";
+import { FilterData } from "../Data/FiltersData/FilterData";
+import { Entity } from "../Data/SearchData/Entity";
 import { SearchData } from "../Data/SearchData/SearchData";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
 const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
 const urlSearchFilters = "WikidataAPI/get/filters";
+const urlSearchFilterDataWikibaseItem = "WikidataAPI/get/filter_data";
 
 export class WikiDataAPI {
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
         let results : SearchData[] = data.map((d : any) => new SearchData(d));
         return results;
     }
-    private static convertToFiltersDataModel(data : any[]) : FiltersData[] {
-        let results : FiltersData[] = data.map((d : any) => new FiltersData(d));
+    private static convertToFiltersDataModel(data : any[]) : FilterData[] {
+        let results : FilterData[] = data.map((d : any) => new FilterData(d));
         return results;
     }
+    private static convertToEntity(data : any[]) : Entity[] {
+        console.log(data)
+        let results : Entity[] = data.map((d : any) =>{
+            let qNumber : string = d.QNumber;
+            let name : string = d.name;
+            return new Entity(qNumber,name);
+        });
+        return results;
+    }
+    
     private static checkStatus(response: any){
         if (response.ok){
             return response;
@@ -58,6 +70,13 @@ export class WikiDataAPI {
     
         const data = await this.fetchData(urlAdministrativeAreas, param);
         return this.convertToSearchDataModel(data);
+    }
+    static async searchForFilterDataWikibaseItem(property: string){
+        let param = new Map<string,string>();
+        param.set("property",property)
+        param.set("data_type","WikibaseItem")
+        const data = await this.fetchData(urlSearchFilterDataWikibaseItem, param);
+        return this.convertToEntity(data);
     }
     static async searchForTypesOfCollectibles(searchWord : string){
         let param = new Map<string,string>();
