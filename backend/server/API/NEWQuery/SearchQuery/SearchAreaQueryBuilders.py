@@ -10,7 +10,7 @@ class SearchCollectibleTypesQueryBuilder(SearchByClassRestrictionQueryBuilder):
 
 class SearchAreaQueryBuilder(SearchByClassRestrictionQueryBuilder):
     def __init__(self) -> None:
-        super().__init__(TYPES.INSTANCES)
+        super().__init__(TYPES.INSTANCEORCLASS)
         self._geo_flag : bool = False
         self._located_in_area = set()
         self._not_located_in_area = set()
@@ -34,18 +34,18 @@ class SearchAreaQueryBuilder(SearchByClassRestrictionQueryBuilder):
     def create_more_restrictions(self):
 
         if self._located_in_area.__len__() != 0:
-            self.__build_predicate("locatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._located_in_area,False,True if self._recursive_flag_for_located_in_area else False)
-            self.__build_restriction("?locatedInAreas",
+            #self.__build_restriction("locatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._located_in_area,False,True if self._recursive_flag_for_located_in_area else False)
+            self.build_restriction("?locatedInAreas",
                                     self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,
                                     self._located_in_area,
                                     True if self._recursive_flag_for_located_in_area else False,
                                     False
                                     )
         if self._not_located_in_area.__len__() != 0:
-            self.__build_predicate("notLocatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._not_located_in_area,True,True if self._recursive_flag_for_located_in_area else False)
-            self.__build_restriction("?notLocatedInAreas",
+            #self.__build_predicate("notLocatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._not_located_in_area,True,True if self._recursive_flag_for_located_in_area else False)
+            self.build_restriction("?notLocatedInAreas",
                                     self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,
-                                    self._located_in_area,
+                                    self._not_located_in_area,
                                     True if self._recursive_flag_for_located_in_area else False,
                                     True
                                     )

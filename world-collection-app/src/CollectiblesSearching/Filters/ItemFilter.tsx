@@ -1,10 +1,14 @@
+import { FILE } from "dns";
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../API/WikiDataAPI";
+import { WikibaseItemFilterData } from "../../Data/FiltersData/WIkibaseItemFilterData";
 import { Entity } from "../../Data/SearchData/Entity";
+import { SearchData } from "../../Data/SearchData/SearchData";
+import SearchBar from "../../DataSearching/SearchBar/SearchBar";
 import { FilterProps } from "./FilterProps";
 
 function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
-    const[valueTypeConstraint,setValueTypeConstraint] = useState<Entity[]>([]);
+    const[filterData,setFilterData] = useState<WikibaseItemFilterData>(new WikibaseItemFilterData());
     const[loadingValueType,setLoadingValueType] = useState(false);
     const[errorForFetchingValueType,setErrorForFetchingValueType] = useState(false);
 
@@ -15,9 +19,16 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
         WikiDataAPI.searchForFilterDataWikibaseItem(filter.PNumber).then(
             (data) => {
                 setLoadingValueType(false);
-                setValueTypeConstraint(data);
+                setFilterData(data);
             }
         ).catch(() => setErrorForFetchingValueType(true))
+    }
+
+    const handleClickedItem =  (data: SearchData) => {
+        
+    }
+    const itemDataGetter =  (searchWord : string) => {
+        return WikiDataAPI.searchWikibaseItem(searchWord,filterData)
     }
     useEffect(() => {
         fetchValueTypeData()
@@ -35,18 +46,74 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
             </>)}
             {!loadingValueType && (
                 <>
-                    <h3>Value type constraint : </h3>
-                    <div className="d-flex flex-row">
-                        {valueTypeConstraint.map((value,index) => {
-                            return (
+                    {filterData.one_of_constraint.length != 0 && (
+                        <>
+                            <h3>This filter supports choosing from list of constraint : </h3>
+                            <select className="form-select">
+                                {filterData.one_of_constraint.map((value,index) => {
+                                    return (
+                                        <option key={index} value={value.QNumber}>{value.name}</option>
+                                    )
+                                })}
+                            </select>
+                        </>
+                    )}
+                    {filterData.one_of_constraint.length == 0 && (
+                        <>
+                            {filterData.value_type_constraint.length != 0 && (
                                 <>
-                                    <small key={index} className={"badge bg-warning text-dark text-wrap"}>
-                                        {value.GetName()}
-                                    </small>
+                                    <h3>Value types, you can used : </h3>
+                                    <div className="d-flex flex-row">
+                                        {filterData.value_type_constraint.map((value,index) => {
+                                            return (
+                                                <>
+                                                    <small key={index} className={"badge bg-success text-wrap"}>
+                                                        {value.name}
+                                                    </small>
+                                                </>
+                                            )
+                                        })}
+                                    </div>
                                 </>
-                            )
-                        })}
-                    </div>
+                            )}
+                            {filterData.conflict_with_constraint.length != 0 && (
+                                <>
+                                    <h3>Value type, which can not be used : </h3>
+                                    <div className="d-flex flex-row">
+                                        {filterData.conflict_with_constraint.map((value,index) => {
+                                            return (
+                                                <>
+                                                    <small key={index} className={"badge bg-warning text-dark text-wrap"}>
+                                                        {value.name}
+                                                    </small>
+                                                </>
+                                            )
+                                        })}
+                                    </div>
+                                </>
+                            )}
+                            {filterData.none_of_constraint.length != 0 && (
+                                <>
+                                    <h3>Values, that can not be used</h3>
+                                    <div className="d-flex flex-row">                          
+                                        {filterData.none_of_constraint.map((value,index) => {
+                                            return (
+                                                <>
+                                                    <small key={index} className={"badge bg-danger text-wrap"}>
+                                                        {value.name}
+                                                    </small>
+                                                </>
+                                            )
+                                        })}
+                                    </div>
+                                </>
+                            )}
+
+                            <h2>Search for item</h2>
+                            <SearchBar placeHolder={"Search for wikibase items"} handleClickedResult={handleClickedItem} dataGetter={itemDataGetter} emptySearchingFlag={false}/>
+                        </>
+                    )}
+                    
                 </>
             )}
         </div>

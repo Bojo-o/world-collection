@@ -1,3 +1,7 @@
+import collections
+import json
+
+from .NEWQuery.SearchQuery.SearchByClassRestrictionQueryBuilder import TYPES
 from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
 from . import Formater
@@ -6,7 +10,8 @@ from flask import (
     Blueprint,request
 )
 from .NEWQuery.FilterQuery.FilterSearchQueryBuilder import FilterSearchQueryBuilder
-from .NEWQuery.FilterQuery.FilterTypeDataQueryBuilder import FilterTypeDataQueryBuilder , DATATYPES
+from .NEWQuery.FilterQuery.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder , DATATYPES
+from .NEWQuery.SearchQuery.SearchWikibaseItemQueryBuilder import SearchWikibaseItemQueryBuilder
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -48,7 +53,7 @@ def search_for_classes():
     if exceptions_classes is not None:
         for item in exceptions_classes.split(','):
             builder.add_exception_class(item)
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
 
 @API.route('/search/places',methods=['GET'])
@@ -62,7 +67,7 @@ def search_for_locations():
     builder.add_super_class(GEO_LOCATION)
     builder.set_recursive_searching(True)
     builder.set_geo_obtaining()
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
 
 @API.route('/search/administrative_areas',methods=['GET'])
@@ -93,7 +98,7 @@ def search_for_administrative_areas():
         for item in not_located_in_area.split(','):
             builder.add_not_located_in_area(item)
             
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
 
 @API.route('/get/filters',methods=['GET'])
@@ -105,8 +110,9 @@ def get_filters():
     if type is not None:
         builder.set_type_for_search_filter(type)
 
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
+
 
 @API.route('/get/filter_data',methods=['GET'])
 def get_filter_data():
@@ -128,6 +134,81 @@ def get_filter_data():
     if type is None :
         return "Invalid request, data_type param value-constraints : Quantity, Time or WikibaseItem "
     
-    builder = FilterTypeDataQueryBuilder(property,type)
+    match type:
+        case DATATYPES.WIKIBASEITEM:
+            d = collections.OrderedDict()
+
+            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.ONE_OF_CONSTRAINT)
+            d["one_of_constraint"] = json.loads(process_query(builder.build()))
+
+            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.NONE_OF_CONSTRAINT)   
+            d["none_of_constraint"] = json.loads(process_query(builder.build()))
+
+            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.CONFLICT_WITH_CONSTRAINT)   
+            d["conflict_with_constraint"] = json.loads(process_query(builder.build()))
+
+            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.VALUE_TYPE_CONSTRAINT)   
+            d["value_type_constraint"] = json.loads(process_query(builder.build()))
+            print(builder.build())
+            
+            return json.dumps(d)
+        
+        case DATATYPES.QUANTITY:
+            d = collections.OrderedDict()
+            
+            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.ALLOWED_UNITS_CONSTRAINT)
+            d["units"] = json.loads(process_query(builder.build()))
+
+            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.RANGE_CONSTRAINT)
+            d["range"] = json.loads(process_query(builder.build()))
+            return  json.dumps(d)
+    return "" 
+
+@API.route('/search/wikibase_item',methods=['GET'])
+def search_wikibase_item():
+    searched_word = request.args.get("key_word")
+
+    if searched_word is None:
+        return "Invalid request,param: key_word must be provided"
+    
+    value_type = request.args.get("value_type")
+    value_type_relation = request.args.get("value_type_relation")
+    conflict_type = request.args.get("conflict_type")
+    conflict_type_relation = request.args.get("conflict_type_relation")
+    none_values = request.args.get("none_values")
+
+    
+    builder = SearchWikibaseItemQueryBuilder()
+    builder.set_recursive_searching(True)
+    builder.set_at_least_one_super_class_mandatory(False)
+    builder.set_seach_by_word(searched_word)
+    builder.set_distinct(True)
+    
+    if conflict_type_relation is not None:
+        builder.reset_type_for_exceptions_classes("wdt:" + conflict_type_relation)
+    if value_type_relation is not None:
+        match value_type_relation:
+            case "instance of":
+                builder.reset_type_for_super_classes(TYPES.INSTANCES.value)
+            case "subclass of":
+                builder.reset_type_for_super_classes(TYPES.CLASS.value)
+            case "instance or subclass of":
+                builder.reset_type_for_super_classes(TYPES.INSTANCEORCLASS.value)
+
+    if value_type is not None and value_type.__eq__('') == False:
+        values = value_type.split(',')
+        for value in values:
+            builder.add_super_class(value)
+
+    if conflict_type is not None and conflict_type.__eq__('') == False:
+        conflict_values = conflict_type.split(',')
+        for conflict_value in conflict_values:
+            builder.add_exception_class(conflict_value)
+
+    if none_values is not None and none_values.__eq__('') == False:
+        none_values = none_values.split(',')
+        for none_value in none_values:
+            builder.add_none_of_constraint(none_value)
+    
     print(builder.build())
     return process_query(builder.build())

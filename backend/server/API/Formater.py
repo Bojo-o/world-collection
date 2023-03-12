@@ -30,7 +30,6 @@ def toJson(input):
     
     data = input['results']['bindings']
     formatted_data = []
-    print(input)
     for item in data:
         d = collections.OrderedDict()
         for bindings_in_item in item:
