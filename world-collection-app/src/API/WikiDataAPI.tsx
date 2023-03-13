@@ -1,4 +1,5 @@
 import { FilterData } from "../Data/FiltersData/FilterData";
+import { QuantityFilterData, ValueRange } from "../Data/FiltersData/QuantityFilterData";
 import { WikibaseItemFilterData } from "../Data/FiltersData/WIkibaseItemFilterData";
 import { WikibaseItemPropertyData } from "../Data/FiltersData/WikibaseItemPropertyData";
 import { Entity } from "../Data/SearchData/Entity";
@@ -8,7 +9,7 @@ const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
 const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
 const urlSearchFilters = "WikidataAPI/get/filters";
-const urlSearchFilterDataWikibaseItem = "WikidataAPI/get/filter_data";
+const urlSearchFilterData = "WikidataAPI/get/filter_data";
 const urlSearchWikibaseItem = "WikidataAPI/search/wikibase_item"
 
 export class WikiDataAPI {
@@ -27,7 +28,7 @@ export class WikiDataAPI {
         return results;
     }
     private static convertToWikibaseItemFilterData(data : any) : WikibaseItemFilterData {
-        console.log(data)
+        
         let result = new WikibaseItemFilterData()
         result.conflict_with_constraint = this.convertToWIkibasePropertyData(data["conflict_with_constraint"])
         result.none_of_constraint = this.convertToWIkibasePropertyData(data["none_of_constraint"])
@@ -36,7 +37,13 @@ export class WikiDataAPI {
         
         return result;
     }
-    
+    private static convertToQuantityFilterData(data : any) : QuantityFilterData {
+        let units : Entity[] = data["units"].map((unit : any) => {
+            return new Entity(unit["QNumber"],unit["name"]);
+        })
+        let range : ValueRange = new ValueRange(data["range"][0]);
+        return new QuantityFilterData(units,range)
+    }
     private static checkStatus(response: any){
         if (response.ok){
             return response;
@@ -81,11 +88,18 @@ export class WikiDataAPI {
         const data = await this.fetchData(urlAdministrativeAreas, param);
         return this.convertToSearchDataModel(data);
     }
+    static async searchForFilterDataQuantity(property: string){
+        let param = new Map<string,string>();
+        param.set("property",property)
+        param.set("data_type","Quantity")
+        const data = await this.fetchData(urlSearchFilterData, param);
+        return this.convertToQuantityFilterData(data);
+    }
     static async searchForFilterDataWikibaseItem(property: string){
         let param = new Map<string,string>();
-        param.set("property","P2044")
-        param.set("data_type","Quantity")
-        const data = await this.fetchData(urlSearchFilterDataWikibaseItem, param);
+        param.set("property",property)
+        param.set("data_type","WikibaseItem")
+        const data = await this.fetchData(urlSearchFilterData, param);
         return this.convertToWikibaseItemFilterData(data);
     }
     static async searchForTypesOfCollectibles(searchWord : string){

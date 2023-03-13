@@ -5,6 +5,7 @@ import { FilterDataType, FilterData } from "../../Data/FiltersData/FilterData";
 import { Entity } from "../../Data/SearchData/Entity";
 import './FiltersSelection.css';
 import ItemFilter from "./ItemFilter";
+import QuantityFilter from "./QuantityFilter";
 import TimeFilter from "./TimeFilter";
 export interface FiltersSelectionProps{
     filtersForType : Entity;
@@ -116,6 +117,7 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
                     )}
                     {selectedFilter.dataType == FilterDataType.Time && (<TimeFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
                     {selectedFilter.dataType == FilterDataType.WikibaseItem && (<ItemFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                    {selectedFilter.dataType == FilterDataType.Quantity && (<QuantityFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
                 </div>
                 <div className="w-25 border border-dark rounded">
                     <h3>Applied filters :</h3>
