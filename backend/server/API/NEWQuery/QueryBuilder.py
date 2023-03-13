@@ -49,6 +49,9 @@ class QueryBuilder(ABC):
     def add_hint(self):
         self._query.append("hint:Prior hint:gearing \"forward\".")
 
+    def add_filter_exist(self,body : str):
+        self._query.append("FILTER EXISTS {" + body + "}")
+    
     def add_filter(self,body : str):
         self._query.append("FILTER ({})".format(body))
     def get_coordinates_of_object(self,object : str):

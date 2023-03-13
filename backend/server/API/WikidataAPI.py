@@ -1,6 +1,8 @@
 import collections
 import json
 
+from .NEWQuery.CollectiblesQuery.AroundCollectiblesSearchQueryBuilder import AroundCollectiblesSearchQueryBuilder
+
 from .NEWQuery.SearchQuery.SearchByClassRestrictionQueryBuilder import TYPES
 from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
@@ -12,6 +14,9 @@ from flask import (
 from .NEWQuery.FilterQuery.FilterSearchQueryBuilder import FilterSearchQueryBuilder
 from .NEWQuery.FilterQuery.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder , DATATYPES
 from .NEWQuery.SearchQuery.SearchWikibaseItemQueryBuilder import SearchWikibaseItemQueryBuilder
+
+from .NEWQuery.CollectiblesQuery.CollectiblesSearchQueryBuilder import CollectiblesSearchQueryBuilder
+from .NEWQuery.CollectiblesQuery.FiltersData.ComparisonOperators import ComparisonOperators
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -212,3 +217,16 @@ def search_wikibase_item():
     
     print(builder.build())
     return process_query(builder.build())
+
+@API.route('/search/collectibles',methods=['GET'])
+def search_collectibles():
+    builder = AroundCollectiblesSearchQueryBuilder("Q515")
+    builder.set_radius(100)
+    builder.set_distinct(True)
+    builder.set_center_as_entity("Q1085")
+    builder.add_class_exception("Q17715832")
+    #builder.add_item_filter("P149","Q176483")
+    #builder.add_time_filter("P571",ComparisonOperators.EQUAL_TO,"900-00-00")
+    builder.add_quantity_filter("P2044",ComparisonOperators.LESS_THAN,"0.2","Q828224")
+    print(builder.build())
+    return ""
