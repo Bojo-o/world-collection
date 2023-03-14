@@ -121,9 +121,11 @@ export class WikiDataAPI {
         return this.convertToSearchDataModel(data);
     }
 
-    static async searchForFilters(QNumberOfType :  string){
+    static async searchForFilters(QNumberOfType :  string | null = null){
         let param = new Map<string,string>();
-        param.set("type",QNumberOfType)
+        if (QNumberOfType != null){
+            param.set("type",QNumberOfType)
+        }
         const data = await this.fetchData(urlSearchFilters, param);
         return this.convertToFiltersDataModel(data);
     }

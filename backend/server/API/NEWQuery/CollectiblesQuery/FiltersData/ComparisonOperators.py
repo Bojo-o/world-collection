@@ -7,3 +7,6 @@ class ComparisonOperators(Enum):
     LESS_THAN = "<"
     GREATER_THAN_OR_EQUAL_TO = ">="
     LESS_THAN_OR_EQUAL_TO = "<="
+
+def Get_ComparisonOperators(value : str):
+    return ComparisonOperators(value)

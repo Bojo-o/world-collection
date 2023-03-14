@@ -52,6 +52,7 @@ function SearchBar({placeHolder,handleClickedResult,dataGetter,emptySearchingFla
 
         dataGetter(word).then(
             (data) => {
+                console.log(data)
                 setLoading(false)
                 setResults(data);
                 setDisplay(true)

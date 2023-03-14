@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Precision, CustomTime } from "../../Data/CustomTime";
-import { AppliedFilterData } from "../../Data/FiltersData/AppliedFilterData";
-import { FilterData } from "../../Data/FiltersData/FilterData";
-import { FilterTimeValueData } from "../../Data/FiltersData/FilterTimeValueData";
+import { Precision, CustomTime } from "../../../Data/CustomTime";
+import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
+import { FilterData } from "../../../Data/FiltersData/FilterData";
+import { FilterTimeValueData } from "../../../Data/FiltersData/FilterTimeValueData";
+import { FilterComparisonOperator } from "./FilterComparisonOperator";
 import { FilterProps } from "./FilterProps";
 
 
@@ -12,21 +13,13 @@ export enum TimePrecision{
     Year,
     Century
 }
-export enum FilterType{
-    GreaterThan = "Greater than (collectible`s property > selected time)",
-    GreaterThanEqual = "Greater than and equals (collectible`s property >= selected time)",
-    LessThan = "Less than (collectible`s property < selected time)",
-    LessThanEqual = "Less than and equals (collectible`s property <= selected time)",
-    InRange = "In certain range (selected time < collectible`s property < other selected time)",
-    InRangeEqual = "In certain range (selected time <= collectible`s property <= other selected time)"
-}
 export enum TimeRange{
     From = "From",
     To = "To"
 }
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const [timeRepresentation,setTimeRepresentation] = useState<TimePrecision>(TimePrecision.Year)
-    const [filterType,setFilterType] = useState<FilterType>(FilterType.GreaterThan)
+    const [filterType,setFilterType] = useState<FilterComparisonOperator>(FilterComparisonOperator.GreaterThan)
 
     const [isBCFrom,setIsBCFrom] = useState(false);
     const [isBCTo,setIsBCTo] = useState(false);
@@ -147,12 +140,12 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                     <div className="m-5">
                         <h5>Choose filter type: </h5>
                         <select className="form-select" aria-label="Select filter type" onChange={handleFilterTypeSelection}>
-                            <option value={FilterType.GreaterThan} > {FilterType.GreaterThan.valueOf()} </option>
-                            <option value={FilterType.GreaterThanEqual}> {FilterType.GreaterThanEqual.valueOf()}</option>
-                            <option value={FilterType.LessThan}> {FilterType.LessThan.valueOf()} </option>
-                            <option value={FilterType.LessThanEqual}> {FilterType.LessThanEqual.valueOf()}</option>
-                            <option value={FilterType.InRange}> {FilterType.InRange.valueOf()}</option>
-                            <option value={FilterType.InRangeEqual}> {FilterType.InRangeEqual.valueOf()}</option>
+                            <option value={FilterComparisonOperator.GreaterThan} > {FilterComparisonOperator.GreaterThan.valueOf()} </option>
+                            <option value={FilterComparisonOperator.GreaterThanEqual}> {FilterComparisonOperator.GreaterThanEqual.valueOf()}</option>
+                            <option value={FilterComparisonOperator.LessThan}> {FilterComparisonOperator.LessThan.valueOf()} </option>
+                            <option value={FilterComparisonOperator.LessThanEqual}> {FilterComparisonOperator.LessThanEqual.valueOf()}</option>
+                            <option value={FilterComparisonOperator.InRange}> {FilterComparisonOperator.InRange.valueOf()}</option>
+                            <option value={FilterComparisonOperator.InRangeEqual}> {FilterComparisonOperator.InRangeEqual.valueOf()}</option>
                         </select>
                     </div>
 
@@ -168,7 +161,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                     
                 </div>
                 
-                {(filterType == FilterType.InRange || filterType == FilterType.InRangeEqual) ? (
+                {(filterType == FilterComparisonOperator.InRange || filterType == FilterComparisonOperator.InRangeEqual) ? (
                     <>
                         {timeRepresentation == TimePrecision.Date && (
                             <>

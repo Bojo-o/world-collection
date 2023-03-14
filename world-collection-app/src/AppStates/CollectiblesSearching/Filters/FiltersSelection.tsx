@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../API/WikiDataAPI";
-import { AppliedFilterData } from "../../Data/FiltersData/AppliedFilterData";
-import { FilterDataType, FilterData } from "../../Data/FiltersData/FilterData";
-import { Entity } from "../../Data/SearchData/Entity";
+import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
+import { FilterDataType, FilterData } from "../../../Data/FiltersData/FilterData";
+import { Entity } from "../../../Data/SearchData/Entity";
 import './FiltersSelection.css';
 import ItemFilter from "./ItemFilter";
 import QuantityFilter from "./QuantityFilter";
 import TimeFilter from "./TimeFilter";
+
 export interface FiltersSelectionProps{
     filtersForType : Entity;
 }
@@ -14,7 +15,15 @@ export interface FiltersSelectionProps{
 function FiltersSelection({filtersForType} : FiltersSelectionProps){
     const [loadingFilters,setLoadingFilters] = useState(false);
     const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
-    const [filters,setFilters] = useState<FilterData[]>([]);
+
+    const [showingFilters,setShowingFilters] = useState<FilterData[]>([]);
+
+    const [recomendedFilters,setRecomendedFilters] = useState<FilterData[]>([]);
+
+    const [allFilters,setAllFilters] = useState<FilterData[]>([]);
+    const [loadingAllFilters,setLoadingAllFilters] = useState(false);
+    const [errorForFetchingAllFilters,setErrorForFetchingAllFilters] = useState(false);
+
     const [selectedFilter,setSelectedFilter] = useState<FilterData>(new FilterData());
     const [appliedFilters,setAppliedFilters] = useState<AppliedFilterData[]>([]);
 
@@ -32,6 +41,9 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
         }
         return "secondary";
     }
+    const handleShowingFilters = (filters : FilterData[]) => {
+        setShowingFilters(filters);
+    }
     const handleAddFilterToAplied = (data : AppliedFilterData) => {
         setAppliedFilters([...appliedFilters, data]) //simple value
         setSelectedFilter(new FilterData())
@@ -39,16 +51,28 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
     const removeFilterFromApplied = (data : AppliedFilterData) => {
         setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber != data.getFilter().PNumber))
     }
-    const fetchFiltersData = () => {
+    const fetchRecomendedFiltersData = () => {
         setLoadingFilters(true)
         setErrorForFetchingFilters(false);
 
         WikiDataAPI.searchForFilters(filtersForType.GetQNumber()).then(
             (data) => {
                 setLoadingFilters(false);
-                setFilters(data);
+                setRecomendedFilters(data);
+                setShowingFilters(data);
             }
         ).catch(() => setErrorForFetchingFilters(true))
+    }
+    const fetchAllFiltersData = () => {
+        setLoadingAllFilters(true)
+        setErrorForFetchingAllFilters(false);
+
+        WikiDataAPI.searchForFilters().then(
+            (data) => {
+                setLoadingAllFilters(false);
+                setAllFilters(data);
+            }
+        ).catch(() => setErrorForFetchingAllFilters(true))
     }
     const handleFilterSelection = (filter : FilterData) => {
         setSelectedFilter(filter);
@@ -67,16 +91,44 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
         return result;
     }
     useEffect(() => {
-        fetchFiltersData()
-
+        fetchRecomendedFiltersData()
+        fetchAllFiltersData()
     },[])
 
     return(
         <>  
-            <h1>You can apply some filters for your collectibles searching</h1>
+            <h1>You can also apply some filters for your collectibles searching</h1>
             <div className="d-flex flex-row justify-content-between" >
                 <div className="w-25 border border-dark rounded" >
-                    <h3>Filters you can use :</h3>
+
+                    <div className="btn-group">
+                        <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filters
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><button className="dropdown-item" onClick={() => handleShowingFilters(recomendedFilters)}>Recomended Filters</button></li>
+                            {loadingAllFilters ? (
+                                <>
+                                    <li>
+                                        <button className="dropdown-item" disabled>All filters 
+                                            {
+                                                <div className="spinner-border text-info" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                            }
+                                        </button>
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>
+                                        <button className="dropdown-item" onClick={() => handleShowingFilters(allFilters)}>All filters</button>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    </div>
+
                     <input className="form-control mr-sm-2" type="search" placeholder="Search for filter" onChange={handleFiltersSearch} />
                     <div className="list-group" id="filters">
                         {loadingFilters && (<>
@@ -88,7 +140,7 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
                         </>)}
                         {!loadingFilters && (
                             <>
-                                {filters.filter((filter) => {
+                                {showingFilters.filter((filter) => {
                                     return filter.name.toLocaleLowerCase().includes(filterSearchWord.toLocaleLowerCase()) && !isFilterUsed(filter)
                                 }).map((filter,index) => {
                                     return(

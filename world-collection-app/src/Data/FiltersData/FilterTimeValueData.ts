@@ -1,13 +1,14 @@
-import { FilterType } from "../../CollectiblesSearching/Filters/TimeFilter";
+
+import { FilterComparisonOperator } from "../../AppStates/CollectiblesSearching/Filters/FilterComparisonOperator";
 import { CustomTime } from "../CustomTime";
 
 
 export class FilterTimeValueData{
-    private filterType :  FilterType;
+    private filterType :  FilterComparisonOperator;
     private timeFrom : CustomTime;
     private timeTo : CustomTime | null;
 
-    constructor(filterType: FilterType,timeFrom : CustomTime,timeTo : CustomTime | null = null){
+    constructor(filterType: FilterComparisonOperator,timeFrom : CustomTime,timeTo : CustomTime | null = null){
         this.filterType = filterType;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;

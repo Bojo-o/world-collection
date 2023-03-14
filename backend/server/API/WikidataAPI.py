@@ -2,6 +2,7 @@ import collections
 import json
 
 from .NEWQuery.CollectiblesQuery.AroundCollectiblesSearchQueryBuilder import AroundCollectiblesSearchQueryBuilder
+from .NEWQuery.CollectiblesQuery.AdministrativeAreaCollectiblesSearchQueryBuilder import AdministrativeAreaCollectiblesSearchQueryBuilder
 
 from .NEWQuery.SearchQuery.SearchByClassRestrictionQueryBuilder import TYPES
 from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
@@ -16,7 +17,9 @@ from .NEWQuery.FilterQuery.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYP
 from .NEWQuery.SearchQuery.SearchWikibaseItemQueryBuilder import SearchWikibaseItemQueryBuilder
 
 from .NEWQuery.CollectiblesQuery.CollectiblesSearchQueryBuilder import CollectiblesSearchQueryBuilder
-from .NEWQuery.CollectiblesQuery.FiltersData.ComparisonOperators import ComparisonOperators
+from .NEWQuery.CollectiblesQuery.FiltersData.ComparisonOperators import ComparisonOperators , Get_ComparisonOperators
+from .NEWQuery.CollectiblesQuery.FiltersData.FilterType import FilterType, Get_FilterType
+from .NEWQuery.CollectiblesQuery.CollectiblesSearchType import CollectiblesSearchType , Get_CollectiblesSearchType
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -58,7 +61,8 @@ def search_for_classes():
     if exceptions_classes is not None:
         for item in exceptions_classes.split(','):
             builder.add_exception_class(item)
-    #print(builder.build())
+            
+    print(builder.build())
     return process_query(builder.build())
 
 @API.route('/search/places',methods=['GET'])
@@ -115,7 +119,7 @@ def get_filters():
     if type is not None:
         builder.set_type_for_search_filter(type)
 
-    #print(builder.build())
+    print(builder.build())
     return process_query(builder.build())
 
 
@@ -218,15 +222,92 @@ def search_wikibase_item():
     print(builder.build())
     return process_query(builder.build())
 
+# administrative, region, world , around
 @API.route('/search/collectibles',methods=['GET'])
 def search_collectibles():
-    builder = AroundCollectiblesSearchQueryBuilder("Q515")
-    builder.set_radius(100)
+    args = request.args
+    
+    parent_class_of_collectibles = args.get("class")
+    if parent_class_of_collectibles is None:
+        return "Invalid request,param: class must be provided"
+    
+    exceptions_classes = args.get("exception_classes")
+    if exceptions_classes is not None:
+        exceptions_classes = exceptions_classes.split(',')
+
+    
+
+    search_type = args.get("search_type")
+    if search_type is None:
+        return "Invalid request,param: search_type must be provided"
+    
+    builder = AdministrativeAreaCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
+
+    try:
+        type_of_search = Get_CollectiblesSearchType(search_type)
+        match (type_of_search):
+            case CollectiblesSearchType.ADMINISTRATIVE:
+                builder = AdministrativeAreaCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
+                area = args.get("administrative_area")
+                if area is None:
+                    return "Invalid request,param: administrative_area must be provided"
+                builder.set_search_area(area)
+
+                area_exceptions = args.get("area_exceptions")
+                if area_exceptions is not None:
+                    for exc in area_exceptions.split(','):
+                        builder.add_area_exception(exc)
+    
+            case CollectiblesSearchType.AROUND:
+                builder = AroundCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
+                radius = args.get("radius")
+                if radius is None:
+                    return "Invalid request,param: radius must be provided"
+                builder.set_radius(int(radius))
+                lat = args.get("lat")
+                if lat is None:
+                    return "Invalid request,param: lat must be provided"
+                lon = args.get("lat")
+                if lon is None:
+                    return "Invalid request,param: lon must be provided"
+                builder.set_center_by_coordinates(float(lat),float(lon))
+    except:
+        return "Invalid request,param search_type was provided incorect"
+    
+
+
+    filers = args.get("filters")
+    if filers is not None:
+        try:
+            filers = filers.split(',')
+            
+            for item in filers:
+                filter : list[str] = item.split[':']
+                filter_type =  Get_FilterType(filter[0])
+                match (filter_type):
+                    case FilterType.WIKIBASEITEM:
+                        property = filter[1]
+                        value_QNumber = filter[2]
+                        builder.add_item_filter(property,value_QNumber)
+                    case FilterType.QUANTITY:
+                        property = filter[1]
+                        comparison_operator = Get_ComparisonOperators(filter[2])
+                        quantity_value = filter[3]
+                        unit  = None
+                        if filter.__len__() == 5:
+                            unit = filter[4]
+                        builder.add_quantity_filter(property,comparison_operator,quantity_value,unit )
+                    case FilterType.TIME:
+                        property = filter[1]
+                        comparison_operator = Get_ComparisonOperators(filter[2])
+                        time_value = filter[3]
+                        builder.add_time_filter(property,comparison_operator,time_value)
+        except:
+            return "Invalid request,param filter was provided incorect"
+
     builder.set_distinct(True)
-    builder.set_center_as_entity("Q1085")
-    builder.add_class_exception("Q17715832")
-    #builder.add_item_filter("P149","Q176483")
-    #builder.add_time_filter("P571",ComparisonOperators.EQUAL_TO,"900-00-00")
-    builder.add_quantity_filter("P2044",ComparisonOperators.LESS_THAN,"0.2","Q828224")
+
+    
+
     print(builder.build())
-    return ""
+    return process_query(builder.build())

@@ -38,7 +38,7 @@ class QueryAroundSearchBuilder(QueryBaseBuilder):
         if self._center_by_coord_flag == False:
             self._query.append("wd:{0} wdt:P625 ?locationOfCenter . ".format(self._center))
         
-        self._query.append("SERVICE wikibase:around { ?collectible wdt:P625 ?geo . bd:serviceParam wikibase:center "
+        self._query.append("SERVICE wikibase:around { ?collectible wdt:P625 ?geo_coord . bd:serviceParam wikibase:center "
         + ("\"{}\"^^geo:wktLiteral.".format(self._center) if self._center_by_coord_flag else "?locationOfCenter")
         +". bd:serviceParam wikibase:radius \""
         + str(self._radius) +"\" . }")

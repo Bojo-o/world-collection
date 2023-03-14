@@ -1,12 +1,12 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Circle, MapContainer, TileLayer, useMap } from 'react-leaflet';
-import { WikiDataAPI } from '../API/WikiDataAPI';
-import { SearchData } from '../Data/SearchData/SearchData';
-import SearchBar from '../DataSearching/SearchBar/SearchBar';
+import { WikiDataAPI } from '../../../API/WikiDataAPI';
+import { SearchData } from '../../../Data/SearchData/SearchData';
+import SearchBar from '../../../DataSearching/SearchBar/SearchBar';
 
-import "../Map/Map.css";
-import MapFlyToOption from '../Map/MapOptions/MapFlyToOption';
-import DraggableMarker from './DraggableMarker';
+import "../../../Map/Map.css";
+import MapFlyToOption from '../../../Map/MapOptions/MapFlyToOption';
+import DraggableMarker from '../../../CollectiblesSearching/DraggableMarker';
 
 
 const center = {
@@ -14,9 +14,9 @@ const center = {
     lng: -0.09,
 }
 export interface SearchByRadiusProps{
-    handleRadiusArea : (center : {lat : number,lng : number} , radius : number) => void;
+    handleNext : (center : {lat : number,lng : number} , radius : number) => void;
 }
-function SearchByRadius({handleRadiusArea} : SearchByRadiusProps){
+function SearchByRadius({handleNext: handleRadiusArea} : SearchByRadiusProps){
     const [positionOfMarker,setPositionOfMarker] = useState<{lat : number,lng : number}>(center)
     const [radius,setRadius] = useState(1);
     const fillBlueOptions = { fillColor: 'blue' }

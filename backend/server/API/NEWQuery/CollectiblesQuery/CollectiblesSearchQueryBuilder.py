@@ -19,6 +19,11 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self._quantity_filters = []
 
         self.select_variable("?item","?QNumber",True,"?name")
+        self.select_variable("SAMPLE(?lat)","?lati")
+        self.select_variable("SAMPLE(?lon)","?long")
+
+        self.add_order_by_("?item")
+        self.add_order_by_("?itemLabel")
 
         self._INSTANCE_OR_SUBCLASS =  "wdt:P31/wdt:P279*"
 
@@ -87,6 +92,12 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
                 self.add_triple("?item","p:{}/psn:{}/wikibase:quantityAmount ".format(quantity.property,quantity.property),temp_name)
                 self.add_filter("({} * {}) {} {}".format(str(quantity.quantity_value),temp_name + "conversion",quantity.comparison_operator.value,temp_name))
             j = j + 1
+
+        # get item coordinates property
+        self.get_coordinates_of_object("?item")
+        # get item instance of property
+        self.add_triple("?item","wdt:P31", "?instances")
+
         self.add_label_servise()
 
     @abstractmethod

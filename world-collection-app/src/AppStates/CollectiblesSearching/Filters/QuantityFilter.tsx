@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../API/WikiDataAPI";
-import { QuantityFilterData, ValueRange } from "../../Data/FiltersData/QuantityFilterData";
-import { Entity } from "../../Data/SearchData/Entity";
+import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { QuantityFilterData, ValueRange } from "../../../Data/FiltersData/QuantityFilterData";
+import { Entity } from "../../../Data/SearchData/Entity";
 import { FilterProps } from "./FilterProps";
 
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
