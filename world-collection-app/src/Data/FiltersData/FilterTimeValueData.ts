@@ -4,14 +4,22 @@ import { CustomTime } from "../CustomTime";
 
 
 export class FilterTimeValueData{
-    private filterType :  FilterComparisonOperator;
-    private timeFrom : CustomTime;
-    private timeTo : CustomTime | null;
+    private filterComparisonOperator :  FilterComparisonOperator;
+    private time: CustomTime;
 
-    constructor(filterType: FilterComparisonOperator,timeFrom : CustomTime,timeTo : CustomTime | null = null){
-        this.filterType = filterType;
-        this.timeFrom = timeFrom;
-        this.timeTo = timeTo;
+    constructor(comparisonOperator: FilterComparisonOperator,time : CustomTime){
+        this.filterComparisonOperator = comparisonOperator;
+        this.time = time;
     }
-    
+
+    public getString(){
+        return this.time.getString() + " " + this.filterComparisonOperator  + " time value of property"  
+    }
+
+    toJSON(){
+        return {
+            comparisonOperator : this.filterComparisonOperator,
+            time : this.time.getString()
+        }
+    }
 }

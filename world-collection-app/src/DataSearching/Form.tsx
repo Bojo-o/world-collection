@@ -1,7 +1,7 @@
 import React from "react";
 import { SearchData } from "../Data/SearchData/SearchData";
 import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
-import { ResultData } from "../Data/ResultsData";
+import { RawCollectible } from "../Data/RawCollectible";
 import ViewMap from "../Map/ViewMap";
 
 import RenderCollectiblesQuery from "./RenderCollectiblesQuery";
@@ -14,7 +14,7 @@ import SearcherBar, { TypeOfSearch } from "./ColletiblesClassSearch";
 function Form() {
 
     const [query,setQuery] = React.useState<CollectiblesQuery>(new CollectiblesQuery);
-    const [resultData,setResultData]  = React.useState<ResultData[]|null>(null);
+    const [resultData,setResultData]  = React.useState<RawCollectible[]|null>(null);
     const [loading,setLoading] = React.useState(false);
 
     const setCollectiblesClass = (data : SearchData) => {

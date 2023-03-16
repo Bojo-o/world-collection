@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
+import { FilterQuantityValueData } from "../../../Data/FiltersData/FIlterQuantityValueData";
 import { QuantityFilterData, ValueRange } from "../../../Data/FiltersData/QuantityFilterData";
 import { Entity } from "../../../Data/SearchData/Entity";
+import { FilterComparisonOperator } from "./FilterComparisonOperator";
 import { FilterProps } from "./FilterProps";
 
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
@@ -9,8 +12,10 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const[loadingValueType,setLoadingValueType] = useState(false);
     const[errorForFetchingValueType,setErrorForFetchingValueType] = useState(false);
 
-    const[unit,setUnit] = useState<string|undefined>(undefined);
+    const[unit,setUnit] = useState<string|null>(null);
     const[value,setValue] = useState<number|undefined>(undefined);
+    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.GreaterThan)
+
     const handleInput = (e : any) => {
         if (e.target.value == ""){
             setValue(undefined)
@@ -21,7 +26,15 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
         setValue(number);
     }
     const handleUnitChange = (e : any) => {
-        console.log(e.target.value)
+        setUnit(e.target.value)
+    }
+    const handleComparisonOperatorSelect = (e : any) => {
+        setComparisonOperator(e.target.value);
+    }
+    const handleSave = () => {
+        if (value != undefined){
+            handleAddFilterToAplied(new AppliedFilterData(filter,new FilterQuantityValueData(comparisonOperator,value,unit)));
+        }
     }
     const fetchFilterData = () => {
         setLoadingValueType(true)
@@ -67,13 +80,27 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                             </select>
                         </>
                     )}
-
+                    <h3>Choose value</h3>
                     <div className="input-group mb-3">
                         <span className="input-group-text">Min : {filterData.range.min}</span>
                         <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleInput} />
                         <span className="input-group-text">Max : {filterData.range.max}</span>
                     </div>
-                    <h1>{value}</h1>
+                    <div className="d-flex flex-row">
+                        <h4>{value}</h4>
+                        <select className="form-select w-25 mx-2" onChange={handleComparisonOperatorSelect}>
+                            <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
+                            <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
+                            <option value={FilterComparisonOperator.GreaterThan}>is greater than</option>
+                            <option value={FilterComparisonOperator.GreaterThanOrEqual}>is greater than or equal to</option>
+                            <option value={FilterComparisonOperator.LessThan}>is less than</option>
+                            <option value={FilterComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
+                        </select>
+                        <h3>"{filter.name}" quantity value</h3>
+                    </div>
+                    {value != undefined && (
+                        <button type="button" className="btn btn-success" onClick={handleSave}>Applied filter</button>
+                    )}
                 </>
             )}
         </div>

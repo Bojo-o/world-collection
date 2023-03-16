@@ -40,10 +40,12 @@ def process_query(query : str):
     except:
         return "invalid query"
 
-@API.route('/search/classes',methods=['GET'])
+@API.route('/search/classes',methods=['GET','POST'])
 def search_for_classes():
     # argumnets 
+
     searched_word = request.args.get("key_word")
+    #searched_word = data['word']
     super_class = request.args.get("super_class")
     exceptions_classes = request.args.get("exceptions")
 
@@ -62,7 +64,7 @@ def search_for_classes():
         for item in exceptions_classes.split(','):
             builder.add_exception_class(item)
             
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
 
 @API.route('/search/places',methods=['GET'])
@@ -119,7 +121,7 @@ def get_filters():
     if type is not None:
         builder.set_type_for_search_filter(type)
 
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
 
 
@@ -158,7 +160,7 @@ def get_filter_data():
 
             builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.VALUE_TYPE_CONSTRAINT)   
             d["value_type_constraint"] = json.loads(process_query(builder.build()))
-            print(builder.build())
+            #print(builder.build())
             
             return json.dumps(d)
         
@@ -219,95 +221,92 @@ def search_wikibase_item():
         for none_value in none_values:
             builder.add_none_of_constraint(none_value)
     
-    print(builder.build())
+    #print(builder.build())
     return process_query(builder.build())
 
 # administrative, region, world , around
-@API.route('/search/collectibles',methods=['GET'])
+@API.route('/search/collectibles',methods=['GET','POST'])
 def search_collectibles():
-    args = request.args
+
+    data = json.loads(request.get_json())
     
-    parent_class_of_collectibles = args.get("class")
+    parent_class_of_collectibles : str = data['type']
     if parent_class_of_collectibles is None:
         return "Invalid request,param: class must be provided"
     
-    exceptions_classes = args.get("exception_classes")
-    if exceptions_classes is not None:
-        exceptions_classes = exceptions_classes.split(',')
-
+    exceptions_classes : list[str] = data['exceptionsSubTypes']
     
+    search_type : str = data['areaSearchType']
 
-    search_type = args.get("search_type")
     if search_type is None:
         return "Invalid request,param: search_type must be provided"
     
-    builder = AdministrativeAreaCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
 
-    try:
-        type_of_search = Get_CollectiblesSearchType(search_type)
-        match (type_of_search):
+    builder = AdministrativeAreaCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
+    type_of_search = Get_CollectiblesSearchType(search_type)
+    match (type_of_search):
             case CollectiblesSearchType.ADMINISTRATIVE:
                 builder = AdministrativeAreaCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
-                area = args.get("administrative_area")
+
+                area : str = data['area']
                 if area is None:
                     return "Invalid request,param: administrative_area must be provided"
                 builder.set_search_area(area)
 
-                area_exceptions = args.get("area_exceptions")
+                area_exceptions : list[str] = data['exceptionsSubAreas']
                 if area_exceptions is not None:
-                    for exc in area_exceptions.split(','):
+                    for exc in area_exceptions:
                         builder.add_area_exception(exc)
     
             case CollectiblesSearchType.AROUND:
                 builder = AroundCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
-                radius = args.get("radius")
+                radius : int = int(data['radius'])
                 if radius is None:
                     return "Invalid request,param: radius must be provided"
-                builder.set_radius(int(radius))
-                lat = args.get("lat")
+                builder.set_radius(radius)
+
+                center = data['center']
+                lat : float = float(center['lat'])
                 if lat is None:
                     return "Invalid request,param: lat must be provided"
-                lon = args.get("lat")
-                if lon is None:
-                    return "Invalid request,param: lon must be provided"
-                builder.set_center_by_coordinates(float(lat),float(lon))
-    except:
-        return "Invalid request,param search_type was provided incorect"
+                lng : float = float(center['lng'])
+                if lng is None:
+                    return "Invalid request,param: lng must be provided"
+                builder.set_center_by_coordinates(lat,lng)
+    #try:
+
+    #except:
+        #return "Invalid request,param search_type was provided incorect"
     
 
+    if exceptions_classes is not None:
+        for exc in exceptions_classes:
+            builder.add_class_exception(exc)
 
-    filers = args.get("filters")
-    if filers is not None:
+    filters : list[dict] = data['filters']
+    if filters is not None:
         try:
-            filers = filers.split(',')
-            
-            for item in filers:
-                filter : list[str] = item.split[':']
-                filter_type =  Get_FilterType(filter[0])
+            for item in filters:
+                property : str = item['property']
+                filter_type =  Get_FilterType(item['filterType'])
                 match (filter_type):
                     case FilterType.WIKIBASEITEM:
-                        property = filter[1]
-                        value_QNumber = filter[2]
-                        builder.add_item_filter(property,value_QNumber)
+                        value : str = item['data']['item']
+                        builder.add_item_filter(property,value)
                     case FilterType.QUANTITY:
-                        property = filter[1]
-                        comparison_operator = Get_ComparisonOperators(filter[2])
-                        quantity_value = filter[3]
-                        unit  = None
-                        if filter.__len__() == 5:
-                            unit = filter[4]
+                        comparison_operator = Get_ComparisonOperators(item['data']['filterComparisonOperator'])
+                        quantity_value : int = item['data']['value']
+                        unit :str =  item['data']['unit']
                         builder.add_quantity_filter(property,comparison_operator,quantity_value,unit )
                     case FilterType.TIME:
-                        property = filter[1]
-                        comparison_operator = Get_ComparisonOperators(filter[2])
-                        time_value = filter[3]
+                        comparison_operator = Get_ComparisonOperators(item['data']['filterComparisonOperator'])
+                        time_value : str = item['data']['time']
                         builder.add_time_filter(property,comparison_operator,time_value)
         except:
             return "Invalid request,param filter was provided incorect"
 
     builder.set_distinct(True)
 
-    
 
     print(builder.build())
     return process_query(builder.build())

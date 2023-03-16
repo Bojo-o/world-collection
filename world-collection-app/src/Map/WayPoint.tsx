@@ -1,15 +1,15 @@
 import React from 'react'
 import { Marker, Popup} from 'react-leaflet';
-import { ResultData } from '../Data/ResultsData';
+import { RawCollectible } from '../Data/RawCollectible';
 import Details from '../Details/Details';
 
 export interface WayPointProps {
-    data: ResultData;
-    removeItem : (item : ResultData) => void;
-    edited : ResultData;
-    editItem : (row : ResultData) => void;
+    data: RawCollectible;
+    removeItem : (item : RawCollectible) => void;
+    edited : RawCollectible;
+    editItem : (row : RawCollectible) => void;
     cancelItem : () => void;
-    saveItem : (edited : ResultData) => void;
+    saveItem : (edited : RawCollectible) => void;
     handleChange : (event : any) => void;
     
 }

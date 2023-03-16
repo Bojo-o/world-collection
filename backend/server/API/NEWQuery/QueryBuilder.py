@@ -11,6 +11,7 @@ class QueryBuilder(ABC):
         self._select_variable_label = set()
         self._distinct_flag = False
         self._order_by_variables = set()
+        self._group_by_variables = set()
 
     def convert_set(self,set : set,prefix : str = ""):
         list = []
@@ -30,6 +31,9 @@ class QueryBuilder(ABC):
     def add_order_by_(self,variable : str):
         self._order_by_variables.add(variable)
 
+    def add_group_by_(self,variable : str):
+        self._group_by_variables.add(variable)
+
     def add_triple(self,subject : str,predicate : str,object :str):
         self._query.append("{} {} {} .".format(subject,predicate,object))
 
@@ -39,11 +43,12 @@ class QueryBuilder(ABC):
     def add_service(self,service : str,body : str):
         self._query.append("SERVICE {} ".format(service) + "{ " + body + " }")
 
-    def add_label_servise(self):
+    def add_label_servise(self,additional_body : str = None):
+        add_body : str = "" if additional_body is None else additional_body
         temp  = []
         for variable  in self._select_variable_label:
             temp.append(" {} rdfs:label {} .".format(variable,variable + "Label"))
-        self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\"." + "" . join(temp))
+        self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\"." + "" . join(temp) + add_body)
         
 
     def add_hint(self):
@@ -54,6 +59,7 @@ class QueryBuilder(ABC):
     
     def add_filter(self,body : str):
         self._query.append("FILTER ({})".format(body))
+
     def get_coordinates_of_object(self,object : str):
         self.add_triple(object,"p:P625","?coord")
         self.add_triple("?coord","psv:P625","?coord_node")
@@ -68,7 +74,13 @@ class QueryBuilder(ABC):
         self._query.append("WHERE {")
 
     def __build_footer(self):
-        self._query.append("} ORDER BY " + self.convert_set(self._order_by_variables) if self._order_by_variables.__len__() != 0 else "}")
+        if self._order_by_variables.__len__() != 0:     
+            self._query.append("} ORDER BY " + self.convert_set(self._order_by_variables))
+            return
+        if self._group_by_variables.__len__() != 0:
+            self._query.append("} GROUP BY " + self.convert_set(self._group_by_variables))
+            return
+        self._query.append("}")
 
     def build(self) -> str:
         self._query.clear()

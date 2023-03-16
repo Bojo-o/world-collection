@@ -1,7 +1,7 @@
 import { CustomDate } from "../Data/CustomDate";
 import { Collection } from "../Data/Database/Colection";
 import { Collectible } from "../Data/Database/Collectible";
-import { ResultData } from "../Data/ResultsData";
+import { RawCollectible } from "../Data/RawCollectible";
 
 const baseUrl = "DatabaseGateway/";
 const getCollectionsUrl = "get/collections"
@@ -91,7 +91,7 @@ export class DatabaseAPI {
         }));
     }
     
-    public static postCollectibles(collectionName : string,collectibles : ResultData[]){
+    public static postCollectibles(collectionName : string,collectibles : RawCollectible[]){
         this.postData(baseUrl + postCollectiblesIntoCollection,"Insert collectibles into: " + collectionName,JSON.stringify(collectibles));
     }
     public static postCollectionUpdateRename(updatedCollectionID : Number,newName : string){

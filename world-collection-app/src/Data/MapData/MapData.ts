@@ -4,7 +4,7 @@ export class MapData{
     
     constructor(initializer?: any){
         if(!initializer) return;  
-        if (initializer.latitude) this.latitude = initializer.latitude;    
-        if (initializer.longitude) this.longitude = initializer.longitude;  
+        if (initializer.lati) this.latitude = initializer.lati;    
+        if (initializer.long) this.longitude = initializer.long;  
     }
 }

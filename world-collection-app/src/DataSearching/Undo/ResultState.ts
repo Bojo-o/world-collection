@@ -1,4 +1,4 @@
-import { ResultData } from "../../Data/ResultsData";
+import { RawCollectible } from "../../Data/RawCollectible";
 
 export enum TypeOfChange {
     REMOVE,
@@ -6,11 +6,11 @@ export enum TypeOfChange {
     ADD,
 }
 export class ResultState {
-    private result : ResultData;
+    private result : RawCollectible;
     private change : TypeOfChange;
     private changeAtIndex : number;
 
-    constructor(result : ResultData,change : TypeOfChange, changeAtIndex : number){
+    constructor(result : RawCollectible,change : TypeOfChange, changeAtIndex : number){
         this.result = result;
         this.change = change;
         this.changeAtIndex = changeAtIndex;

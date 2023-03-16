@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class CollectiblesSearchType(Enum):
-    AROUND = "around"
-    ADMINISTRATIVE = "administrative"
+    AROUND = "Radius"
+    ADMINISTRATIVE = "Area"
 
 def Get_CollectiblesSearchType(value : str):
     return CollectiblesSearchType(value)

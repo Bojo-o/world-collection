@@ -1,19 +1,19 @@
 import React from "react";
 import './Map.css';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-import { ResultData } from "../Data/ResultsData";
+import { RawCollectible } from "../Data/RawCollectible";
 import WayPoint from "./WayPoint";
 import { map } from "leaflet";
 import MapOptions from "./MapOptions/MapOptions";
 import { convertToMapDataModel } from "./ConvertToMapData";
 
 export interface ViewMapProps {
-    waypoints : ResultData[];
-    edited : ResultData;
-    removeItem : (item : ResultData) => void;
-    editItem : (row : ResultData) => void;
+    waypoints : RawCollectible[];
+    edited : RawCollectible;
+    removeItem : (item : RawCollectible) => void;
+    editItem : (row : RawCollectible) => void;
     cancelItem : () => void;
-    saveItem : (edited : ResultData) => void;
+    saveItem : (edited : RawCollectible) => void;
     handleChange : (event : any) => void;
 }
 function ViewMap({waypoints,edited,removeItem,editItem,cancelItem,saveItem,handleChange}: ViewMapProps) {  

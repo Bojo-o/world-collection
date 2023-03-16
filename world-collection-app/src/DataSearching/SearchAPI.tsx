@@ -1,7 +1,7 @@
 import { SearchData } from "../Data/SearchData/SearchData";
 import { EntityDetailsData } from "../Data/EntityDetailsData";
 import { CollectiblesQuery } from "../Data/Query/CollectiblesResultQuery";
-import { ResultData } from "../Data/ResultsData";
+import { RawCollectible } from "../Data/RawCollectible";
 
 const urlCollectiblesType = "API/search/classes";
 const urlAdministrativeArea = "API/search/administrative_area";
@@ -39,8 +39,8 @@ function convertToCollectiblesBaseDataModels(data: any[]) : SearchData[] {
     return collectibles;
 }
 
-function convertToResultDataModels(data : any[]) : ResultData[] {
-    let resultData : ResultData[] = data.map((d : any) => new ResultData(d));
+function convertToResultDataModels(data : any[]) : RawCollectible[] {
+    let resultData : RawCollectible[] = data.map((d : any) => new RawCollectible(d));
     return resultData;
 }
 export class SearchAPI {

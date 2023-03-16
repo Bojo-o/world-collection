@@ -21,9 +21,10 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self.select_variable("?item","?QNumber",True,"?name")
         self.select_variable("SAMPLE(?lat)","?lati")
         self.select_variable("SAMPLE(?lon)","?long")
+        self.select_variable("GROUP_CONCAT( DISTINCT ?instancesLabel;separator=\"/\")","?subTypeOf")
 
-        self.add_order_by_("?item")
-        self.add_order_by_("?itemLabel")
+        self.add_group_by_("?item")
+        self.add_group_by_("?itemLabel")
 
         self._INSTANCE_OR_SUBCLASS =  "wdt:P31/wdt:P279*"
 
@@ -57,7 +58,7 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         filter = TimeFilterData(property,comparison_operator,time_value)
         self._time_filters.append(filter)
 
-    def add_quantity_filter(self,property : str,comparison_operator : ComparisonOperators, quantity_value : str,value_in_unit : str = None):
+    def add_quantity_filter(self,property : str,comparison_operator : ComparisonOperators, quantity_value : int,value_in_unit : str = None):
         filter = QuantityFilterData(property,comparison_operator,quantity_value,value_in_unit)
         self._quantity_filters.append(filter)
 
@@ -98,7 +99,7 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         # get item instance of property
         self.add_triple("?item","wdt:P31", "?instances")
 
-        self.add_label_servise()
+        self.add_label_servise("?instances rdfs:label ?instancesLabel .")
 
     @abstractmethod
     def build_class_and_location_restriction(self):

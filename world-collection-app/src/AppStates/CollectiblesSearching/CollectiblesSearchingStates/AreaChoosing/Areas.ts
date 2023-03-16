@@ -1,7 +1,7 @@
 
 export enum Areas{
-    RADIUS,
-    ADMINISTRAVIVE_AREA,
-    REGION,
-    WORLD
+    RADIUS = "Radius",
+    ADMINISTRAVIVE_AREA = "Area",
+    REGION = "Region",
+    WORLD = "World"
 }

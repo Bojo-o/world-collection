@@ -1,9 +1,11 @@
+import { RawCollectible } from "../Data/RawCollectible";
 import { FilterData } from "../Data/FiltersData/FilterData";
 import { QuantityFilterData, ValueRange } from "../Data/FiltersData/QuantityFilterData";
 import { WikibaseItemFilterData } from "../Data/FiltersData/WIkibaseItemFilterData";
 import { WikibaseItemPropertyData } from "../Data/FiltersData/WikibaseItemPropertyData";
 import { Entity } from "../Data/SearchData/Entity";
 import { SearchData } from "../Data/SearchData/SearchData";
+import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/ColectiblesSearchQueryData";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
@@ -11,8 +13,13 @@ const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
 const urlSearchFilters = "WikidataAPI/get/filters";
 const urlSearchFilterData = "WikidataAPI/get/filter_data";
 const urlSearchWikibaseItem = "WikidataAPI/search/wikibase_item"
+const urlSearchCollectibles = "WikidataAPI/search/collectibles"
 
 export class WikiDataAPI {
+    private static convertToCollectibleModels(data : any[]) : RawCollectible[] {
+        let result : RawCollectible[] = data.map((d : any) => new RawCollectible(d));
+        return result;
+    }
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
         let results : SearchData[] = data.map((d : any) => new SearchData(d));
         return results;
@@ -103,6 +110,7 @@ export class WikiDataAPI {
         return this.convertToWikibaseItemFilterData(data);
     }
     static async searchForTypesOfCollectibles(searchWord : string){
+        console.log(searchWord)
         let param = new Map<string,string>();
         param.set("key_word",searchWord)
         const data = await this.fetchData(urlCollectiblesType, param);
@@ -141,13 +149,38 @@ export class WikiDataAPI {
         const data = await this.fetchData(urlSearchWikibaseItem, param);
         return this.convertToSearchDataModel(data);
     }
+    static async searchCollectibles(params : CollectiblesSearchQueryData){
+        const data = await this.fetchDataNEW(urlSearchCollectibles,JSON.stringify(params));
+        console.log(data)
+        return this.convertToCollectibleModels(data);
+    }
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";
         for (let [key, value] of params) {
-            parameters = parameters.concat(`${key}=${value}&`)        
+            parameters = parameters.concat(`${key}=${value}&`) 
         }
         try {
             const response = await fetch(`${url}?${parameters}`);
+            const response_1 = await this.checkStatus(response);
+            return this.parseJson(response_1);
+        } catch (e) {
+            throw new Error(
+                'There was an error retrieving the data. Please try again.'
+            );
+        }
+    }
+
+    private static async fetchDataNEW(url : string, data : {}){
+        try {
+            const response = await fetch(url,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
             const response_1 = await this.checkStatus(response);
             return this.parseJson(response_1);
         } catch (e) {

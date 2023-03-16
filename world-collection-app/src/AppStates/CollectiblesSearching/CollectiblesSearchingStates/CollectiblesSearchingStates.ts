@@ -4,4 +4,5 @@ export enum CollectiblesSearchingStates{
     RadiusArea,
     AdministrativeArea,
     FiltersSelection,
+    Collectibles
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { json } from "stream/consumers";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
 import { FilterDataType, FilterData } from "../../../Data/FiltersData/FilterData";
@@ -10,9 +11,10 @@ import TimeFilter from "./TimeFilter";
 
 export interface FiltersSelectionProps{
     filtersForType : Entity;
+    handleNext : (appliedFilters : AppliedFilterData[]) => void;
 }
 
-function FiltersSelection({filtersForType} : FiltersSelectionProps){
+function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
     const [loadingFilters,setLoadingFilters] = useState(false);
     const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
 
@@ -90,6 +92,9 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
         })
         return result;
     }
+    const saveAndContinue = () =>{
+        handleNext(appliedFilters)
+    }
     useEffect(() => {
         fetchRecomendedFiltersData()
         fetchAllFiltersData()
@@ -97,7 +102,10 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
 
     return(
         <>  
-            <h1>You can also apply some filters for your collectibles searching</h1>
+            <div className="d-flex flex-row">
+                <h1>You can also apply some filters for your collectibles searching</h1>
+                <button type="button" className="btn btn-success mx-3" onClick={saveAndContinue}>Continue</button>
+            </div>
             <div className="d-flex flex-row justify-content-between" >
                 <div className="w-25 border border-dark rounded" >
 
@@ -141,7 +149,7 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
                         {!loadingFilters && (
                             <>
                                 {showingFilters.filter((filter) => {
-                                    return filter.name.toLocaleLowerCase().includes(filterSearchWord.toLocaleLowerCase()) && !isFilterUsed(filter)
+                                    return filter.name.toLocaleLowerCase().includes(filterSearchWord.toLocaleLowerCase())
                                 }).map((filter,index) => {
                                     return(
                                         <>
@@ -183,9 +191,11 @@ function FiltersSelection({filtersForType} : FiltersSelectionProps){
                                             <small className={"badge bg-" + getColorByFilterType(filter.getFilter().dataType) +" text-wrap "}>
                                                             {filter.getFilter().dataType}
                                             </small>
+                                            <p>{filter.getValueOfFilter().getString()}</p>
                                         </div>
-                                        
-                                        <button type="button" className="btn btn-danger" onClick={() => removeFilterFromApplied(filter)}>Remove filter</button>
+                                        <div>
+                                            <button type="button" className="btn btn-danger" onClick={() => removeFilterFromApplied(filter)}>Remove filter</button>
+                                        </div>
                                     </div>
                                 </li>
                             )

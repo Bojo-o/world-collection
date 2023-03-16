@@ -1,5 +1,4 @@
 import React from 'react'
-import { ResultData } from '../Data/ResultsData';
 import ViewMap from '../Map/ViewMap';
 import ResultsTable from './ResultsTable';
 import './Results.css'
@@ -9,9 +8,10 @@ import { EntityDetailsData } from '../Data/EntityDetailsData';
 import { SearchAPI } from './SearchAPI';
 import ResultsSaveFrom from './ResultsSaveForm';
 import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
+import { RawCollectible } from '../Data/RawCollectible';
 
 export interface ResultProps{
-    data : ResultData[];
+    data : RawCollectible[];
 }
 enum View {
     Table,
@@ -20,12 +20,12 @@ enum View {
 
 function Result({data} : ResultProps) {
     //const [resultDataaa,setResultDataaa]  = React.useState<ResultData[]>(data);
-    const [resultData,setResultData]  = React.useState<ResultData[]>(data);
-    const [resultsToRender,setResultsToRender] = React.useState<ResultData[]>(data);
+    const [resultData,setResultData]  = React.useState<RawCollectible[]>(data);
+    const [resultsToRender,setResultsToRender] = React.useState<RawCollectible[]>(data);
     const [viewType,setViewType] = React.useState<View>(View.Table);
 
-    const [edited,setEdited] = React.useState<ResultData>(new ResultData);
-    const [showedDetails,setShowedDetails] = React.useState<ResultData>(new ResultData)
+    const [edited,setEdited] = React.useState<RawCollectible>(new RawCollectible);
+    const [showedDetails,setShowedDetails] = React.useState<RawCollectible>(new RawCollectible)
 
     const [nameFilter,setNameFilter] = React.useState<string>('');
     const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
@@ -34,18 +34,18 @@ function Result({data} : ResultProps) {
 
     const [saveProcess,setSaveProcess] = React.useState(false);
 
-    const editItem = (row : ResultData) => {
-        setEdited(new ResultData(row));     
+    const editItem = (row : RawCollectible) => {
+        setEdited(new RawCollectible(row));     
     }
     const cancelItem = () => {
-        setEdited(new ResultData)
-        setShowedDetails(new ResultData)
+        setEdited(new RawCollectible)
+        setShowedDetails(new RawCollectible)
     }
 
     const setView = (view : View) => {
         setViewType(view);
     }
-    const removeItem = (item : ResultData) => {  
+    const removeItem = (item : RawCollectible) => {  
         setResultData((prevData) =>    
             prevData.filter((result,index) => {
                 if (result.QNumber != item.QNumber){
@@ -63,10 +63,10 @@ function Result({data} : ResultProps) {
             name: value,
         };
         setEdited((prev) => {
-            return new ResultData({...prev,...change});
+            return new RawCollectible({...prev,...change});
         });
     }
-    const saveItem = (edited : ResultData) => {
+    const saveItem = (edited : RawCollectible) => {
         let itemIndex : number = 0;
         setResultData((data) => {
             return data.map((d,index) => {
@@ -78,7 +78,7 @@ function Result({data} : ResultProps) {
             })
         })
         //resultsStateCaretaker.saveState(edited,TypeOfChange.EDIT);
-        setEdited(new ResultData)
+        setEdited(new RawCollectible)
     }
     const handleResultsSearch = (event : any) => {
         const value = event.target.value;
@@ -92,7 +92,7 @@ function Result({data} : ResultProps) {
         setResultData(resultsStateCaretaker.undoState());       
     }
 
-    const showDetails = (item : ResultData) => {
+    const showDetails = (item : RawCollectible) => {
         setShowedDetails(item);  
     }
 
@@ -118,7 +118,7 @@ function Result({data} : ResultProps) {
             setResultsToRender((prev) => prev.filter((result) => result.name.toLocaleLowerCase().includes(nameFilter.toLocaleLowerCase())));
         }
         if (subTypeFilter !== ''){
-            setResultsToRender((prev) => prev.filter((result) => result.instanceOf.toLocaleLowerCase().includes(subTypeFilter.toLocaleLowerCase())));
+            setResultsToRender((prev) => prev.filter((result) => result.subTypeOf.toLocaleLowerCase().includes(subTypeFilter.toLocaleLowerCase())));
         }
         
     },[nameFilter,subTypeFilter,resultData])

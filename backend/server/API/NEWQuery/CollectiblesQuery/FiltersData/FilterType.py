@@ -2,9 +2,9 @@ from enum import Enum
 
 
 class FilterType(Enum):
-    WIKIBASEITEM = "item"
-    QUANTITY = "quantity"
-    TIME= "time"
+    WIKIBASEITEM = "Item"
+    QUANTITY = "Quantity"
+    TIME= "Time"
 
 
 def Get_FilterType(value : str):

@@ -1,25 +1,25 @@
 import { runInThisContext } from "vm";
-import { ResultData } from "../../Data/ResultsData";
+import { RawCollectible } from "../../Data/RawCollectible";
 import { ResultState, TypeOfChange } from "./ResultState";
 
 export class Caretaker {
-    private results : ResultData[];
+    private results : RawCollectible[];
     private stack : ResultState[];
     private stackSize : number;
 
-    constructor(results : ResultData[],stackSize : number){
+    constructor(results : RawCollectible[],stackSize : number){
         this.results = results;
         this.stack = [];
         this.stackSize = stackSize;
     }
 
-    private insertToArr(arr: ResultData[] ,data : ResultData, index : number){
+    private insertToArr(arr: RawCollectible[] ,data : RawCollectible, index : number){
         return arr.splice(index, 0,data);
     }
-    changeResults(results : ResultData[]){
+    changeResults(results : RawCollectible[]){
         this.results = results;
     }
-    saveState(data : ResultData,change :TypeOfChange,index : number) {
+    saveState(data : RawCollectible,change :TypeOfChange,index : number) {
         if (this.stack.length >= this.stackSize){
             this.stack.shift();
         }

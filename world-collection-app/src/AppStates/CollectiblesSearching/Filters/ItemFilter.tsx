@@ -1,6 +1,8 @@
 import { FILE } from "dns";
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
+import { FilterItemValueData } from "../../../Data/FiltersData/FilterItemValueData";
 import { WikibaseItemFilterData } from "../../../Data/FiltersData/WIkibaseItemFilterData";
 import { Entity } from "../../../Data/SearchData/Entity";
 import { SearchData } from "../../../Data/SearchData/SearchData";
@@ -27,7 +29,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
     }
 
     const handleClickedItem =  (data: SearchData) => {
-        
+        setSelectedItem(new Entity(data.QNumber,data.name));
     }
     const handleSelectedItem = (e : any) => {
         
@@ -40,6 +42,11 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
             }
         })
         setSelectedItem(item);
+    }
+    const handleSave = () => {
+        if (selectedItem != null){
+            handleAddFilterToAplied(new AppliedFilterData(filter,new FilterItemValueData(selectedItem)));
+        }
     }
     const itemDataGetter =  (searchWord : string) => {
         return WikiDataAPI.searchWikibaseItem(searchWord,filterData)
@@ -64,6 +71,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                         <>
                             <h3>This filter supports choosing from list of constraint : </h3>
                             <select className="form-select" onChange={handleSelectedItem}>
+                                <option value="" selected disabled hidden>Choose here</option>
                                 {filterData.one_of_constraint.map((value,index) => {
                                     return (
                                         <option key={index} value={value.QNumber}>{value.name}</option>
@@ -133,8 +141,8 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
 
                     {selectedItem != null && (
                         <>
-                            <h3>Picked item "{selectedItem.GetName()}"</h3>
-                            <button type="button" className="btn btn-success" >Applied filter</button>
+                            <h3>Choosed, that item "{selectedItem.GetName()}" is value of "{filter.name}"</h3>
+                            <button type="button" className="btn btn-success" onClick={handleSave}>Applied filter</button>
                         </>
                     )}
                     

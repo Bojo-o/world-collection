@@ -37,15 +37,7 @@ export class CustomTime{
         if (this.precision == Precision.Day){
             day = (this.day < 10) ? "0" + this.day.toString() : this.day.toString();
         }
-        switch(this.precision) {
-            case Precision.Day:
-                break;
-            case Precision.Month:
-                break;
-            case Precision.Year:
-                return year + "-";
-                
-        }
+        
         return year + "-" + month + "-" + day;
     }
 

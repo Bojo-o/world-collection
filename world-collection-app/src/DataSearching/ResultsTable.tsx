@@ -1,5 +1,5 @@
 import React from "react";
-import { ResultData } from "../Data/ResultsData";
+import { RawCollectible } from "../Data/RawCollectible";
 import Details from "../Details/Details";
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
@@ -9,15 +9,15 @@ function countPages(results: number,rowsPerPage : number) : number {
 }
 
 export interface ResultsTableProps{
-    results : ResultData[];
-    edited : ResultData;
-    detailShowing : ResultData;
-    removeItem : (item : ResultData) => void;
-    editItem : (row : ResultData) => void;
+    results : RawCollectible[];
+    edited : RawCollectible;
+    detailShowing : RawCollectible;
+    removeItem : (item : RawCollectible) => void;
+    editItem : (row : RawCollectible) => void;
     cancelItem : () => void;
-    saveItem : (edited : ResultData) => void;
+    saveItem : (edited : RawCollectible) => void;
     handleChange : (event : any) => void;
-    showDetails : (item : ResultData) => void;
+    showDetails : (item : RawCollectible) => void;
 }
 
 function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeItem,saveItem,showDetails,detailShowing} : ResultsTableProps) {
@@ -47,7 +47,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                     (
                                         <React.Fragment>
                                             <td><input type="text" className="form-control" value={edited.name} onChange={handleChange}/></td>
-                                            <td>{row.instanceOf.replaceAll("/"," , ")}</td>
+                                            <td>{row.subTypeOf.replaceAll("/"," , ")}</td>
 
                                             <td className="d-flex flex-row justify-content-center">
                                                 <button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button>
@@ -61,7 +61,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                     (
                                         <React.Fragment>
                                             <td>{row.name}</td>
-                                            <td>{row.instanceOf.replaceAll("/"," , ")}</td>
+                                            <td>{row.subTypeOf.replaceAll("/"," , ")}</td>
                                             {detailShowing.QNumber !== row.QNumber ? 
                                             (
                                                 <React.Fragment>    
@@ -90,7 +90,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                             {detailShowing.QNumber === row.QNumber && (
                                 <tr>
                                     <th colSpan={4}>
-                                        <Details QNumber={row.QNumber} name={row.name} type={row.instanceOf} />
+                                        <Details QNumber={row.QNumber} name={row.name} type={row.subTypeOf} />
                                     </th>
                                 </tr>
                             )}

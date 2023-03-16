@@ -20,7 +20,7 @@ class AroundCollectiblesSearchQueryBuilder(CollectiblesSearchQueryBuilder):
         if longitude > 180 or longitude < -180:
             raise AroundCollectiblesSearchQueryBuilderException("The longitude parameters range is from -180.0 to 180.0")
 
-        self._center = "Point({0} {1})".format(latitude,longitude)
+        self._center = "Point({0} {1})".format(longitude,latitude)
         self._center_by_coord_flag = True
     
     def set_radius(self,radius_in_km : int):
