@@ -1,8 +1,8 @@
 export class Collection {
-    collectionID: Number = 0;
+    collectionID: number = 0;
     name : string = '';
-    visited : Number = 0;
-    notVisited : Number = 0;
+    visited : number = 0;
+    notVisited : number = 0;
         
     constructor(initializer?: any){
         if(!initializer) return;

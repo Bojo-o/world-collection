@@ -13,17 +13,24 @@ const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
 const urlSearchFilters = "WikidataAPI/get/filters";
 const urlSearchFilterData = "WikidataAPI/get/filter_data";
 const urlSearchWikibaseItem = "WikidataAPI/search/wikibase_item"
-const urlSearchCollectibles = "WikidataAPI/search/collectibles"
+const urlSearchCollectibles = "WikidataAPI/search/collectibles";
+const urlSearchRegions = "WikidataAPI/search/regions";
+const urlCollectibleDataGetter = "WikidataAPI/get/collectible_data"
 
 export class WikiDataAPI {
     private static convertToCollectibleModels(data : any[]) : RawCollectible[] {
         let result : RawCollectible[] = data.map((d : any) => new RawCollectible(d));
         return result;
     }
+    private static convertToCollectibleModel(data : any) : RawCollectible {
+        let result : RawCollectible =  new RawCollectible(data[0]);
+        return result;
+    }
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
         let results : SearchData[] = data.map((d : any) => new SearchData(d));
         return results;
     }
+    
     private static convertToFiltersDataModel(data : any[]) : FilterData[] {
         let results : FilterData[] = data.map((d : any) => new FilterData(d));
         return results;
@@ -131,6 +138,7 @@ export class WikiDataAPI {
 
     static async searchForFilters(QNumberOfType :  string | null = null){
         let param = new Map<string,string>();
+        console.log(QNumberOfType)
         if (QNumberOfType != null){
             param.set("type",QNumberOfType)
         }
@@ -150,9 +158,23 @@ export class WikiDataAPI {
         return this.convertToSearchDataModel(data);
     }
     static async searchCollectibles(params : CollectiblesSearchQueryData){
+        console.log(JSON.stringify(params))
         const data = await this.fetchDataNEW(urlSearchCollectibles,JSON.stringify(params));
-        console.log(data)
         return this.convertToCollectibleModels(data);
+    }
+    static async searchRegions(searchWord : string){
+        let params  = {
+            key_word : (searchWord === "") ? null : searchWord
+        }
+        const data = await this.fetchDataNEW(urlSearchRegions,JSON.stringify(params));
+        return this.convertToSearchDataModel(data);
+    }
+    static async collectibleDataGetter(collectibleQNumber : string){
+        let params  = {
+            collectible_QNumber : collectibleQNumber
+        }
+        const data = await this.fetchDataNEW(urlCollectibleDataGetter,JSON.stringify(params));
+        return this.convertToCollectibleModel(data);
     }
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";

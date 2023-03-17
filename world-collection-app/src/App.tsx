@@ -5,6 +5,7 @@ import Form from './DataSearching/Form';
 import HomeState from './AppStates/HomeState';
 import Editation from './AppStates/Editation';
 import CollectibleSearching from './AppStates/CollectiblesSearching/CollectiblesSearching';
+import CollectiblesAdding from './AppStates/CollectiblesAdding';
 
 const homeState = () => {
   return (
@@ -17,6 +18,13 @@ const collectiblesSearcherState = () => {
     //<Form />
     <CollectibleSearching />
   );
+}
+const collectibleAdditionState = () => {
+  return (
+    <>
+      <CollectiblesAdding />
+    </>
+  )
 }
 
 const editCollectionsState = () => {
@@ -44,6 +52,7 @@ function App() {
             <div className='d-flex mx-5'>
               <button type='button' className='btn btn-light btn-lg me-3' onClick={() => {setAppState(homeState)}}>Home</button>
               <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(collectiblesSearcherState)}}>Find collectibles</button>
+              <button type='button' className='btn btn-light btn-lg me-3' onClick={() => {setAppState(collectibleAdditionState)}}>Add Collectibles</button> 
               <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(editCollectionsState)}}>Edit collections</button>
             </div>
           </ul>

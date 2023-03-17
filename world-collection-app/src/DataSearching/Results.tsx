@@ -105,7 +105,7 @@ function Result({data} : ResultProps) {
     }
 
     const saveResults = (collectionName : string) => {
-        DatabaseAPI.postCollectibles(collectionName,resultData)
+        //DatabaseAPI.postCollectibles(collectionName,resultData)
     }
 
     React.useEffect(() => {

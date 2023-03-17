@@ -20,6 +20,9 @@ from .NEWQuery.CollectiblesQuery.CollectiblesSearchQueryBuilder import Collectib
 from .NEWQuery.CollectiblesQuery.FiltersData.ComparisonOperators import ComparisonOperators , Get_ComparisonOperators
 from .NEWQuery.CollectiblesQuery.FiltersData.FilterType import FilterType, Get_FilterType
 from .NEWQuery.CollectiblesQuery.CollectiblesSearchType import CollectiblesSearchType , Get_CollectiblesSearchType
+from .NEWQuery.SearchQuery.SearchRegionQueryBuilder import SearchRegionQueryBuilder
+from .NEWQuery.CollectiblesQuery.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
+from .NEWQuery.CollectiblesQuery.CollectibleDataGetter import CollectibleDataGetter
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -78,7 +81,35 @@ def search_for_locations():
     builder.add_super_class(GEO_LOCATION)
     builder.set_recursive_searching(True)
     builder.set_geo_obtaining()
-    #print(builder.build())
+    print(builder.build())
+    return process_query(builder.build())
+@API.route('/get/collectible_data',methods = ['POST'])
+def get_collectible_data():
+
+    data = json.loads(request.get_json())
+
+    Qnumber = data['collectible_QNumber']
+    if Qnumber is None:
+        return "Invalid request, param : collectible_QNumber must be provided"
+    
+    builder = CollectibleDataGetter()
+    builder.set_collectible(Qnumber)
+
+    print(builder.build())
+    return process_query(builder.build())
+
+@API.route('/search/regions',methods=['GET','POST'])
+def search_regions():
+
+    data = json.loads(request.get_json())
+
+    builder = SearchRegionQueryBuilder()
+
+    searched_word = data['key_word']
+    if searched_word is not None:
+        builder.set_seach_by_word(searched_word)
+
+    print(builder.build())
     return process_query(builder.build())
 
 @API.route('/search/administrative_areas',methods=['GET'])
@@ -109,7 +140,7 @@ def search_for_administrative_areas():
         for item in not_located_in_area.split(','):
             builder.add_not_located_in_area(item)
             
-    #print(builder.build())
+    print(builder.build())
     return process_query(builder.build())
 
 @API.route('/get/filters',methods=['GET'])
@@ -117,11 +148,11 @@ def get_filters():
     type = request.args.get("type")
 
     builder = FilterSearchQueryBuilder()
-    
+
     if type is not None:
         builder.set_type_for_search_filter(type)
 
-    #print(builder.build())
+    print(builder.build())
     return process_query(builder.build())
 
 
@@ -229,7 +260,7 @@ def search_wikibase_item():
 def search_collectibles():
 
     data = json.loads(request.get_json())
-    
+    print(data)
     parent_class_of_collectibles : str = data['type']
     if parent_class_of_collectibles is None:
         return "Invalid request,param: class must be provided"
@@ -273,6 +304,14 @@ def search_collectibles():
                 if lng is None:
                     return "Invalid request,param: lng must be provided"
                 builder.set_center_by_coordinates(lat,lng)
+            case CollectiblesSearchType.REGION:
+                builder = RegionCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
+
+                region : str = data["region"]
+                if region is None:
+                    return "Invalid request,param: region must be provided"
+                
+                builder.set_region_area(region)
     #try:
 
     #except:

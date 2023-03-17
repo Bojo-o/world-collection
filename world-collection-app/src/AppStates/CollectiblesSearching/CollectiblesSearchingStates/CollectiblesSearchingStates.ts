@@ -3,6 +3,7 @@ export enum CollectiblesSearchingStates{
     AreaChoosing,
     RadiusArea,
     AdministrativeArea,
+    RegionArea,
     FiltersSelection,
     Collectibles
 }

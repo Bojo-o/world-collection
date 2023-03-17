@@ -1,3 +1,4 @@
+import { json } from "stream/consumers";
 import { CustomDate } from "../Data/CustomDate";
 import { Collection } from "../Data/Database/Colection";
 import { Collectible } from "../Data/Database/Collectible";
@@ -51,6 +52,25 @@ function convertToAskedResultModel(data : any) : boolean {
     return (result == "1") ? true : false;
 }
 export class DatabaseAPI {
+    public static convertToStatusMSG(data : any) : string {
+        return data['status'];
+    }
+    private static checkStatus(response: any){
+        if (response.ok){
+            return response;
+        }else {
+            const httpErrorInfo = {
+                status : response.status,
+                statusText : response.statusText,
+                url : response.url,
+            }
+            console.log(`log server http error: ${JSON.stringify(httpErrorInfo)}`);
+            throw new Error("Something went wrong...");
+        }
+    }
+    private static parseJson(response : Response){
+        return response.json();
+    }
     public static askIfExistsCollections(name : string){
         return this.fetchData(baseUrl + askForExistanceOfCollections,`name=${name}`).then(convertToAskedResultModel);
     }
@@ -81,76 +101,80 @@ export class DatabaseAPI {
         if (dateTo != null){
             dateToString = dateTo.GetDate();
         }
-        this.postData(baseUrl + postVisitation,"Set visitation",JSON.stringify(
+        this.postData(baseUrl + postVisitation,
             {
             'QNumber': QNumberOfCollectible,
             'isVisit' : isVisit,
             'dateFormat' : dateFormat,
             'dateFrom' : dateFromString,
             'dateTo' : dateToString
-        }));
+        });
     }
     
-    public static postCollectibles(collectionName : string,collectibles : RawCollectible[]){
-        this.postData(baseUrl + postCollectiblesIntoCollection,"Insert collectibles into: " + collectionName,JSON.stringify(collectibles));
+    public static async postCollectibles(collectionID : number,collectibles : RawCollectible[]){
+        let data = await this.postData(baseUrl + postCollectiblesIntoCollection,
+            {
+            'collectibles' : collectibles,
+            'collectionID' : collectionID
+        });
+        return this.convertToStatusMSG(data);
     }
     public static postCollectionUpdateRename(updatedCollectionID : Number,newName : string){
-        this.postData(baseUrl + postCollectionUpdateRename,"Rename collection: " + updatedCollectionID,JSON.stringify(
+        this.postData(baseUrl + postCollectionUpdateRename,
             {
                 'CollectionID' : updatedCollectionID,
                 'newName' : newName
             }
-        ));
+        );
     }
     public static postCollectionUpdateDelete(CollectionID : Number){
-        this.postData(baseUrl + postCollectionUpdateDelete,"Delete collection: " + CollectionID,JSON.stringify(
+        this.postData(baseUrl + postCollectionUpdateDelete,
             {
                 'CollectionID' : CollectionID
             }
-        ));
+        );
     }
     public static postCollectionUpdateMerge(CollectionID : Number,newCollectionID : Number){
-        this.postData(baseUrl + postCollectionUpdateMerge,"Merge collection " + CollectionID + " into " + newCollectionID ,JSON.stringify(
+        this.postData(baseUrl + postCollectionUpdateMerge,
             {
                 'CollectionID' : CollectionID,
                 'NewCollectionID' : newCollectionID
             }
-        ));
+        );
     }
     public static postCollectibleDeletion(collectibleQNumber : string,CollectionID : Number){
-        this.postData(baseUrl + postCollectibleDelete,"Delete collectible",JSON.stringify(
+        this.postData(baseUrl + postCollectibleDelete,
             {
                 'q_number' : collectibleQNumber,
                 'CollectionID' : CollectionID
             }
-        ))
+        )
     }
     public static postCollectibleUpdateName(collectibleQNumber : string,newName : string){
-        this.postData(baseUrl + postCollectibleUpdateName,"Update collectible name",JSON.stringify(
+        this.postData(baseUrl + postCollectibleUpdateName,
             {
                 'q_number' : collectibleQNumber,
                 'name' : newName
             }
-        ))
+        )
     }
-    private static postData(url : string,title: string,data : string){
-        fetch(url,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                title: title,
-                body: data
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
-        })
-        .catch(error => {           
-            console.log(error)
-        })  
+    private static async postData(url : string,data : {}){
+        try {
+            const response = await fetch(url,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
+            const response_1 = await this.checkStatus(response);
+            return this.parseJson(response_1);
+        } catch (e) {
+            throw new Error(
+                'There was an error. Please try again.'
+            );
+        }
     }
 }

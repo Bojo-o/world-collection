@@ -50,10 +50,14 @@ class QueryBuilder(ABC):
             temp.append(" {} rdfs:label {} .".format(variable,variable + "Label"))
         self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\"." + "" . join(temp) + add_body)
         
-
+    def add_union(self,the_first_part : str,the_second_part : str):
+        self._query.append("{ "+ the_first_part +"} UNION { " + the_second_part + "}")
+        
     def add_hint(self):
         self._query.append("hint:Prior hint:gearing \"forward\".")
-
+    def add_query_hint(self):
+        self._query.append("hint:Query hint:optimizer \"None\".")
+        
     def add_filter_exist(self,body : str):
         self._query.append("FILTER EXISTS {" + body + "}")
     

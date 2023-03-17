@@ -17,6 +17,7 @@ import SearchByAdministrativeArea from "./CollectiblesSearchingStates/SearchByAd
 import { AppliedFilterData } from "../../Data/FiltersData/AppliedFilterData";
 import Collectibles from "./Collectibles";
 import { CollectiblesSearchQueryData } from "./ColectiblesSearchQueryData";
+import SearchByRegion from "./CollectiblesSearchingStates/SearchByRegion";
 
 
 function CollectibleSearching(){
@@ -45,6 +46,10 @@ function CollectibleSearching(){
                 setState(CollectiblesSearchingStates.RadiusArea)
                 break; 
             } 
+            case Areas.REGION: { 
+                setState(CollectiblesSearchingStates.RegionArea)
+                break; 
+            } 
             default: { 
                 break; } 
         }
@@ -68,6 +73,18 @@ function CollectibleSearching(){
             </>
         )
     }
+    const regionAreaStateHandleNext = (region : Entity) => {
+        //setSearchQuery(searchQuery.setRadius(center,radius));
+        setQueryData((prev) => prev.setAreaSearchTypeAsRegion(region))
+        setState(CollectiblesSearchingStates.FiltersSelection);
+    }
+    const renderRegionAreaState = () => {
+        return (
+            <>
+                <SearchByRegion handleNext={regionAreaStateHandleNext}/>
+            </>
+        )
+    }
     const administrativeAreaStateHandleNext = (area : Entity,exceptionSubAreas : Entity[]) => {     
         setState(CollectiblesSearchingStates.FiltersSelection)
         setQueryData((prev) => prev.setAreaSearchTypeAsAdministrative(area,exceptionSubAreas))
@@ -86,7 +103,7 @@ function CollectibleSearching(){
     const renderFiltersSelectionState = () => {
         return (
             <>
-                <FiltersSelection filtersForType={new Entity("Q23413","castle")} handleNext={filtersSelectionStateHandleNext}/>
+                <FiltersSelection filtersForType={new Entity(queryData.getType(),"filter")} handleNext={filtersSelectionStateHandleNext}/>
             </>
         )
     }
@@ -103,6 +120,7 @@ function CollectibleSearching(){
                 { state === CollectiblesSearchingStates.TypeChoosing && renderTypeChoosingState()}
                 { state === CollectiblesSearchingStates.AreaChoosing && renderAreaChoosingState()}
                 { state === CollectiblesSearchingStates.RadiusArea && renderRadiusAreaState()}
+                { state === CollectiblesSearchingStates.RegionArea && renderRegionAreaState()}
                 { state === CollectiblesSearchingStates.AdministrativeArea && renderAdministrativeAreaState()}
                 { state === CollectiblesSearchingStates.FiltersSelection && renderFiltersSelectionState()}
                 { state === CollectiblesSearchingStates.Collectibles && renderCollectiblesState()}

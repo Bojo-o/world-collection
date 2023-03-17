@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 
 export interface ResultsSaveFormProps{
     handleSave : (collectionName : string) => void;
@@ -11,6 +11,9 @@ function ResultsSaveFrom({handleSave,handleCancel} : ResultsSaveFormProps){
         const value = event.target.value;
         setCollectionName(value);
     }
+    useEffect(() => {
+
+    },[])
     return (
         <div>
             <form>

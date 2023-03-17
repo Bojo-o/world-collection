@@ -11,6 +11,6 @@ export class RawCollectible {
         if (initializer.name) this.name = initializer.name;
         if (initializer.lati) this.lati = initializer.lati;
         if (initializer.long) this.long = initializer.long;
-        if (initializer.instanceOf) this.subTypeOf = initializer.subTypeOf;
+        if (initializer.subTypeOf) this.subTypeOf = initializer.subTypeOf;
     }
 }

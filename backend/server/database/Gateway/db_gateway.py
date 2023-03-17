@@ -44,25 +44,27 @@ def exists_collections():
 
 @bp_database_gateway.route('/post/collectibles', methods=['POST'])
 def insert_collection_with_collectibles_to_db():
-    req_data = request.get_json()
-    collection = req_data['title'].removeprefix("Insert collectibles into: ")
-    collectibles = json.loads(req_data['body'])
 
-    status = db_CRUD.create_collection(collection)
-    if status is False:
-        return "collection did not saved, there was some problem"
-    collectionID = db_CRUD.get_collection_id(collection)
+    data = request.get_json()
+    print(data)
+
+    collectionID = data['collectionID']
+    collectibles = data['collectibles']
+    #status = db_CRUD.create_collection(collection)
+    #if status is False:
+    #    return "collection did not saved, there was some problem"
+    #collectionID = db_CRUD.get_collection_id(collection)
 
     errors = []
     for collectible in collectibles:
-        insert_status = db_CRUD.create_collectible(collectible['QNumber'],collectionID,collectible['name'],collectible['instanceOf'],collectible['lati'],collectible['long'])
+        insert_status = db_CRUD.create_collectible(collectible['QNumber'],collectionID,collectible['name'],collectible['subTypeOf'],collectible['lati'],collectible['long'])
         if insert_status is False:
-            errors.append('Error with ' +  collectible['QNumber'])
+            errors.append(collectible['name'])
 
     if len(errors) != 0:
-        return ''.join(errors)
+        return  json.dumps({'status' : "Error , not saved :" + ','.join(errors)})
 
-    return "Succesfully saved"
+    return  json.dumps({'status' : "Succesfully saved"})
 
 @bp_database_gateway.route('/post/set_visit', methods=['POST'])
 def set_visit_of_collectible():
