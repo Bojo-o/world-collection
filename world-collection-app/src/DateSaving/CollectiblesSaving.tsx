@@ -3,6 +3,7 @@ import { Collection } from "../Data/Database/Colection";
 import { RawCollectible } from "../Data/RawCollectible";
 import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
+import CollectionCreation from "./CollectionCreation";
 
 export interface CollectiblesSavingProps{
     collectibles : RawCollectible[];
@@ -14,6 +15,11 @@ function CollectiblesSaving({collectibles} : CollectiblesSavingProps){
     const [selectedCollectionID,setSelectedCollectionID] = useState<number|null>(null);
 
     const [display,setDisplay] = useState(false);
+    const [collectionCreationDisplay,setCollectionCreationDisplay] = useState(false);
+
+    const [status,setStatus] = useState<string|null>(null);
+    const [savingData,setSavingData] = useState(false);
+    const [savingError,setSavingError] = useState(false);
 
     const fetchCollection = () =>{
         setLoading(true);
@@ -33,12 +39,24 @@ function CollectiblesSaving({collectibles} : CollectiblesSavingProps){
     const handleClose = () => {
         setSelectedCollectionID(null);
         setDisplay(false);
+        setSavingData(false);
+        setSavingError(false);
+        setStatus(null);
     }
     const saveCollectibles = () => {
         if (selectedCollectionID != null){
+            setSelectedCollectionID(null)
+            setSavingData(true);
+            setSavingError(false);
             DatabaseAPI.postCollectibles(selectedCollectionID,collectibles).then((status) =>
-                console.log(status)
-            ).catch()
+                {
+                    setStatus(status);
+                    setSavingData(false)
+                }
+                
+            ).catch(() => {
+                setSavingError(true);
+            })
         }
         
     }
@@ -53,38 +71,66 @@ function CollectiblesSaving({collectibles} : CollectiblesSavingProps){
                 </>
             ): (
                 <>
-                    <div className="d-flex flex-column">
-                        <h3>Save collectibles into collection</h3>
-                        {loading ? (
-                            <>
-                                <LoadingStatus error={loadingError} errorText={"Something went wrong, try again"} loadingText={"Loading collections"}/>
-                            </>
-                        ) : (
-                            <>
-                                <select className="form-select" onChange={handleCollectionSelection}>
-                                    <option value="" selected disabled hidden>Choose Collection</option>
-                                    {collections.map((c,index) => {
-                                        return (
-                                            <option key={index} value={c.collectionID}>{c.name}</option>
-                                        )
-                                    })}
-                                </select>
-                            </>
-                        )}
-                        <div className="d-flex flex-row justify-content-around">
-                                {selectedCollectionID == null ? (
+                    {collectionCreationDisplay ? (
+                        <>
+                            <CollectionCreation collection={collections} handleCancel={() => {
+                                setCollectionCreationDisplay(false)
+                                fetchCollection()
+                            }} />
+                        </>
+                    ) : (
+                        <>
+                            <div className="d-flex flex-column">
+                                <h3>Save collectibles into collection</h3>
+                                {loading ? (
                                     <>
-                                        <button type="button" className="btn btn-success" disabled>Save</button>
+                                        <LoadingStatus error={loadingError} errorText={"Something went wrong, try again"} loadingText={"Loading collections"}/>
                                     </>
                                 ) : (
                                     <>
-                                        <button type="button" className="btn btn-success" onClick={saveCollectibles}>Save</button>
+                                        <select className="form-select" onChange={handleCollectionSelection}>
+                                            <option value="" selected disabled hidden>Choose Collection</option>
+                                            {collections.map((c,index) => {
+                                                return (
+                                                    <option key={index} value={c.collectionID}>{c.name}</option>
+                                                )
+                                            })}
+                                        </select>
                                     </>
                                 )}
-                            <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
-                        </div>
-                        
-                    </div>
+                                {savingData && (
+                                    <>
+                                        <LoadingStatus error={savingError} errorText={"Something went wrong, try again"} loadingText={"Saving collectibles"}/>
+                                    </>
+                                )}
+                                {status != null && (
+                                    <div className="d-flex justify-content-center">
+                                        <h5>{status}</h5>
+                                    </div>
+                                )}
+                                <div className="d-flex flex-row justify-content-around">
+                                        {selectedCollectionID == null ? (
+                                            <>
+                                                <button type="button" className="btn btn-success" disabled>Save</button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <button type="button" className="btn btn-success" onClick={saveCollectibles}>Save</button>
+                                            </>
+                                        )}
+                                    {!loading && (
+                                        <>
+                                            <button type="button" className="btn btn-info" onClick={() => setCollectionCreationDisplay(true)}>Create new Collection</button>
+                                        </>
+                                    )}
+
+                                    <button type="button" className="btn btn-danger" onClick={handleClose}>Close</button>
+                                </div>
+                                
+                            </div>
+                        </>
+                    )}
+                    
                 </>
             )}
             

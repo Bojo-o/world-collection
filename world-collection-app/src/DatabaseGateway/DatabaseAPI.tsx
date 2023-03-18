@@ -18,6 +18,7 @@ const postCollectionUpdateMerge = "post/collection_update_merge"
 
 const postCollectibleDelete="/post/collectible_delete"
 const postCollectibleUpdateName="/post/collectible_update_name"
+const postCollectionCreation = "/post/collection_creation"
 
 function checkStatus(response: any){
     if (response.ok){
@@ -119,6 +120,14 @@ export class DatabaseAPI {
         });
         return this.convertToStatusMSG(data);
     }
+    public static async postCollectionCreation(collectionName : string){
+        let data = await this.postData(baseUrl + postCollectionCreation,
+            {
+            'collection_name' : collectionName
+        });
+        return this.convertToStatusMSG(data);
+    }
+
     public static postCollectionUpdateRename(updatedCollectionID : Number,newName : string){
         this.postData(baseUrl + postCollectionUpdateRename,
             {

@@ -41,6 +41,15 @@ def exists_collections():
     return result
 
 # post 
+@bp_database_gateway.route('/post/collection_creation', methods=['POST'])
+def create_collection():
+    data = request.get_json()
+
+    collection_name = data['collection_name']
+    status = db_CRUD.create_collection(collection_name)
+    if status is False:
+        return  json.dumps({'status' : "Error, collection did not saved"})
+    return  json.dumps({'status' : "Succesfully saved"})
 
 @bp_database_gateway.route('/post/collectibles', methods=['POST'])
 def insert_collection_with_collectibles_to_db():
