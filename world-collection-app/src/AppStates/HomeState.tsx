@@ -11,6 +11,7 @@ function HomeState() {
     const [collectionLoading,setCollectionLoading] = useState(false);
 
     const [collectiblesToShow,setCollectiblesToShow] = useState<Collectible[]>([]);
+    const [selectedCollection,setSelectedCollection] = useState<Collection>(new Collection())
 
     const [filter,setfilter] = React.useState<string>('');
 
@@ -25,10 +26,18 @@ function HomeState() {
             console.log(collectibles)
         })
     }
-
+    
     const convertStatus = (collection : Collection) => {
         let sum = +collection.visited + +collection.notVisited
-        return  collection.visited.toString()+'/'+sum.toString()
+        return   collection.visited.toString()+'/'+sum.toString()
+    }
+    const computeProgress = (collection : Collection) => {
+        let sum = +collection.visited + +collection.notVisited
+        return (collection.visited/sum)*100;
+    }
+    const handleClickOnCollection = (clickedCollection : Collection) => {
+        setSelectedCollection(clickedCollection)
+        handleCollectionSelect(clickedCollection.collectionID)
     }
     useEffect(() => {
         setCollectionLoading(true);
@@ -36,6 +45,7 @@ function HomeState() {
             setCollectionLoading(false);
             setCollections(collections);
             setCollectionsToShow(collections)
+            console.log(collections)
         }        
         );
     },[])
@@ -59,19 +69,30 @@ function HomeState() {
                     {collectionLoading ? (
                         <p>Collections Loading</p>
                     ) : (
-                        <ul id='collectionsList'>     
+                        <ul className='list-group' id='collectionsList'>     
                             {collectionsToShow.map((collection,index) => {
+                                let className = "list-group-item list-group-item-action ";
+                                if (collection.collectionID == selectedCollection.collectionID){
+                                    className = className + "active"
+                                }
+                                let style = {
+                                    width :  computeProgress(collection).toString()+"%"
+                                };
                                 return (
-                                    <div key={index} className="d-flex flex-row">
-                                        <li>
-                                            <div className='d-flex '>
-                                                <input className="form-check-input" type="radio" name="flexRadioDefault" id={"flexRadioDefault"+collection.collectionID} onChange={() => handleCollectionSelect(collection.collectionID)}/>
-                                                <label className="form-check-label" htmlFor={"flexRadioDefault"+collection.collectionID}>
-                                                    {collection.name +" - "+ convertStatus(collection)}
-                                                </label>                                                 
+                                    <>
+                                        <li key={index} className={className} onClick={() => handleClickOnCollection(collection)}>
+                                            <div className='d-flex flex-column'>
+                                                <div className="d-flex w-100 justify-content-between">
+                                                    <h4 className="mb-1">{collection.name}</h4>
+                                                    <span className="badge bg-info rounded-pill">{convertStatus(collection)}</span>
+                                                </div>
+                                                <div className="progress">
+                                                    <div className="progress-bar bg-success"  style={style} role="progressbar" aria-valuenow={collection.visited} aria-valuemin={0} aria-valuemax={collection.notVisited + collection.visited}></div>
+                                                </div>
                                             </div>                                
                                         </li>
-                                    </div>
+                                    </>
+                                    
                                 );
                             })}
                         </ul>
