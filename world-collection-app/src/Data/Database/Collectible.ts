@@ -5,8 +5,8 @@ export class Collectible{
     collectionID : number = 0;
     name : string = '';
     type : string ='';
-    latitude : number = 0;
-    longitude : number = 0;
+    lati : number = 0;
+    long : number = 0;
     isVisit : boolean = false;
     dateFormat : string|null =null;
     dateFrom : CustomDate|null = null;
@@ -27,8 +27,8 @@ export class Collectible{
         //
         if (initializer.type) this.type = initializer.type;   
 
-        if (initializer.latitude) this.latitude = initializer.latitude;    
-        if (initializer.longitude) this.longitude = initializer.longitude;  
+        if (initializer.latitude) this.lati = initializer.latitude;    
+        if (initializer.longitude) this.long = initializer.longitude;  
         if (initializer.is_visited) {
             if (initializer.is_visited === 1){
                 this.isVisit = true;

@@ -120,7 +120,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
     }
     return (
         <React.Fragment>
-            <Marker position={[collectible.longitude,collectible.latitude]}
+            <Marker position={[collectible.lati,collectible.long]}
             icon={GetIcon(collectible.isVisit ? "visit" : "unvisit")}
             >
                 <Popup>      

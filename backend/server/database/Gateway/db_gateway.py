@@ -77,8 +77,8 @@ def insert_collection_with_collectibles_to_db():
 
 @bp_database_gateway.route('/post/set_visit', methods=['POST'])
 def set_visit_of_collectible():
-    req_data = request.get_json()
-    data = json.loads(req_data['body'])
+
+    data = request.get_json()
     
     is_visit = 0
     visition = data['isVisit']
@@ -100,8 +100,8 @@ def set_visit_of_collectible():
 
 @bp_database_gateway.route('/post/collection_update_rename',methods=['POST'])
 def update_collection():
-    req_data = request.get_json()
-    data = json.loads(req_data['body'])
+
+    data = request.get_json()
     
     status = db_CRUD.update_collection(data['CollectionID'],data['newName'])
 
@@ -111,8 +111,8 @@ def update_collection():
 
 @bp_database_gateway.route('/post/collection_update_delete',methods=['POST'])
 def remove_collection():
-    req_data = request.get_json()
-    data = json.loads(req_data['body'])
+
+    data = request.get_json()
     
     status = db_CRUD.delete_collection(data['CollectionID'])
 
@@ -124,8 +124,8 @@ def remove_collection():
 
 @bp_database_gateway.route('/post/collection_update_merge',methods=['POST'])
 def merge_collection():
-    req_data = request.get_json()
-    data = json.loads(req_data['body'])
+
+    data = request.get_json()
     if data['CollectionID'] == data['NewCollectionID']:
         return "Same"
     collectibles = json.loads(db_CRUD.get_all_collectibles_in_collection(data['CollectionID']))
@@ -137,8 +137,8 @@ def merge_collection():
 
 @bp_database_gateway.route('/post/collectible_delete',methods=['POST'])
 def delete_collectible():
-    req_data = request.get_json()
-    data = json.loads(req_data['body'])
+
+    data = request.get_json()
     status = db_CRUD.delete_collectible(data['q_number'],data['CollectionID'])
 
     if status:
@@ -147,8 +147,8 @@ def delete_collectible():
 
 @bp_database_gateway.route('/post/collectible_update_name',methods=['POST'])
 def update_collectible_name():
-    req_data = request.get_json()
-    data = json.loads(req_data['body'])
+
+    data = request.get_json()
     status = db_CRUD.update_collectible_name(data['q_number'],data['name'])
 
     if status:
