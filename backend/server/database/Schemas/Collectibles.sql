@@ -13,6 +13,8 @@ CREATE TABLE Collectibles(
   visit_date_from DATE DEFAULT NULL, -- 
   visit_date_to DATE DEFAULT NULL, --
   visit_date_format TEXT DEFAULT NULL,
+  icon TEXT NOT NULL DEFAULT 'default',
+  notes TEXT DEFAULT NULL,
   CONSTRAINT PK_Collectible PRIMARY KEY (q_number,collection_id),   -- set the pair Q number and id of collection as unique primary key, the primary key value can be stored only once,
                                                                 -- but for the entity it should be posibble to assing it to more collections 
   FOREIGN KEY (collection_id) REFERENCES Collections(collection_id) ON DELETE CASCADE   -- use collection id as foreign key, if the collection was deleted, 

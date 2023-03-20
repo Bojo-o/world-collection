@@ -5,20 +5,22 @@ import { Collectible } from "../Data/Database/Collectible";
 import { RawCollectible } from "../Data/RawCollectible";
 
 const baseUrl = "DatabaseGateway/";
-const getCollectionsUrl = "get/collections"
-const getCollectiblessUrl = "get/collectibles"
-const askForExistanceOfCollections = "/get/exists_collections"
+const getCollectionsUrl = "get/collections";
+const getCollectiblessUrl = "get/collectibles";
+const askForExistanceOfCollections = "/get/exists_collections";
 
 
-const postCollectiblesIntoCollection = "post/collectibles"
-const postVisitation = "post/set_visit"
-const postCollectionUpdateRename = "post/collection_update_rename"
-const postCollectionUpdateDelete = "post/collection_update_delete"
-const postCollectionUpdateMerge = "post/collection_update_merge"
+const postCollectiblesIntoCollection = "post/collectibles";
+const postVisitation = "post/set_visit";
+const postCollectionUpdateRename = "post/collection_update_rename";
+const postCollectionUpdateDelete = "post/collection_update_delete";
+const postCollectionUpdateMerge = "post/collection_update_merge";
 
-const postCollectibleDelete="/post/collectible_delete"
-const postCollectibleUpdateName="/post/collectible_update_name"
-const postCollectionCreation = "/post/collection_creation"
+const postCollectibleDelete="/post/collectible_delete";
+const postCollectibleUpdateName="/post/collectible_update_name";
+const postCollectionCreation = "/post/collection_creation";
+
+const postCollectibleIconUpdate = "/post/collectible_update_icon";
 
 function checkStatus(response: any){
     if (response.ok){
@@ -54,6 +56,7 @@ function convertToAskedResultModel(data : any) : boolean {
 }
 export class DatabaseAPI {
     public static convertToStatusMSG(data : any) : string {
+        console.log(data)
         return data['status'];
     }
     private static checkStatus(response: any){
@@ -166,6 +169,15 @@ export class DatabaseAPI {
                 'name' : newName
             }
         )
+    }
+    public static async postCollectibleUpdateIcon(collectibleQNumber : string,icon : string){
+        let data = await this.postData(baseUrl + postCollectibleIconUpdate,
+            {
+                'q_number' : collectibleQNumber,
+                'icon' : icon
+            }
+        )
+        return this.convertToStatusMSG(data);
     }
     private static async postData(url : string,data : {}){
         try {

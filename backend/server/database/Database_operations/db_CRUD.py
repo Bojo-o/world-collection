@@ -179,3 +179,10 @@ def update_collectible_visit_date(q_number : int,date_format : str = None,date_f
     if status is True:
         print(f'Update visit of the collectible with Q number : Q{q_number}')
     return status
+
+def update_collectible_icon(q_number : int,icon_name : str):
+    status = execute_command("UPDATE Collectibles SET icon=?  WHERE q_number=?",
+    (icon_name,q_number))
+    if status is True:
+        print(f'Updateicon of the collectible with Q number : Q{q_number}')
+    return status

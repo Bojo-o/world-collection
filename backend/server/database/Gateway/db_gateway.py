@@ -109,19 +109,6 @@ def update_collection():
         return "Succesfully saved"
     return "Something went wrong"
 
-@bp_database_gateway.route('/post/collection_update_delete',methods=['POST'])
-def remove_collection():
-
-    data = request.get_json()
-    
-    status = db_CRUD.delete_collection(data['CollectionID'])
-
-    if status:
-        return "Succesfully saved"
-
-    
-    return "Something went wrong"
-
 @bp_database_gateway.route('/post/collection_update_merge',methods=['POST'])
 def merge_collection():
 
@@ -135,6 +122,18 @@ def merge_collection():
     db_CRUD.delete_collection(data['CollectionID'])
     return "Merged"
 
+@bp_database_gateway.route('/post/collection_update_delete',methods=['POST'])
+def remove_collection():
+
+    data = request.get_json()
+    
+    status = db_CRUD.delete_collection(data['CollectionID'])
+
+    if status:
+        return "Succesfully saved"
+
+    
+    return "Something went wrong"
 @bp_database_gateway.route('/post/collectible_delete',methods=['POST'])
 def delete_collectible():
 
@@ -154,3 +153,15 @@ def update_collectible_name():
     if status:
         return "Succesfully updated"
     return "Something went wrong"
+
+@bp_database_gateway.route('/post/collectible_update_icon',methods=['POST'])
+def update_collectible_icon():
+
+    data = request.get_json()
+    status = db_CRUD.update_collectible_icon(data['q_number'],data['icon'])
+
+    
+    if status:
+        return  json.dumps({'status' : "Succesfully saved"})
+    
+    return  json.dumps({'status' : "Error , icon was not updated"})

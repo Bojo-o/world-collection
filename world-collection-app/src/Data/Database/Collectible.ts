@@ -11,6 +11,7 @@ export class Collectible{
     dateFormat : string|null =null;
     dateFrom : CustomDate|null = null;
     dateTo : CustomDate|null = null;
+    icon : string = '';
         
     constructor(initializer?: any){
         if(!initializer) return;
@@ -38,6 +39,7 @@ export class Collectible{
         }
         if (initializer.visit_date_format) this.dateFormat = initializer.visit_date_format;  
         if (initializer.visit_date_from) this.dateFrom = new CustomDate(initializer.visit_date_from); 
-        if (initializer.visit_date_to) this.dateTo = new CustomDate(initializer.visit_date_to);   
+        if (initializer.visit_date_to) this.dateTo = new CustomDate(initializer.visit_date_to);  
+        if (initializer.icon) this.icon = initializer.icon;   
     }
 }

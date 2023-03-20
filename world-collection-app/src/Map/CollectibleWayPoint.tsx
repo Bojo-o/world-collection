@@ -6,8 +6,10 @@ import { Collectible } from '../Data/Database/Collectible';
 import { DateOption } from '../Data/DateOption';
 import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
 import Details from '../Details/Details';
+import IconsSelector from '../ImageIcons/IconsSelector';
 import './Card.css'
 import { GetIcon } from './GetIcon';
+import "./Gray.css"
 
 enum DatesRange{
     From,
@@ -27,6 +29,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
 
     const [dateFrom,setDateFrom] = useState<CustomDate|null>(null);
     const [dateTo,setDateTo] = useState<CustomDate|null>(null);
+    const [icon,setIcon] = useState(collectible.icon);
 
     const handleEditationOfVisit = () => {
         if (editationOfVisit){
@@ -118,10 +121,13 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
         }
         return (<></>)
     }
+    const handleIconChange = (icon : string) => {
+        setIcon(icon);
+    }
     return (
         <React.Fragment>
             <Marker position={[collectible.lati,collectible.long]}
-            icon={GetIcon(collectible.isVisit ? "visit" : "unvisit")}
+            icon={GetIcon(icon,collectible.isVisit)}
             >
                 <Popup>      
                     <>        
@@ -225,6 +231,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                 )}
                                 <button type='button' className="btn btn-primary" onClick={() => handleEditationOfVisit()}>{!editationOfVisit ? ("Set visitation") : ("Close")}</button>
                                 <button type='button' className="btn btn-info" onClick={() => handleDetails()}>{!isDetailsShowed ? ("Show details") : ("Hide details")}</button> 
+                                <IconsSelector collectible={collectible} handleChangeOfIcon={handleIconChange}/>
                             </div>
                         </div>
 
