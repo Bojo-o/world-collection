@@ -64,6 +64,9 @@ class QueryBuilder(ABC):
     def add_filter(self,body : str):
         self._query.append("FILTER ({})".format(body))
 
+    def add_optional(self,body : str):
+        self._query.append("OPTIONAL {" + body + "}")
+        
     def get_coordinates_of_object(self,object : str):
         self.add_triple(object,"p:P625","?coord")
         self.add_triple("?coord","psv:P625","?coord_node")

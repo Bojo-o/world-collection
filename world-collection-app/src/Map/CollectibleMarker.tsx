@@ -11,6 +11,7 @@ import Visitation from "../CollectibleEditationComponents/Visitation";
 import { CustomDate } from "../Data/CustomDate";
 import IconsSelector from "../ImageIcons/IconsSelector";
 import Notes from "../CollectibleEditationComponents/Notes";
+import CollectibleDetails from "../Details/CollectibleDetails";
 
 export interface CollectibleMarkerProps{
     collectible : Collectible;
@@ -26,6 +27,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     const [editingVisitation,setEditingVisitation] = useState(false);
     const [editingIcon,setEditingIcon] = useState(false);
     const [editingNotes,setEditingNotes] = useState(false);
+    const [showingDetails,setShowingDetails] = useState(false);
 
     const [basicInfo,setBasicInfo] = useState<CollectibleBasicInfo>(new CollectibleBasicInfo());
     const [loadingBasicInfo,setLoadingBasicInfo] = useState(false);
@@ -36,6 +38,9 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     }
     const handleEditingIcon = () => {
         setEditingIcon((prev) => !prev);
+    }
+    const handleShowingDetails = () => {
+        setShowingDetails((prev) => !prev);
     }
     const handleEditingNotes = () => {
         setEditingNotes((prev) => !prev);
@@ -118,12 +123,18 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                         <h5 className="text-muted">Actions</h5>
                                         <p className="text-muted">Here you can edit, visitation, icon image and see more details.</p>
                                         <div className="d-flex flex-column">
+                                            <button type='button' className="btn btn-light" onClick={handleShowingDetails}>{(!showingDetails) ? "Show details" : "Close"}</button>
                                             <button type='button' className="btn btn-success" onClick={handleEditingVisitation}>{(!editingVisitation) ? "Visitation" : "Close"}</button>
                                             <button type='button' className="btn btn-warning" onClick={handleEditingIcon}>{(!editingIcon) ? "Edit Icon" : "Close"}</button>
                                             <button type='button' className="btn btn-info" onClick={handleEditingNotes}>{(!editingNotes) ? "Edit notes" : "Close"}</button>
                                         </div>
 
-                                        
+                                        {showingDetails && (
+                                            <>
+                                                <h5>Details</h5>
+                                                <CollectibleDetails collectible={collectible} />
+                                            </>
+                                        )}
                                         {editingVisitation && (
                                                 <>
                                                     <h5>Editing Visitation</h5>
@@ -143,6 +154,8 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                                 <Notes collectible={collectible} updateNotes={handleNotesChange}/>
                                             </>
                                         )}
+
+                                        
                                         
                                     </div>
                                 </div>

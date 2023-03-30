@@ -7,6 +7,7 @@ import { Entity } from "../Data/SearchData/Entity";
 import { SearchData } from "../Data/SearchData/SearchData";
 import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/ColectiblesSearchQueryData";
 import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
+import { CollectibleDetail } from "../Data/CollectibleDetails";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
@@ -18,6 +19,7 @@ const urlSearchCollectibles = "WikidataAPI/search/collectibles";
 const urlSearchRegions = "WikidataAPI/search/regions";
 const urlCollectibleDataGetter = "WikidataAPI/get/collectible_data";
 const urlCollectibleBasicInfo = "WikidataAPI/get/collectible_basic_info";
+const urlCollectibleDetails = "WikidataAPI/get/collectible_details";
 
 
 export class WikiDataAPI {
@@ -31,6 +33,10 @@ export class WikiDataAPI {
     }
     private static convertToCollectibleBasicInfo(data : any) : CollectibleBasicInfo {
         let result : CollectibleBasicInfo =  new CollectibleBasicInfo(data[0]);
+        return result;
+    }
+    private static convertToCollectibleDetails(data : any) : CollectibleDetail[] {
+        let result : CollectibleDetail[] = data.map((d : any) => new CollectibleDetail(d));
         return result;
     }
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
@@ -189,6 +195,13 @@ export class WikiDataAPI {
         }
         const data = await this.fetchDataNEW(urlCollectibleBasicInfo,JSON.stringify(params));
         return this.convertToCollectibleBasicInfo(data);
+    }
+    static async getCollectibleDetails(collectibleQNumber : string){
+        let params  = {
+            collectible_QNumber : collectibleQNumber
+        }
+        const data = await this.fetchDataNEW(urlCollectibleDetails,JSON.stringify(params));
+        return this.convertToCollectibleDetails(data);
     }
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";

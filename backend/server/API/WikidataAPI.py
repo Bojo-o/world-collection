@@ -24,6 +24,7 @@ from .NEWQuery.SearchQuery.SearchRegionQueryBuilder import SearchRegionQueryBuil
 from .NEWQuery.CollectiblesQuery.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
 from .NEWQuery.CollectiblesQuery.CollectibleDataGetter import CollectibleDataGetter
 from .NEWQuery.CollectibleDetailsQuery.CollectibleBasicInfoQuery import CollectibleBasicInfoQuery
+from .NEWQuery.CollectibleDetailsQuery.CollectibleDatailsQuery import CollectibleDetailsQuery
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -272,6 +273,19 @@ def get_collectible_basic_info():
 
     return process_query(builder.build())
 
+@API.route('/get/collectible_details',methods=['GET','POST'])
+def get_collectible_details():
+
+    data = json.loads(request.get_json())
+
+    collectible : str = data['collectible_QNumber']
+
+    if collectible is None:
+        return "Invalid request,param: collectible_QNumber must be provided"
+    
+    builder = CollectibleDetailsQuery(collectible)
+
+    return process_query(builder.build())
 # administrative, region, world , around
 @API.route('/search/collectibles',methods=['GET','POST'])
 def search_collectibles():
