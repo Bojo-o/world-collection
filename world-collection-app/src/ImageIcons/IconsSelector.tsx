@@ -22,7 +22,6 @@ function IconsSelector({collectible,handleChangeOfIcon} : IconsSelectorProps){
         setSavingStatus(null);
         DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber,icon).then((status) => {
             setSaving(false);
-            console.log(status)
             setSavingStatus(status);
             handleChangeOfIcon(icon);
         }).catch(() => {

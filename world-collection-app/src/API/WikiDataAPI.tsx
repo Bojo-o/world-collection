@@ -6,6 +6,7 @@ import { WikibaseItemPropertyData } from "../Data/FiltersData/WikibaseItemProper
 import { Entity } from "../Data/SearchData/Entity";
 import { SearchData } from "../Data/SearchData/SearchData";
 import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/ColectiblesSearchQueryData";
+import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
 
 const urlCollectiblesType = "WikidataAPI/search/classes";
 const urlPlaces = "WikidataAPI/search/places";
@@ -15,7 +16,8 @@ const urlSearchFilterData = "WikidataAPI/get/filter_data";
 const urlSearchWikibaseItem = "WikidataAPI/search/wikibase_item"
 const urlSearchCollectibles = "WikidataAPI/search/collectibles";
 const urlSearchRegions = "WikidataAPI/search/regions";
-const urlCollectibleDataGetter = "WikidataAPI/get/collectible_data"
+const urlCollectibleDataGetter = "WikidataAPI/get/collectible_data";
+const urlCollectibleBasicInfo = "WikidataAPI/get/collectible_basic_info";
 
 export class WikiDataAPI {
     private static convertToCollectibleModels(data : any[]) : RawCollectible[] {
@@ -24,6 +26,10 @@ export class WikiDataAPI {
     }
     private static convertToCollectibleModel(data : any) : RawCollectible {
         let result : RawCollectible =  new RawCollectible(data[0]);
+        return result;
+    }
+    private static convertToCollectibleBasicInfo(data : any) : CollectibleBasicInfo {
+        let result : CollectibleBasicInfo =  new CollectibleBasicInfo(data[0]);
         return result;
     }
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
@@ -175,6 +181,13 @@ export class WikiDataAPI {
         }
         const data = await this.fetchDataNEW(urlCollectibleDataGetter,JSON.stringify(params));
         return this.convertToCollectibleModel(data);
+    }
+    static async getCollectibleBasicInfo(collectibleQNumber : string){
+        let params  = {
+            collectible_QNumber : collectibleQNumber
+        }
+        const data = await this.fetchDataNEW(urlCollectibleBasicInfo,JSON.stringify(params));
+        return this.convertToCollectibleBasicInfo(data);
     }
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";

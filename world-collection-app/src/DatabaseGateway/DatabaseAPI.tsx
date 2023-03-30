@@ -96,7 +96,7 @@ export class DatabaseAPI {
             );
         })
     }
-    public static postVisitation(QNumberOfCollectible : string,isVisit : boolean,dateFormat : string|null=null,dateFrom : CustomDate|null=null,dateTo : CustomDate|null=null){
+    public static async postVisitation(QNumberOfCollectible : string,isVisit : boolean,dateFormat : string|null=null,dateFrom : CustomDate|null=null,dateTo : CustomDate|null=null){
         let dateFromString  : string = 'null'
         let dateToString  : string = 'null'
         if (dateFrom != null){
@@ -105,7 +105,7 @@ export class DatabaseAPI {
         if (dateTo != null){
             dateToString = dateTo.GetDate();
         }
-        this.postData(baseUrl + postVisitation,
+        let data = await this.postData(baseUrl + postVisitation,
             {
             'QNumber': QNumberOfCollectible,
             'isVisit' : isVisit,
@@ -113,6 +113,7 @@ export class DatabaseAPI {
             'dateFrom' : dateFromString,
             'dateTo' : dateToString
         });
+        return this.convertToStatusMSG(data);
     }
     
     public static async postCollectibles(collectionID : number,collectibles : RawCollectible[]){

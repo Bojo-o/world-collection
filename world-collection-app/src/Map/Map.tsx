@@ -2,6 +2,7 @@ import {Popup } from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { Collectible } from '../Data/Database/Collectible';
+import CollectibleMarker from './CollectibleMarker';
 import CollectibleWayPoint from './CollectibleWayPoint';
 import { convertToMapDataModel } from './ConvertToMapData';
 import './Map.css';
@@ -25,7 +26,7 @@ function Map ({collectiblesToShow} : MapProps){
                 />
                 {               
                     collectiblesToShow.map((collectible,index) => {             
-                        return (<CollectibleWayPoint key={index} collectible={collectible}/>)
+                        return (<CollectibleMarker key={index} collectible={collectible}/>)
                     })
                 }
                 <MapOptions waypoints={convertToMapDataModel(collectiblesToShow)}/>

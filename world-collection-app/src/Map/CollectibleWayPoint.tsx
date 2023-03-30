@@ -1,9 +1,9 @@
 import { icon, map, PopupEvent } from 'leaflet';
 import React,{useEffect, useRef, useState} from 'react';
 import { Marker, Popup } from 'react-leaflet';
-import { CustomDate } from '../Data/CustomDate';
+import { CustomDate, DatePrecision } from '../Data/CustomDate';
 import { Collectible } from '../Data/Database/Collectible';
-import { DateOption } from '../Data/DateOption';
+import { DATEOPTIONS } from '../Data/DateOption';
 import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
 import Details from '../Details/Details';
 import IconsSelector from '../ImageIcons/IconsSelector';
@@ -22,8 +22,8 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
     const [isDetailsShowed,setIsDetailsShowed] = useState(false);
     const [editationOfVisit,setEdititationOfVisit] = useState(false);
     const [isVisit,setIsVisit] = useState(collectible.isVisit);
-    const [dateOption,setDateOption] = useState<DateOption>(DateOption.Date);
-    const [todayDate,setTodayDate] = useState(new CustomDate(null));
+    const [dateOption,setDateOption] = useState<DATEOPTIONS>(DATEOPTIONS.Date);
+    const [todayDate,setTodayDate] = useState(new CustomDate(null,DatePrecision.Day));
 
     const [year,setYear] = useState(todayDate.year);
 
@@ -53,12 +53,12 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
     }
     const handleSave = () => {
         if (isVisit){
-            DatabaseAPI.postVisitation(collectible.QNumber,isVisit,DateOption[dateOption],dateFrom,dateTo)
+            //DatabaseAPI.postVisitation(collectible.QNumber,isVisit,DATEOPTIONS[dateOption],dateFrom,dateTo)
         }else{
             DatabaseAPI.postVisitation(collectible.QNumber,isVisit)
         }
         collectible.isVisit = isVisit;
-        collectible.dateFormat = DateOption[dateOption];
+        //collectible.dateFormat = DATEOPTIONS[dateOption];
         collectible.dateFrom = dateFrom;
         collectible.dateTo = dateTo;
         setEdititationOfVisit(false)
@@ -66,9 +66,9 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
     }
     const handleDate = (e: any,d : DatesRange) =>{
         if (d == DatesRange.From){
-            setDateFrom(new CustomDate(e.target.value));
+            //setDateFrom(new CustomDate(e.target.value));
         }else{
-            setDateTo(new CustomDate(e.target.value));
+            //setDateTo(new CustomDate(e.target.value));
         }
     }
 
@@ -77,7 +77,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
         let year = e.target.value;
         if(year <= todayDate.year && year > 1900){
             setYear(year);
-            setDateFrom(new CustomDate(e.target.value+"-01"));
+            //setDateFrom(new CustomDate(e.target.value+"-01"));
         }
     }
 
@@ -87,40 +87,24 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
         setDateTo(null)
         switch(e.target.value){
             case 'date':
-                setDateOption(DateOption.Date)
+                setDateOption(DATEOPTIONS.Date)
                 break;
             case 'month':
-                setDateOption(DateOption.Month)
+                setDateOption(DATEOPTIONS.Month)
                 break;
             case 'year':
-                setDateOption(DateOption.Year)
+                setDateOption(DATEOPTIONS.Year)
                 break;
             case 'rangeInDate':
-                setDateOption(DateOption.RangeInDate)
+                setDateOption(DATEOPTIONS.RangeInDate)
                 break;
             case 'rangeInMonth':
-                setDateOption(DateOption.RangeInMonth)
+                setDateOption(DATEOPTIONS.RangeInMonth)
                 break;
         }
     }
 
-    const renderDate = () => {
-        if (collectible.isVisit && collectible.dateFormat != null){
-            switch(collectible.dateFormat){
-                case 'Date':
-                    return (<h6>{collectible.dateFrom?.GetDateToShow()}</h6>)
-                case 'Month':
-                    return (<h6>{collectible.dateFrom?.GetMonthYearToShow()}</h6>)
-                case 'Year':
-                    return (<h6>{collectible.dateFrom?.GetYear()}</h6>)
-                case 'RangeInDate':
-                    return (<h6>{collectible.dateFrom?.GetDateToShow()} - {collectible.dateTo?.GetDateToShow()}</h6>)
-                case 'RangeInMonth':
-                    return (<h6>{collectible.dateFrom?.GetMonthYearToShow()} - {collectible.dateTo?.GetMonthYearToShow()}</h6>)   
-            }
-        }
-        return (<></>)
-    }
+   
     const handleIconChange = (icon : string) => {
         setIcon(icon);
     }
@@ -136,7 +120,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                 <h5 className="card-title">{collectible.name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{collectible.type.replaceAll('/',', ')}</h6>                               
                                 <h5 className="card-subtitle mb-2 text-muted">{collectible.isVisit ? ("Visited") : ("Not visited")}</h5>
-                                {renderDate()}
+                               
                                 {editationOfVisit && (
                                     <>
                                     <div>
@@ -154,7 +138,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                                     <option value={"rangeInMonth"}>Range of Months and years</option>
                                                 </select>
 
-                                                {dateOption == DateOption.Date && (
+                                                {dateOption == DATEOPTIONS.Date && (
                                                     <>
                                                         <label htmlFor='date'>Date of visit</label>
                                                         <input type={"date"} id={"date"} name={"date"} max={todayDate.GetDate()} onChange={(event) => handleDate(event,DatesRange.From)}/>
@@ -166,7 +150,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                                     </>
                                                 )}
 
-                                                {dateOption == DateOption.Month && (
+                                                {dateOption == DATEOPTIONS.Month && (
                                                     <>
                                                         <label htmlFor='month'>Month of visit</label>
                                                         <input type={"month"} id={"month"} name={"month"} max={todayDate.GetMonthYear()} onChange={(event) => handleDate(event,DatesRange.From)}/>
@@ -178,7 +162,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                                     </>
                                                 )}
 
-                                                {dateOption == DateOption.Year && (
+                                                {dateOption == DATEOPTIONS.Year && (
                                                     <>
                                                         <label htmlFor='year'>Year of visit</label>
                                                         <input type="number" id={"year"} name={'year'} min="1900" max={todayDate.GetYear()} step="1" value={year} onChange={handleYear}/>
@@ -190,7 +174,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                                     </>                                           
                                                 )}
 
-                                                {dateOption == DateOption.RangeInDate && (
+                                                {dateOption == DATEOPTIONS.RangeInDate && (
                                                     <>
                                                         <label htmlFor='dateFrom'>Date from </label>
                                                         <input type="date" id={"dateFrom"} name={'dateFrom'} max={dateTo != null ? dateTo.GetDate() : todayDate.GetDate()} onChange={(event) => handleDate(event,DatesRange.From)}/>
@@ -206,7 +190,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                                     </>
                                                 )}
 
-                                                {dateOption == DateOption.RangeInMonth && (
+                                                {dateOption == DATEOPTIONS.RangeInMonth && (
                                                     <>
                                                         <label htmlFor='monthFrom'>Month from </label>
                                                         <input type="month" id={"monthFrom"} name={'monthFrom'} max={dateTo != null ? dateTo.GetMonthYear() : todayDate.GetMonthYear()} onChange={(event) => handleDate(event,DatesRange.From)}/>

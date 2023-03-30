@@ -1,4 +1,5 @@
-import { CustomDate } from "../CustomDate";
+import { CustomDate, DatePrecision } from "../CustomDate";
+import { DATEOPTIONS } from "../DateOption";
 
 export class Collectible{
     QNumber: string = '';
@@ -8,7 +9,7 @@ export class Collectible{
     lati : number = 0;
     long : number = 0;
     isVisit : boolean = false;
-    dateFormat : string|null =null;
+    dateFormat : DatePrecision = DatePrecision.Day;
     dateFrom : CustomDate|null = null;
     dateTo : CustomDate|null = null;
     icon : string = '';
@@ -37,9 +38,9 @@ export class Collectible{
                 this.isVisit = false;
             }
         }
-        if (initializer.visit_date_format) this.dateFormat = initializer.visit_date_format;  
-        if (initializer.visit_date_from) this.dateFrom = new CustomDate(initializer.visit_date_from); 
-        if (initializer.visit_date_to) this.dateTo = new CustomDate(initializer.visit_date_to);  
+        if (initializer.visit_date_format) this.dateFormat = DatePrecision[initializer.visit_date_format as keyof typeof DatePrecision];  
+        if (initializer.visit_date_from) this.dateFrom = new CustomDate(initializer.visit_date_from,this.dateFormat); 
+        if (initializer.visit_date_to) this.dateTo = new CustomDate(initializer.visit_date_to,this.dateFormat);  
         if (initializer.icon) this.icon = initializer.icon;   
     }
 }

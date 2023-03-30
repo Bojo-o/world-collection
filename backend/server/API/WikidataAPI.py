@@ -23,6 +23,7 @@ from .NEWQuery.CollectiblesQuery.CollectiblesSearchType import CollectiblesSearc
 from .NEWQuery.SearchQuery.SearchRegionQueryBuilder import SearchRegionQueryBuilder
 from .NEWQuery.CollectiblesQuery.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
 from .NEWQuery.CollectiblesQuery.CollectibleDataGetter import CollectibleDataGetter
+from .NEWQuery.CollectibleDetailsQuery.CollectibleBasicInfoQuery import CollectibleBasicInfoQuery
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -83,6 +84,7 @@ def search_for_locations():
     builder.set_geo_obtaining()
     print(builder.build())
     return process_query(builder.build())
+
 @API.route('/get/collectible_data',methods = ['POST'])
 def get_collectible_data():
 
@@ -255,12 +257,27 @@ def search_wikibase_item():
     #print(builder.build())
     return process_query(builder.build())
 
+@API.route('/get/collectible_basic_info',methods=['GET','POST'])
+def get_collectible_basic_info():
+
+    data = json.loads(request.get_json())
+
+    collectible : str = data['collectible_QNumber']
+
+
+    if collectible is None:
+        return "Invalid request,param: collectible_QNumber must be provided"
+    
+    builder = CollectibleBasicInfoQuery(collectible)
+
+    return process_query(builder.build())
+
 # administrative, region, world , around
 @API.route('/search/collectibles',methods=['GET','POST'])
 def search_collectibles():
 
     data = json.loads(request.get_json())
-    print(data)
+
     parent_class_of_collectibles : str = data['type']
     if parent_class_of_collectibles is None:
         return "Invalid request,param: class must be provided"
@@ -321,7 +338,7 @@ def search_collectibles():
     if exceptions_classes is not None:
         for exc in exceptions_classes:
             builder.add_class_exception(exc)
-
+    
     filters : list[dict] = data['filters']
     if filters is not None:
         try:

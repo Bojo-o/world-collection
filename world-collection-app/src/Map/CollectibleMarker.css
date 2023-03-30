@@ -1,0 +1,8 @@
+.gray {
+    filter: grayscale(1);
+}
+.scroll{
+    list-style: none;
+    overflow:hidden; overflow-y:scroll;
+    height: 50vh;
+}

@@ -93,10 +93,10 @@ def set_visit_of_collectible():
     status_date =  db_CRUD.update_collectible_visit_date(data['QNumber'],date_format,date_from,date_to)
     
     if status_date and status_visit:
-        return "Succesfully saved"
+        return  json.dumps({'status' : "Succesfully saved"})
 
     
-    return "Something went wrong"
+    return json.dumps({'status' : "Error , visitation was not updated"})
 
 @bp_database_gateway.route('/post/collection_update_rename',methods=['POST'])
 def update_collection():
