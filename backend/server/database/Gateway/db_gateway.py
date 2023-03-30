@@ -165,3 +165,13 @@ def update_collectible_icon():
         return  json.dumps({'status' : "Succesfully saved"})
     
     return  json.dumps({'status' : "Error , icon was not updated"})
+
+@bp_database_gateway.route('/post/collectible_update_notes',methods=['POST'])
+def update_collectible_notes():
+    data = request.get_json()
+    status = db_CRUD.update_collectible_notes(data['q_number'],data['notes'])
+
+    if status:
+        return  json.dumps({'status' : "Succesfully saved"})
+    
+    return  json.dumps({'status' : "Error , notes were not updated"})

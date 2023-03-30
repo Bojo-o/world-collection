@@ -16,7 +16,6 @@ function IconsSelector({collectible,handleChangeOfIcon} : IconsSelectorProps){
     const [savingStatus,setSavingStatus] = useState<string|null>(null)
 
     const handleIconChange = (icon : string) => {
-        console.log(icon)
         setSaving(true);
         setSavingError(false);
         setSavingStatus(null);

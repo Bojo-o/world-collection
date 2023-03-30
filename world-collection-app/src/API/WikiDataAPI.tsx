@@ -19,6 +19,7 @@ const urlSearchRegions = "WikidataAPI/search/regions";
 const urlCollectibleDataGetter = "WikidataAPI/get/collectible_data";
 const urlCollectibleBasicInfo = "WikidataAPI/get/collectible_basic_info";
 
+
 export class WikiDataAPI {
     private static convertToCollectibleModels(data : any[]) : RawCollectible[] {
         let result : RawCollectible[] = data.map((d : any) => new RawCollectible(d));

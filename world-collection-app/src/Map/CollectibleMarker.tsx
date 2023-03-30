@@ -4,10 +4,13 @@ import { WikiDataAPI } from "../API/WikiDataAPI";
 import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
 import { Collectible } from "../Data/Database/Collectible";
 import { GetIcon } from "./GetIcon";
-import './Card.css'
+
 import "./CollectibleMarker.css"
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import Visitation from "../CollectibleEditationComponents/Visitation";
+import { CustomDate } from "../Data/CustomDate";
+import IconsSelector from "../ImageIcons/IconsSelector";
+import Notes from "../CollectibleEditationComponents/Notes";
 
 export interface CollectibleMarkerProps{
     collectible : Collectible;
@@ -16,22 +19,38 @@ export interface CollectibleMarkerProps{
 function CollectibleMarker({collectible} : CollectibleMarkerProps){
     const [icon,setIcon] = useState(collectible.icon);
     const [isVisit,setIsVisit] = useState(collectible.isVisit);
+    const [dateFrom,setDateFrom] = useState(collectible.dateFrom);
+    const [dateTo,setDateTo] = useState(collectible.dateTo);
+    
 
     const [editingVisitation,setEditingVisitation] = useState(false);
+    const [editingIcon,setEditingIcon] = useState(false);
+    const [editingNotes,setEditingNotes] = useState(false);
 
     const [basicInfo,setBasicInfo] = useState<CollectibleBasicInfo>(new CollectibleBasicInfo());
     const [loadingBasicInfo,setLoadingBasicInfo] = useState(false);
     const [errorBasicInfo,setErrorBasicInfo] = useState(false);
 
-    const handleEditing = () => {
+    const handleEditingVisitation = () => {
         setEditingVisitation((prev) => !prev);
+    }
+    const handleEditingIcon = () => {
+        setEditingIcon((prev) => !prev);
+    }
+    const handleEditingNotes = () => {
+        setEditingNotes((prev) => !prev);
     }
 
     const handleIconChange = (icon : string) => {
         setIcon(icon);
     }
-    const handleVisitationChange = (isVisit : boolean) => {
+    const handleNotesChange = (notes : string) => {
+        collectible.notes = notes;
+    }
+    const handleVisitationChange = (isVisit : boolean,dateFrom : CustomDate|null,dateTo : CustomDate|null) => {
         setIsVisit(isVisit);
+        setDateFrom(dateFrom);
+        setDateTo(dateTo);
     }
     const fetchCollectibleBasicInfo = () => {
         setErrorBasicInfo(false);
@@ -45,12 +64,12 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     }
     const renderDate = () => {
         
-        if (collectible.isVisit && collectible.dateFrom != null){
+        if (isVisit && dateFrom != null){
             
-            if(collectible.dateTo == null){
-                return (<h6>{collectible.dateFrom.ToString()}</h6>);
+            if(dateTo == null){
+                return (<h5>{dateFrom.ToString()}</h5>);
             }else{
-                return (<h6>{collectible.dateFrom.ToString()} - {collectible.dateTo.ToString()}</h6>)
+                return (<h5>{dateFrom.ToString()} - {dateTo.ToString()}</h5>)
             }
         }
         return (<></>)
@@ -87,17 +106,21 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                                 )
                                             })}
                                         </div>
-                                        <p className="text-muted">Visit status</p>
+                                        <h5 className="text-muted">Visit status</h5>
                                         {isVisit ? (
                                             <span className="badge bg-success"><h5>Visited</h5></span>
                                         ) : (
                                             <span className="badge bg-danger"><h5>Not visited yet</h5></span>
                                         )}
                                         {renderDate()}
+                                        <h5 className="text-muted">Notes</h5>
+                                            <p>{collectible.notes}</p>
                                         <h5 className="text-muted">Actions</h5>
                                         <p className="text-muted">Here you can edit, visitation, icon image and see more details.</p>
-                                        <div className="d-flex flex-row">
-                                            <button type='button' className="btn btn-primary" onClick={handleEditing}>{(!editingVisitation) ? "Visitation" : "Close"}</button>
+                                        <div className="d-flex flex-column">
+                                            <button type='button' className="btn btn-success" onClick={handleEditingVisitation}>{(!editingVisitation) ? "Visitation" : "Close"}</button>
+                                            <button type='button' className="btn btn-warning" onClick={handleEditingIcon}>{(!editingIcon) ? "Edit Icon" : "Close"}</button>
+                                            <button type='button' className="btn btn-info" onClick={handleEditingNotes}>{(!editingNotes) ? "Edit notes" : "Close"}</button>
                                         </div>
 
                                         
@@ -107,6 +130,20 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                                     <Visitation collectible={collectible} updateVisitation={handleVisitationChange}/>
                                                 </>
                                         )}
+                                        {editingIcon && (
+                                                <>
+                                                    <h5>Editing Icon</h5>
+                                                    <IconsSelector collectible={collectible} handleChangeOfIcon={handleIconChange}/>
+                                                </>
+                                        )}
+
+                                        {editingNotes && (
+                                            <>
+                                                <h5>Editing Notes</h5>
+                                                <Notes collectible={collectible} updateNotes={handleNotesChange}/>
+                                            </>
+                                        )}
+                                        
                                     </div>
                                 </div>
                             </>

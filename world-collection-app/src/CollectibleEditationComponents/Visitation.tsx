@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CustomDate, DatePrecision } from "../Data/CustomDate";
 import { Precision } from "../Data/CustomTime";
 import { Collectible } from "../Data/Database/Collectible";
@@ -13,7 +13,7 @@ enum Date{
 
 export interface VisitationProps{
     collectible : Collectible;
-    updateVisitation : (isVisited : boolean) => void;
+    updateVisitation : (isVisited : boolean,dateFrom : CustomDate|null,dateTo : CustomDate|null) => void;
 }
 function Visitation({collectible,updateVisitation} : VisitationProps){
     const [isVisited,setIsVisited] = useState(collectible.isVisit)
@@ -47,7 +47,7 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
             setSaving(false);
             setSavingStatus(status);
 
-            updateVisitation(isVisited);
+            updateVisitation(isVisited,dateFrom,dateTo);
             // change
         }).catch(() => {
             setSavingError(true);
@@ -95,11 +95,16 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
         )
     }
     const handleDateSelection = (e : any) => {
-        setDateFrom(null)
-        setDateTo(null)
         let value : string = e.target.value;
         setDateOption(DATEOPTIONS[value as keyof typeof DATEOPTIONS])
     }
+    useEffect(() => {
+        setDateFrom(null)
+        setDateTo(null)
+        if (dateOption == DATEOPTIONS.Year){
+            setDateFrom(new CustomDate(todayDate.year+"-01",DatePrecision.Year));
+        }
+    },[dateOption])
     return(
         <>
             <div className="d-flex flex-column">

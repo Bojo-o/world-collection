@@ -21,6 +21,7 @@ const postCollectibleUpdateName="/post/collectible_update_name";
 const postCollectionCreation = "/post/collection_creation";
 
 const postCollectibleIconUpdate = "/post/collectible_update_icon";
+const postCollectibleNotesUpdate = "/post/collectible_update_notes";
 
 function checkStatus(response: any){
     if (response.ok){
@@ -176,6 +177,15 @@ export class DatabaseAPI {
             {
                 'q_number' : collectibleQNumber,
                 'icon' : icon
+            }
+        )
+        return this.convertToStatusMSG(data);
+    }
+    public static async postCollectibleUpdateNotes(collectibleQNumber : string,notes : string){
+        let data = await this.postData(baseUrl + postCollectibleNotesUpdate,
+            {
+                'q_number' : collectibleQNumber,
+                'notes' : notes
             }
         )
         return this.convertToStatusMSG(data);

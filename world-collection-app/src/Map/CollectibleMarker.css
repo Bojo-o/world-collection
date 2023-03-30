@@ -6,3 +6,6 @@
     overflow:hidden; overflow-y:scroll;
     height: 50vh;
 }
+.card {
+    width: 18rem;
+}
