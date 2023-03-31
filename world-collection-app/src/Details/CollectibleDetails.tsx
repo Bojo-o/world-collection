@@ -13,6 +13,7 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
     const [details,setDetails] = useState<CollectibleDetail[]>([]);
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState(false);
+    const [detailFilter,setDetailFilter] = useState<string>("");
 
     const fetchDetails = () => {
         setLoading(true);
@@ -66,7 +67,10 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
         }
         
     }
-    
+    const handleDetailSearch = (event : any) => {
+        const value = event.target.value;
+        setDetailFilter(value);  
+    }
     useEffect(() => {
         fetchDetails()
     },[])
@@ -78,58 +82,61 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
                     </>
             )}
             {!loading && (
-                <div className="details_scroll">
-                    <ul className="list-group">
-                        {details.map((detail,index) => {
-                            return(
-                                <>
-                                    <li key={index} className="list-group-item">
-                                        <div className="d-flex flex-column">
-                                            <h6><strong>{detail.property}</strong></h6>
-                                            <div className="d-flex flex-wrap">
-                                                {detail.values.map((value) => {
-                                                    return(
-                                                        <>
-                                                            {detail.dataType == "Url" && (
-                                                                <>
-                                                                    <span key={index} className="badge bg-info text-dark">
-                                                                        <a href={value} target="_blank">Link</a>
-                                                                    </span>
-                                                                </>
-                                                            )}
-                                                            {detail.dataType == "Quantity" && (
-                                                                <>
-                                                                    <span key={index} className="badge bg-warning text-dark">
-                                                                        {(detail.unit != null && detail.unit != "1") ? value + " " + detail.unit : value}
-                                                                    </span>
-                                                                </>
-                                                            )}
-                                                            {(detail.dataType == "Monolingualtext" || detail.dataType == "WikibaseItem") && (
-                                                                <>
-                                                                    <span key={index} className="badge bg-primary">
-                                                                        {value}
-                                                                    </span>
-                                                                </>
-                                                            )}
-                                                            {detail.dataType == "Time" && (
-                                                                <>
-                                                                    <span key={index} className="badge bg-success">
-                                                                        {timeToString(value,detail.timePrecision)}
-                                                                    </span>
-                                                                </>
-                                                            )}
-                                                        </>
-                                                    )
-                                                })}
+                <>
+                <input className="form-control mr-sm-2" type="search" placeholder="Search for detail"  onChange={handleDetailSearch}/>
+                    <div className="details_scroll">
+                        <ul className="list-group">
+                            {details.filter((d) =>  d.property.toLocaleLowerCase().includes(detailFilter.toLocaleLowerCase())).map((detail,index) => {
+                                return(
+                                    <>
+                                        <li key={index} className="list-group-item">
+                                            <div className="d-flex flex-column">
+                                                <h6><strong>{detail.property}</strong></h6>
+                                                <div className="d-flex flex-wrap">
+                                                    {detail.values.map((value) => {
+                                                        return(
+                                                            <>
+                                                                {detail.dataType == "Url" && (
+                                                                    <>
+                                                                        <span key={index} className="badge bg-info text-dark">
+                                                                            <a href={value} target="_blank">Link</a>
+                                                                        </span>
+                                                                    </>
+                                                                )}
+                                                                {detail.dataType == "Quantity" && (
+                                                                    <>
+                                                                        <span key={index} className="badge bg-warning text-dark">
+                                                                            {(detail.unit != null && detail.unit != "1") ? value + " " + detail.unit : value}
+                                                                        </span>
+                                                                    </>
+                                                                )}
+                                                                {(detail.dataType == "Monolingualtext" || detail.dataType == "WikibaseItem") && (
+                                                                    <>
+                                                                        <span key={index} className="badge bg-primary">
+                                                                            {value}
+                                                                        </span>
+                                                                    </>
+                                                                )}
+                                                                {detail.dataType == "Time" && (
+                                                                    <>
+                                                                        <span key={index} className="badge bg-success">
+                                                                            {timeToString(value,detail.timePrecision)}
+                                                                        </span>
+                                                                    </>
+                                                                )}
+                                                            </>
+                                                        )
+                                                    })}
+                                                </div>
+                                                
                                             </div>
-                                            
-                                        </div>
-                                    </li>
-                                </>
-                            )
-                        })}
-                    </ul>
-                </div>
+                                        </li>
+                                    </>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                </>
             )}
         </>
     )
