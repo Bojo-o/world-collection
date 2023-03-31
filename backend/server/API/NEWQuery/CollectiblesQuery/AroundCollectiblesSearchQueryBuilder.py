@@ -42,6 +42,8 @@ class AroundCollectiblesSearchQueryBuilder(CollectiblesSearchQueryBuilder):
         +" bd:serviceParam wikibase:radius \""
         + str(self._radius) +"\" .")
 
-        self.add_filter_exist("?item " + self._INSTANCE_OR_SUBCLASS + " wd:{}".format(self._parent_class))
+        if self._parent_class != self._ANYTHING:
+            self.add_filter_exist("?item " + self._INSTANCE_OR_SUBCLASS + " wd:{}".format(self._parent_class))
+            
         if self._exception_classes.__len__() != 0:
             self.build_statement("?item","?exceptionClasses",self._INSTANCE_OR_SUBCLASS,self._exception_classes,False,True)

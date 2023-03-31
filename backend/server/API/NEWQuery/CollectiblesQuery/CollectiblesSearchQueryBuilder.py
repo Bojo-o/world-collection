@@ -10,6 +10,7 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         super().__init__()
 
         self._parent_class = parent_class
+        self._ANYTHING = "Q2221906"
 
         self._exception_classes = set()
 
@@ -45,7 +46,10 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self._exception_classes.add(Qnumber_of_class)
 
     def build_class_restriction(self):
-        self.add_triple("?item",self._INSTANCE_OR_SUBCLASS,"wd:{}".format(self._parent_class))
+
+        if self._parent_class != self._ANYTHING:
+            self.add_triple("?item",self._INSTANCE_OR_SUBCLASS,"wd:{}".format(self._parent_class))
+        
 
         if self._exception_classes.__len__() != 0:
             self.build_statement("?item","?exceptionClasses",self._INSTANCE_OR_SUBCLASS,self._exception_classes,False,True)
@@ -63,12 +67,16 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self._quantity_filters.append(filter)
 
     def build_where_body(self):
-        
-        self.build_class_and_location_restriction()
 
         for itemFilter  in self._item_filters:
             item : WikibaseItemFilterData = itemFilter
-            self.add_filter_exist("?item wdt:{} wd:{} .".format(item.property,item.value))
+            self.add_triple("?item", "wdt:{}".format(item.property),"wd:{}".format(item.value))
+
+        self.build_class_and_location_restriction()
+
+        #for itemFilter  in self._item_filters:
+        #    item : WikibaseItemFilterData = itemFilter
+        #    self.add_filter_exist("?item wdt:{} wd:{} .".format(item.property,item.value))
 
         i = 0
         for timeFilter in self._time_filters:
