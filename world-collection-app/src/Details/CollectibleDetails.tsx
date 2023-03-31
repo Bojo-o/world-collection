@@ -14,14 +14,22 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState(false);
     const [detailFilter,setDetailFilter] = useState<string>("");
+    const [wikipediaLink,setWikipediaLink] = useState<string|null>(null);
 
+    const fetchWikipediaLink = () => {
+        WikiDataAPI.getCollectibleWikipediaLink(collectible.QNumber).then((data) => {
+            if (data != ""){
+                setWikipediaLink(data);
+            }
+        }).catch(() => {})
+    }
     const fetchDetails = () => {
         setLoading(true);
         setError(false);
         WikiDataAPI.getCollectibleDetails(collectible.QNumber).then((data) => {
             setLoading(false);
             setDetails(data);
-            console.log(data)
+            
         }).catch(() => {
             setError(true);
         })
@@ -73,6 +81,7 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
     }
     useEffect(() => {
         fetchDetails()
+        fetchWikipediaLink();
     },[])
     return(
         <>
@@ -83,6 +92,12 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
             )}
             {!loading && (
                 <>
+                {wikipediaLink != null && (
+                    <div className="d-flex flex-row">
+                        <h6>Wikipedia Link: </h6>
+                        <a href={wikipediaLink} target="_blank">Link</a>
+                    </div>
+                )}
                 <input className="form-control mr-sm-2" type="search" placeholder="Search for detail"  onChange={handleDetailSearch}/>
                     <div className="details_scroll">
                         <ul className="list-group">

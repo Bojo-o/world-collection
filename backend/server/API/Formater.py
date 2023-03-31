@@ -40,7 +40,7 @@ def toJson(input):
                 case "literal":
                     d[bindings_in_item] = value
                 case "uri":
-                    if bindings_in_item == "image":
+                    if bindings_in_item == "image" or bindings_in_item == "article":
                         d[bindings_in_item] = value
                         break
                     temp : str = value.split('/')[-1]

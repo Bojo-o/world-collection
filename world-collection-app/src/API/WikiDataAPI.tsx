@@ -20,6 +20,7 @@ const urlSearchRegions = "WikidataAPI/search/regions";
 const urlCollectibleDataGetter = "WikidataAPI/get/collectible_data";
 const urlCollectibleBasicInfo = "WikidataAPI/get/collectible_basic_info";
 const urlCollectibleDetails = "WikidataAPI/get/collectible_details";
+const urlCollectibleWikipediaLink = "WikidataAPI/get/collectible_wikipedia_link";
 
 
 export class WikiDataAPI {
@@ -38,6 +39,12 @@ export class WikiDataAPI {
     private static convertToCollectibleDetails(data : any) : CollectibleDetail[] {
         let result : CollectibleDetail[] = data.map((d : any) => new CollectibleDetail(d));
         return result;
+    }
+    private static convertToWikipediaLink(data : any[]) : string {
+        if (data.length == 0){
+            return "";
+        }
+        return data[0]['article'];
     }
     private static convertToSearchDataModel(data: any[]) : SearchData[] {
         let results : SearchData[] = data.map((d : any) => new SearchData(d));
@@ -202,6 +209,14 @@ export class WikiDataAPI {
         }
         const data = await this.fetchDataNEW(urlCollectibleDetails,JSON.stringify(params));
         return this.convertToCollectibleDetails(data);
+    }
+    static async getCollectibleWikipediaLink(collectibleQNumber : string){
+        let params  = {
+            collectible_QNumber : collectibleQNumber
+        }
+        const data = await this.fetchDataNEW(urlCollectibleWikipediaLink,JSON.stringify(params));
+        console.log(data)
+        return this.convertToWikipediaLink(data);
     }
     private static async fetchData(url : string,params : Map<string,string>){
         let parameters = "";
