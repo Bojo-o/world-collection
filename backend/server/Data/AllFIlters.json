@@ -1,0 +1,1508 @@
+[
+  {
+    "dataType": "Time",
+    "description": "point in time at which the subject (organisation, building) ceased to exist;  see \"date of official closure\" (P3999) for closing a facility, \"service retirement\" (P730) for retiring equipment,  \"discontinued date\" (P2669) for stopping a product",
+    "PNumber": "P576",
+    "name": "dissolved, abolished or demolished date"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "area occupied by an object",
+    "PNumber": "P2046",
+    "name": "area"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "service stopping at a station",
+    "PNumber": "P1192",
+    "name": "connecting service"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "employment divided by sector",
+    "PNumber": "P2297",
+    "name": "employment by economic sector"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "measured dimension of an object",
+    "PNumber": "P2043",
+    "name": "length"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of people allowed for a venue or vehicle",
+    "PNumber": "P1083",
+    "name": "maximum capacity"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "width of an object",
+    "PNumber": "P2049",
+    "name": "width"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the item is located on the territory of the following ecclesiastical entity. Use P708 (diocese) for dioceses",
+    "PNumber": "P5607",
+    "name": "located in the ecclesiastical territorial entity"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person or organization to whom the subject was dedicated",
+    "PNumber": "P825",
+    "name": "dedicated to"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "Commons category for media files depicting interior views of this item (object, place)",
+    "PNumber": "P7561",
+    "name": "category for the interior of the item"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "emergencies treated by hospital or health care organization",
+    "PNumber": "P6855",
+    "name": "emergency services"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "spacing of the rails on a railway track",
+    "PNumber": "P1064",
+    "name": "track gauge"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "official symbol of an organisation",
+    "PNumber": "P2238",
+    "name": "official symbol"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "architectural style of a structure",
+    "PNumber": "P149",
+    "name": "architectural style"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person, state or item replaced. Use \"structure replaces\" (P1398) for structures. Use \"follows\" (P155) if the previous item was not replaced or predecessor and successor are identical",
+    "PNumber": "P1365",
+    "name": "replaces"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "subject's official anthem",
+    "PNumber": "P85",
+    "name": "anthem"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "construction impounding this watercourse or creating this reservoir",
+    "PNumber": "P4792",
+    "name": "dam"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "height of the item (geographical object) as measured relative to sea level",
+    "PNumber": "P2044",
+    "name": "elevation above sea level"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "category item for people who died in this location",
+    "PNumber": "P1465",
+    "name": "category for people who died here"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "legislative body governing this entity; political institution with elected representatives, such as a parliament/legislature or council",
+    "PNumber": "P194",
+    "name": "legislative body"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "amount of currency the central bank has injected in the economy (MO, M1, M2, M3)",
+    "PNumber": "P2296",
+    "name": "money supply"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "major inflow sources \u2014 rivers, aquifers, glacial runoff, etc. Some terms may not be place names, e.g. none",
+    "PNumber": "P200",
+    "name": "inflows"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "Wikimedia category for people with a burial site within this area",
+    "PNumber": "P1791",
+    "name": "category of people buried here"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "literary, artistic, scientific or philosophical movement or scene associated with this person or work. For political ideologies use P1142.",
+    "PNumber": "P135",
+    "name": "movement"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "countries or administrative subdivisions, of equal level, that this item borders, either by land or water. A single common point is enough.",
+    "PNumber": "P47",
+    "name": "shares border with"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "category for multimedia files depicting exterior views of this item (object, place)",
+    "PNumber": "P8596",
+    "name": "category for the exterior of the item"
+  },
+  {
+    "dataType": "Time",
+    "description": "time when an entity begins to exist; for date of official opening use P1619",
+    "PNumber": "P571",
+    "name": "inception"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "head of the executive power of this town, city, municipality, state, country, or other governmental body",
+    "PNumber": "P6",
+    "name": "head of government"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "street, road, or square, where the item is located. To add the number, use Property:P670 \"house number\" as qualifier. Use property P6375 \"street address\", if there is no item for the street",
+    "PNumber": "P669",
+    "name": "located on street"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "expected part that the item does not have (for qualities, use P6477)",
+    "PNumber": "P3113",
+    "name": "does not have part"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "HDI value of a country",
+    "PNumber": "P1081",
+    "name": "Human Development Index"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of tracks served by the platforms at a railway station",
+    "PNumber": "P1103",
+    "name": "number of platform tracks"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "significant or notable events associated with the subject",
+    "PNumber": "P793",
+    "name": "significant event"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the item was located in the territory of this present-day administrative unit; however the two did not at any point coexist in time",
+    "PNumber": "P3842",
+    "name": "located in the present-day administrative territorial entity"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the feature (intersecting road, train station, etc.) at the end of a linear feature",
+    "PNumber": "P559",
+    "name": "terminus"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "State debt in relation to gross domestic product",
+    "PNumber": "P1689",
+    "name": "central government debt as a percent of GDP"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "heritage designation of a cultural or natural site",
+    "PNumber": "P1435",
+    "name": "heritage designation"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "size of a stream's watershed (drainage basin)",
+    "PNumber": "P2053",
+    "name": "watershed area"
+  },
+  {
+    "dataType": "Time",
+    "description": "date of official closure of a building or event",
+    "PNumber": "P3999",
+    "name": "date of official closure"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "measure of statistical dispersion intended to represent the income distribution of a nation's residents",
+    "PNumber": "P1125",
+    "name": "Gini coefficient"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "main Wikimedia category",
+    "PNumber": "P910",
+    "name": "topic's main category"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "Wikimedia category for people associated with this place or organization",
+    "PNumber": "P1792",
+    "name": "category of associated people"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of inpatient beds",
+    "PNumber": "P6801",
+    "name": "number of hospital beds"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "side of the road that vehicles drive on in a given jurisdiction",
+    "PNumber": "P1622",
+    "name": "driving side"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "point with highest elevation in a region, or on the path of a race or route",
+    "PNumber": "P610",
+    "name": "highest point"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "linear distance around the outside of an object",
+    "PNumber": "P2547",
+    "name": "perimeter"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "to indicate state of use of a building, monument, etc. It is not related with its heritage protection (P1435), but to its present state of use. Ex.: abandoned, in use, temporarily closed, etc.",
+    "PNumber": "P5817",
+    "name": "state of use"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "vertical distance from a horizontal area to a point below. Compare with \"horizontal depth\" (P5524)",
+    "PNumber": "P4511",
+    "name": "vertical depth"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "subject's coat of arms",
+    "PNumber": "P237",
+    "name": "coat of arms"
+  },
+  {
+    "dataType": "Time",
+    "description": "date or point in time an event, museum, theater etc. officially opened",
+    "PNumber": "P1619",
+    "name": "date of official opening"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "extent from one surface to the opposite",
+    "PNumber": "P2610",
+    "name": "thickness"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "minimum age at which a person is generally allowed by law to marry. Use qualifier \"applies to part\" (P518), to specify if it applies only to males (Q6581097), females (Q6581072) or both genders (Q27177113)",
+    "PNumber": "P3000",
+    "name": "marriageable age"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "point with lowest elevation in the country, region, city or area",
+    "PNumber": "P1589",
+    "name": "lowest point"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "Christian liturgical rite associated with this item",
+    "PNumber": "P3501",
+    "name": "Christian liturgical rite"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "language designated as official by this item",
+    "PNumber": "P37",
+    "name": "official language"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "religion of a person, organization or religious building, or associated with this subject",
+    "PNumber": "P140",
+    "name": "religion or worldview"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "specialization of a person or organization; see P106 for the occupation",
+    "PNumber": "P101",
+    "name": "field of work"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "material the subject or the object is made of or derived from (do not confuse with P10672 which is used for processes)",
+    "PNumber": "P186",
+    "name": "made from material"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "subject's flag",
+    "PNumber": "P163",
+    "name": "flag"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "rivers and other outflows waterway names. If evaporation or seepage are notable outflows, they may be included. Some terms may not be place names, e.g. evaporation",
+    "PNumber": "P201",
+    "name": "lake outflow"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "subject's government",
+    "PNumber": "P122",
+    "name": "basic form of government"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "seat of government of a country, province, state or other type of administrative territorial entity",
+    "PNumber": "P36",
+    "name": "capital"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person, profession, or organization that operates the equipment, facility, or service",
+    "PNumber": "P137",
+    "name": "operator"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "entity or event that inspired the subject's name, or namesake (in at least one language). Qualifier \"applies to name\" (P5168) can be used to indicate which one",
+    "PNumber": "P138",
+    "name": "named after"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "country that have drainage to/from or border the body of water",
+    "PNumber": "P205",
+    "name": "basin country"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person or architectural firm responsible for designing this building",
+    "PNumber": "P84",
+    "name": "architect"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "patron saint adopted by the subject",
+    "PNumber": "P417",
+    "name": "patron saint"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "category for the view from this item (object, place)",
+    "PNumber": "P8933",
+    "name": "category for the view from the item"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "residence time of water in a lake or sea",
+    "PNumber": "P3020",
+    "name": "residence time of water"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "airport or station connected by regular direct service to the subject; for the destination of a trip see P1444",
+    "PNumber": "P521",
+    "name": "scheduled service destination"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "part of this subject; inverse property of \"part of\" (P361). See also \"has parts of the class\" (P2670).",
+    "PNumber": "P527",
+    "name": "has part(s)"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "electrification system scheme and/or voltage",
+    "PNumber": "P930",
+    "name": "type of electrification"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the subject item has this type of facility, e.g. toilet, car park",
+    "PNumber": "P912",
+    "name": "has facility"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "territorial entity or entities served by this transport hub (airport, train station, etc.)",
+    "PNumber": "P931",
+    "name": "place served by transport hub"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "total number of employees of a company at a given \"point in time\" (P585). Most recent data would generally have preferred rank; data for previous years normal rank (not deprecated rank). Add data for recent years, don't overwrite",
+    "PNumber": "P1128",
+    "name": "employees"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "portion of a workforce population that is not employed",
+    "PNumber": "P1198",
+    "name": "unemployment rate"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "work where this item is described",
+    "PNumber": "P1343",
+    "name": "described by source"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "currency used by item",
+    "PNumber": "P38",
+    "name": "currency"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person or organization in charge of keeping the subject (for instance an infrastructure) in functioning order",
+    "PNumber": "P126",
+    "name": "maintained by"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "net worth of consumers",
+    "PNumber": "P2220",
+    "name": "household wealth"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "quantity of three-dimensional space",
+    "PNumber": "P2234",
+    "name": "volume as quantity"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "category item that groups people born in this place",
+    "PNumber": "P1464",
+    "name": "category for people born here"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "organization that a person or organization is affiliated with (not necessarily member of or employed by)",
+    "PNumber": "P1416",
+    "name": "affiliation"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "(list of) direct subdivisions of an administrative territorial entity",
+    "PNumber": "P150",
+    "name": "contains the administrative territorial entity"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "official with the highest formal authority in a country/state",
+    "PNumber": "P35",
+    "name": "head of state"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "administrative division of the church to which the element belongs; use P5607 for other types of ecclesiastical territorial entities",
+    "PNumber": "P708",
+    "name": "diocese"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "supreme judicial body within a country, administrative division, or other organization",
+    "PNumber": "P209",
+    "name": "highest judicial authority"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of people inhabiting the place; number of people of subject",
+    "PNumber": "P1082",
+    "name": "population"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "voltage of residential mains electricity in a country or region",
+    "PNumber": "P2884",
+    "name": "mains voltage"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "policy for activities in this place, for example no photos, photos allowed, no flash, lighting fires, flying drones, etc.",
+    "PNumber": "P5023",
+    "name": "activity policy in this place"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the object is a category for films shot at or in the subject",
+    "PNumber": "P1740",
+    "name": "category for films shot at this location"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of continuous platform edges facing a track or vehicle guideway in a station (often, but not always, the same as P1103 and the number of platform numbers). See property talk page for illustrated samples",
+    "PNumber": "P5595",
+    "name": "number of platform faces"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "owner of the subject",
+    "PNumber": "P127",
+    "name": "owned by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the body of water to which the watercourse drains",
+    "PNumber": "P403",
+    "name": "mouth of the watercourse"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "that class of which this subject is a particular example and member; different from P279 (subclass of); for example: K2 is an instance of mountain; volcano is a subclass of mountain (and an instance of volcanic landform)",
+    "PNumber": "P31",
+    "name": "instance of"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "railway line(s) subject is directly connected to",
+    "PNumber": "P81",
+    "name": "connecting line"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the stations next to this station, sharing the same line(s)",
+    "PNumber": "P197",
+    "name": "adjacent station"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "body of water on or next to which a place is located",
+    "PNumber": "P206",
+    "name": "located in or next to body of water"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the item (institution, law, public office, public register...) or statement belongs to or has power over or applies to the value (a territorial jurisdiction: a country, state, municipality, ...)",
+    "PNumber": "P1001",
+    "name": "applies to jurisdiction"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "category containing people who studied at this institution",
+    "PNumber": "P3876",
+    "name": "category for alumni of educational institution"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "recognised peak bagging classification of a mountain or hill",
+    "PNumber": "P8450",
+    "name": "peak bagging classification"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "settlement which an administrative division contains",
+    "PNumber": "P1383",
+    "name": "contains settlement"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "text through which an institution or object has been created or established",
+    "PNumber": "P457",
+    "name": "foundational text"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "official app for this organization or other entity (a downloadable application for Android, iOS, etc.)",
+    "PNumber": "P4290",
+    "name": "official app"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "diameter of a circular or spherical object",
+    "PNumber": "P2386",
+    "name": "diameter"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "official public holiday that occurs in this place in its honor, usually a non-working day",
+    "PNumber": "P832",
+    "name": "public holiday"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of spans a bridge has",
+    "PNumber": "P1314",
+    "name": "number of spans"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "area where precipitation collects and drains off into a common outlet, such as into a river, bay, or other body of water",
+    "PNumber": "P4614",
+    "name": "drainage basin"
+  },
+  {
+    "dataType": "Time",
+    "description": "time an entity begins to exist or a statement starts being valid",
+    "PNumber": "P580",
+    "name": "start time"
+  },
+  {
+    "dataType": "Time",
+    "description": "time an entity ceases to exist or a statement stops being valid",
+    "PNumber": "P582",
+    "name": "end time"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "obstacle (body of water, road, railway...) which this bridge crosses over or this tunnel goes under",
+    "PNumber": "P177",
+    "name": "crosses"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "maximum speed allowed on a transport route or in a certain area",
+    "PNumber": "P3086",
+    "name": "speed limit"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the item which replaced this building or structure, at the same geographic location",
+    "PNumber": "P167",
+    "name": "structure replaced by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "Internet domain name system top-level code",
+    "PNumber": "P78",
+    "name": "top-level Internet domain"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "height of a mountain or hill relative to the lowest contour line encircling it (on Earth, maximum 8,848 m)",
+    "PNumber": "P2660",
+    "name": "topographic prominence"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "length of the longest span of a bridge, a natural arch",
+    "PNumber": "P2787",
+    "name": "longest span"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "item with sitelinks to wikimedia page containing text of a relevant KML file",
+    "PNumber": "P3096",
+    "name": "KML file"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person or organization occupying property",
+    "PNumber": "P466",
+    "name": "occupant"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "time zone for this item",
+    "PNumber": "P421",
+    "name": "located in time zone"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "twin towns, sister cities, twinned municipalities and other localities that have a partnership or cooperative agreement, either legally or informally acknowledged by their governments",
+    "PNumber": "P190",
+    "name": "twinned administrative body"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "range or subrange to which the geographical item belongs",
+    "PNumber": "P4552",
+    "name": "mountain range"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "object of which the subject is a part (if this subject is already part of object A which is a part of object B, then please only make the subject part of object A), inverse property of \"has part\" (P527, see also \"has parts of the class\" (P2670))",
+    "PNumber": "P361",
+    "name": "part of"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "location where a group or organization was formed",
+    "PNumber": "P740",
+    "name": "location of formation"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person(s) or organization which designed the object",
+    "PNumber": "P287",
+    "name": "designed by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "color of subject",
+    "PNumber": "P462",
+    "name": "color"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person that officially opened the event or place",
+    "PNumber": "P542",
+    "name": "officially opened by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "time period (historic period or era, sports season, theatre season, legislative period etc.) in which the subject occurred",
+    "PNumber": "P2348",
+    "name": "time period"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "telephone number to contact emergency services",
+    "PNumber": "P2852",
+    "name": "emergency phone number"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "total number of households in this place, includes dwellings of all types",
+    "PNumber": "P1538",
+    "name": "number of households"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "highest col connecting to an even higher point",
+    "PNumber": "P7479",
+    "name": "key col"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "shape of an object",
+    "PNumber": "P1419",
+    "name": "shape"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "link to the list of heritage monuments in the place/area",
+    "PNumber": "P1456",
+    "name": "list of monuments"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person, group or organisation responsible for the structural engineering of a building or structure",
+    "PNumber": "P631",
+    "name": "structural engineer"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "diplomatic relations of the country",
+    "PNumber": "P530",
+    "name": "diplomatic relation"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of students of any type in an educational organization. Qualify with \" point in time\" (P585). The most recent count would generally have preferred rank; data for previous years normal rank (not deprecated rank). Don't overwrite.",
+    "PNumber": "P2196",
+    "name": "students count"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "fee or toll payable to use, transit or enter the subject (only for one-time fees, do NOT use it for an ongoing fee, tuition fee or trading fee)",
+    "PNumber": "P2555",
+    "name": "fee"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "item with which the item is physically connected",
+    "PNumber": "P2789",
+    "name": "connects with"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "item that is different from another item, with which it may be confused",
+    "PNumber": "P1889",
+    "name": "different from"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "heritage monument is a part of the list of heritage monuments",
+    "PNumber": "P2817",
+    "name": "appears in the heritage monument list"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "volume rate of water flow which is transported through a given cross-sectional area",
+    "PNumber": "P2225",
+    "name": "discharge"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "organization, club or musical group to which the subject belongs. Do not use for membership in ethnic or social groups, nor for holding a political position, such as a member of parliament (use P39 for that)",
+    "PNumber": "P463",
+    "name": "member of"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "type of food served by a restaurant or restaurant chain or national food culture",
+    "PNumber": "P2012",
+    "name": "cuisine"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "selection criteria for UNESCO's cultural and natural 'World Heritage' designation since 2005",
+    "PNumber": "P2614",
+    "name": "World Heritage criteria"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "continent of which the subject is a part",
+    "PNumber": "P30",
+    "name": "continent"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "language widely used (spoken or written) in this place or at this event",
+    "PNumber": "P2936",
+    "name": "language used"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "network the infrastructure is a part of",
+    "PNumber": "P16",
+    "name": "transport network"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "main source of a river, stream or lake",
+    "PNumber": "P885",
+    "name": "origin of the watercourse"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "location of the terminus of a linear feature",
+    "PNumber": "P609",
+    "name": "terminus location"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "other person or item which continues the item by replacing it in its role. Use P156 (\"followed by\") if the item is not replaced nor identical, but adds to the series (e.g. books in a series).",
+    "PNumber": "P1366",
+    "name": "replaced by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "item (e.g. road, railway, canal) carried by a bridge, a tunnel or a mountain pass",
+    "PNumber": "P2505",
+    "name": "carries"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "founder or co-founder of this organization, religion or place",
+    "PNumber": "P112",
+    "name": "founded by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "location of the object, structure or event. In the case of an administrative entity as containing item use P131. For statistical entities use P8138. In the case of a geographic entity use P706. Use P7153 for locations associated with the object.",
+    "PNumber": "P276",
+    "name": "location"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "vertical length of an entity",
+    "PNumber": "P2048",
+    "name": "height"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "Wikimedia route diagram template",
+    "PNumber": "P3858",
+    "name": "route diagram"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "next crossing of this river, canal, etc. upstream of this subject",
+    "PNumber": "P2673",
+    "name": "next crossing upstream"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "next crossing of this river, canal, etc. downstream of this subject",
+    "PNumber": "P2674",
+    "name": "next crossing downstream"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "lake or reservoir through which the river or stream flows",
+    "PNumber": "P469",
+    "name": "lake on watercourse"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the main organization responsible for construction of this structure or building",
+    "PNumber": "P193",
+    "name": "main building contractor"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "located on the specified (geo)physical feature. Should not be used when the value is only political/administrative (P131) or a mountain range (P4552).",
+    "PNumber": "P706",
+    "name": "located in/on physical feature"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "standard plug type for mains electricity in a country",
+    "PNumber": "P2853",
+    "name": "electrical plug type"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "the distance at which the light can be seen. If the light has colors, there will be several ranges, one for each color. Use qualifier \"color\" (P462)",
+    "PNumber": "P2929",
+    "name": "lighthouse range"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "type of lens used in a lighthouse, telescope, camera, etc.",
+    "PNumber": "P9597",
+    "name": "type of lens"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person linked to the item in any possible way",
+    "PNumber": "P3342",
+    "name": "significant person"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of people visiting a location or an event each year",
+    "PNumber": "P1174",
+    "name": "visitors per year"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "total number of below ground floors of the building",
+    "PNumber": "P1139",
+    "name": "floors below ground"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "parent organization of an organization, opposite of subsidiaries (P355)",
+    "PNumber": "P749",
+    "name": "parent organization"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "difference between Coordinated Universal Time (UTC) and this timezone",
+    "PNumber": "P2907",
+    "name": "UTC timezone offset"
+  },
+  {
+    "dataType": "Time",
+    "description": "date or point in time when the item was discovered or invented",
+    "PNumber": "P575",
+    "name": "time of discovery or invention"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "position of the head of this item",
+    "PNumber": "P2388",
+    "name": "office held by head of the organization"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "battles, wars or other military engagements in which the person or item participated",
+    "PNumber": "P607",
+    "name": "conflict"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "height of the lamp of a lighthouse from water level",
+    "PNumber": "P2923",
+    "name": "focal height"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "describes the source of energy an animated object (machine or animal) uses",
+    "PNumber": "P618",
+    "name": "source of energy"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "entity having executive power on given entity",
+    "PNumber": "P797",
+    "name": "authority"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "above ground floor count of a building (ground floor and attic included)",
+    "PNumber": "P1101",
+    "name": "floors above ground"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "protected areas category by the World Commission on Protected Areas. Used with dedicated items for each category.",
+    "PNumber": "P814",
+    "name": "IUCN protected areas category"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "organization or individual that sponsors this item",
+    "PNumber": "P859",
+    "name": "sponsor"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "primary topic of a work (see also P180: depicts)",
+    "PNumber": "P921",
+    "name": "main subject"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of items in a collection or exhibition",
+    "PNumber": "P1436",
+    "name": "collection or exhibition size"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "to indicate state of conservation of a building, monument, etc. It is not related with its heritage protection (P1435), but to its present state of conservation. Ex.: ruinous, demolished, correct, etc.",
+    "PNumber": "P5816",
+    "name": "state of conservation"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the item this building or structure replaced, at the same geographic location",
+    "PNumber": "P1398",
+    "name": "structure replaces"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of remains buried or interred",
+    "PNumber": "P2324",
+    "name": "quantity buried"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of lanes on this road in a given direction",
+    "PNumber": "P10367",
+    "name": "number of lanes"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "distance between surface under bridge and bottom of a bridge deck",
+    "PNumber": "P2793",
+    "name": "clearance"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "geographic area or jurisdiction an organisation or industry operates in, serves, or has responsibility for",
+    "PNumber": "P2541",
+    "name": "operating area"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of burial places In a cemetery or necropolis",
+    "PNumber": "P2351",
+    "name": "number of graves"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "specific industry of company or organization",
+    "PNumber": "P452",
+    "name": "industry"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "reservoir created upstream of a dam by this dam",
+    "PNumber": "P4661",
+    "name": "reservoir created"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the subject instance (the subject is not a class) has one or more parts of the object class",
+    "PNumber": "P2670",
+    "name": "has part(s) of the class"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "official religion in this administrative entity",
+    "PNumber": "P3075",
+    "name": "official religion"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person who manages any kind of group",
+    "PNumber": "P1037",
+    "name": "director / manager"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "institution that monitors this volcanic landform or phenomenon",
+    "PNumber": "P3815",
+    "name": "volcano observatory"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of elevators in a building",
+    "PNumber": "P1301",
+    "name": "number of elevators"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "principal house or community for a religious institute",
+    "PNumber": "P612",
+    "name": "mother house"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "country's central bank",
+    "PNumber": "P1304",
+    "name": "central bank"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "legal form of an entity",
+    "PNumber": "P1454",
+    "name": "legal form"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "axis of alignment of an item, or direction perpendicular to its primary face (specify with P518 if necessary)",
+    "PNumber": "P7469",
+    "name": "orientation"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "main use of the subject (includes current and former usage)",
+    "PNumber": "P366",
+    "name": "has use"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "taxa, preferably species, present at a zoo, botanical garden,  collection, or other institution. NOT specific animals, not for any geographic location",
+    "PNumber": "P1990",
+    "name": "species kept"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "commander of a military unit/army/security service, operation, etc.",
+    "PNumber": "P4791",
+    "name": "commanded by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "equipment, installation or service operated by the subject",
+    "PNumber": "P121",
+    "name": "item operated"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "qualifier to use together with the end date qualifier (P582) to specify the cause",
+    "PNumber": "P1534",
+    "name": "end cause"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "amount of dissolved salt in a body of water",
+    "PNumber": "P4350",
+    "name": "salinity"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of daily passengers, patrons or visitors in specified time period",
+    "PNumber": "P1373",
+    "name": "daily patronage"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "annual energy output of a power plant",
+    "PNumber": "P4131",
+    "name": "annual energy output"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "qualifier to indicate at what temperature something took place",
+    "PNumber": "P2076",
+    "name": "temperature"
+  },
+  {
+    "dataType": "Time",
+    "description": "date or point in time on which a piece or class of equipment entered operational service",
+    "PNumber": "P729",
+    "name": "service entry"
+  },
+  {
+    "dataType": "Time",
+    "description": "date or point in time on which a piece or class of equipment was retired from operational service",
+    "PNumber": "P730",
+    "name": "service retirement"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "days in the week subject item is open within the opening season",
+    "PNumber": "P3025",
+    "name": "open days"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "depth below the water line to the bottom of a vessel's hull. summer draft is implied unless stated otherwise.",
+    "PNumber": "P2262",
+    "name": "draft"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "the taxon of an individual named organism (animal, plant)",
+    "PNumber": "P10241",
+    "name": "is an individual of taxon"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "type of signalling used on this railway line",
+    "PNumber": "P3019",
+    "name": "railway signalling system"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "building adjacent to the item",
+    "PNumber": "P3032",
+    "name": "adjacent building"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of passengers, patrons or visitors in specified time period",
+    "PNumber": "P3872",
+    "name": "patronage"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "difficulty level of an item",
+    "PNumber": "P7252",
+    "name": "degree of difficulty"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "destination for this route (journey, flight, sailing, exploration, migration, etc.)",
+    "PNumber": "P1444",
+    "name": "destination point"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "power produced by the engine or plant (use with unit of power)",
+    "PNumber": "P2109",
+    "name": "installed capacity"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "starting place of this journey, flight, voyage, trek, migration etc.",
+    "PNumber": "P1427",
+    "name": "start point"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "measure of the difference in height between two points on the terrain, when following a track",
+    "PNumber": "P7297",
+    "name": "cumulative elevation gain"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of houses in given territorial entity",
+    "PNumber": "P4080",
+    "name": "number of houses"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "manufacturer or producer of this product",
+    "PNumber": "P176",
+    "name": "manufacturer"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "width of a ship at its widest point measured at its nominal waterline",
+    "PNumber": "P2261",
+    "name": "beam"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "country where a ship is or has been registered",
+    "PNumber": "P8047",
+    "name": "country of registry"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "angle the principal axis of an item makes with the vertical; use degree (Q28390) as unit",
+    "PNumber": "P4183",
+    "name": "angle from vertical"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "spatial extent for 3D object along the third axis, what is most commonly referred to as its depth. Compare with \"vertical depth\" (P4511)",
+    "PNumber": "P5524",
+    "name": "horizontal depth"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of instances of this subject in the universe of the subject (the actual number of instances in Wikidata may be lower or higher)",
+    "PNumber": "P1114",
+    "name": "quantity"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "subject software depends on object software",
+    "PNumber": "P1547",
+    "name": "depends on software"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "sport that the subject participates or participated in or is associated with",
+    "PNumber": "P641",
+    "name": "sport"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "order of monks or nuns to which an individual or religious house belongs",
+    "PNumber": "P611",
+    "name": "religious order"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "astronomical body on which features or places are situated",
+    "PNumber": "P376",
+    "name": "located on astronomical body"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "specify if the stream confluence is a left bank or right bank tributary",
+    "PNumber": "P3871",
+    "name": "tributary orientation"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "watercourse that flows into an other one (for lake inflows use P200)",
+    "PNumber": "P974",
+    "name": "tributary"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "describes wheelchair accessibility of location or event",
+    "PNumber": "P2846",
+    "name": "wheelchair accessibility"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "internet access availability through Wi-Fi",
+    "PNumber": "P2848",
+    "name": "Wi-Fi access"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "highest Strahler number of a stream, creek, or river",
+    "PNumber": "P1548",
+    "name": "maximum Strahler number"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "senior official in an educational institution",
+    "PNumber": "P1075",
+    "name": "rector"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of teachers at an educational facility",
+    "PNumber": "P10610",
+    "name": "number of teachers"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "hazards implicit in the subject item: that a sign warns of; that one may encounter in this place, on this thoroughfare; that are inherent properties of the subject; etc.",
+    "PNumber": "P3335",
+    "name": "associated hazard"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "political office that is fulfilled by the head of the government of this item",
+    "PNumber": "P1313",
+    "name": "office held by head of government"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "inherent and characteristic embodiment of a given concept",
+    "PNumber": "P1557",
+    "name": "manifestation of"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "person who unveils a statue, sculpture, memorial or plaque, etc.",
+    "PNumber": "P1656",
+    "name": "unveiled by"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "subsidiary of a company or organization; generally a fully owned separate corporation. Compare with \"business division\" (P199). Opposite of parent organization (P749).",
+    "PNumber": "P355",
+    "name": "has subsidiary"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "maker of this creative work or other object (where no more specific property exists)",
+    "PNumber": "P170",
+    "name": "creator"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "total number of ballot(s) cast, including invalid or blank ballots",
+    "PNumber": "P1868",
+    "name": "ballots cast"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "hydraulic head of a dam or hydroelectric power station",
+    "PNumber": "P4441",
+    "name": "hydraulic head"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "things, places this place offers views on",
+    "PNumber": "P3173",
+    "name": "offers view on"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "entity visually depicted in an image, literarily described in a work, or otherwise incorporated into an audiovisual or other medium; see also P921,  'main subject'",
+    "PNumber": "P180",
+    "name": "depicts"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "what the place, monument, memorial, or holiday, commemorates",
+    "PNumber": "P547",
+    "name": "commemorates"
+  },
+  {
+    "dataType": "WikibaseItem",
+    "description": "branch of government for the daily administration of the territorial entity",
+    "PNumber": "P208",
+    "name": "executive body"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of eligible voters for a particular election",
+    "PNumber": "P1867",
+    "name": "eligible voters"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of female people inhabiting the place; number of female people of subject",
+    "PNumber": "P1539",
+    "name": "female population"
+  },
+  {
+    "dataType": "Quantity",
+    "description": "number of male people inhabiting the place; number of male people of subject",
+    "PNumber": "P1540",
+    "name": "male population"
+  }
+]

@@ -10,7 +10,7 @@ from . import SparqlPoint
 from . import Formater
 from .NEWQuery.SearchQuery.SearchAreaQueryBuilders import SearchCollectibleTypesQueryBuilder , SearchAreaQueryBuilder
 from flask import (
-    Blueprint,request
+    Blueprint, current_app,request
 )
 from .NEWQuery.FilterQuery.FilterSearchQueryBuilder import FilterSearchQueryBuilder
 from .NEWQuery.FilterQuery.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder , DATATYPES
@@ -153,10 +153,15 @@ def get_filters():
 
     builder = FilterSearchQueryBuilder()
 
-    if type is not None:
-        builder.set_type_for_search_filter(type)
+    if type is None:
+        print()
+        with current_app.open_resource('Data/AllFilters.json') as file:
+            data = json.load(file)
+            return json.dumps(data)
 
-    print(builder.build())
+    builder.set_type_for_search_filter(type)
+
+    print(process_query(builder.build()))
     return process_query(builder.build())
 
 
@@ -292,7 +297,7 @@ def get_collectible_details():
 def get_collectible_wikipedia_link():
     data = json.loads(request.get_json())
     collectible : str = data['collectible_QNumber']
-   
+
     if collectible is None:
         return "Invalid request,param: collectible_QNumber must be provided"
     
