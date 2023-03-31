@@ -16,7 +16,7 @@ export enum TimePrecision{
 
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const [timeRepresentation,setTimeRepresentation] = useState<TimePrecision>(TimePrecision.Year)
-    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.GreaterThan)
+    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.EqualTo)
 
     const [isBC,setIsBC] = useState(false);
 
@@ -61,7 +61,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const handleCentury = (e : any) => {
         let century = e.target.value;
         if(century >= 1){
-            setTime(new CustomTime(Precision.Year,isBC,(century - 1) * 100));
+            setTime(new CustomTime(Precision.Year,isBC,century * 100));
         }
         
     }
@@ -70,9 +70,13 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     }
 
     const renderTimeNumberInput = (name : string,handleFunc : (e : any) => void ,showAsCentury : boolean = false) => {
-        let value : number =  (time == null) ? 0 : time.getYear();
+        let value : number =  (time == null) ? 1 : time.getYear();
         if (showAsCentury){
-            value = ~~(value/100) + 1; 
+            if (value%100 == 0){
+                value = ~~(value/100);
+            }else{
+                value = ~~(value/100) + 1; 
+            }
         }
 
         return(
@@ -127,6 +131,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                 <div className="d-flex flex-row">
                     <h3>Selected time</h3>
                     <select className="form-select w-25 mx-2" onChange={handleComparisonOperatorSelect}>
+                        <option value={FilterComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
                         <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
                         <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
                         <option value={FilterComparisonOperator.GreaterThan}>is greater than</option>

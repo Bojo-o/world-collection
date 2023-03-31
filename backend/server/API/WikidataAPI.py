@@ -161,7 +161,7 @@ def get_filters():
 
     builder.set_type_for_search_filter(type)
 
-    print(process_query(builder.build()))
+    
     return process_query(builder.build())
 
 
@@ -311,6 +311,8 @@ def search_collectibles():
 
     data = json.loads(request.get_json())
 
+    
+
     parent_class_of_collectibles : str = data['type']
     if parent_class_of_collectibles is None:
         return "Invalid request,param: class must be provided"
@@ -383,12 +385,12 @@ def search_collectibles():
                         value : str = item['data']['item']
                         builder.add_item_filter(property,value)
                     case FilterType.QUANTITY:
-                        comparison_operator = Get_ComparisonOperators(item['data']['filterComparisonOperator'])
+                        comparison_operator = Get_ComparisonOperators(item['data']['comparisonOperator'])
                         quantity_value : int = item['data']['value']
                         unit :str =  item['data']['unit']
                         builder.add_quantity_filter(property,comparison_operator,quantity_value,unit )
                     case FilterType.TIME:
-                        comparison_operator = Get_ComparisonOperators(item['data']['filterComparisonOperator'])
+                        comparison_operator = Get_ComparisonOperators(item['data']['comparisonOperator'])
                         time_value : str = item['data']['time']
                         builder.add_time_filter(property,comparison_operator,time_value)
         except:

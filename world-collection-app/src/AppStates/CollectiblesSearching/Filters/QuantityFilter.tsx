@@ -14,7 +14,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
 
     const[unit,setUnit] = useState<string|null>(null);
     const[value,setValue] = useState<number|undefined>(undefined);
-    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.GreaterThan)
+    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.EqualTo)
 
     const handleInput = (e : any) => {
         if (e.target.value == ""){
@@ -89,6 +89,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                     <div className="d-flex flex-row">
                         <h4>{value}</h4>
                         <select className="form-select w-25 mx-2" onChange={handleComparisonOperatorSelect}>
+                            <option value={FilterComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
                             <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
                             <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
                             <option value={FilterComparisonOperator.GreaterThan}>is greater than</option>
