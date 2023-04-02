@@ -3,6 +3,7 @@ import { RawCollectible } from "../Data/RawCollectible";
 import Details from "../Details/Details";
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
+import RawCollectibleInfoCard from "../Map/RawCollectibleInfoCard";
 
 function countPages(results: number,rowsPerPage : number) : number {
     return results === 0 ? 1 : Math.ceil(results / rowsPerPage);
@@ -47,7 +48,17 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                     (
                                         <React.Fragment>
                                             <td><input type="text" className="form-control" value={edited.name} onChange={handleChange}/></td>
-                                            <td>{row.subTypeOf.replaceAll("/"," , ")}</td>
+                                            <td>
+                                                <div className="d-flex flex-wrap">
+                                                    {row.subTypeOf.split('/').map((subType,index) => {
+                                                        return (
+                                                            <>
+                                                                <span key={index} className="badge bg-primary">{subType}</span>
+                                                            </>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </td>
 
                                             <td className="d-flex flex-row justify-content-center">
                                                 <button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button>
@@ -61,7 +72,17 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                     (
                                         <React.Fragment>
                                             <td>{row.name}</td>
-                                            <td>{row.subTypeOf.replaceAll("/"," , ")}</td>
+                                            <td>
+                                                <div className="d-flex flex-wrap">
+                                                    {row.subTypeOf.split('/').map((subType,index) => {
+                                                        return (
+                                                            <>
+                                                                <span key={index} className="badge bg-primary">{subType}</span>
+                                                            </>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </td>
                                             {detailShowing.QNumber !== row.QNumber ? 
                                             (
                                                 <React.Fragment>    
@@ -90,7 +111,10 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                             {detailShowing.QNumber === row.QNumber && (
                                 <tr>
                                     <th colSpan={4}>
-                                        <Details QNumber={row.QNumber} name={row.name} type={row.subTypeOf} />
+                                        <div className="d-flex flex justify-content-center">
+                                            <RawCollectibleInfoCard rawCollectible={row} />
+                                        </div>
+                                        {/*<Details QNumber={row.QNumber} name={row.name} type={row.subTypeOf} />*/}
                                     </th>
                                 </tr>
                             )}

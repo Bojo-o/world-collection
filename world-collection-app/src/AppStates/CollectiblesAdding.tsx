@@ -9,7 +9,7 @@ import { SearchData } from "../Data/SearchData/SearchData";
 import { RawCollectible } from "../Data/RawCollectible";
 import './CollectiblesAdding.css'
 import CollectiblesSaving from "../DateSaving/CollectiblesSaving";
-import RawCollectiblePopup from "../Map/RawCollectiblePopup";
+import RawCollectibleInfoCard from "../Map/RawCollectibleInfoCard";
 
 const center = {
     lat: 51.505,
@@ -127,7 +127,9 @@ function CollectiblesAdding(){
                         {collectible != null && (
                             <>
                                 <Marker position={[collectible.lati,collectible.long]}>
-                                    <RawCollectiblePopup rawCollectible={collectible} />
+                                    <Popup>
+                                        <RawCollectibleInfoCard rawCollectible={collectible} />
+                                    </Popup>
                                 </Marker>
                                 
                             </>
@@ -136,7 +138,9 @@ function CollectiblesAdding(){
                             return (
                                 <>
                                     <Marker position={[c.lati,c.long]}>
-                                        <RawCollectiblePopup rawCollectible={c} />
+                                        <Popup>
+                                            <RawCollectibleInfoCard rawCollectible={c} />
+                                        </Popup>
                                     </Marker>
                                 </>
                             )

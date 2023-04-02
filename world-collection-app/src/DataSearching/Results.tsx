@@ -4,10 +4,6 @@ import ResultsTable from './ResultsTable';
 import './Results.css'
 import { Caretaker } from './Undo/Caretaker';
 import { TypeOfChange } from './Undo/ResultState';
-import { EntityDetailsData } from '../Data/EntityDetailsData';
-import { SearchAPI } from './SearchAPI';
-import ResultsSaveFrom from './ResultsSaveForm';
-import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
 import { RawCollectible } from '../Data/RawCollectible';
 import CollectiblesSaving from '../DateSaving/CollectiblesSaving';
 
@@ -33,7 +29,7 @@ function Result({data} : ResultProps) {
 
     const [resultsStateCaretaker,setResultsStateCaretaker] = React.useState<Caretaker>(new Caretaker(data,5));
 
-    const [saveProcess,setSaveProcess] = React.useState(false);
+    //const [saveProcess,setSaveProcess] = React.useState(false);
 
     const editItem = (row : RawCollectible) => {
         setEdited(new RawCollectible(row));     
@@ -97,17 +93,7 @@ function Result({data} : ResultProps) {
         setShowedDetails(item);  
     }
 
-    const openSaveProcess = () => {
-        setSaveProcess(true);
-    }
-
-    const closeSaveProcess = () => {
-        setSaveProcess(false);
-    }
-
-    const saveResults = (collectionName : string) => {
-        //DatabaseAPI.postCollectibles(collectionName,resultData)
-    }
+   
 
     React.useEffect(() => {
         resultsStateCaretaker.changeResults(resultData);
@@ -141,11 +127,8 @@ function Result({data} : ResultProps) {
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} >Undo</button>) :
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} disabled>Undo</button>)}
 
-            <button type="button" className="btn btn-success" onClick={openSaveProcess}>Save Collectibles</button>
-            {saveProcess && (
-                //<ResultsSaveFrom handleSave={saveResults} handleCancel={closeSaveProcess}/>
-                <CollectiblesSaving collectibles={resultData} />
-            )}
+            
+            <CollectiblesSaving collectibles={resultData} />
             <h4>{resultsToRender.length} results</h4>
             {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  detailShowing={showedDetails} editItem={editItem} removeItem={removeItem} saveItem={saveItem} showDetails={showDetails}/>
             : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     

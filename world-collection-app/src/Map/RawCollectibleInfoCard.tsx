@@ -9,11 +9,11 @@ import LoadingStatus from "../Gadgets/LoadingStatus";
 import CollectibleDetails from "../Details/CollectibleDetails";
 import { RawCollectible } from "../Data/RawCollectible";
 
-export interface RawCollectiblePopupProps{
+export interface RawCollectibleInfoCardProps{
     rawCollectible : RawCollectible;
 }
 
-function RawCollectiblePopup({rawCollectible} : RawCollectiblePopupProps){
+function RawCollectibleInfoCard({rawCollectible} : RawCollectibleInfoCardProps){
 
     const [showingDetails,setShowingDetails] = useState(false);
 
@@ -42,7 +42,6 @@ function RawCollectiblePopup({rawCollectible} : RawCollectiblePopupProps){
     
     return (
         <>
-            <Popup>
                     <div className="scroll">
                         {loadingBasicInfo && (
                             <div className="d-flex justify-content-center">
@@ -82,9 +81,8 @@ function RawCollectiblePopup({rawCollectible} : RawCollectiblePopupProps){
                             </>
                         )}
                     </div>
-                </Popup>
         </>
     )
 }
 
-export default RawCollectiblePopup;
+export default RawCollectibleInfoCard;
