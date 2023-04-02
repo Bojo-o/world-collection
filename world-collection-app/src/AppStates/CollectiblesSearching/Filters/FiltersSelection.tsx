@@ -104,6 +104,7 @@ function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
         <>  
             <div className="d-flex flex-row">
                 <h1>You can also apply some filters for your collectibles searching</h1>
+                
                 <button type="button" className="btn btn-success mx-3" onClick={saveAndContinue}>Continue</button>
             </div>
             <div className="d-flex flex-row justify-content-between" >

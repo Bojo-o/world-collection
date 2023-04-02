@@ -22,6 +22,7 @@ from .NEWQuery.CollectiblesQuery.FiltersData.FilterType import FilterType, Get_F
 from .NEWQuery.CollectiblesQuery.CollectiblesSearchType import CollectiblesSearchType , Get_CollectiblesSearchType
 from .NEWQuery.SearchQuery.SearchRegionQueryBuilder import SearchRegionQueryBuilder
 from .NEWQuery.CollectiblesQuery.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
+from .NEWQuery.CollectiblesQuery.WorldCollectiblesSearchQueryBuilder import WorldCollectiblesSearchQueryBuilder
 from .NEWQuery.CollectiblesQuery.CollectibleDataGetter import CollectibleDataGetter
 from .NEWQuery.CollectibleDetailsQuery.CollectibleBasicInfoQuery import CollectibleBasicInfoQuery
 from .NEWQuery.CollectibleDetailsQuery.CollectibleDatailsQuery import CollectibleDetailsQuery
@@ -311,7 +312,7 @@ def search_collectibles():
 
     data = json.loads(request.get_json())
 
-    
+    print(data)
 
     parent_class_of_collectibles : str = data['type']
     if parent_class_of_collectibles is None:
@@ -364,6 +365,8 @@ def search_collectibles():
                     return "Invalid request,param: region must be provided"
                 
                 builder.set_region_area(region)
+            case CollectiblesSearchType.WORLD:
+                builder = WorldCollectiblesSearchQueryBuilder(parent_class_of_collectibles)
     #try:
 
     #except:

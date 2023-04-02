@@ -50,6 +50,11 @@ function CollectibleSearching(){
                 setState(CollectiblesSearchingStates.RegionArea)
                 break; 
             } 
+            case Areas.WORLD: {
+                setQueryData((prev) => prev.setAreaSearchTypeAsWorld())
+                setState(CollectiblesSearchingStates.FiltersSelection)
+                break;
+            }
             default: { 
                 break; } 
         }

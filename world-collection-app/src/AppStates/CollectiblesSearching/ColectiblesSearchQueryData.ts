@@ -41,6 +41,7 @@ export class CollectiblesSearchQueryData{
     }
     public setFilters(filters : AppliedFilterData[]){
         this.filters = filters;
+        console.log(filters)
         return new CollectiblesSearchQueryData(this);
     }
     public setAreaSearchTypeAsRadius(radius : number,center : {lat : number,lng : number}){
@@ -58,6 +59,10 @@ export class CollectiblesSearchQueryData{
         this.areaSearchType = Areas.ADMINISTRAVIVE_AREA;
         this.area= area.GetQNumber();
         this.exceptionsSubAreas = exceptionsSubAreas.map((e) => {return e.GetQNumber()});
+        return new CollectiblesSearchQueryData(this);
+    }
+    public setAreaSearchTypeAsWorld(){
+        this.areaSearchType = Areas.WORLD;
         return new CollectiblesSearchQueryData(this);
     }
 
