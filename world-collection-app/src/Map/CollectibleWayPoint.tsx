@@ -215,7 +215,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
                                 )}
                                 <button type='button' className="btn btn-primary" onClick={() => handleEditationOfVisit()}>{!editationOfVisit ? ("Set visitation") : ("Close")}</button>
                                 <button type='button' className="btn btn-info" onClick={() => handleDetails()}>{!isDetailsShowed ? ("Show details") : ("Hide details")}</button> 
-                                <IconsSelector collectible={collectible} handleChangeOfIcon={handleIconChange}/>
+                                
                             </div>
                         </div>
 

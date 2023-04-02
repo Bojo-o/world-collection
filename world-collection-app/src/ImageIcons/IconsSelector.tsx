@@ -6,10 +6,10 @@ import LoadingStatus from "../Gadgets/LoadingStatus";
 import './IconsSelector.css'
 
 export interface IconsSelectorProps{
-    collectible : Collectible;
     handleChangeOfIcon : (icon : string) => void;
+    iconChange : (settedIcon : string) =>  Promise<string>;
 }
-function IconsSelector({collectible,handleChangeOfIcon} : IconsSelectorProps){
+function IconsSelector({handleChangeOfIcon,iconChange} : IconsSelectorProps){
     const [listOfIcons,setListOfIcons] = useState<string[]>([]);
     const [saving,setSaving] = useState(false);
     const [savingError,setSavingError] = useState(false);
@@ -19,7 +19,7 @@ function IconsSelector({collectible,handleChangeOfIcon} : IconsSelectorProps){
         setSaving(true);
         setSavingError(false);
         setSavingStatus(null);
-        DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber,icon).then((status) => {
+        iconChange(icon).then((status) => {
             setSaving(false);
             setSavingStatus(status);
             handleChangeOfIcon(icon);
@@ -31,7 +31,7 @@ function IconsSelector({collectible,handleChangeOfIcon} : IconsSelectorProps){
         setListOfIcons(data.icons)
     },[])
     return (
-        <>
+        <div>
             <div className="d-flex flex column">
                 <div className="d-flex flex-wrap">
                     {listOfIcons.map((icon,index) => {
@@ -57,7 +57,7 @@ function IconsSelector({collectible,handleChangeOfIcon} : IconsSelectorProps){
                         </div>
                     </>
                 )}
-        </>
+        </div>
     )
 }
 

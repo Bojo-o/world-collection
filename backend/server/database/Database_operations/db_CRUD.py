@@ -187,6 +187,13 @@ def update_collectible_icon(q_number : int,icon_name : str):
         print(f'Update icon of the collectible with Q number : Q{q_number}')
     return status
 
+def update_collectibles_in_collection_icon(collection_id : int,icon_name : str):
+    status = execute_command("UPDATE Collectibles SET icon=?  WHERE collection_id=?",
+    (icon_name,collection_id))
+    if status is True:
+        print(f'Update icons of all collectibles in collection with ID : {collection_id}')
+    return status
+
 # notes
 def update_collectible_notes(q_number : int,new_notes : str):
     status = execute_command("UPDATE Collectibles SET notes=?  WHERE q_number=?",

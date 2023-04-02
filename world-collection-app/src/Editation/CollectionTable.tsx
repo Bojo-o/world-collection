@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Collection } from "../Data/Database/Colection";
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
+import IconsSelector from "../ImageIcons/IconsSelector";
+import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
 
 function countPages(results: number,rowsPerPage : number) : number {
     return results === 0 ? 1 : Math.ceil(results / rowsPerPage);
@@ -20,10 +22,16 @@ export interface EditationTableProps{
     mergeItem : (row : Collection) => void;
     merging : Collection;
     editCollectibles : (row : Collection) => void;
+
 }
 function CollectionTable ({collections,edited,editItem,cancelEditation,removeItem,handleChange,saveItem,canSaveItem,merge,mergeItem,merging,editCollectibles} : EditationTableProps){
     const [selectedCollection,setSelectedCollection] = useState(-1)
 
+    const [iconSetting,setIconSetting] = useState(false);
+
+    const handleIconSetting = () =>{
+        setIconSetting((prev) => !prev);
+    }
     const handleCollectionSelection = (e : any) => {
         let value = e.target.value;
         setSelectedCollection(value)
@@ -31,6 +39,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
     useEffect(() => {
         setSelectedCollection(-1)
     },[merging,edited]) 
+
     const renderHead = () => {
         return (
             <>
@@ -41,6 +50,10 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
             </>
         )
     }
+
+    const iconChange = (settedIcon : string) => {
+        return  DatabaseAPI.postCollectiblesInCollectionUpdateIcon(edited.collectionID,settedIcon);
+    }
     const renderBody = (currPage : number,rowsPerPage : number) => {
         return (
             <>
@@ -50,7 +63,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                 <>
                     <tr key={index}>
                        <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
-                        {edited.collectionID !== row.collectionID && merging.collectionID !== row.collectionID &&(
+                        {edited.collectionID !== row.collectionID && merging.collectionID !== row.collectionID  &&(
                             <>
                                 <td>{row.name}</td>
                                 <td>{row.GetCountOfCollectibles().toString()}</td>
@@ -107,6 +120,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                 <td>{row.GetCountOfCollectibles().toString()}</td>
                                 <td >
                                     <div className="d-flex flex-row justify-content-center">
+                                        <button type="button" className="btn btn-secondary" onClick={handleIconSetting}>{(!iconSetting) ? "Set Icon for all collectibles" : "Cancel"}</button>
                                         {canSaveItem ? (
                                             <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
                                         ) : (
@@ -119,6 +133,17 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                             </>
                         )}
                         </tr>
+                        {edited.collectionID === row.collectionID && iconSetting && (
+                            <>
+                                <tr>
+                                    <th colSpan={4}>
+                                        <div className="d-flex flex justify-content-center">
+                                            <IconsSelector handleChangeOfIcon={() => {}} iconChange={iconChange}/>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </>
+                        )}
                     </>
                 );
             })

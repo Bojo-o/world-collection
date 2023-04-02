@@ -166,6 +166,16 @@ def update_collectible_icon():
     
     return  json.dumps({'status' : "Error , icon was not updated"})
 
+@bp_database_gateway.route('/post/collectibles_in_collection_update_icons',methods=['POST'])
+def update_collectibles_icons_in_collection():
+
+    data = request.get_json()
+    status = db_CRUD.update_collectibles_in_collection_icon(data['collectionID'],data['icon'])
+
+    if status:
+        return  json.dumps({'status' : "Succesfully saved"})    
+    return  json.dumps({'status' : "Error , icon was not updated"})
+
 @bp_database_gateway.route('/post/collectible_update_notes',methods=['POST'])
 def update_collectible_notes():
     data = request.get_json()

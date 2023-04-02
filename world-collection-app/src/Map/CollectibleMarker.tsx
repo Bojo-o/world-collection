@@ -12,6 +12,7 @@ import { CustomDate } from "../Data/CustomDate";
 import IconsSelector from "../ImageIcons/IconsSelector";
 import Notes from "../CollectibleEditationComponents/Notes";
 import CollectibleDetails from "../Details/CollectibleDetails";
+import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
 
 export interface CollectibleMarkerProps{
     collectible : Collectible;
@@ -66,6 +67,9 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
         }).catch(() => {
             setErrorBasicInfo(true);
         })
+    }
+    const iconChange = (settedIcon : string) => {
+        return  DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber,settedIcon);
     }
     const renderDate = () => {
         
@@ -144,7 +148,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                         {editingIcon && (
                                                 <>
                                                     <h5>Editing Icon</h5>
-                                                    <IconsSelector collectible={collectible} handleChangeOfIcon={handleIconChange}/>
+                                                    <IconsSelector  handleChangeOfIcon={handleIconChange} iconChange={iconChange}/>
                                                 </>
                                         )}
 

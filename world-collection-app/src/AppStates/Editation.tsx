@@ -9,6 +9,7 @@ function Editation(){
     const [collectionsLoading,setCollectionsLoading] = useState<boolean>(false);
     const [collections,setCollections] = useState<Collection[]>([]); 
     const [edited,setEdited] = useState<Collection>(new Collection);
+ 
     const [merging,setMerging] = useState<Collection>(new Collection);
     const [filter,setfilter] = useState<string>('');
 

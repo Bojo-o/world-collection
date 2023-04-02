@@ -21,7 +21,11 @@ const postCollectibleUpdateName="/post/collectible_update_name";
 const postCollectionCreation = "/post/collection_creation";
 
 const postCollectibleIconUpdate = "/post/collectible_update_icon";
+const postCollectiblesInCollectionIconUpdate = "/post/collectibles_in_collection_update_icons";
+
 const postCollectibleNotesUpdate = "/post/collectible_update_notes";
+
+
 
 function checkStatus(response: any){
     if (response.ok){
@@ -176,6 +180,15 @@ export class DatabaseAPI {
         let data = await this.postData(baseUrl + postCollectibleIconUpdate,
             {
                 'q_number' : collectibleQNumber,
+                'icon' : icon
+            }
+        )
+        return this.convertToStatusMSG(data);
+    }
+    public static async postCollectiblesInCollectionUpdateIcon(collectionID : number,icon : string){
+        let data = await this.postData(baseUrl + postCollectiblesInCollectionIconUpdate,
+            {
+                'collectionID' : collectionID,
                 'icon' : icon
             }
         )
