@@ -9,6 +9,7 @@ import { SearchData } from "../Data/SearchData/SearchData";
 import { RawCollectible } from "../Data/RawCollectible";
 import './CollectiblesAdding.css'
 import CollectiblesSaving from "../DateSaving/CollectiblesSaving";
+import RawCollectiblePopup from "../Map/RawCollectiblePopup";
 
 const center = {
     lat: 51.505,
@@ -57,7 +58,7 @@ function CollectiblesAdding(){
                 <div className="d-flex flex-column w-50 border border-dark border-2 rounded-end ">
                     <h2>Add collectibles</h2>
                     <h5>You can here search for collectible and add it to your collection.</h5>
-                    <h5>Also you can add custom collectible, just find it on map and name it.</h5>
+                    
                     
                     <SearchBar placeHolder={"Type some collectible, likes Eiffel tower"} handleClickedResult={handleClickedCollectible} dataGetter={dataGetter} emptySearchingFlag={false}/> 
                     <div>
@@ -126,9 +127,7 @@ function CollectiblesAdding(){
                         {collectible != null && (
                             <>
                                 <Marker position={[collectible.lati,collectible.long]}>
-                                    <Popup>
-                                        {collectible.name}
-                                    </Popup>
+                                    <RawCollectiblePopup rawCollectible={collectible} />
                                 </Marker>
                                 
                             </>
@@ -136,7 +135,9 @@ function CollectiblesAdding(){
                         {collectibles.map((c) => {
                             return (
                                 <>
-                                    <Marker position={[c.lati,c.long]}></Marker>
+                                    <Marker position={[c.lati,c.long]}>
+                                        <RawCollectiblePopup rawCollectible={c} />
+                                    </Marker>
                                 </>
                             )
                         })}

@@ -132,7 +132,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                         {showingDetails && (
                                             <>
                                                 <h5>Details</h5>
-                                                <CollectibleDetails collectible={collectible} />
+                                                <CollectibleDetails collectibleQNumber={collectible.QNumber} />
                                             </>
                                         )}
                                         {editingVisitation && (

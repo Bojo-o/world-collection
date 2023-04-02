@@ -7,9 +7,9 @@ import LoadingStatus from "../Gadgets/LoadingStatus";
 import './CollectibleDetail.css';
 
 export interface CollectibleDetailsProps{
-    collectible : Collectible
+    collectibleQNumber : string
 }
-function CollectibleDetails({collectible} : CollectibleDetailsProps){
+function CollectibleDetails({collectibleQNumber} : CollectibleDetailsProps){
     const [details,setDetails] = useState<CollectibleDetail[]>([]);
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState(false);
@@ -17,7 +17,7 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
     const [wikipediaLink,setWikipediaLink] = useState<string|null>(null);
 
     const fetchWikipediaLink = () => {
-        WikiDataAPI.getCollectibleWikipediaLink(collectible.QNumber).then((data) => {
+        WikiDataAPI.getCollectibleWikipediaLink(collectibleQNumber).then((data) => {
             if (data != ""){
                 setWikipediaLink(data);
             }
@@ -26,7 +26,7 @@ function CollectibleDetails({collectible} : CollectibleDetailsProps){
     const fetchDetails = () => {
         setLoading(true);
         setError(false);
-        WikiDataAPI.getCollectibleDetails(collectible.QNumber).then((data) => {
+        WikiDataAPI.getCollectibleDetails(collectibleQNumber).then((data) => {
             setLoading(false);
             setDetails(data);
             
