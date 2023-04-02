@@ -12,9 +12,11 @@ import TimeFilter from "./TimeFilter";
 export interface FiltersSelectionProps{
     filtersForType : Entity;
     handleNext : (appliedFilters : AppliedFilterData[]) => void;
+    usedFilters : AppliedFilterData[];
+    handleUsedFiltersChange : (filters : AppliedFilterData[]) => void;
 }
 
-function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
+function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFiltersChange} : FiltersSelectionProps){
     const [loadingFilters,setLoadingFilters] = useState(false);
     const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
 
@@ -27,7 +29,7 @@ function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
     const [errorForFetchingAllFilters,setErrorForFetchingAllFilters] = useState(false);
 
     const [selectedFilter,setSelectedFilter] = useState<FilterData>(new FilterData());
-    const [appliedFilters,setAppliedFilters] = useState<AppliedFilterData[]>([]);
+    const [appliedFilters,setAppliedFilters] = useState<AppliedFilterData[]>(usedFilters);
 
     const [filterSearchWord,setFIlterSearchWord] = useState<string>("");
 
@@ -46,6 +48,7 @@ function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
     const handleShowingFilters = (filters : FilterData[]) => {
         setShowingFilters(filters);
     }
+
     const handleAddFilterToAplied = (data : AppliedFilterData) => {
         setAppliedFilters([...appliedFilters, data]) //simple value
         setSelectedFilter(new FilterData())
@@ -53,6 +56,7 @@ function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
     const removeFilterFromApplied = (data : AppliedFilterData) => {
         setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber != data.getFilter().PNumber))
     }
+
     const fetchRecomendedFiltersData = () => {
         setLoadingFilters(true)
         setErrorForFetchingFilters(false);
@@ -99,6 +103,11 @@ function FiltersSelection({filtersForType,handleNext} : FiltersSelectionProps){
         fetchRecomendedFiltersData()
         fetchAllFiltersData()
     },[])
+    
+    useEffect(() => {
+        handleUsedFiltersChange(appliedFilters)
+        console.log(appliedFilters)
+    },[appliedFilters])
 
     return(
         <>  

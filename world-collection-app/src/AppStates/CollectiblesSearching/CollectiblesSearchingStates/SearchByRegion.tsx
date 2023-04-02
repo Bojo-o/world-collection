@@ -3,6 +3,7 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/SearchData/Entity";
 import { SearchData } from "../../../Data/SearchData/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
 export interface SearchByRegionProps{
     handleNext : (region : Entity) => void;
@@ -31,6 +32,7 @@ function SearchByRegion({handleNext} : SearchByRegionProps){
                         <button type="button" className="btn btn-success" onClick={() => handleNext(region)} >Continue</button> 
                     </div>
                 )}
+                
             </div>
         </>
     )

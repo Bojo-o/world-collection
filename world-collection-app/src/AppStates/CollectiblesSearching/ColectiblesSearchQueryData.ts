@@ -34,6 +34,9 @@ export class CollectiblesSearchQueryData{
         }
         return "Not yet provided"
     }
+    public getExceptionsSubTypes(){
+        return this.exceptionsSubTypes;
+    }
     public setTypeAndExceptionSubTypes(type : Entity,exceptionsSubTypes : Entity[]){
         this.type = type.GetQNumber();
         this.exceptionsSubTypes = exceptionsSubTypes.map((e) => {return e.GetQNumber()}) ;

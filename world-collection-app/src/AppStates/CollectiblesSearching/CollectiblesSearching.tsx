@@ -26,13 +26,29 @@ function CollectibleSearching(){
     const [state,setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.TypeChoosing)
     const [queryData,setQueryData] = useState<CollectiblesSearchQueryData>(new CollectiblesSearchQueryData())
 
+    const [pickedType,setPickedType] = useState<Entity|null>(null)
+    const [pickedExceptionSubTypes,setPickedExceptionSubTypes] = useState<Entity[]>([])
+
+    const [usedFilters,setUsedFilters] = useState<AppliedFilterData[]>([]);
+    const handleUsedFiltersChange = (filters : AppliedFilterData[]) => {
+        setUsedFilters(filters);
+    };
     const typeChoosingStateHandleNext = (type : Entity,exceptionSubTypes : Entity[]) => {
         setQueryData((prev) => prev.setTypeAndExceptionSubTypes(type,exceptionSubTypes))
+        if (type.GetQNumber() != pickedType?.GetQNumber()){
+            setUsedFilters([])
+        }
+        setPickedType(type);
+        setPickedExceptionSubTypes(exceptionSubTypes);
         setState(CollectiblesSearchingStates.AreaChoosing)
+    }
+    const handleSetState = (newState : CollectiblesSearchingStates) => {
+        setState(newState);
     }
     const renderTypeChoosingState = () => {
         return(
-            <TypeChoosing handleNext={typeChoosingStateHandleNext}/>
+            <TypeChoosing handleNext={typeChoosingStateHandleNext} pickedType={pickedType} pickedExceptionSubTypes={pickedExceptionSubTypes}/>
+            
         );
     }
     const areaChoosingStatehandleNext = (areaType : Areas) => {
@@ -62,6 +78,9 @@ function CollectibleSearching(){
     const renderAreaChoosingState = () => {
         return(
             <>
+                <div>
+                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.TypeChoosing)}>Back to type choosing</button>
+                </div>
                 <AreaChoosing handleSelection={areaChoosingStatehandleNext}/>
             </>
         );
@@ -74,6 +93,9 @@ function CollectibleSearching(){
     const renderRadiusAreaState = () => {
         return (
             <>
+                <div>
+                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
+                </div>
                 <SearchByRadius handleNext={radiusAreaStateHandleNext}/>
             </>
         )
@@ -86,7 +108,10 @@ function CollectibleSearching(){
     const renderRegionAreaState = () => {
         return (
             <>
-                <SearchByRegion handleNext={regionAreaStateHandleNext}/>
+                <div>
+                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
+                </div>
+                <SearchByRegion handleNext={regionAreaStateHandleNext} />
             </>
         )
     }
@@ -97,6 +122,9 @@ function CollectibleSearching(){
     const renderAdministrativeAreaState = () => {
         return (
             <>
+                <div>
+                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
+                </div>
                 <SearchByAdministrativeArea handleNext={administrativeAreaStateHandleNext}/>
             </>
         )
@@ -108,7 +136,10 @@ function CollectibleSearching(){
     const renderFiltersSelectionState = () => {
         return (
             <>
-                <FiltersSelection filtersForType={new Entity(queryData.getType(),"filter")} handleNext={filtersSelectionStateHandleNext}/>
+                <div>
+                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
+                </div>
+                <FiltersSelection filtersForType={new Entity(queryData.getType(),"filter")} handleNext={filtersSelectionStateHandleNext} usedFilters={usedFilters} handleUsedFiltersChange={handleUsedFiltersChange}/>
             </>
         )
     }

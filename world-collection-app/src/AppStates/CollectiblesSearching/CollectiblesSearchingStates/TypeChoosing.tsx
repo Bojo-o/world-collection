@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/SearchData/Entity";
 import { SearchData } from "../../../Data/SearchData/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import { CollectiblesSearchQueryData } from "../ColectiblesSearchQueryData";
 
 export interface TypeChoosingProps{
     handleNext : (type : Entity,exceptionSubTypes : Entity[]) => void;
+    pickedType :Entity|null;
+    pickedExceptionSubTypes : Entity[];
 }
-function TypeChoosing({handleNext} : TypeChoosingProps){
+function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoosingProps){
     const SUPER_TYPE : Entity = new Entity("Q2221906","Anything") // geographic location
-    const [type,setType] = useState<Entity|null>(null)
-    const [exceptionSubTypes,setExceptionSubTypes] = useState<Entity[]>([])
+    const [type,setType] = useState<Entity|null>(pickedType)
+    const [exceptionSubTypes,setExceptionSubTypes] = useState<Entity[]>(pickedExceptionSubTypes)
 
     const handleAddingTypeChoosing = (data : SearchData) => {
         setType(new Entity(data.QNumber,data.name))
@@ -37,6 +40,7 @@ function TypeChoosing({handleNext} : TypeChoosingProps){
         let exceptionSubTypesQNumbers  = exceptionSubTypes.map((type) => { return type.GetQNumber()})
         return WikiDataAPI.searchForTypesOfCollectiblesExceptions(searchWord,type?.GetQNumber(),exceptionSubTypesQNumbers);
     }
+
     return(
         <>
             <h1>Type of collectibles choosing</h1>

@@ -3,6 +3,7 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/SearchData/Entity";
 import { SearchData } from "../../../Data/SearchData/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
 export interface SearchByAdministrativeAreaProps{
     handleNext : (area : Entity,exceptionSubAreas : Entity[]) => void;

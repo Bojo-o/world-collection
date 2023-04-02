@@ -7,6 +7,7 @@ import SearchBar from '../../../DataSearching/SearchBar/SearchBar';
 import "../../../Map/Map.css";
 import MapFlyToOption from '../../../Map/MapOptions/MapFlyToOption';
 import DraggableMarker from '../../../CollectiblesSearching/DraggableMarker';
+import { CollectiblesSearchingStates } from './CollectiblesSearchingStates';
 
 
 const center = {
@@ -47,6 +48,7 @@ function SearchByRadius({handleNext: handleRadiusArea} : SearchByRadiusProps){
                 </label>
                 <input type="range" className="form-range" min={1} max ={250} value={radius} id="radiusRange" onChange={handleRangeSlider}/>
                 <button type='button' className='btn btn-success' onClick={() => handleRadiusArea(positionOfMarker,radius)}>Save radius area and continue</button>
+                
             </div>
             
             <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
