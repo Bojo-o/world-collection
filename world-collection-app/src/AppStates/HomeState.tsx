@@ -5,6 +5,7 @@ import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
 import IconsSelector from '../ImageIcons/IconsSelector';
 import Map from '../Map/Map';
 import './HomeState.css';
+import { useMediaQuery } from 'react-responsive';
 
 function HomeState() {
     const [collections,setCollections] = useState<Collection[]>([]);
@@ -15,6 +16,9 @@ function HomeState() {
     const [selectedCollection,setSelectedCollection] = useState<Collection>(new Collection())
 
     const [filter,setfilter] = React.useState<string>('');
+    
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
+    const [showingCollectionsMenu,setShowingCollectionsMenu] = useState(false);
 
     const handleCollectionSearch = (event : any) => {
         const value = event.target.value;
@@ -39,6 +43,9 @@ function HomeState() {
     const handleClickOnCollection = (clickedCollection : Collection) => {
         setSelectedCollection(clickedCollection)
         handleCollectionSelect(clickedCollection.collectionID)
+        if (!isBigScreen){
+            handleCollectibleMenu()
+        }
     }
     useEffect(() => {
         setCollectionLoading(true);
@@ -57,12 +64,21 @@ function HomeState() {
             setCollectionsToShow((prev) => prev.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())));
         }
     },[filter])
-
-    return(
-        <React.Fragment>
-            <div className='d-flex w-100'> 
-                <div className='d-flex flex-column w-25 border border-dark border-2 rounded-end'>
-                    <h1>Colections</h1>
+    const handleCollectibleMenu = () => {
+        setShowingCollectionsMenu((prev) => !prev);
+    }
+    const renderCollectionsMenu = () => {
+        return (
+            <>
+                
+                <div className=' d-flex flex-column border border-dark border-2 rounded-end' id='collectionsContainer'>
+                    <div className='d-flex flex-row justify-content-between '>
+                        <h1>Your Colections</h1>
+                        <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu}>
+                                <img className="align " src={ require('../static/Icons/close.png') }  width="40" height="40"/>
+                        </button>
+                    </div>
+                    
                     <input className="form-control mr-sm-2" type="search" placeholder="Search for collection" onChange={handleCollectionSearch} />
 
                     
@@ -97,11 +113,33 @@ function HomeState() {
                             })}
                         </ul>
                     )}
-                </div>           
-                <Map collectiblesToShow={collectiblesToShow}/>
+                </div>  
+            </>
+        )
+    }
+    return(
+        <>
+            <div className='d-flex flex-row w-100 justify-content-center '> 
+                {showingCollectionsMenu ? (
+                    <>
+                        {renderCollectionsMenu()}
+                    </>
+                ) : (
+                    <>
+                        <div className='bg-dark' id='menu'>
+                            <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu}>
+                                <img className="align " src={ require('../static/Icons/menu.png') }  width="50" height="50"/>
+                            </button>
+                        </div>
+                    </> 
+                )}
+                        
+                {(isBigScreen || !showingCollectionsMenu) && (
+                    <Map collectiblesToShow={collectiblesToShow}/>
+                )}
             </div>
 
-        </React.Fragment>  
+        </>  
     );
 }
 

@@ -116,8 +116,9 @@ function App() {
   return (
     
     <>
-        {isBigScreen && renderDeskopNavbar()}
-        {!isBigScreen && renderMobileNavbar()}
+      {isBigScreen && renderDeskopNavbar()}
+      {!isBigScreen && renderMobileNavbar()}
+
       
         <div>
           {appState}
