@@ -6,6 +6,7 @@ import HomeState from './AppStates/HomeState';
 import Editation from './AppStates/Editation';
 import CollectibleSearching from './AppStates/CollectiblesSearching/CollectiblesSearching';
 import CollectiblesAdding from './AppStates/CollectiblesAdding';
+import { useMediaQuery } from 'react-responsive';
 
 const homeState = () => {
   return (
@@ -38,32 +39,91 @@ const editCollectionsState = () => {
 
 function App() {
   const [appState,setAppState] = useState<JSX.Element>(homeState);
-
   
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
+
+  const renderBrand = () => {
+    return (
+      <>
+          <div className="navbar-header">
+            <div className="navbar-brand d-flex ">
+              <img src="/logoEarth.png" width="50" height="50" className="d-inline-block align-top" alt="logo"/>
+              <h2 className='text-white'>World Colletion</h2>
+            </div>
+          </div>
+      </>
+    )
+  }
+  const renderStatesList = (classType : string) => {
+    return (
+      <>
+        <li className={classType}>
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => {setAppState(homeState)}}>Home</button>
+        </li>
+        <li className={classType}>
+          <button type='button' className='btn btn-outline-light btn-lg'onClick={() => {setAppState(collectiblesSearcherState)}}>Find collectibles</button>
+        </li>
+        <li className={classType}>
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => {setAppState(collectibleAdditionState)}}>Add Collectibles</button> 
+        </li>
+        <li className={classType}>
+          <button type='button' className='btn btn-outline-light btn-lg'onClick={() => {setAppState(editCollectionsState)}}>Edit collections</button>
+        </li>
+      </>
+    )
+  }
+  const renderDeskopNavbar = () => {
+    return (
+      <>
+        <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
+          {renderBrand()}
+          <div className="collapse navbar-collapse" id="Navbar">
+            <ul className='navbar-nav mr-auto'>
+                {renderStatesList("nav-link")}
+            </ul>
+          </div>
+        </nav>
+      </>
+    )
+  }
+
+  const renderMobileNavbar = () => {
+    return (
+      <>
+        <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
+            <div className='d-flex flex-row'>
+              
+              
+              <div className='dropdown'> 
+                <button type='button' className='btn btn-outline-light btn-lg me-3 dropdown-toggle' id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span className="navbar-toggler-icon"></span>
+                </button>
+
+                
+                <ul className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                  {renderStatesList("dropdown-item")}               
+                </ul>  
+                      
+              </div>
+              {renderBrand()}
+            </div>
+            
+
+        </nav>
+      </>
+    )
+  }
   return (
     
-    <React.Fragment>
-        <nav className='navbar navbar-expand-lg navbar-dark bg-dark '>
-        <div className='d-flex flex-row mx-4'>
-          <img id='logo-img' src='/logoEarth.png' alt='logo'/>
-          <h1 className='text-white'>World Colletion</h1>
+    <>
+        {isBigScreen && renderDeskopNavbar()}
+        {!isBigScreen && renderMobileNavbar()}
+      
+        <div>
+          {appState}
         </div>
-        <ul className='navbar-nav'>
-            <div className='d-flex mx-5'>
-              <button type='button' className='btn btn-light btn-lg me-3' onClick={() => {setAppState(homeState)}}>Home</button>
-              <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(collectiblesSearcherState)}}>Find collectibles</button>
-              <button type='button' className='btn btn-light btn-lg me-3' onClick={() => {setAppState(collectibleAdditionState)}}>Add Collectibles</button> 
-              <button type='button' className='btn btn-light btn-lg me-3'onClick={() => {setAppState(editCollectionsState)}}>Edit collections</button>
-            </div>
-          </ul>
-        
-      </nav>
       
-      <div>
-        {appState}
-      </div>
-      
-    </React.Fragment>  
+    </>  
   );
 }
 
