@@ -1,6 +1,6 @@
 import {Popup } from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl, useMap } from 'react-leaflet';
 import { Collectible } from '../Data/Database/Collectible';
 import CollectibleMarker from './CollectibleMarker';
 import CollectibleWayPoint from './CollectibleWayPoint';
@@ -19,6 +19,8 @@ function Map ({collectiblesToShow} : MapProps){
             center={[51.505, -0.09]}
             zoom={13}
             scrollWheelZoom={true}
+            zoomControl={false}
+            
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -30,6 +32,7 @@ function Map ({collectiblesToShow} : MapProps){
                     })
                 }
                 <MapOptions waypoints={convertToMapDataModel(collectiblesToShow)}/>
+                <ZoomControl position="bottomright" zoomInText="🔍" zoomOutText="🗺️" />
             </MapContainer>
             
         </React.Fragment>

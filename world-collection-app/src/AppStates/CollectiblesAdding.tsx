@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
 import DraggableMarker from "../CollectiblesSearching/DraggableMarker";
 import MapFlyToOption from "../Map/MapOptions/MapFlyToOption";
 import '../Map/Map.css';
@@ -137,7 +137,7 @@ function CollectiblesAdding(){
     const renderMap = () => {
         return (
             <>
-                <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+                <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} zoomControl={false}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -164,6 +164,7 @@ function CollectiblesAdding(){
                             )
                         })}
                         <MapFlyToOption position={position} />
+                        <ZoomControl position="bottomright" zoomInText="🔍" zoomOutText="🗺️" />
                     </MapContainer>
             </>
         )

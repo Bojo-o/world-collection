@@ -102,7 +102,7 @@ function App() {
                 </button>
 
                 
-                <ul className="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                <ul className="dropdown-menu bg-dark " aria-labelledby="navbarDropdown">
                   {renderStatesList("dropdown-item")}               
                 </ul>  
                       

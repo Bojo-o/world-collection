@@ -23,3 +23,8 @@
 .table-wrapper{ 
   overflow-x: scroll;
 }
+
+.dropdown-menu{
+  position: absolute;
+  
+}

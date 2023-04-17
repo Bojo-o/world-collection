@@ -1,6 +1,6 @@
 import React from "react";
 import './Map.css';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
 import { RawCollectible } from "../Data/RawCollectible";
 import WayPoint from "./WayPoint";
 import { map } from "leaflet";
@@ -20,7 +20,7 @@ function ViewMap({waypoints,edited,removeItem,editItem,cancelItem,saveItem,handl
     
     return (
         <React.Fragment>
-            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+            <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} zoomControl={false}>
                 <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -29,6 +29,7 @@ function ViewMap({waypoints,edited,removeItem,editItem,cancelItem,saveItem,handl
                     return <WayPoint key={index} data={waypoint} removeItem={removeItem} edited={edited} editItem={editItem} cancelItem={cancelItem} saveItem={saveItem} handleChange={handleChange}/>
                 })}
                 <MapOptions waypoints={convertToMapDataModel(waypoints)}/>
+                <ZoomControl position="bottomright" zoomInText="🔍" zoomOutText="🗺️" />
             </MapContainer>
         </React.Fragment>
     );
