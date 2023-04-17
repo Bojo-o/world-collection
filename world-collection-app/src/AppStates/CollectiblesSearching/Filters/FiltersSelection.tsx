@@ -242,7 +242,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
             <div className='d-flex flex-row  '> 
 
                 <div className='side-menu d-flex flex-column '>
-                    <button type="button" className="btn btn-secondary" onClick={handleBack}>
+                    <button type="button" className="btn btn-outline-light" onClick={handleBack}>
                         Back to area choosing
                     </button>
 
@@ -254,7 +254,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                         Used Filters
                     </button>
 
-                    <button type="button" className="btn btn-success" onClick={saveAndContinue} >
+                    <button type="button" className="btn btn-outline-success" onClick={saveAndContinue} >
                         Continue
                     </button>
 

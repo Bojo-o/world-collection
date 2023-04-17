@@ -57,9 +57,18 @@ function SearchByRadius({handleNext: handleRadiusArea,handleBack} : SearchByRadi
                     <h5>Current radius : {radius}</h5>
                 </label>
                 <input type="range" className="form-range" min={1} max ={250} value={radius} id="radiusRange" onChange={handleRangeSlider}/>
-                <button type='button' className='btn btn-success' onClick={() => handleRadiusArea(positionOfMarker,radius)}>Save radius area and continue</button>
+                {isBigScreen ? (
+                    <>
+                        <button type='button' className='btn btn-success' onClick={() => handleRadiusArea(positionOfMarker,radius)}>Save and continue</button>
+                    </>
+                ) : (
+                    <>
+                        <button type='button' className='btn btn-secondary' onClick={handleRadiusMenu}>Return to map</button>
+                    </>
+                )}
+                
 
-                <button type="button" className="btn btn-secondary" onClick={handleBack}>Back to area choosing</button>
+                
             </div>
         )
         
@@ -75,9 +84,15 @@ function SearchByRadius({handleNext: handleRadiusArea,handleBack} : SearchByRadi
                     </>
                 ) : (
                     <>
-                        <div className='side-menu'>
+                        <div className='side-menu d-flex flex-column'>
+                            <button type="button" className="btn btn-outline-light" onClick={handleBack}>
+                                Back to area choosing
+                            </button>
                             <button type="button" className="btn btn-outline-light" onClick={handleRadiusMenu}>
                                 <img className="align " src={ require('../../../static/Icons/menu.png') }  width="40" height="40"/>
+                            </button>
+                            <button type="button" className="btn btn-outline-success" onClick={() => handleRadiusArea(positionOfMarker,radius)} >
+                                Save & Continue
                             </button>
                         </div>
                     </> 
