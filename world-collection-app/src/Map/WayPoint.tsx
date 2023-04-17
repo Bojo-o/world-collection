@@ -21,20 +21,21 @@ function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleCha
             <Marker position={[data.lati,data.long]}>
                 <Popup>  
                     <div>
+                        <RawCollectibleInfoCard rawCollectible={data} />   
                         {edited.QNumber === data.QNumber ? (
                             <React.Fragment>
+                                
                                 <input type="text" className="form-control" value={edited.name} onChange={handleChange}/>
                                 <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
                                 <button type="button" className="btn btn-danger" onClick={() => cancelItem()}>Cancel</button>
                             </React.Fragment> 
                         ) : (
                             <React.Fragment>
-                                {data.name}
+                                <h3>Actions</h3>
                                 <button type="button" className="btn btn-primary" onClick={() => editItem(data)}>Edit</button>
                                 <button type="button" className="btn btn-danger" onClick={() => removeItem(data)}>Remove</button>
                             </React.Fragment> 
                         ) }
-                        <RawCollectibleInfoCard rawCollectible={data} />   
                     </div>                       
                 </Popup>
             </Marker>

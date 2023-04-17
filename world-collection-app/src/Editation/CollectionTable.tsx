@@ -68,7 +68,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                 <td>{row.name}</td>
                                 <td>{row.GetCountOfCollectibles().toString()}</td>
                                 <td>
-                                    <div className="d-flex flex-row justify-content-center">
+                                    <div className="d-flex flex-wrap justify-content-center">
                                         <button type="button" className="btn btn-info" onClick={() => editCollectibles(row)}>Edit Collectibles</button>
                                         <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
                                         <button type="button" className="btn btn-warning" onClick={() => mergeItem(row)}>Merge</button>
@@ -82,7 +82,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                 <td>{row.name}</td>
                                 <td>{row.GetCountOfCollectibles().toString()}</td>
                                 <td>
-                                    <div className="d-flex flex-row justify-content-center">
+                                    <div className="d-flex flex-wrap justify-content-center">
                                         <p>Merge into collection:</p>
                                         <select className="form-select" onChange={handleCollectionSelection} >
                                             {collections.map((item,index) => {
@@ -102,7 +102,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                         ) : (
                                             <button type="button" className="btn btn-success" onClick={() => merge(row.collectionID,selectedCollection)}>Merge</button>
                                         )}
-                                        <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancle</button>
+                                        <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancel</button>
                                     </div>
                                 </td>
                             </>
@@ -119,7 +119,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                 </td>
                                 <td>{row.GetCountOfCollectibles().toString()}</td>
                                 <td >
-                                    <div className="d-flex flex-row justify-content-center">
+                                    <div className="d-flex flex-wrap justify-content-center">
                                         <button type="button" className="btn btn-secondary" onClick={handleIconSetting}>{(!iconSetting) ? "Set Icon for all collectibles" : "Cancel"}</button>
                                         {canSaveItem ? (
                                             <button type="button" className="btn btn-success" onClick={() => saveItem(edited)}>Save</button>
@@ -127,7 +127,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                             <button type="button" className="btn btn-success"  disabled onClick={() => saveItem(edited)}>Save</button>
                                         )}
                                         
-                                        <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancle</button>
+                                        <button type="button" className="btn btn-danger" onClick={cancelEditation}>Cancel</button>
                                     </div>
                                 </td>
                             </>
@@ -137,7 +137,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                             <>
                                 <tr>
                                     <th colSpan={4}>
-                                        <div className="d-flex flex justify-content-center">
+                                        <div className="d-flex justify-content-center">
                                             <IconsSelector handleChangeOfIcon={() => {}} iconChange={iconChange}/>
                                         </div>
                                     </th>

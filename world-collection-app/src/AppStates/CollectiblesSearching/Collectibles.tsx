@@ -25,33 +25,35 @@ function Collectibles({queryData} : CollectiblesProps){
     },[])
     return(
         <>
-            <div className="container mt -1 mb -3">
-                <h1>Collectibles </h1>
-                {loading && (
-                    <>
-                        {error ? (
-                            <>
-                                <h3>Some error occurs, try later, or try query with less parameters</h3>
-                            </>
-                        ) : (
-                            <>
-                                <div className="d-flex flex-row">
-                                    <h3>Searching for collectibles</h3>
-                                    <div className="spinner-border text-info" role="status">
-                                        <span className="visually-hidden">Loading...</span>
+        
+            <div>
+                    <h1>Collectibles </h1>
+                    {loading && (
+                        <>
+                            {error ? (
+                                <>
+                                    <h3>Some error occurs, try later, or try query with less parameters</h3>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="d-flex flex-row">
+                                        <h3>Searching for collectibles</h3>
+                                        <div className="spinner-border text-info" role="status">
+                                            <span className="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </>
-                        )}
-                    </>
-                )}
+                                </>
+                            )}
+                        </>
+                    )}
+                
+                    {!loading && collectibles != null &&(
+                        <>
+                            <Result data={collectibles}/>
+                        </>
+                    )}
+                </div>
             
-                {!loading && collectibles != null &&(
-                    <>
-                        <Result data={collectibles}/>
-                    </>
-                )}
-            </div>
         </>
     )
 }

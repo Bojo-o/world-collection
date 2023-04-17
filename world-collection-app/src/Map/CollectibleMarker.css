@@ -6,6 +6,24 @@
     overflow:hidden; overflow-y:scroll;
     height: 50vh;
 }
+
 .card {
     width: 18rem;
 }
+
+.card-collectibles {
+    width: 10rem;
+}
+
+@media only screen and ((min-width: 400px)) {
+    .card-collectibles {
+        width: 15rem;
+    }
+}
+@media only screen and ((min-width: 800px)) {
+    .card-collectibles {
+        width: 20rem;
+    }
+}
+
+

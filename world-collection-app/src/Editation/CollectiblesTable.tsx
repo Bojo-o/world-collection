@@ -15,7 +15,7 @@ function CollectiblesTable ({collectibles,editCollectible,removeCollectible,edit
     const renderTypesColumn = (types : string) => {
         return(
             <>
-                <div className="d-flex ">
+                <div className="d-flex flex-wrap">
                     {types.split('/').map((type,index) => {
                         return (
                             <>
@@ -84,7 +84,7 @@ function CollectiblesTable ({collectibles,editCollectible,removeCollectible,edit
                                 <th scope="row">{renderTypesColumn(collectible.type)}</th>
                                 <th scope="row">{renderVisition(collectible.isVisit)}</th>
                                 <th scope="row">
-                                    <div className="d-flex justify-content-center" >
+                                    <div className="d-flex flex-wrap justify-content-center" >
                                         {editedCollectible.QNumber === collectible.QNumber && (
                                             <>
                                                 {canSaveCollectible ? (

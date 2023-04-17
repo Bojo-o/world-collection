@@ -93,7 +93,6 @@ function Result({data} : ResultProps) {
         setShowedDetails(item);  
     }
 
-   
 
     React.useEffect(() => {
         resultsStateCaretaker.changeResults(resultData);
@@ -111,7 +110,7 @@ function Result({data} : ResultProps) {
     },[nameFilter,subTypeFilter,resultData])
     return (
         <React.Fragment>
-            <h3>Results</h3>
+            
             <div className="btn-group dropend">
                 <button type="button" className="btn btn-danger dropdown-toggle"  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     View

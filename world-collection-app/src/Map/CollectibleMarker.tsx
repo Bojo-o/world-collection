@@ -100,7 +100,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                         )}
                         {!loadingBasicInfo && (
                             <>
-                                <div className="card">
+                                <div className="card card-collectibles">
                                     {basicInfo.image != null && (
                                         <img src={basicInfo.image} className="card-img-top" alt={"image of " + collectible.name}/>
                                     )}

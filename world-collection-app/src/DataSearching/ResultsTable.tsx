@@ -60,7 +60,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                                 </div>
                                             </td>
 
-                                            <td className="d-flex flex-row justify-content-center">
+                                            <td className="d-flex flex-wrap justify-content-center">
                                                 <button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button>
                                                 <button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button>
                                             </td>
@@ -86,7 +86,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                             {detailShowing.QNumber !== row.QNumber ? 
                                             (
                                                 <React.Fragment>    
-                                                    <td className="d-flex flex-row justify-content-center">
+                                                    <td className="d-flex flex-wrap justify-content-center">
                                                         <button type="button" className="btn btn-info" onClick={() => showDetails(row)}>Details</button>
                                                         <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
                                                         <button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button>
@@ -97,7 +97,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                             :
                                             (
                                                 <React.Fragment>    
-                                                    <td className="d-flex flex-row justify-content-center">
+                                                    <td className="d-flex flex-wrap justify-content-center">
                                                         <button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button>
                                                     </td>                                                   
                                                 </React.Fragment>   
@@ -111,7 +111,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                             {detailShowing.QNumber === row.QNumber && (
                                 <tr>
                                     <th colSpan={4}>
-                                        <div className="d-flex flex justify-content-center">
+                                        <div className="d-flex justify-content-center">
                                             <RawCollectibleInfoCard rawCollectible={row} />
                                         </div>
                                         {/*<Details QNumber={row.QNumber} name={row.name} type={row.subTypeOf} />*/}

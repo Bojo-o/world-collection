@@ -46,17 +46,20 @@ function Table ({rowsCount,renderHead,renderBody} : TableProps){
 
     return (
         <>
-        <table className="table table-light table-bordered table-striped table-hover">
-            <thead>
-                <tr className="table-dark">
-                    {renderHead()}
-                </tr>
-            </thead>
-                
-            <tbody>
-                {renderBody(currPage,rowsPerPage)}
-            </tbody>
-        </table>
+        <div className="table-wrapper">
+            <table className="table table-light table-bordered table-striped table-hover">
+                <thead>
+                    <tr className="table-dark">
+                        {renderHead()}
+                    </tr>
+                </thead>
+                    
+                <tbody>
+                    {renderBody(currPage,rowsPerPage)}
+                </tbody>
+            </table>
+        </div>
+        
         <TableFooter nextPage={nextPage} prevPage={prevPage} firstPage={firstPage} lastPage={lastPage} setRowsPerPage={setRecordsPerPage} pages={pages} currPage={currPage}/>   
         </>
     );
