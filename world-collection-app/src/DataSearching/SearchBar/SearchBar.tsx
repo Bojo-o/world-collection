@@ -69,22 +69,20 @@ function SearchBar({placeHolder,handleClickedResult,dataGetter,emptySearchingFla
     return (
         <React.Fragment>
                 <div className="search-bar-dropdown">
-                <div className="input-group flex-nowrap">
-                    {emptySearchingFlag && (
-                        <>
-                            <span className="input-group-text" id="addon-wrapping">
-                                <button type="button" className="btn btn-outline-info" onClick={handleShowAll}>Show all</button>
-                            </span>
-                        </>
-                    )}
-                    
-                    <input type="search" className="form-control mr-sm-2" placeholder={placeHolder} value={barValue} onChange={handleChange} onClick={handleClick}  aria-describedby="addon-wrapping"/>
-                </div>
-                    
-                    
+                    <div className="input-group flex-nowrap">
+                        {emptySearchingFlag && (
+                            <>
+                                <span className="input-group-text" id="addon-wrapping">
+                                    <button type="button" className="btn btn-outline-info" onClick={handleShowAll}>Show all</button>
+                                </span>
+                            </>
+                        )}
+                        
+                        <input type="search" className="form-control mr-sm-2" placeholder={placeHolder} value={barValue} onChange={handleChange} onClick={handleClick}  aria-describedby="addon-wrapping"/>
+                    </div>
                     
                         {loading && ( 
-                            <ul ref={searchTypeRef} id='searchedResult' className="list-group">
+                            <ul ref={searchTypeRef} className="list-group searchedResults">
                                 <button type="button" className="list-group-item list-group-item-action">{isError ? "Some error occurs, try later" : 
                                     <div className="spinner-border text-info" role="status">
                                         <span className="visually-hidden">Loading...</span>
@@ -95,7 +93,7 @@ function SearchBar({placeHolder,handleClickedResult,dataGetter,emptySearchingFla
                         )}
                         {!loading && display && (
                             <>
-                                <ul ref={searchTypeRef} id='searchedResults' className="list-group">
+                                <ul ref={searchTypeRef} className="list-group searchedResults">
                                 {
                                     results.map((result,index) => {
                                         return (

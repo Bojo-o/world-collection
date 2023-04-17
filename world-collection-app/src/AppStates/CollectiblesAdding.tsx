@@ -10,6 +10,7 @@ import { RawCollectible } from "../Data/RawCollectible";
 import './CollectiblesAdding.css'
 import CollectiblesSaving from "../DateSaving/CollectiblesSaving";
 import RawCollectibleInfoCard from "../Map/RawCollectibleInfoCard";
+import { useMediaQuery } from "react-responsive";
 
 const center = {
     lat: 51.505,
@@ -22,6 +23,9 @@ function CollectiblesAdding(){
     const [collectible,setCollectible] = useState<RawCollectible|null>(null);
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState(false);
+
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
+    const [showingAddingMenu,setShowingAddingMenu] = useState(false);
 
     const changePosition = (providedCollectible : RawCollectible) => {
         setPosition({lat : providedCollectible.lati,lng : providedCollectible.long});
@@ -52,11 +56,17 @@ function CollectiblesAdding(){
     const handleRemove = (collectible : RawCollectible) =>{
         setCollectibles((prev) => prev.filter((c) => c.QNumber != collectible.QNumber))
     }
-    return (
-        <>
-            <div className="d-flex flex-row w-100">
-                <div className="d-flex flex-column w-50 border border-dark border-2 rounded-end ">
-                    <h2>Add collectibles</h2>
+    const renderAddingMenu = () => {
+        return (
+            <>
+                <div className="d-flex flex-column border border-dark border-2 rounded-end container" >
+                    <div className='d-flex flex-row justify-content-between '>
+                        <h1>Add collectibles</h1>
+                        <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
+                                <img className="align " src={ require('../static/Icons/close.png') }  width="40" height="40"/>
+                        </button>
+                    </div>
+                    
                     <h5>You can here search for collectible and add it to your collection.</h5>
                     
                     
@@ -85,7 +95,7 @@ function CollectiblesAdding(){
                                     <button type="button" className="btn btn-success" onClick={() => {addCollectible(collectible)}}>Add</button>
                                 </div>
                                 
-                                <div className="d-flex flex-row">
+                                <div className="d-flex flex-wrap">
                                     {collectible.subTypeOf.split('/').map((type) => {
                                         return (
                                             <>
@@ -118,8 +128,16 @@ function CollectiblesAdding(){
                         </>
                     )}
                 </div>
-                
-                    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+            </>
+        )
+    }
+    const handleAddingMenu = () => {
+        setShowingAddingMenu((prev) => !prev);
+    }
+    const renderMap = () => {
+        return (
+            <>
+                <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -147,7 +165,31 @@ function CollectiblesAdding(){
                         })}
                         <MapFlyToOption position={position} />
                     </MapContainer>
-                
+            </>
+        )
+    }
+    return (
+        <>
+            
+            <div className="d-flex flex-row w-100 justify-content-center">
+                {showingAddingMenu ? (
+                    <>
+                        {renderAddingMenu()}
+                    </>
+                ) : (
+                    <>
+                        <div className='side-menu'>
+                            <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
+                                <img className="align " src={ require('../static/Icons/menu.png') }  width="40" height="40"/>
+                            </button>
+                        </div>
+                    </> 
+                )}
+                        
+                {(isBigScreen || !showingAddingMenu) && 
+                    renderMap()
+                }
+
             </div>
         </>
     )

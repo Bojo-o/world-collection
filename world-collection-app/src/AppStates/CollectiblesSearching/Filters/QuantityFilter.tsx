@@ -6,6 +6,7 @@ import { QuantityFilterData, ValueRange } from "../../../Data/FiltersData/Quanti
 import { Entity } from "../../../Data/SearchData/Entity";
 import { FilterComparisonOperator } from "./FilterComparisonOperator";
 import { FilterProps } from "./FilterProps";
+import { useMediaQuery } from "react-responsive";
 
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const[filterData,setFilterData] = useState<QuantityFilterData>(new QuantityFilterData([],new ValueRange()));
@@ -15,6 +16,8 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const[unit,setUnit] = useState<string|null>(null);
     const[value,setValue] = useState<number|undefined>(undefined);
     const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.EqualTo)
+
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
     const handleInput = (e : any) => {
         if (e.target.value == ""){
@@ -52,8 +55,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
         fetchFilterData()
     },[filter])
     return(
-        <div className="m-3">
-            <h3>Apply Quantity filter</h3>
+        <div>           
             {loadingValueType && (<>
                 <button type="button" className="list-group-item list-group-item-action">{errorForFetchingValueType ? "Some error occurs, try later" : 
                     <div className="spinner-border text-info" role="status">
@@ -81,14 +83,31 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                         </>
                     )}
                     <h3>Choose value</h3>
-                    <div className="input-group mb-3">
-                        <span className="input-group-text">Min : {filterData.range.min}</span>
-                        <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleInput} />
-                        <span className="input-group-text">Max : {filterData.range.max}</span>
-                    </div>
-                    <div className="d-flex flex-row">
-                        <h4>{value}</h4>
-                        <select className="form-select w-25 mx-2" onChange={handleComparisonOperatorSelect}>
+                    
+                        {isBigScreen ? (
+                            <>
+                                <div className="input-group mb-3">
+                                <span className="input-group-text">Min : {filterData.range.min}</span>
+                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleInput} />
+                                <span className="input-group-text">Max : {filterData.range.max}</span>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="d-flex flex-wrap justify-content-between">
+                                    <h6 className="input-group-text">Min : {filterData.range.min}</h6>
+                                    <h6 className="input-group-text">Max : {filterData.range.max}</h6>
+                                </div>
+                                
+                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleInput} />
+                                
+                            </>
+                        )}
+                        
+                    <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column")}>
+                        <h4>{(value!=undefined) ? value : "value"}</h4>
+                        
+                        <select className={"form-select w-50 mx-2"} onChange={handleComparisonOperatorSelect}>
                             <option value={FilterComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
                             <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
                             <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
@@ -97,10 +116,10 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                             <option value={FilterComparisonOperator.LessThan}>is less than</option>
                             <option value={FilterComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
                         </select>
-                        <h3>"{filter.name}" quantity value</h3>
+                        <h4>"{filter.name}"</h4>
                     </div>
                     {value != undefined && (
-                        <button type="button" className="btn btn-success" onClick={handleSave}>Applied filter</button>
+                        <button type="button" className="btn btn-success" onClick={handleSave}>Use filter</button>
                     )}
                 </>
             )}

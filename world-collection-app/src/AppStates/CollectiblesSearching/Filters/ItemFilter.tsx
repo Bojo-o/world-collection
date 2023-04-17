@@ -56,8 +56,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
     },[filter])
 
     return(
-        <div className="m-3">
-            <h3>Apply Item filter</h3>
+        <div>
             {loadingValueType && (<>
                 <button type="button" className="list-group-item list-group-item-action">{errorForFetchingValueType ? "Some error occurs, try later" : 
                     <div className="spinner-border text-info" role="status">
@@ -85,7 +84,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                             {filterData.value_type_constraint.length != 0 && (
                                 <>
                                     <h3>Value types, you can used : </h3>
-                                    <div className="d-flex flex-row">
+                                    <div className="d-flex flex-wrap">
                                         {filterData.value_type_constraint.map((value,index) => {
                                             return (
                                                 <>
@@ -101,7 +100,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                             {filterData.conflict_with_constraint.length != 0 && (
                                 <>
                                     <h3>Value type, which can not be used : </h3>
-                                    <div className="d-flex flex-row">
+                                    <div className="d-flex flex-wrap">
                                         {filterData.conflict_with_constraint.map((value,index) => {
                                             return (
                                                 <>
@@ -117,7 +116,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                             {filterData.none_of_constraint.length != 0 && (
                                 <>
                                     <h3>Values, that can not be used</h3>
-                                    <div className="d-flex flex-row">                          
+                                    <div className="d-flex flex-wrap">                          
                                         {filterData.none_of_constraint.map((value,index) => {
                                             return (
                                                 <>
@@ -142,7 +141,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                     {selectedItem != null && (
                         <>
                             <h3>Choosed, that item "{selectedItem.GetName()}" is value of "{filter.name}"</h3>
-                            <button type="button" className="btn btn-success" onClick={handleSave}>Applied filter</button>
+                            <button type="button" className="btn btn-success" onClick={handleSave}>Use filter</button>
                         </>
                     )}
                     

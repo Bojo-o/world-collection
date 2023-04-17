@@ -5,6 +5,7 @@ import { FilterData } from "../../../Data/FiltersData/FilterData";
 import { FilterTimeValueData } from "../../../Data/FiltersData/FilterTimeValueData";
 import { FilterComparisonOperator } from "./FilterComparisonOperator";
 import { FilterProps } from "./FilterProps";
+import { useMediaQuery } from "react-responsive";
 
 
 export enum TimePrecision{
@@ -21,6 +22,8 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const [isBC,setIsBC] = useState(false);
 
     const [time,setTime] = useState<CustomTime|null>(null)
+    
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
 
     const handleTimePrecisionSelection = (e : any) => {
@@ -109,9 +112,8 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
 
     return(
         <>
-            <div className="m-3">
-                <h3>Apply time filter</h3>
-                <div className="m-5">
+            <div >
+                
                         <p>Select time representation you want to use :</p>
                         <select className="form-select" aria-label="Select Time represenation" onChange={handleTimePrecisionSelection} >
                             <option value={TimePrecision.Year}> Year</option>
@@ -119,7 +121,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                             <option value={TimePrecision.Month} > Month </option>
                             <option value={TimePrecision.Century}> Century </option>
                         </select>
-                </div>
+                
 
                 {timeRepresentation == TimePrecision.Date && (renderDateInput("Date"))}
                 {timeRepresentation == TimePrecision.Month && (renderDateInput("Month",true))}
@@ -128,9 +130,9 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
 
                 <p>Select comparison operator</p>
                 
-                <div className="d-flex flex-row">
-                    <h3>Selected time</h3>
-                    <select className="form-select w-25 mx-2" onChange={handleComparisonOperatorSelect}>
+                <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column")}>
+                    <h4>Selected time</h4>
+                    <select className="form-select w-50 mx-2" onChange={handleComparisonOperatorSelect}>
                         <option value={FilterComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
                         <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
                         <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
@@ -139,11 +141,11 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                         <option value={FilterComparisonOperator.LessThan}>is less than</option>
                         <option value={FilterComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
                     </select>
-                    <h3>"{filter.name}" time value</h3>
+                    <h4>"{filter.name}"</h4>
                 </div>
                 
                 {time != null && (
-                    <button type="button" className="btn btn-success" onClick={handleSave}>Applied filter</button>
+                    <button type="button" className="btn btn-success" onClick={handleSave}>Use filter</button>
                 )}
 
             </div>

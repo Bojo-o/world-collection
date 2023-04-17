@@ -42,13 +42,15 @@ function App() {
   
   const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
-  const renderBrand = () => {
+  const renderBrand = (nameFlag : boolean) => {
     return (
       <>
           <div className="navbar-header">
             <div className="navbar-brand d-flex ">
               <img src="/logoEarth.png" width="50" height="50" className="d-inline-block align-top" alt="logo"/>
-              <h2 className='text-white'>World Colletion</h2>
+              {nameFlag && (
+                <h2 className='text-white'>World Colletion</h2>
+              )}
             </div>
           </div>
       </>
@@ -75,8 +77,8 @@ function App() {
   const renderDeskopNavbar = () => {
     return (
       <>
-        <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
-          {renderBrand()}
+        <nav className='navbar navbar-expand-lg navbar-dark bg-dark' id='navbar'>
+          {renderBrand(true)}
           <div className="collapse navbar-collapse" id="Navbar">
             <ul className='navbar-nav mr-auto'>
                 {renderStatesList("nav-link")}
@@ -90,7 +92,7 @@ function App() {
   const renderMobileNavbar = () => {
     return (
       <>
-        <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
+        <nav className='navbar navbar-expand-lg navbar-dark bg-dark' id='navbar'>
             <div className='d-flex flex-row'>
               
               
@@ -105,7 +107,7 @@ function App() {
                 </ul>  
                       
               </div>
-              {renderBrand()}
+              {renderBrand(false)}
             </div>
             
 
@@ -120,7 +122,7 @@ function App() {
       {!isBigScreen && renderMobileNavbar()}
 
       
-        <div>
+        <div >
           {appState}
         </div>
       

@@ -6,13 +6,13 @@ interface RenderSearchInfo{
 }
 function RenderSearchInfo({result} : RenderSearchInfo) {
     return (
-        <React.Fragment>
+        <>
             <p className="h5">
                 {result.name}
                 <br />
                 <small className="text-muted">{result.desc}</small>
             </p>
-        </React.Fragment>
+        </>
     );
 }
 

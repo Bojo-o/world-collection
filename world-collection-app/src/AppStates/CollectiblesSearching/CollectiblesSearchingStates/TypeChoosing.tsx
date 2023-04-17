@@ -43,20 +43,22 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
 
     return(
         <>
-            <h1>Type of collectibles choosing</h1>
-            <div className="d-flex flex-column">
+            
+            <div className="d-flex flex-column" >
+                <h1>Type of collectibles choosing</h1>
                 {type == null ? (
                     <>
                         <h2>Choose what type of collectibles you want to search for</h2>
                         <h6>If you want to search for all possible things, which you can collect, click button "anything"</h6>
-                        <div className="d-flex flex-row">
-                            <SearchBar placeHolder={"examples : castle, cave, museum"} handleClickedResult={handleAddingTypeChoosing} dataGetter={typesDataGetter} emptySearchingFlag={false}/> 
-                            <button type="button" className="btn btn-warning" onClick={handleSuperTypeChoosing}>anything</button>
+                        <div className="d-flex"> 
+                            <button type="button" className="btn btn-warning  btn-sm" onClick={handleSuperTypeChoosing}>Anything</button>
                         </div>
+                        
+                        <SearchBar placeHolder={"examples : castle, cave, museum"} handleClickedResult={handleAddingTypeChoosing} dataGetter={typesDataGetter} emptySearchingFlag={false}/> 
                     </>
                 ) : (
                     <>
-                        <div className="d-flex flex-row">
+                        <div className="d-flex">
                             <h1>Choosed type "{type.GetName()}" </h1>
                             <button type="button" className="btn btn-info" onClick={handleResetType} >Choose other</button> 
                         </div>

@@ -5,4 +5,17 @@
 }
 
 
+#navbar{
+  height: 70px;
+}
 
+
+.side-menu{
+  background-color: #343a40;
+  width: 80px;
+}
+
+.container{
+  width: 500px;
+  height: calc(100vh - 70px);
+}

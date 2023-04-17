@@ -47,7 +47,9 @@ function CollectibleSearching(){
     }
     const renderTypeChoosingState = () => {
         return(
-            <TypeChoosing handleNext={typeChoosingStateHandleNext} pickedType={pickedType} pickedExceptionSubTypes={pickedExceptionSubTypes}/>
+            <>
+                <TypeChoosing handleNext={typeChoosingStateHandleNext} pickedType={pickedType} pickedExceptionSubTypes={pickedExceptionSubTypes}/>
+            </>
             
         );
     }
@@ -93,10 +95,7 @@ function CollectibleSearching(){
     const renderRadiusAreaState = () => {
         return (
             <>
-                <div>
-                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
-                </div>
-                <SearchByRadius handleNext={radiusAreaStateHandleNext}/>
+                <SearchByRadius handleNext={radiusAreaStateHandleNext} handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}/>
             </>
         )
     }
@@ -136,10 +135,9 @@ function CollectibleSearching(){
     const renderFiltersSelectionState = () => {
         return (
             <>
-                <div>
-                    <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
-                </div>
-                <FiltersSelection filtersForType={new Entity(queryData.getType(),"filter")} handleNext={filtersSelectionStateHandleNext} usedFilters={usedFilters} handleUsedFiltersChange={handleUsedFiltersChange}/>
+                <FiltersSelection filtersForType={new Entity(queryData.getType(),"filter")}
+                handleNext={filtersSelectionStateHandleNext} usedFilters={usedFilters} handleUsedFiltersChange={handleUsedFiltersChange}
+                handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}/>
             </>
         )
     }

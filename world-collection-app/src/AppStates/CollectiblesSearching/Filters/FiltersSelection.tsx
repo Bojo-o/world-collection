@@ -8,15 +8,23 @@ import './FiltersSelection.css';
 import ItemFilter from "./ItemFilter";
 import QuantityFilter from "./QuantityFilter";
 import TimeFilter from "./TimeFilter";
+import { useMediaQuery } from "react-responsive";
 
 export interface FiltersSelectionProps{
     filtersForType : Entity;
     handleNext : (appliedFilters : AppliedFilterData[]) => void;
     usedFilters : AppliedFilterData[];
     handleUsedFiltersChange : (filters : AppliedFilterData[]) => void;
+    handleBack : () => void;
 }
 
-function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFiltersChange} : FiltersSelectionProps){
+enum FiltersState{
+    Filters,
+    UsedFilters,
+    Filter
+}
+
+function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFiltersChange,handleBack} : FiltersSelectionProps){
     const [loadingFilters,setLoadingFilters] = useState(false);
     const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
 
@@ -32,6 +40,10 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
     const [appliedFilters,setAppliedFilters] = useState<AppliedFilterData[]>(usedFilters);
 
     const [filterSearchWord,setFIlterSearchWord] = useState<string>("");
+
+    const [filterState,setFilterState] = useState<FiltersState>(FiltersState.Filters)
+
+    const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
     const getColorByFilterType = (type : FilterDataType) => {
         if (type === FilterDataType.Quantity){
@@ -52,6 +64,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
     const handleAddFilterToAplied = (data : AppliedFilterData) => {
         setAppliedFilters([...appliedFilters, data]) //simple value
         setSelectedFilter(new FilterData())
+        setFilterState(FiltersState.UsedFilters);
     }
     const removeFilterFromApplied = (data : AppliedFilterData) => {
         setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber != data.getFilter().PNumber))
@@ -82,7 +95,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
     }
     const handleFilterSelection = (filter : FilterData) => {
         setSelectedFilter(filter);
-        console.log(filter.PNumber)
+        setFilterState(FiltersState.Filter);
     }
     const handleFiltersSearch = (e : any) => {
         setFIlterSearchWord(e.target.value);
@@ -109,45 +122,39 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
         console.log(appliedFilters)
     },[appliedFilters])
 
-    return(
-        <>  
-            <div className="d-flex flex-row">
-                <h1>You can also apply some filters for your collectibles searching</h1>
-                
-                <button type="button" className="btn btn-success mx-3" onClick={saveAndContinue}>Continue</button>
-            </div>
-            <div className="d-flex flex-row justify-content-between" >
-                <div className="w-25 border border-dark rounded" >
+    const renderFilters = () => {
+        return (
+            <>
+                <div className="border border-dark rounded" >
+                <div className="btn-group">
+                    <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filters
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li><button className="dropdown-item" onClick={() => handleShowingFilters(recomendedFilters)}>Recomended Filters</button></li>
+                        {loadingAllFilters ? (
+                            <>
+                                <li>
+                                    <button className="dropdown-item" disabled>All filters 
+                                        {
+                                            <div className="spinner-border text-info" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                        }
+                                    </button>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li>
+                                    <button className="dropdown-item" onClick={() => handleShowingFilters(allFilters)}>All filters</button>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                </div>
 
-                    <div className="btn-group">
-                        <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Filters
-                        </button>
-                        <ul className="dropdown-menu">
-                            <li><button className="dropdown-item" onClick={() => handleShowingFilters(recomendedFilters)}>Recomended Filters</button></li>
-                            {loadingAllFilters ? (
-                                <>
-                                    <li>
-                                        <button className="dropdown-item" disabled>All filters 
-                                            {
-                                                <div className="spinner-border text-info" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
-                                            }
-                                        </button>
-                                    </li>
-                                </>
-                            ) : (
-                                <>
-                                    <li>
-                                        <button className="dropdown-item" onClick={() => handleShowingFilters(allFilters)}>All filters</button>
-                                    </li>
-                                </>
-                            )}
-                        </ul>
-                    </div>
-
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search for filter" onChange={handleFiltersSearch} />
+                <input className="form-control mr-sm-2" type="search" placeholder="Search for filter" onChange={handleFiltersSearch} />
                     <div className="list-group" id="filters">
                         {loadingFilters && (<>
                             <button type="button" className="list-group-item list-group-item-action">{errorForFetchingFilters ? "Some error occurs, try later" : 
@@ -165,7 +172,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                                         <>
                                             
                                             <button  key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
-                                                <div className="d-flex w-100 justify-content-between">
+                                                <div className="d-flex w-100 flex-wrap justify-content-between">
                                                     <h5 className="mb-1">{filter.name}</h5>
                                                     <small className={"badge bg-" + getColorByFilterType(filter.dataType) +" text-wrap"}>
                                                         {filter.dataType}
@@ -181,21 +188,36 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                         )}
                     </div>
                 </div>
-                <div>
-                    {selectedFilter.dataType != FilterDataType.NotSupported && (
-                        <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
-                    )}
-                    {selectedFilter.dataType == FilterDataType.Time && (<TimeFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                    {selectedFilter.dataType == FilterDataType.WikibaseItem && (<ItemFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                    {selectedFilter.dataType == FilterDataType.Quantity && (<QuantityFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                </div>
-                <div className="w-25 border border-dark rounded">
-                    <h3>Applied filters :</h3>
-                    <ul className="list-group" id="filters">
+            </>
+        )
+    }
+    const renderFilter = () => {
+        return (
+            <>
+                    <div className="m-2">
+                        <button type="button" className="btn btn-danger" onClick={() => setFilterState(FiltersState.Filters)}>
+                            Back to filters
+                        </button>
+                        {selectedFilter.dataType != FilterDataType.NotSupported && (
+                            <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
+                        )}
+                        {selectedFilter.dataType == FilterDataType.Time && (<TimeFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                        {selectedFilter.dataType == FilterDataType.WikibaseItem && (<ItemFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                        {selectedFilter.dataType == FilterDataType.Quantity && (<QuantityFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                    </div>
+            </>
+        )
+    }
+    const renderUsedFilters = () => {
+        return (
+            <>
+                <div className="border border-dark rounded">
+                    <h3>Used filters :</h3>
+                    <ul className="list-group" id="used-filters">
                         {appliedFilters.map((filter,index) => {
                             return(
                                 <li key={index} className="list-group-item ">
-                                    <div className="d-flex flex-row justify-content-between">
+                                    <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column") + " justify-content-between"}>
                                         <div >
                                             <h5 className="mb-1"> {filter.getFilter().name}</h5>
                                             <small className={"badge bg-" + getColorByFilterType(filter.getFilter().dataType) +" text-wrap "}>
@@ -212,6 +234,39 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                         })}
                     </ul>
                 </div>
+            </>
+        )
+    }
+    return(
+        <>  
+            <div className='d-flex flex-row  '> 
+
+                <div className='side-menu d-flex flex-column '>
+                    <button type="button" className="btn btn-secondary" onClick={handleBack}>
+                        Back to area choosing
+                    </button>
+
+                    <button type="button" className="btn btn-outline-light" onClick={() => setFilterState(FiltersState.Filters)} >
+                        Filters
+                    </button>
+
+                    <button type="button" className="btn btn-outline-light" onClick={() => setFilterState(FiltersState.UsedFilters)}>
+                        Used Filters
+                    </button>
+
+                    <button type="button" className="btn btn-success" onClick={saveAndContinue} >
+                        Continue
+                    </button>
+
+                </div>
+            
+                <div className="w-100 filter-container">
+                    {filterState==FiltersState.Filters && renderFilters()}
+                    {filterState==FiltersState.UsedFilters && renderUsedFilters()}
+                    {filterState==FiltersState.Filter && renderFilter()}
+                </div>
+                
+            
             </div>
         </>
     )

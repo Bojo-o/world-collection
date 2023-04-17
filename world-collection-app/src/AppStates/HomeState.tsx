@@ -71,7 +71,7 @@ function HomeState() {
         return (
             <>
                 
-                <div className=' d-flex flex-column border border-dark border-2 rounded-end' id='collectionsContainer'>
+                <div className=' d-flex flex-column border border-dark border-2 rounded-end container' >
                     <div className='d-flex flex-row justify-content-between '>
                         <h1>Your Colections</h1>
                         <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu}>
@@ -126,9 +126,9 @@ function HomeState() {
                     </>
                 ) : (
                     <>
-                        <div className='bg-dark' id='menu'>
-                            <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu}>
-                                <img className="align " src={ require('../static/Icons/menu.png') }  width="50" height="50"/>
+                        <div className='side-menu'>
+                            <button type="button" className="btn btn-outline-light" onClick={handleCollectibleMenu}>
+                                <img className="align " src={ require('../static/Icons/menu.png') }  width="40" height="40"/>
                             </button>
                         </div>
                     </> 

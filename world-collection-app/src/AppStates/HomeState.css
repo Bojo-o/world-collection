@@ -5,13 +5,9 @@
 #collectionsList {
     list-style: none;
     overflow:hidden; overflow-y:scroll;
-    height: 85vh;
+    height: calc(100vh - 170px);
 }
 
 #menu{
-    width: 100px;
-}
-
-#collectionsContainer{
-    width: 500px;
+    width: 80px;
 }
