@@ -27,27 +27,16 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-
-        
-    #from .database import db
-    #db.init_app(app)
-    from .database.Database_operations import db_initiazition
+    # add database init command to app
+    from .Database.Database_operations import db_initiazition
     db_initiazition.init_app(app)
     
-
-
-    #register api blueprint to app
-    #from .API import API
-    #app.register_blueprint(API.bp)
-
+    # register Wikidata API blueprint to app
     from .API import WikidataAPI
     app.register_blueprint(WikidataAPI.API)
 
-    #register database api/gateway to app
-    #from .database import db_gateway
-    #app.register_blueprint(db_gateway.bp_db_gateway)
-
-    from .database.Gateway import db_gateway
+    # register database gateway to app
+    from .Database.Gateway import db_gateway
     app.register_blueprint(db_gateway.bp_database_gateway)
 
     return app

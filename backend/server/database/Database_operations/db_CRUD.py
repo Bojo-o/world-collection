@@ -1,24 +1,56 @@
-import click
 import json
 import collections
 
 from .db_access import get_db
 
-def execute_command(sql : str,parameter :  any):
+def execute_command(sql : str,parameters :  any):
+    """
+    Execute sql command in Database.
+
+    Parameters
+    ----------
+    sql : str
+        Command, which will be executed.
+    parameters : any
+        Parameters for command.
+
+    Returns
+    -------
+    bool
+        True if command was executed and there was not Integrity Error.
+    """
     db = get_db()
     try:
-        db.execute(sql,parameter)
+        db.execute(sql,parameters)
         db.commit()
     except db.IntegrityError:
-        print(f'error, something went wrong')
+        print(f'Database Integrity Error, problem with executing, command :{sql} with parameters: {parameters}')
         return False
     else:      
         return True
 
-def execute_and_fetch_all(sql: str,parameter : any):
+def execute_and_fetch_all(sql: str,parameters : any):
+    """
+    Fetch all rows from Database, which satisfying provided sql command.
+
+    Parameters
+    ----------
+    sql : str
+        Command, which fetch all rows.
+    parameters : any
+        Parameters for command.
+
+    Returns
+    -------
+    JSON formatted str
+        Json with array of data.
+
+    None
+        If Integrity Error occurs.
+    """
     db=get_db()
     try:
-        fetched_rows = db.execute(sql,parameter).fetchall()
+        fetched_rows = db.execute(sql,parameters).fetchall()
         data = []
         for row in fetched_rows:
             d = collections.OrderedDict()
@@ -28,125 +60,260 @@ def execute_and_fetch_all(sql: str,parameter : any):
             data.append(d)
         return json.dumps(data,default=str)
     except db.IntegrityError:
-        print(f'error, something went wrong')  
+        print(f'Database Integrity Error, problem with fetching all, command :{sql} with parameters: {parameters}')  
         return None
-def execute_and_fetch_one(sql: str,parameter : any):
-    db=get_db()
     
+def execute_and_fetch_one(sql: str,parameters : any):
+    """
+    Fetch one row from Database, which satisfying provided sql command.
+
+    Parameters
+    ----------
+    sql : str
+        Command, which fetch one row.
+    parameters : any
+        Parameters for command.
+
+    Returns
+    -------
+    JSON formatted str
+        Fetched data.
+
+    None
+        If Integrity Error occurs.
+    """
+    db=get_db()
     try:
-        row = db.execute(sql,parameter).fetchone()
+        row = db.execute(sql,parameters).fetchone()
         d = collections.OrderedDict()
         keys = row.keys()
         for key in keys:
             d[key] = row[key]
         return json.dumps(d,default=str)
     except db.IntegrityError:
-        print(f'error, something went wrong')  
+        print(f'Database Integrity Error, problem with fetching one, command :{sql} with parameters: {parameters}')  
         return None
 
-def execute_and_ask(sql: str,parameter : any):
+def execute_and_ask(sql: str,parameters : any):
+    """
+    Ask Database.
+
+    Parameters
+    ----------
+    sql : str
+        Command, which asks Database for result.
+    parameters : any
+        Parameters for command.
+
+    Returns
+    -------
+    JSON formatted str
+        Result of asking.
+
+    None
+        If Integrity Error occurs.
+    """
     db=get_db()
     try:
-        row = db.execute(sql,parameter).fetchone()
+        row = db.execute(sql,parameters).fetchone()
         d = collections.OrderedDict()
         key = row.keys()[0]
         d['result'] = row[key]         
         return json.dumps(d,default=str)
     except db.IntegrityError:
-        print(f'error, something went wrong')  
+        print(f'Database Integrity Error, problem with asking, command :{sql} with parameters: {parameters}')  
         return None
-# collections
+    
+# CRUD for collections
 
 # create
-
 def create_collection(name_of_collection : str):
+    """
+    Create a new collection in database table.
+
+    Parameters
+    ----------
+    name_of_collection : str
+        Name of collection.
+
+    Returns
+    -------
+    bool
+        True if operation was successful.
+    """
     status = execute_command("INSERT INTO Collections (name) VALUES (?)", (name_of_collection,))
     if status is True:
-        print(f'Creates {name_of_collection} and insert into Collections table')
+        print(f'Create collection {name_of_collection} and insert into Collections table')
     return status
     
 # delete
+def delete_collection(collection_id : int):
+    """
+    Delete a existing collection from database table.
 
-def delete_collection(id_of_collection : int):
-    status = execute_command("DELETE FROM Collections WHERE collection_id=?", (id_of_collection,))
+    Parameters
+    ----------
+    collection_id : int
+        ID of collection, which will be deleted.
+
+    Returns
+    -------
+    bool
+        True if operation was successful.
+    """
+    status = execute_command("DELETE FROM Collections WHERE collection_id=?", (collection_id,))
     if status is True:
-        print(f'Deletes collection ID: {id_of_collection} from Collections table')
+        print(f'Delete collection with ID: {collection_id} from Collections table')
     return status
     
-# update
+# update name
+def update_collection(collection_id : int,new_name_of_collection : str):
+    """
+    Rename a existing collection.
 
-def update_collection(id_of_collection : int,new_name_of_collection : str):
-    status = execute_command("UPDATE Collections SET name=? WHERE collection_id=?", (new_name_of_collection,id_of_collection,))
+    Parameters
+    ----------
+    collection_id : int
+        ID of collection, which name will be changed.
+    new_name_of_collection : str
+        A new name of collection.
+
+    Returns
+    -------
+    bool
+        True if operation was successful.
+    """
+    status = execute_command("UPDATE Collections SET name=? WHERE collection_id=?", (new_name_of_collection,collection_id,))
     if status is True:
-        print(f'Updates collection ID: {id_of_collection},the new name of collection is {new_name_of_collection}')
+        print(f'Update collection ID: {collection_id},the new name of collection is {new_name_of_collection}')
     return status
     
 # read 
-
 def get_all_collections():
+    """
+    Get all existing collections.
+
+    Returns
+    -------
+    JSON formatted str
+        Data containing collections.
+    """
     data = execute_and_fetch_all("SELECT * FROM Collections",())
-    if data is None:
-        print(f'error, something went wrong') 
     return data
     
 def get_collection_status(collection_id : int):
+    """
+    Get status of collections.
+    Status contains how many collectibles in collections have already been visited.
+
+    Parameters
+    ----------
+    collection_id : int
+        ID of collection.
+    
+    Returns
+    -------
+    JSON formatted str
+        Status data.
+
+    None
+        If there was problem with obtaining data.
+    """
     query = "SELECT COUNT(name) FROM Collectibles WHERE collection_id=? AND is_visited=?"
     visited = execute_and_fetch_one(query,(collection_id,1))
     not_visited = execute_and_fetch_one(query,(collection_id,0))
     
     if visited is None or not_visited is None:
-        print(f'error, something went wrong') 
+        return None
 
     d = collections.OrderedDict()
     d['visited'] = json.loads(visited)['COUNT(name)']
     d['notVisited'] = json.loads(not_visited)['COUNT(name)']
     return json.dumps(d)
-#
-def get_collection_id(collection_name : str):
-    db=get_db()
-    try:
-        query = "SELECT * FROM Collections WHERE name='{0}'".format(collection_name)
-        collection = db.execute(query).fetchone()
-        return collection["collection_id"]
 
-    except db.IntegrityError:
-        print(f'error, something went wrong')
-        return 'error'  
-#
+def exists_collection_with_name(name_of_collection : str):
+    """
+    Ask the database if this name has already used.
 
-def exist_collection_with_name(name : str):
+    Parameters
+    ----------
+    name_of_collection : str
+        Name, which tests if there exists collection with that name.
+    
+    Returns
+    -------
+    JSON formatted str
+        Data contains true or false.
+
+    None
+        If there was problem with asking the database.
+    """
     ask = "SELECT EXISTS(SELECT * FROM Collections WHERE name=?)"
-    data = execute_and_ask(ask,(name,))
+    data = execute_and_ask(ask,(name_of_collection,))
     if data is None:
-        print(f'error, something went wrong') 
+        print(f'Error with asking the database, ask command: {ask}') 
     return data
 
 
-# collectibles
+# CRUD for collectibles
 
 # create
-
 def create_collectible(q_number : str,collection_id : str,name : str,instance_of : str,latitude : float,longitude : float):
+    """
+    Create a new collectible, which will be register into provided collection.
 
+    Parameters
+    ----------
+    q_number : str
+        QNumber of collectible.
+    collection_id : str
+        ID of collection, into which will be collectible added.
+    name : str
+        Name of collectible.
+    instance_of : str
+        Info about what sub types is collectible, for example if collectible is instance of castle or cave.
+    latitude : float
+        Latitude of collectible.
+    longitude : float
+        Longitude of collectible.
+    
+    Returns
+    -------
+    bool
+        True if collectible was created.
+    """
     status = execute_command("INSERT INTO Collectibles (q_number,collection_id,name,instance_of,latitude,longitude) VALUES (?,?,?,?,?,?)", (q_number,collection_id,name,instance_of,latitude,longitude,))
     if status is True:
-        print(f'Creates {name} and inserts into database')
+        print(f'Create {name} and inserts into database')
     return status
     
 # delete
-
 def delete_collectible(q_number : int, collection_id : int):
+    """
+    Delete collectible from collection.
+
+    Parameters
+    ----------
+    q_number : int 
+        QNumber of collectible, which will be deleted.
+    collection_id : int
+        Collection ID, from which will be collectible with provided QNumber deleted.
+    
+    Returns
+    -------
+    bool
+        True if collectible was deleted.
+    """
     status = execute_command("DELETE FROM Collectibles WHERE q_number=? AND collection_id=?",(q_number,collection_id,))
     if status is True:
-        print(f'Deletes collectible with Q number :{q_number} in collection with id : {collection_id}')
+        print(f'Delete collectible with Q number :{q_number} in collection with id : {collection_id}')
     return status
 
 # read
-
 def get_all_collectibles_in_collection(collection_id : int):
     data = execute_and_fetch_all("SELECT * FROM Collectibles WHERE collection_id=?",(collection_id,))
     if data is None:
-        print(f'error, something went wrong') 
+        print(f'Error with obtaining all collectibles in collections') 
     return data
 
 # update
@@ -165,19 +332,19 @@ def update_collectible_collection(q_number : int,collection_id : int,new_collect
         print(f'Update collection of collectible with Q number : Q{q_number} , which was in collection with id : {collection_id}')
     return status
 
-# visit, date 
+# visit
 def update_collectible_visit(q_number : int, is_visited : int) :
     status = execute_command("UPDATE Collectibles SET is_visited=?  WHERE q_number=?",
     (is_visited,q_number))
     if status is True:
         print(f'Update visit of the collectible with Q number : Q{q_number}')
     return status
-
+# date of visit
 def update_collectible_visit_date(q_number : int,date_format : str = None,date_from: str = None,date_to : str = None) :
     status = execute_command("UPDATE Collectibles SET visit_date_from=?, visit_date_to=?, visit_date_format=?  WHERE q_number=?",
     (date_from,date_to,date_format,q_number))
     if status is True:
-        print(f'Update visit of the collectible with Q number : Q{q_number}')
+        print(f'Update date of visit of the collectible with Q number : Q{q_number}')
     return status
 # icon
 def update_collectible_icon(q_number : int,icon_name : str):
@@ -186,7 +353,7 @@ def update_collectible_icon(q_number : int,icon_name : str):
     if status is True:
         print(f'Update icon of the collectible with Q number : Q{q_number}')
     return status
-
+# icon for all collectibles in collection
 def update_collectibles_in_collection_icon(collection_id : int,icon_name : str):
     status = execute_command("UPDATE Collectibles SET icon=?  WHERE collection_id=?",
     (icon_name,collection_id))

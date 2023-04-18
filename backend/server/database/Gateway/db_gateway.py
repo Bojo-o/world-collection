@@ -37,7 +37,7 @@ def exists_collections():
     if collection_name is None:
         return "Invalid request, name=<name of collection,which will be tested> must be provided"
 
-    result = db_CRUD.exist_collection_with_name(collection_name)
+    result = db_CRUD.exists_collection_with_name(collection_name)
     return result
 
 # post 
