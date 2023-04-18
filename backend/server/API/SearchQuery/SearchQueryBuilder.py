@@ -1,64 +1,114 @@
-class SearchQueryBuilder:
-    def __init__(self,entity_search_name : str):
-        self._entity_search_name = entity_search_name
-        self._parent_classes_set = set()
-        self._minus_parent_classes_set = set()
-        self._instances = False
+from abc import ABC, abstractmethod
 
-    def set_parent_class(self,class_Qnumber : str):
-        self._parent_classes_set.add(class_Qnumber)
+class SearchQueryBuilderException(Exception):
+    def __init__(self, message : str) -> None:
+        super().__init__(message)
 
-    def set_minus_parent_class(self,class_Qnumber : str):
-        self._minus_parent_classes_set.add(class_Qnumber)
+class SearchBaseQueryBuilder(ABC):
+    def __init__(self,statment : str) -> None:
+        self._searched_word : str|None = None
+        self._query = []
+        self._super_classes = set()
+        self._exceptions_classes = set()
+        self._statment : str = statment
+        self._geo_flag : bool = False
+        self._located_in_area = set()
+        self._not_located_in_area = set()
+        self._recursive_flag_for_located_in_area = False
+        self._LOCATED_IN_AREA_STATEMENT : str = "wdt:P131"
 
-    def set_searing_for_instances(self):
-        self._instances = True
-    
-    def __construct_classification(self, append_list : list , values : str ):
-        append_list.append("   VALUES ?parentClass { " + values + " }")
-        append_list.append("   ?item {0}wdt:P279* ?parentClass.".format("wdt:P31/" if self._instances else ""))
-        append_list.append("   hint:Prior hint:gearing \"forward\".")
-
-    def __convert_set_to_text(self,set : set):
+    def convert_set(self,set : set):
         list = []
         for item in set:
-            list.append(item + " ")
+            list.append("wd:" + item + " ")
         return "" . join(list)
+    
+    def set_geo_obtaining(self):
+        self._geo_flag = True
+    def set_recursive_searching_for_located_in_area(self):
+        self._recursive_flag_for_located_in_area = True
+    def set_seach_by_word(self,word : str):
+        self._searched_word = word
 
+    def add_super_class(self,Qnumber_of_class : str):
+        self._super_classes.add(Qnumber_of_class)
+    
+    def add_exception_class(self,Qnumber_of_class : str):
+        self._exceptions_classes.add(Qnumber_of_class)
+
+    def add_located_in_area(self,Qnumber_of_area : str):
+        self._located_in_area.add(Qnumber_of_area)
+
+    def add_not_located_in_area(self,Qnumber_of_area : str):
+        self._not_located_in_area.add(Qnumber_of_area)
+
+    def __append_header(self):
+        geo = "?coord" if self._geo_flag else ""
+        self._query.append("SELECT DISTINCT  ?item ?itemLabel ?description " + geo)
+        self._query.append("WHERE {")
+
+    def __append_footer(self):
+        self._query.append("?item schema:description ?description.")
+        self._query.append("""FILTER ( lang(?description) = "en" )""")      
+        self._query.append("""SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }""")
+        self._query.append("} ORDER BY ASC(?num) ")
+
+    def __append_hint(self):
+        self._query.append("hint:Prior hint:gearing \"forward\".")
+
+    def __build_predicate(self,values_name : str,statment : str,values : set,minus_flag = False,add_hint = True):
+        if minus_flag:
+            self._query.append("MINUS{")
+
+        self._query.append(" VALUES ?" + values_name + " {" + self.convert_set(values) + " }")
+        self._query.append(" ?item {} ?{}.".format(statment,values_name))
+
+        if add_hint:
+            self.__append_hint()
+
+        if minus_flag:
+            self._query.append("}")
     def build(self) -> str:
-        _service_mwapi = """SERVICE wikibase:mwapi 
-        { bd:serviceParam wikibase:endpoint "www.wikidata.org";
-        wikibase:api "EntitySearch"; mwapi:search "%s"; mwapi:language "en".
-        ?item wikibase:apiOutputItem mwapi:item. ?num wikibase:apiOrdinal true.}""" % (self._entity_search_name)
 
-        #str_parent_classes_list = []
-        #for item in self._parent_classes_set:
-        #    str_parent_classes_list.append(item + " ")
-        #
-        #str_parent_classes = "" . join(str_parent_classes_list)
-
-        #init empty query text 
-        query = []
-
-        query.append("SELECT DISTINCT  ?item ?itemLabel ?description")
-        query.append("WHERE {")
-        query.append("   " + _service_mwapi)
-
-        #query.append("   VALUES ?parentClass { " + str_parent_classes + " }")
-        #query.append("   ?item {0}wdt:P279* ?parentClass.".format("wdt:P31/" if self._instances else ""))
-        #query.append("   hint:Prior hint:gearing \"forward\".")
+        if self._super_classes.__len__() == 0:
+            raise SearchQueryBuilderException("There must be set at least one super class")
         
-        self.__construct_classification(query,self.__convert_set_to_text(self._parent_classes_set))
+        self._query.clear()
+        self.__append_header()
+        if self._searched_word is not None:
+            self._query.append("SERVICE wikibase:mwapi{ bd:serviceParam wikibase:endpoint \"www.wikidata.org\";wikibase:api \"EntitySearch\"; mwapi:search \"" + self._searched_word + "\"; mwapi:language \"en\".?item wikibase:apiOutputItem mwapi:item. ?num wikibase:apiOrdinal true.}")
+        
+        # super classes
+        self.__build_predicate("superClasses",self._statment,self._super_classes)
 
-        if len(self._minus_parent_classes_set) != 0:
-            query.append("  MINUS{")
-            self.__construct_classification(query,self.__convert_set_to_text(self._minus_parent_classes_set))
-            query.append("  }")
+        # exceptions
+        if self._exceptions_classes.__len__() != 0:
+            self.__build_predicate("exceptionClasses",self._statment,self._exceptions_classes,True)
 
-        query.append("   ?item schema:description ?description.")
-        query.append("   FILTER ( lang(?description) = \"en\" )")
-        query.append("   SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }")
-        query.append("} ORDER BY ASC(?num)")
+        if self._located_in_area.__len__() != 0:
+            self.__build_predicate("locatedInAreas",self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,self._located_in_area,False,True if self._recursive_flag_for_located_in_area else False)
+            
+        if self._not_located_in_area.__len__() != 0:
+            self.__build_predicate("notLocatedInAreas",
+                                self._LOCATED_IN_AREA_STATEMENT + "*" if self._recursive_flag_for_located_in_area else self._LOCATED_IN_AREA_STATEMENT,
+                                self._not_located_in_area,
+                                True,
+                                True if self._recursive_flag_for_located_in_area else False)
 
-        # join query and return it
-        return '\n'.join(query)
+        if self._geo_flag:
+            self._query.append("?item wdt:P625 ?coord .")
+
+        self.__append_footer()
+
+        return '\n'.join(self._query)
+
+
+class SearchClassesQueryBuilder(SearchBaseQueryBuilder):
+    def __init__(self) -> None:
+        super().__init__("wdt:P279*")
+    
+
+class SearchInstancesQueryBuilder(SearchBaseQueryBuilder):
+    def __init__(self) -> None:
+        super().__init__("wdt:P31/wdt:P279*")
+    

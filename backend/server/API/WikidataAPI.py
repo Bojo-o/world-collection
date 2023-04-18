@@ -5,7 +5,7 @@ from .NEWQuery.CollectiblesQuery.AroundCollectiblesSearchQueryBuilder import Aro
 from .NEWQuery.CollectiblesQuery.AdministrativeAreaCollectiblesSearchQueryBuilder import AdministrativeAreaCollectiblesSearchQueryBuilder
 
 from .NEWQuery.SearchQuery.SearchByClassRestrictionQueryBuilder import TYPES
-from .SearchQuery.NEWSearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
+from .SearchQuery.SearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
 from . import Formater
 from .NEWQuery.SearchQuery.SearchAreaQueryBuilders import SearchCollectibleTypesQueryBuilder , SearchAreaQueryBuilder

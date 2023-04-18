@@ -37,8 +37,8 @@ def create_app(test_config=None):
 
 
     #register api blueprint to app
-    from .API import API
-    app.register_blueprint(API.bp)
+    #from .API import API
+    #app.register_blueprint(API.bp)
 
     from .API import WikidataAPI
     app.register_blueprint(WikidataAPI.API)

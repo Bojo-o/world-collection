@@ -6,7 +6,7 @@ from .db_access import get_db,close_db
 def init_db():
     db =  get_db()
     with current_app.open_resource('database/Schemas/Collectibles.sql') as f:
-       db.executescript(f.read().decode('utf8'))
+        db.executescript(f.read().decode('utf8'))
     with current_app.open_resource('database/Schemas/Collections.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
