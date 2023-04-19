@@ -19,8 +19,8 @@ class SearchAreaQueryBuilder(SearchByClassRestrictionQueryBuilder):
     
     def set_geo_obtaining(self):
         self._geo_flag = True
-        self.select_variable("?lat","?lati")
-        self.select_variable("?lon","?long")
+        self.add_variable_into_select("?lat","?lati")
+        self.add_variable_into_select("?lon","?long")
 
     def set_recursive_searching_for_located_in_area(self):
         self._recursive_flag_for_located_in_area = True

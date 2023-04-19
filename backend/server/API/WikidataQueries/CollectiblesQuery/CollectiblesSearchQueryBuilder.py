@@ -19,10 +19,10 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self._time_filters = []
         self._quantity_filters = []
 
-        self.select_variable("?item","?QNumber",True,"?name")
-        self.select_variable("SAMPLE(?lat)","?lati")
-        self.select_variable("SAMPLE(?lon)","?long")
-        self.select_variable("GROUP_CONCAT( DISTINCT ?instancesLabel;separator=\"/\")","?subTypeOf")
+        self.add_variable_into_select("?item","?QNumber",True,"?name")
+        self.add_variable_into_select("SAMPLE(?lat)","?lati")
+        self.add_variable_into_select("SAMPLE(?lon)","?long")
+        self.add_variable_into_select("GROUP_CONCAT( DISTINCT ?instancesLabel;separator=\"/\")","?subTypeOf")
 
         self.add_group_by_("?item")
         self.add_group_by_("?itemLabel")
@@ -37,7 +37,7 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self.add_triple(object,predicate,value_name)
 
         if add_hint:
-            self.add_hint()
+            self.add_gearing_forward_hint()
 
         if minus_flag:
             self._query.append("}")
@@ -74,16 +74,14 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
 
         self.build_class_and_location_restriction()
 
-        #for itemFilter  in self._item_filters:
-        #    item : WikibaseItemFilterData = itemFilter
-        #    self.add_filter_exist("?item wdt:{} wd:{} .".format(item.property,item.value))
+        
 
         i = 0
         for timeFilter in self._time_filters:
             time : TimeFilterData = timeFilter
             temp_name = "?timeFilterTemp{}".format(i)
             self.add_triple("?item","wdt:{}".format(time.property),temp_name)
-            self.add_filter("\"{}\"^^xsd:dateTime {} {} ".format(time.date_value,time.comparison_operator.value,temp_name))
+            self.filter_wrapper("\"{}\"^^xsd:dateTime {} {} ".format(time.date_value,time.comparison_operator.value,temp_name))
             i = i + 1
         
         j = 0
@@ -95,11 +93,11 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
             unit = quantity.value_in_unit
             if unit is None:  
                 self.add_triple("?item","wdt:{}".format(quantity.property),temp_name)
-                self.add_filter("{} {} {}".format(str(quantity.quantity_value),quantity.comparison_operator.value,temp_name))
+                self.filter_wrapper("{} {} {}".format(str(quantity.quantity_value),quantity.comparison_operator.value,temp_name))
             else:
                 self.add_triple("wd:{}".format(unit),"wdt:P2370",temp_name + "conversion")
                 self.add_triple("?item","p:{}/psn:{}/wikibase:quantityAmount ".format(quantity.property,quantity.property),temp_name)
-                self.add_filter("({} * {}) {} {}".format(str(quantity.quantity_value),temp_name + "conversion",quantity.comparison_operator.value,temp_name))
+                self.filter_wrapper("({} * {}) {} {}".format(str(quantity.quantity_value),temp_name + "conversion",quantity.comparison_operator.value,temp_name))
             j = j + 1
 
         # get item coordinates property

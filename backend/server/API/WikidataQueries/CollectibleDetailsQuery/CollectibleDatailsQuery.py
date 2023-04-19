@@ -7,11 +7,11 @@ class CollectibleDetailsQuery(QueryBuilder):
         self._collectible = collectible_Qnumber
 
         self.set_distinct(True)
-        self.select_variable("?property")
-        self.select_variable("?dataType")
-        self.select_variable("GROUP_CONCAT( DISTINCT ?valueLabel ;separator=\"<space>\")","?values")
-        self.select_variable("?timePrecision")
-        self.select_variable("?unit")
+        self.add_variable_into_select("?property")
+        self.add_variable_into_select("?dataType")
+        self.add_variable_into_select("GROUP_CONCAT( DISTINCT ?valueLabel ;separator=\"<space>\")","?values")
+        self.add_variable_into_select("?timePrecision")
+        self.add_variable_into_select("?unit")
 
         self.add_group_by_("?property")
         self.add_group_by_("?dataType")
@@ -44,12 +44,12 @@ class CollectibleDetailsQuery(QueryBuilder):
 
         self.define_values_variable("?supportedDataTypes",self._supported_data_type,"wikibase:")
         self.add_triple("?wd","wikibase:propertyType","?supportedDataTypes")
-        self.add_filter("?wd not in ({})".format(self.convert_set(self._property_exception,", wd:")[1:]))
+        self.filter_wrapper("?wd not in ({})".format(self.convert_set(self._property_exception,", wd:")[1:]))
 
         self.add_triple("?wd","wikibase:propertyType","?dataType")
         self.add_triple("?statement","?ps","?value")
 
-        self.add_optional("?statement ?psv [wikibase:timePrecision  ?timePrecision].")
-        self.add_optional("?statement ?psv [wikibase:quantityUnit  ?unitValue].")
+        self.optional_wrapper("?statement ?psv [wikibase:timePrecision  ?timePrecision].")
+        self.optional_wrapper("?statement ?psv [wikibase:quantityUnit  ?unitValue].")
 
         self.add_label_servise("?wd rdfs:label ?property . ?value rdfs:label ?valueLabel. ?unitValue rdfs:label ?unit.")

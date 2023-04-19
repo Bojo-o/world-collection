@@ -25,13 +25,13 @@ class FilterDataQueryBuilder(QueryBuilder):
         self._property_constraint_type = property_constraint_type
 
         if property_constraint_type == PROPERTY_CONSTRAINT_TYPE.RANGE_CONSTRAINT:
-            self.select_variable("?max")
-            self.select_variable("?min")
+            self.add_variable_into_select("?max")
+            self.add_variable_into_select("?min")
         else:
-            self.select_variable("?item","?QNumber",True,"?name")
+            self.add_variable_into_select("?item","?QNumber",True,"?name")
 
         if self._property_constraint_type == PROPERTY_CONSTRAINT_TYPE.VALUE_TYPE_CONSTRAINT or self._property_constraint_type == PROPERTY_CONSTRAINT_TYPE.CONFLICT_WITH_CONSTRAINT:
-            self.select_variable("?rel","?relationQNumber",True,"?relation")
+            self.add_variable_into_select("?rel","?relationQNumber",True,"?relation")
 
         self._PROPERTY_CONSTRAINT = "P2302"
         self._QUALIFIER_CLASS = "P2308"

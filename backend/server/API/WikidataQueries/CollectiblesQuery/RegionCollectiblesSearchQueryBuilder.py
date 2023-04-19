@@ -27,5 +27,5 @@ class RegionCollectiblesSearchQueryBuilder(CollectiblesSearchQueryBuilder):
         self.add_triple("?countries","wdt:{}*".format(self._PART_OF),"wd:{}".format(self._region))
         self.add_triple("?countries","wdt:{}".format("P31"),"wd:{}".format(self._COUNTRY_CLASS))
         self.add_triple("?item","wdt:{}".format(self._COUNTRY),"?temp")
-        self.add_filter("?temp in ( ?countries )")
+        self.filter_wrapper("?temp in ( ?countries )")
 

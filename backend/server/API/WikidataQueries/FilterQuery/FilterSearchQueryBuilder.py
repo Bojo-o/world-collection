@@ -6,9 +6,9 @@ class FilterSearchQueryBuilder(QueryBuilder):
 
         self.set_distinct(True)
 
-        self.select_variable("?property","?PNumber",True,"?name")
-        self.select_variable("?dataType")
-        self.select_variable("?description")
+        self.add_variable_into_select("?property","?PNumber",True,"?name")
+        self.add_variable_into_select("?dataType")
+        self.add_variable_into_select("?description")
 
         self._type_for_search_filter = None
 
@@ -37,17 +37,17 @@ class FilterSearchQueryBuilder(QueryBuilder):
 
         self.define_values_variable("?superClasses",self._super_classes,"wd:")
         self.add_triple("?classes","wdt:P279*","?superClasses")
-        self.add_hint()
+        self.add_gearing_forward_hint()
 
         self.add_triple("?classes","wdt:P1963","?property")
-        self.add_filter("?property not in ({})".format(self.convert_set(self._property_exception,", wd:")[1:]))
+        self.filter_wrapper("?property not in ({})".format(self.convert_set(self._property_exception,", wd:")[1:]))
 
         self.define_values_variable("?supportedDataTypes",self._supported_data_type,"wikibase:")
         self.add_triple("?property","wikibase:propertyType","?supportedDataTypes")
         self.add_triple("?property", "wikibase:propertyType" ,"?dataType")
 
         self.add_triple("?property","schema:description","?description")
-        self.add_filter("lang(?description) = \"en\"")
+        self.filter_wrapper("lang(?description) = \"en\"")
         # add label service
         #self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\".")
         self.add_label_servise()

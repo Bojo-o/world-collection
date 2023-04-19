@@ -8,7 +8,7 @@ class WikiPediaLinkQuery(QueryBuilder):
         self._language = 'en'
 
         self.set_distinct(True)
-        self.select_variable("?article")
+        self.add_variable_into_select("?article")
 
     def set_language(self,language : str):
         self._language = language

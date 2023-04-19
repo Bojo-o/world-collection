@@ -12,8 +12,8 @@ class SearchBaseQueryBuilder(QueryBuilder,ABC):
         self._searched_word : str|None = None
 
 
-        self.select_variable("?item","?QNumber",True,"?name")
-        self.select_variable("?description")
+        self.add_variable_into_select("?item","?QNumber",True,"?name")
+        self.add_variable_into_select("?description")
         self.set_distinct(True)
 
         self.add_order_by_("ASC(?num)")
@@ -26,7 +26,7 @@ class SearchBaseQueryBuilder(QueryBuilder,ABC):
         if self._searched_word is  None:
             raise SearchQueryBaseBuilderException("For search service must be set search word")
         
-        self.add_service("wikibase:mwapi","bd:serviceParam wikibase:endpoint \"www.wikidata.org\";wikibase:api \"EntitySearch\";" +
+        self.service_wrapper("wikibase:mwapi","bd:serviceParam wikibase:endpoint \"www.wikidata.org\";wikibase:api \"EntitySearch\";" +
                             "mwapi:search \"{}\"; ".format(self._searched_word) + 
                             "mwapi:language \"{}\" .".format(language) +
                             " {} wikibase:apiOutputItem mwapi:item. ?num wikibase:apiOrdinal true.".format(append_to_variable_name))
@@ -40,7 +40,7 @@ class SearchBaseQueryBuilder(QueryBuilder,ABC):
         
         # get desc
         self.add_triple("?item","schema:description","?description")
-        self.add_filter("lang(?description) = \"en\"")
+        self.filter_wrapper("lang(?description) = \"en\"")
         # add label service
         #self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\".")
         self.add_label_servise()

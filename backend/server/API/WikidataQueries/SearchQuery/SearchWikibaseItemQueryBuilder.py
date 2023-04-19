@@ -15,4 +15,4 @@ class SearchWikibaseItemQueryBuilder(SearchByClassRestrictionQueryBuilder):
         self._none_of_constraint.add(Qnumber)
 
     def create_more_restrictions(self):
-        self.add_filter("?item not in ({})".format(self.convert_set(self._none_of_constraint,", wd:")[1:]))
+        self.filter_wrapper("?item not in ({})".format(self.convert_set(self._none_of_constraint,", wd:")[1:]))
