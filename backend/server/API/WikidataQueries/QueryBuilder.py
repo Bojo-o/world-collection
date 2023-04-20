@@ -108,7 +108,7 @@ class QueryBuilder(ABC):
 
     def define_values_variable(self,variable_name : str,values : set,values_prefix : str = ""):
         """
-        Create in query a new variable, which holds provided values.
+        Creates in query a new variable, which holds provided values.
 
         Parameters
         -------
@@ -136,6 +136,37 @@ class QueryBuilder(ABC):
         """
         self._query.append("SERVICE {} ".format(service) + "{ " + body + " }")
 
+    def restriction_wrapper(self,input_variable : str,value_name : str,predicate : str,values : set,gearing_forward_hint : bool = False, minus_flag : bool = False ):
+        '''
+        Wrapper for making restrictions. It creates from input parameters desired restriction condition.
+        
+        Parameters
+        ----------
+        input_variable : str
+            Name of variable, which will be restricted.
+        value_name : str
+            Defines in query a new variable with whis name, which will be used in restriction.
+        predicate : str
+            Predicate of restriction.
+        values : set
+            Set of values, which will be stored into a new defined variable.
+        gearing_forward_hint : bool [optional, default False]
+            Adds gearing forward hint for restriction.
+        minus_flag : bool [optional, defaut False]
+            Wraps entire restriction into MINUS, for better understanding of MINUS , please read Sparql Wikidata documentation.
+        '''
+        if minus_flag:
+            self._query.append("MINUS{")
+
+        self.define_values_variable(value_name,values,"wd:")
+        self.add_triple(input_variable,predicate,value_name)
+
+        if gearing_forward_hint:
+            self.add_gearing_forward_hint()
+
+        if minus_flag:
+            self._query.append("}")
+            
     def add_label_servise(self,additional_body : str = None):
         """
         Adds into query label service for obtaining labels from Wikidata.
@@ -207,6 +238,8 @@ class QueryBuilder(ABC):
     def get_coordinates_of_object(self,object : str):
         """
         Method for adding into query mechanism of obtaing coordinates of object.
+        Results are stored into variables : lat and lon.
+        Do not forget to add them into select if results should contains data about them.
 
         Parameters
         -------

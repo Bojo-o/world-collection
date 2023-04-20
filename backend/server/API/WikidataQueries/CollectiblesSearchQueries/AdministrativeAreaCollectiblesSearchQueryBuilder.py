@@ -29,5 +29,5 @@ class AdministrativeAreaCollectiblesSearchQueryBuilder(CollectiblesSearchQueryBu
         self.add_gearing_forward_hint()
 
         if self._area_exceptions.__len__ != 0 :
-            self.build_statement("?item","?areaExceptions","wdt:{}".format(self._IN_ADMIN_AREA),self._area_exceptions,True,True)
+            self.restriction_wrapper("?item","?areaExceptions","wdt:{}".format(self._IN_ADMIN_AREA),self._area_exceptions,True,True)
         

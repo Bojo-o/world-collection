@@ -1,32 +1,35 @@
 import collections
 import json
 
-from .WikidataQueries.CollectiblesQuery.AroundCollectiblesSearchQueryBuilder import AroundCollectiblesSearchQueryBuilder
-from .WikidataQueries.CollectiblesQuery.AdministrativeAreaCollectiblesSearchQueryBuilder import AdministrativeAreaCollectiblesSearchQueryBuilder
+from .WikidataQueries.SearchQueries.SearchCollectibleQueryBuilder import SearchCollectibleQueryBuilder
 
-from .WikidataQueries.SearchQuery.SearchByClassRestrictionQueryBuilder import TYPES
+from .WikidataQueries.CollectiblesSearchQueries.AroundCollectiblesSearchQueryBuilder import AroundCollectiblesSearchQueryBuilder
+from .WikidataQueries.CollectiblesSearchQueries.AdministrativeAreaCollectiblesSearchQueryBuilder import AdministrativeAreaCollectiblesSearchQueryBuilder
+
+from .WikidataQueries.SearchQueries.SearchByClassRestrictionQueryBuilder import TYPES
 #from .SearchQuery.SearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
 from . import Formater
-from .WikidataQueries.SearchQuery.SearchAreaQueryBuilders import SearchCollectibleTypesQueryBuilder , SearchAreaQueryBuilder
+from .WikidataQueries.SearchQueries.SearchAreaQueryBuilders import SearchAreaQueryBuilder
+from .WikidataQueries.SearchQueries.SearchCollectibleTypesQueryBuilder import SearchCollectibleTypesQueryBuilder
 from flask import (
     Blueprint, current_app,request
 )
-from .WikidataQueries.FilterQuery.FilterSearchQueryBuilder import FilterSearchQueryBuilder
-from .WikidataQueries.FilterQuery.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder , DATATYPES
-from .WikidataQueries.SearchQuery.SearchWikibaseItemQueryBuilder import SearchWikibaseItemQueryBuilder
+from .WikidataQueries.FilterQueries.FilterSearchQueryBuilder import FilterSearchQueryBuilder
+from .WikidataQueries.FilterQueries.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder , DATATYPES
+from .WikidataQueries.SearchQueries.SearchWikibaseItemQueryBuilder import SearchWikibaseItemQueryBuilder
 
-from .WikidataQueries.CollectiblesQuery.CollectiblesSearchQueryBuilder import CollectiblesSearchQueryBuilder
-from .WikidataQueries.CollectiblesQuery.FiltersData.ComparisonOperators import ComparisonOperators , Get_ComparisonOperators
-from .WikidataQueries.CollectiblesQuery.FiltersData.FilterType import FilterType, Get_FilterType
-from .WikidataQueries.CollectiblesQuery.CollectiblesSearchType import CollectiblesSearchType , Get_CollectiblesSearchType
-from .WikidataQueries.SearchQuery.SearchRegionQueryBuilder import SearchRegionQueryBuilder
-from .WikidataQueries.CollectiblesQuery.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
-from .WikidataQueries.CollectiblesQuery.WorldCollectiblesSearchQueryBuilder import WorldCollectiblesSearchQueryBuilder
-from .WikidataQueries.CollectiblesQuery.CollectibleDataGetter import CollectibleDataGetter
-from .WikidataQueries.CollectibleDetailsQuery.CollectibleBasicInfoQuery import CollectibleBasicInfoQuery
-from .WikidataQueries.CollectibleDetailsQuery.CollectibleDatailsQuery import CollectibleDetailsQuery
-from .WikidataQueries.CollectibleDetailsQuery.WikipediaLinkQuery import WikiPediaLinkQuery
+from .WikidataQueries.CollectiblesSearchQueries.CollectiblesSearchQueryBuilder import CollectiblesSearchQueryBuilder
+from .WikidataQueries.CollectiblesSearchQueries.FiltersData.ComparisonOperators import get_ComparisonOperator
+from .WikidataQueries.CollectiblesSearchQueries.FiltersData.FilterType import FilterType, get_FilterType
+from .WikidataQueries.CollectiblesSearchQueries.CollectiblesSearchType import CollectiblesSearchType , Get_CollectiblesSearchType
+from .WikidataQueries.SearchQueries.SearchRegionQueryBuilder import SearchRegionQueryBuilder
+from .WikidataQueries.CollectiblesSearchQueries.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
+from .WikidataQueries.CollectiblesSearchQueries.WorldCollectiblesSearchQueryBuilder import WorldCollectiblesSearchQueryBuilder
+from .WikidataQueries.CollectiblesSearchQueries.CollectibleDataGetter import CollectibleDataGetter
+from .WikidataQueries.CollectibleDetailsQueries.CollectibleBasicInfoQuery import CollectibleBasicInfoQuery
+from .WikidataQueries.CollectibleDetailsQueries.CollectibleDatailsQuery import CollectibleDetailsQuery
+from .WikidataQueries.CollectibleDetailsQueries.WikipediaLinkQuery import WikiPediaLinkQuery
 
 API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 
@@ -56,20 +59,12 @@ def search_for_classes():
     super_class = request.args.get("super_class")
     exceptions_classes = request.args.get("exceptions")
 
-    builder = SearchCollectibleTypesQueryBuilder()
+    builder = SearchCollectibleTypesQueryBuilder(super_class,exceptions_classes.split(',') if exceptions_classes is not None else None)
     
     if searched_word is not None:
-        builder.set_seach_by_word(searched_word)
+        builder.set_searched_word(searched_word)
 
-    if super_class is not None:
-        builder.add_super_class(super_class)
-    else:
-        builder.add_super_class(GEO_LOCATION)
     
-
-    if exceptions_classes is not None:
-        for item in exceptions_classes.split(','):
-            builder.add_exception_class(item)
             
     #print(builder.build())
     return process_query(builder.build())
@@ -80,11 +75,9 @@ def search_for_locations():
     if searched_word is None:
         return "Invalid request,param: key_word must be provided"
     
-    builder = SearchAreaQueryBuilder()
-    builder.set_seach_by_word(searched_word)
-    builder.add_super_class(GEO_LOCATION)
-    builder.set_recursive_searching(True)
-    builder.set_geo_obtaining()
+    builder = SearchCollectibleQueryBuilder()
+    builder.set_searched_word(searched_word)
+    
     print(builder.build())
     return process_query(builder.build())
 
@@ -112,7 +105,7 @@ def search_regions():
 
     searched_word = data['key_word']
     if searched_word is not None:
-        builder.set_seach_by_word(searched_word)
+        builder.set_searched_word(searched_word)
 
     print(builder.build())
     return process_query(builder.build())
@@ -127,7 +120,7 @@ def search_for_administrative_areas():
     builder = SearchAreaQueryBuilder()
     builder.set_recursive_searching(True)
     if searched_word is not None:
-        builder.set_seach_by_word(searched_word)
+        builder.set_searched_word(searched_word)
         builder.set_recursive_searching_for_located_in_area()
     
     builder.add_super_class(ADMINISTRATIVE_AREA)
@@ -233,19 +226,19 @@ def search_wikibase_item():
     builder = SearchWikibaseItemQueryBuilder()
     builder.set_recursive_searching(True)
     builder.set_at_least_one_super_class_mandatory(False)
-    builder.set_seach_by_word(searched_word)
+    builder.set_searched_word(searched_word)
     builder.set_distinct(True)
     
     if conflict_type_relation is not None:
-        builder.reset_type_for_exceptions_classes("wdt:" + conflict_type_relation)
+        builder.set_type_for_exceptions_classes("wdt:" + conflict_type_relation)
     if value_type_relation is not None:
         match value_type_relation:
             case "instance of":
-                builder.reset_type_for_super_classes(TYPES.INSTANCES.value)
+                builder.set_type_for_super_classes(TYPES.INSTANCES)
             case "subclass of":
-                builder.reset_type_for_super_classes(TYPES.CLASS.value)
+                builder.set_type_for_super_classes(TYPES.CLASS)
             case "instance or subclass of":
-                builder.reset_type_for_super_classes(TYPES.INSTANCEORCLASS.value)
+                builder.set_type_for_super_classes(TYPES.INSTANCEORCLASS)
 
     if value_type is not None and value_type.__eq__('') == False:
         values = value_type.split(',')
@@ -260,7 +253,7 @@ def search_wikibase_item():
     if none_values is not None and none_values.__eq__('') == False:
         none_values = none_values.split(',')
         for none_value in none_values:
-            builder.add_none_of_constraint(none_value)
+            builder.add_exception_constraint(none_value)
     
     #print(builder.build())
     return process_query(builder.build())
@@ -382,18 +375,18 @@ def search_collectibles():
         try:
             for item in filters:
                 property : str = item['property']
-                filter_type =  Get_FilterType(item['filterType'])
+                filter_type =  get_FilterType(item['filterType'])
                 match (filter_type):
                     case FilterType.WIKIBASEITEM:
                         value : str = item['data']['item']
                         builder.add_item_filter(property,value)
                     case FilterType.QUANTITY:
-                        comparison_operator = Get_ComparisonOperators(item['data']['comparisonOperator'])
+                        comparison_operator = get_ComparisonOperator(item['data']['comparisonOperator'])
                         quantity_value : int = item['data']['value']
                         unit :str =  item['data']['unit']
                         builder.add_quantity_filter(property,comparison_operator,quantity_value,unit )
                     case FilterType.TIME:
-                        comparison_operator = Get_ComparisonOperators(item['data']['comparisonOperator'])
+                        comparison_operator = get_ComparisonOperator(item['data']['comparisonOperator'])
                         time_value : str = item['data']['time']
                         builder.add_time_filter(property,comparison_operator,time_value)
         except:

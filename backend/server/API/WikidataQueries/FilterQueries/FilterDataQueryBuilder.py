@@ -3,20 +3,33 @@ from ..QueryBuilder import QueryBuilder
 
 
 class DATATYPES(Enum):
+    '''
+    Every Wikidatas property value has it own data type.
+    This enum contains supported data types for project.
+    '''
     QUANTITY = "Quantity"
     TIME = "Time"
     WIKIBASEITEM = "Item"
 
 class PROPERTY_CONSTRAINT_TYPE(Enum):
+    '''
+    Enum contining QNumbers of properties constraints, which carry data about value.
+    '''
     ONE_OF_CONSTRAINT = "Q21510859" #item of property constraint
     VALUE_TYPE_CONSTRAINT = "Q21510865" #relation , class
     NONE_OF_CONSTRAINT = "Q52558054" # #item of property constraint
     CONFLICT_WITH_CONSTRAINT = "Q21502838" # property, item of property constraint
-
     ALLOWED_UNITS_CONSTRAINT = "Q21514353"
     RANGE_CONSTRAINT = "Q21510860"
 
 class FilterDataQueryBuilder(QueryBuilder):
+    '''
+    Builder for building Sparql query, which will fetch from wikidata necessary data about speciffic property.
+    In this project it is used in "filter step", where user chooses some filter (means property in wikidata) and it is needed to fetch data about that filter.
+    For a filter, whose value is `Wikibase item type`, it retrieves data about what kind of item this value can be.
+    For `Quantity` possible unit, in which quantity might be expressed and the range of max and min value.
+    For `Time` we do not need anything data. We know it contains only some time point.
+    '''
     def __init__(self,property_Pnumber : str,data_type_of_property : DATATYPES,property_constraint_type : PROPERTY_CONSTRAINT_TYPE):
         super().__init__()
 

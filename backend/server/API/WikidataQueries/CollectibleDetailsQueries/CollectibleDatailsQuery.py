@@ -1,6 +1,10 @@
 from ..QueryBuilder import QueryBuilder
 
 class CollectibleDetailsQuery(QueryBuilder):
+    """
+    Query for obtaining all details of collectible, which are related to specific categories or values of details are of a certain supported type.   
+
+    """
     def __init__(self,collectible_Qnumber : str):
         super().__init__()
 

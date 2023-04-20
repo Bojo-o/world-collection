@@ -1,6 +1,12 @@
 from ..QueryBuilder import QueryBuilder
 
 class CollectibleBasicInfoQuery(QueryBuilder):
+    """
+    Query for obtaining basic data of collectible.
+    It ask Wikidata for description of collectible and also for image, if it exists.
+    Now, it only support english description, so others will be throwed out.
+
+    """
     def __init__(self,collectible_Qnumber : str):
         super().__init__()
 

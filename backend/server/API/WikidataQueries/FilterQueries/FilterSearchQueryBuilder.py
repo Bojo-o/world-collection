@@ -1,6 +1,13 @@
 from ..QueryBuilder import QueryBuilder
 
 class FilterSearchQueryBuilder(QueryBuilder):
+    '''
+    It searchs for all filters, which are related to provided type/class, that means for example for castle class it search for properties related to castle class objects.
+    Then we will said, that this filters are recomended for provided class.
+    In project we also, support using for each class albitraly filter.
+    If type is not set by method, then it search for all possible filters.
+    (Hovewer, this query takes long time to be done for all filters, so we fetched it once and stores that values into json. When the fronted requires all filters, we will send this json.)
+    '''
     def __init__(self) -> None:
         super().__init__()
 
@@ -26,6 +33,9 @@ class FilterSearchQueryBuilder(QueryBuilder):
 
 
     def set_type_for_search_filter(self,Qnumber_of_type : str):
+        '''
+        Sets a type, for which it will search for recomended filters.
+        '''
         self._type_for_search_filter = Qnumber_of_type
 
     def build_where_body(self):
@@ -48,6 +58,5 @@ class FilterSearchQueryBuilder(QueryBuilder):
 
         self.add_triple("?property","schema:description","?description")
         self.filter_wrapper("lang(?description) = \"en\"")
-        # add label service
-        #self.add_service("wikibase:label","bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\".")
+
         self.add_label_servise()

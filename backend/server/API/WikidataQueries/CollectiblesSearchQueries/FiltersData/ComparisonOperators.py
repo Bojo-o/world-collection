@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ComparisonOperators(Enum):
+class ComparisonOperator(Enum):
     EQUAL_TO = "="
     NOT_EQUAL = "!="
     GREATER_THAN = ">"
@@ -8,5 +8,5 @@ class ComparisonOperators(Enum):
     GREATER_THAN_OR_EQUAL_TO = ">="
     LESS_THAN_OR_EQUAL_TO = "<="
 
-def Get_ComparisonOperators(value : str):
-    return ComparisonOperators(value)
+def get_ComparisonOperator(value : str):
+    return ComparisonOperator(value)

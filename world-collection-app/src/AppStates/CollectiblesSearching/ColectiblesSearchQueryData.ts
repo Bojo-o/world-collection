@@ -26,6 +26,7 @@ export class CollectiblesSearchQueryData{
         if (initializer.area) this.area = initializer.area;    
         if (initializer.exceptionsSubAreas) this.exceptionsSubTypes = initializer.exceptionsSubTypes;    
         if (initializer.areaSearchType) this.areaSearchType = initializer.areaSearchType;
+        if (initializer.exceptionsSubAreas) this.exceptionsSubAreas = initializer.exceptionsSubAreas; 
         if (initializer.region) this.region = initializer.region;
     }
     public getType(){

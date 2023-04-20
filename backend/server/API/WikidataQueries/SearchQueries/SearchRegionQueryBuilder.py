@@ -1,6 +1,10 @@
-from .SearchBaseQueryBuilder import SearchBaseQueryBuilder
+from .SearchQueryBuilder import SearchQueryBuilder
 
-class SearchRegionQueryBuilder(SearchBaseQueryBuilder):
+class SearchRegionQueryBuilder(SearchQueryBuilder):
+    '''
+    Builder for creating query, which will search for item on Wikidata, that are instances of regions of words.
+    That conclude continets as Europe, Asia ... but also more specific regions as East Europe or Centre Europe.
+    '''
     def __init__(self) -> None:
         super().__init__()
 
