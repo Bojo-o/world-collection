@@ -132,11 +132,11 @@ def search_for_administrative_areas():
             builder.add_exception_class(item)
 
     if located_in_area is not None:
-        builder.add_located_in_area(located_in_area)
+        builder.add_located_in_area_resctriction(located_in_area)
 
     if not_located_in_area is not None:
         for item in not_located_in_area.split(','):
-            builder.add_not_located_in_area(item)
+            builder.add_not_located_in_area_resctriction(item)
             
     print(builder.build())
     return process_query(builder.build())
@@ -328,12 +328,12 @@ def search_collectibles():
                 area : str = data['area']
                 if area is None:
                     return "Invalid request,param: administrative_area must be provided"
-                builder.set_search_area(area)
+                builder.set_administrative_area(area)
 
                 area_exceptions : list[str] = data['exceptionsSubAreas']
                 if area_exceptions is not None:
                     for exc in area_exceptions:
-                        builder.add_area_exception(exc)
+                        builder.add_administrative_area_exception(exc)
     
             case CollectiblesSearchType.AROUND:
                 builder = AroundCollectiblesSearchQueryBuilder(parent_class_of_collectibles)

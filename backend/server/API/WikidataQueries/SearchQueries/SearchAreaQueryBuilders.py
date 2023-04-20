@@ -15,12 +15,31 @@ class SearchAreaQueryBuilder(SearchByClassRestrictionQueryBuilder):
         self._LOCATED_IN_AREA_STATEMENT : str = "wdt:P131"
     
     def set_recursive_searching_for_located_in_area(self):
+        '''
+        Sets recursivly searching for areas.
+        '''
         self._recursive_flag_for_located_in_area = True
     
-    def add_located_in_area(self,Qnumber_of_area : str):
+    def add_located_in_area_resctriction(self,Qnumber_of_area : str):
+        '''
+        Adds into query restriction. Founded locations are located in provided location.
+
+        Parameters
+        ----------
+        Qnumber_of_area : str
+            QNumber of location.
+        '''
         self._located_in_area.add(Qnumber_of_area)
 
-    def add_not_located_in_area(self,Qnumber_of_area : str):
+    def add_not_located_in_area_resctriction(self,Qnumber_of_area : str):
+        '''
+        Adds into query restriction. Founded locations are not located in provided location.
+
+        Parameters
+        ----------
+        Qnumber_of_area : str
+            QNumber of location.
+        '''
         self._not_located_in_area.add(Qnumber_of_area)
 
     def create_more_restrictions(self):

@@ -2,7 +2,19 @@ import collections
 import json
 
 def toJson(input):
-    
+    '''
+    Convert provided input to json format.
+    It works only for input, which is result of Wikidata sparql endpoint query.
+
+    Parameters
+    ----------
+    input : any
+        Result, which return Wikidata sparql endpoint query.
+    Returns
+    -------
+    JSON formatted str
+            Result of query in JSON formatted str.
+    '''
     data = input['results']['bindings']
     formatted_data = []
 

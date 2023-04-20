@@ -2,6 +2,9 @@ from enum import Enum
 
 
 class CollectiblesSearchType(Enum):
+    '''
+    Enum, which contains collection of all supported types of "location" part of collectible searching.
+    '''
     AROUND = "Radius"
     ADMINISTRATIVE = "Area"
     REGION = "Region"
