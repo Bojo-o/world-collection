@@ -31,7 +31,7 @@ function CollectiblesAdding(){
         setPosition({lat : providedCollectible.lati,lng : providedCollectible.long});
     }
     const dataGetter = (searchWord : string) => {
-        return WikiDataAPI.searchForPlaces(searchWord);
+        return WikiDataAPI.searchForCollectible(searchWord);
     }
     const handleClickedCollectible = (data : SearchData) => {
         fetchCollectibleData(data.QNumber);

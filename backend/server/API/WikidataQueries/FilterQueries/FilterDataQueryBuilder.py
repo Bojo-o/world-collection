@@ -9,7 +9,7 @@ class DATATYPES(Enum):
     '''
     QUANTITY = "Quantity"
     TIME = "Time"
-    WIKIBASEITEM = "Item"
+    WIKIBASEITEM = "WikibaseItem"
 
 class PROPERTY_CONSTRAINT_TYPE(Enum):
     '''

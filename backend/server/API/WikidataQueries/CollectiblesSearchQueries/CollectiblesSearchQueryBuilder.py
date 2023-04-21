@@ -24,6 +24,8 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
         self._time_filters = []
         self._quantity_filters = []
 
+        self.set_distinct(True)
+
         self.add_variable_into_select("?item","?QNumber",True,"?name")
         self.add_variable_into_select("SAMPLE(?lat)","?lati")
         self.add_variable_into_select("SAMPLE(?lon)","?long")
@@ -36,7 +38,7 @@ class CollectiblesSearchQueryBuilder(QueryBuilder,ABC):
 
     def add_class_exception(self, Qnumber_of_class: str):
         '''
-        Adds into query class exception, meaning that, founded collectibles will not be instances of this exception class.
+        Adds into query class exception, meaning that, found collectibles will not be instances of this exception class.
         '''
         self._exception_classes.add(Qnumber_of_class)
 

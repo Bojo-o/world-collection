@@ -18,7 +18,7 @@ class CollectibleDataGetter(CollectiblesSearchQueryBuilder):
     
     def set_collectible(self,Qnumber_of_collectible : str):
         '''
-        Sets collectible, for which will data be obtained.
+        Sets collectible, for which data will be obtained.
 
         Parameters
         ---------

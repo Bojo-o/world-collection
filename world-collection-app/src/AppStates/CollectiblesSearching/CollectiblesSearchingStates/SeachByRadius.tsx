@@ -27,7 +27,7 @@ function SearchByRadius({handleNext: handleRadiusArea,handleBack} : SearchByRadi
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
     const placesDataGetter = (searchWord : string) => {
-        return WikiDataAPI.searchForPlaces(searchWord);
+        return WikiDataAPI.searchForCollectible(searchWord);
     }
 
     const handleClickedPlace = (data : SearchData) => {

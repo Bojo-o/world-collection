@@ -9,14 +9,14 @@ export class WikibaseItemFilterData {
     constructor(){
     }
     private trasform(data : WikibaseItemPropertyData[]){
-        let result : string = ""
-        data.map((d) => {
-            if (result == ""){
-                result = d.QNumber
-            }else{
-                result = result + "," +d.QNumber
-            }
-            
+        //let result : string = ""
+        let result : string[]  =  data.map((d) => {
+            //if (result == ""){
+            //    result = d.QNumber
+            //}else{
+            //    result = result + "," +d.QNumber
+            //}
+            return d.QNumber;
         })
         return result;
     }

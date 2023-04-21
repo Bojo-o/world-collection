@@ -9,10 +9,10 @@ import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/
 import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
 import { CollectibleDetail } from "../Data/CollectibleDetails";
 
-const urlCollectiblesType = "WikidataAPI/search/classes";
-const urlPlaces = "WikidataAPI/search/places";
+const urlCollectiblesType = "WikidataAPI/search/collectible_allowed_types";
+const urlPlacesOrCollectibles = "WikidataAPI/search/placesOrCollectibles";
 const urlAdministrativeAreas = "WikidataAPI/search/administrative_areas";
-const urlSearchFilters = "WikidataAPI/get/filters";
+const urlSearchFilters = "WikidataAPI/get/recomended_filters";
 const urlSearchFilterData = "WikidataAPI/get/filter_data";
 const urlSearchWikibaseItem = "WikidataAPI/search/wikibase_item"
 const urlSearchCollectibles = "WikidataAPI/search/collectibles";
@@ -95,86 +95,127 @@ export class WikiDataAPI {
         return response.json();
     }
     static async searchForTypesOfCollectiblesExceptions(searchWord : string,superClass : string|undefined,exceptionsClasses : string[]){
-        let param = new Map<string,string>();
-        if (searchWord !== ""){
-            param.set("key_word",searchWord)
-        }
-        if (superClass != undefined){
-            param.set("super_class",superClass)
-        }
+        //let param = new Map<string,string>();
+        //if (searchWord !== ""){
+        //    param.set("key_word",searchWord)
+        //}
+        //if (superClass != undefined){
+        //    param.set("super_class",superClass)
+        //}
         
-        param.set("exceptions",exceptionsClasses.join(","))
-    
-        const data = await this.fetchData(urlCollectiblesType, param);
+        //param.set("exceptions",exceptionsClasses.join(","))
+        let params = {
+            search_word : searchWord,
+            super_class : superClass,
+            exception_classes : exceptionsClasses
+        }
+        const data = await this.fetchDataNEW(urlCollectiblesType, JSON.stringify(params));
         return this.convertToSearchDataModel(data);
     }
-    static async searchForAdministrativeAreasExceptions(searchWord : string,locatedInArea : string|undefined,notLocatedInAreas : string[]){
-        let param = new Map<string,string>();
-        if (searchWord !== ""){
-            param.set("key_word",searchWord)
-        }
-        if (locatedInArea != undefined){
-            param.set("located_in_area",locatedInArea)
-        }
+    static async searchForAdministrativeAreasExceptions(searchWord : string,locatedInArea : string|null,notLocatedInAreas : string[]){
+        //let param = new Map<string,string>();
+        //if (searchWord !== ""){
+        //    param.set("key_word",searchWord)
+        //}
+        //if (locatedInArea != undefined){
+        //param.set("located_in_area",locatedInArea)
+        //}
         
-        param.set("not_located_in_area",notLocatedInAreas.join(","))
-    
-        const data = await this.fetchData(urlAdministrativeAreas, param);
+        //param.set("not_located_in_area",notLocatedInAreas.join(","))
+        let params = {
+            search_word : searchWord,
+            located_in_area : locatedInArea,
+            not_located_in_areas : notLocatedInAreas
+        }
+        const data = await this.fetchDataNEW(urlAdministrativeAreas, JSON.stringify(params));
         return this.convertToSearchDataModel(data);
     }
     static async searchForFilterDataQuantity(property: string){
-        let param = new Map<string,string>();
-        param.set("property",property)
-        param.set("data_type","Quantity")
-        const data = await this.fetchData(urlSearchFilterData, param);
+        //let param = new Map<string,string>();
+        //param.set("property",property)
+        //param.set("data_type","Quantity")
+        //const data = await this.fetchData(urlSearchFilterData, param);
+        let params = {
+            property : property,
+            data_type : "Quantity"
+        }
+        const data = await this.fetchDataNEW(urlSearchFilterData,JSON.stringify(params));
         return this.convertToQuantityFilterData(data);
     }
     static async searchForFilterDataWikibaseItem(property: string){
-        let param = new Map<string,string>();
-        param.set("property",property)
-        param.set("data_type","WikibaseItem")
-        const data = await this.fetchData(urlSearchFilterData, param);
+        //let param = new Map<string,string>();
+        //param.set("property",property)
+        //param.set("data_type","WikibaseItem")
+        //const data = await this.fetchData(urlSearchFilterData, param);
+        let params = {
+            property : property,
+            data_type : "WikibaseItem"
+        }
+        const data = await this.fetchDataNEW(urlSearchFilterData,JSON.stringify(params));
         return this.convertToWikibaseItemFilterData(data);
     }
     static async searchForTypesOfCollectibles(searchWord : string){
-        console.log(searchWord)
-        let param = new Map<string,string>();
-        param.set("key_word",searchWord)
-        const data = await this.fetchData(urlCollectiblesType, param);
+        //console.log(searchWord)
+        //let param = new Map<string,string>();
+        //param.set("key_word",searchWord)
+        let params = {
+            search_word : searchWord
+        }
+        const data = await this.fetchDataNEW(urlCollectiblesType, JSON.stringify(params));
         return this.convertToSearchDataModel(data);
     }
-    static async searchForPlaces(searchWord : string){
-        let param = new Map<string,string>();
-        param.set("key_word",searchWord)
-        const data = await this.fetchData(urlPlaces, param);
+    static async searchForCollectible(searchWord : string){
+        //let param = new Map<string,string>();
+        //param.set("key_word",searchWord)
+        let params = {
+            search_word : searchWord
+        }
+        const data = await this.fetchDataNEW(urlPlacesOrCollectibles,JSON.stringify(params));
         return this.convertToSearchDataModel(data);
     }
     static async searchForAdministrativeAreas(searchWord : string){
-        let param = new Map<string,string>();
-        param.set("key_word",searchWord)
-        const data = await this.fetchData(urlAdministrativeAreas, param);
+        //let param = new Map<string,string>();
+        //param.set("key_word",searchWord)
+        let params = {
+            search_word : searchWord,
+            
+        }
+        const data = await this.fetchDataNEW(urlAdministrativeAreas, JSON.stringify(params));
+        //const data = await this.fetchData(urlAdministrativeAreas, param);
         return this.convertToSearchDataModel(data);
     }
 
     static async searchForFilters(QNumberOfType :  string | null = null){
-        let param = new Map<string,string>();
-        console.log(QNumberOfType)
-        if (QNumberOfType != null){
-            param.set("type",QNumberOfType)
+        //let param = new Map<string,string>();
+        //console.log(QNumberOfType)
+        //if (QNumberOfType != null){
+        //    param.set("type",QNumberOfType)
+        //}
+        let params =  {
+            type : QNumberOfType
         }
-        const data = await this.fetchData(urlSearchFilters, param);
+        const data = await this.fetchDataNEW(urlSearchFilters, JSON.stringify(params));
         return this.convertToFiltersDataModel(data);
     }
     static async searchWikibaseItem(searchWord : string, wikibaseItemFilterData : WikibaseItemFilterData){
-        let param = new Map<string,string>();
-        param.set("key_word",searchWord)
+        //let param = new Map<string,string>();
+        //param.set("key_word",searchWord)
         
-        param.set("value_type",wikibaseItemFilterData.getValueTypeQNumbers())
-        param.set("value_type_relation",wikibaseItemFilterData.getValueTypesRelation())
-        param.set("conflict_type",wikibaseItemFilterData.getConflictTypeQNumbers())
-        param.set("conflict_type_relation",wikibaseItemFilterData.getConflictTypesRelation())
-        param.set("none_values",wikibaseItemFilterData.getNoneValuesQNumbers())
-        const data = await this.fetchData(urlSearchWikibaseItem, param);
+        //param.set("value_type",wikibaseItemFilterData.getValueTypeQNumbers())
+        //param.set("value_type_relation",wikibaseItemFilterData.getValueTypesRelation())
+        //param.set("conflict_type",wikibaseItemFilterData.getConflictTypeQNumbers())
+        //param.set("conflict_type_relation",wikibaseItemFilterData.getConflictTypesRelation())
+        //param.set("none_values",wikibaseItemFilterData.getNoneValuesQNumbers())
+        //const data = await this.fetchData(urlSearchWikibaseItem, param);
+        let params  = {
+            search_word : searchWord,
+            value_type : wikibaseItemFilterData.getValueTypeQNumbers(),
+            value_type_relation : wikibaseItemFilterData.getValueTypesRelation(),
+            conflict_type : wikibaseItemFilterData.getConflictTypeQNumbers(),
+            conflict_type_relation : wikibaseItemFilterData.getConflictTypesRelation(),
+            none_values: wikibaseItemFilterData.getNoneValuesQNumbers()
+        }
+        const data = await this.fetchDataNEW(urlSearchWikibaseItem,JSON.stringify(params));
         return this.convertToSearchDataModel(data);
     }
     static async searchCollectibles(params : CollectiblesSearchQueryData){
@@ -184,7 +225,7 @@ export class WikiDataAPI {
     }
     static async searchRegions(searchWord : string){
         let params  = {
-            key_word : (searchWord === "") ? null : searchWord
+            search_word : (searchWord === "") ? null : searchWord
         }
         const data = await this.fetchDataNEW(urlSearchRegions,JSON.stringify(params));
         return this.convertToSearchDataModel(data);

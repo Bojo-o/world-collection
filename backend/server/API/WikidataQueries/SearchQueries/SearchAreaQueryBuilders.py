@@ -22,7 +22,7 @@ class SearchAreaQueryBuilder(SearchByClassRestrictionQueryBuilder):
     
     def add_located_in_area_resctriction(self,Qnumber_of_area : str):
         '''
-        Adds into query restriction. Founded locations are located in provided location.
+        Adds into query restriction. Found locations are located in provided location.
 
         Parameters
         ----------
@@ -33,7 +33,7 @@ class SearchAreaQueryBuilder(SearchByClassRestrictionQueryBuilder):
 
     def add_not_located_in_area_resctriction(self,Qnumber_of_area : str):
         '''
-        Adds into query restriction. Founded locations are not located in provided location.
+        Adds into query restriction. Found locations are not located in provided location.
 
         Parameters
         ----------
