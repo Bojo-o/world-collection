@@ -3,7 +3,7 @@ import { Collection } from "../Data/Database/Colection";
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
 import IconsSelector from "../ImageIcons/IconsSelector";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 
 function countPages(results: number,rowsPerPage : number) : number {
     return results === 0 ? 1 : Math.ceil(results / rowsPerPage);

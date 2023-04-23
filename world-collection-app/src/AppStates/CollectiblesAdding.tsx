@@ -44,7 +44,7 @@ function CollectiblesAdding(){
     const fetchCollectibleData = (QNumber : string) => {
         setLoading(true)
         setError(false)
-        WikiDataAPI.collectibleDataGetter(QNumber).then((data) => {
+        WikiDataAPI.getCollectibleData(QNumber).then((data) => {
             console.log(data)
             setCollectible(data)
 

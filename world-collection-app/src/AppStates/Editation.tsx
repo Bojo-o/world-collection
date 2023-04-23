@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Collection } from "../Data/Database/Colection";
 import { Collectible } from "../Data/Database/Collectible";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 import CollectiblesTable from "../Editation/CollectiblesTable";
 import CollectionTable from "../Editation/CollectionTable";
 
@@ -37,7 +37,7 @@ function Editation(){
 
     const fetchCollections = () => {
         setCollectionsLoading(true);
-        DatabaseAPI.getCollections().then( (collections) => {
+        DatabaseAPI.getAllCollections().then( (collections) => {
             setCollectionsLoading(false);
             setCollections(collections);            
         }        
@@ -75,7 +75,7 @@ function Editation(){
             return new Collection({...prev,...change});
         });
 
-        DatabaseAPI.askIfExistsCollections(value).then((r) => {
+        DatabaseAPI.existsCollectionWithName(value).then((r) => {
             if (value.length > 2){
                 setCanSaveCollection(!r)
             }else{

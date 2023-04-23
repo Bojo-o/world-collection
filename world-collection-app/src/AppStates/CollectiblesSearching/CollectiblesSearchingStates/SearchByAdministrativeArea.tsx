@@ -17,7 +17,7 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
     }
     const subAreaDataGetter = (seachWord : string) => {
         let exceptionSubAreasQNumbers = exceptionSubAreas.map((type) => { return type.GetQNumber()})
-        return WikiDataAPI.searchForAdministrativeAreasExceptions(seachWord,(area != null) ? area.GetQNumber() : null,exceptionSubAreasQNumbers)
+        return WikiDataAPI.searchForSubAdministrativeAreasOfArea(seachWord,(area != null) ? area.GetQNumber() : null,exceptionSubAreasQNumbers)
     }
     const handleAddingArea = (data : SearchData) => {
         setArea(new Entity(data.QNumber,data.name))

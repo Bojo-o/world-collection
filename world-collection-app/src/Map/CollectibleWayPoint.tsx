@@ -4,7 +4,7 @@ import { Marker, Popup } from 'react-leaflet';
 import { CustomDate, DatePrecision } from '../Data/CustomDate';
 import { Collectible } from '../Data/Database/Collectible';
 import { DATEOPTIONS } from '../Data/DateOption';
-import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
+import { DatabaseAPI } from '../API/DatabaseAPI';
 import Details from '../Details/Details';
 import IconsSelector from '../ImageIcons/IconsSelector';
 import './Card.css'
@@ -55,7 +55,7 @@ function CollectibleWayPoint({collectible} : CollectibleWayPointProps){
         if (isVisit){
             //DatabaseAPI.postVisitation(collectible.QNumber,isVisit,DATEOPTIONS[dateOption],dateFrom,dateTo)
         }else{
-            DatabaseAPI.postVisitation(collectible.QNumber,isVisit)
+            DatabaseAPI.setCollectibleVisitation(collectible.QNumber,isVisit)
         }
         collectible.isVisit = isVisit;
         //collectible.dateFormat = DATEOPTIONS[dateOption];

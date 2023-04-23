@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Collectible } from "../Data/Database/Collectible";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import './Notes.css';
 

@@ -6,10 +6,10 @@ import json
 
 from ..Database_operations import db_CRUD
 
-bp_database_gateway = Blueprint('DatabaseGateway', __name__, url_prefix='/DatabaseGateway')
+bp_database_gateway = Blueprint('DatabaseAPI', __name__, url_prefix='/DatabaseAPI')
 
 
-@bp_database_gateway.route('/get/collections', methods=['GET'])
+@bp_database_gateway.route('/get/collections', methods=['POST'])
 def get_collections():
     """
     Obtain data of all collections in database.
@@ -35,7 +35,7 @@ def get_collections():
         i+=1
     return json.dumps(data)
 
-@bp_database_gateway.route('/get/collectibles',methods=['GET'])
+@bp_database_gateway.route('/get/collectibles',methods=['POST'])
 def get_collectibles_in_collection():
     """
     Obtain data of all collectibles in specific collection.
@@ -52,7 +52,10 @@ def get_collectibles_in_collection():
     None
         If fetching was not successful.
     """
-    collection_id = request.args.get("collectionID")
+
+    data = request.get_json()
+
+    collection_id = data["collectionID"]
     
     if collection_id is None:
         return "Invalid request, collectionID=< existing collectionID> must be provided"
@@ -63,7 +66,7 @@ def get_collectibles_in_collection():
         return "Error, there occurs some problem with getting collectibles from database"
     return result
 
-@bp_database_gateway.route('/get/exists_collections',methods=['GET'])
+@bp_database_gateway.route('/get/exists_collections',methods=['POST'])
 def exists_collections():
     """
     Ask database if there exists collection with specific name.
@@ -80,7 +83,10 @@ def exists_collections():
     None
         If asking was not successful.
     """
-    collection_name = request.args.get("name")
+    data = request.get_json()
+
+    collection_name = data["name"]
+
     if collection_name is None:
         return "Invalid request, name=<name of collection,which will be tested> must be provided"
 

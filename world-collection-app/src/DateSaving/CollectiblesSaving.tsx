@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Collection } from "../Data/Database/Colection";
 import { RawCollectible } from "../Data/RawCollectible";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import CollectionCreation from "./CollectionCreation";
 
@@ -24,7 +24,7 @@ function CollectiblesSaving({collectibles} : CollectiblesSavingProps){
     const fetchCollection = () =>{
         setLoading(true);
         setLoadingError(false);
-        DatabaseAPI.getCollections().then((data) => {
+        DatabaseAPI.getAllCollections().then((data) => {
             setLoading(false);
             setCollections(data);
         }).catch(() => {
@@ -48,7 +48,7 @@ function CollectiblesSaving({collectibles} : CollectiblesSavingProps){
             setSelectedCollectionID(null)
             setSavingData(true);
             setSavingError(false);
-            DatabaseAPI.postCollectibles(selectedCollectionID,collectibles).then((status) =>
+            DatabaseAPI.addCollectiblesIntoCollection(selectedCollectionID,collectibles).then((status) =>
                 {
                     setStatus(status);
                     setSavingData(false)

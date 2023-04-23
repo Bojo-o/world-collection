@@ -38,7 +38,7 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
     }
     const subTypesDataGetter = (searchWord : string) => {
         let exceptionSubTypesQNumbers  = exceptionSubTypes.map((type) => { return type.GetQNumber()})
-        return WikiDataAPI.searchForTypesOfCollectiblesExceptions(searchWord,type?.GetQNumber(),exceptionSubTypesQNumbers);
+        return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord,(type == null) ? "" : type.GetQNumber(),exceptionSubTypesQNumbers);
     }
 
     return(

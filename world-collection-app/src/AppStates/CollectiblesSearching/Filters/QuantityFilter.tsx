@@ -43,7 +43,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
         setLoadingValueType(true)
         setErrorForFetchingValueType(false);
 
-        WikiDataAPI.searchForFilterDataQuantity(filter.PNumber).then(
+        WikiDataAPI.getQuantityFilterData(filter.PNumber).then(
             (data) => {
                 setLoadingValueType(false);
                 setFilterData(data);

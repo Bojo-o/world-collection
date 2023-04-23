@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Collection } from '../Data/Database/Colection';
 import { Collectible } from '../Data/Database/Collectible';
-import { DatabaseAPI } from '../DatabaseGateway/DatabaseAPI';
+import { DatabaseAPI } from '../API/DatabaseAPI';
 import IconsSelector from '../ImageIcons/IconsSelector';
 import Map from '../Map/Map';
 import './HomeState.css';
@@ -49,7 +49,7 @@ function HomeState() {
     }
     useEffect(() => {
         setCollectionLoading(true);
-        DatabaseAPI.getCollections().then( (collections) => {
+        DatabaseAPI.getAllCollections().then( (collections) => {
             setCollectionLoading(false);
             setCollections(collections);
             setCollectionsToShow(collections)

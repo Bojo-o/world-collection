@@ -13,7 +13,7 @@ function SearchByRegion({handleNext} : SearchByRegionProps){
     const [region,setRegion] = useState<Entity|null>(null)
     const regionDataGetter = (searchWord : string) => {
     
-        return WikiDataAPI.searchRegions(searchWord);
+        return WikiDataAPI.searchForRegions(searchWord);
     }
     const handleClickedRegion = (data : SearchData) => {
         setRegion(new Entity(data.QNumber,data.name))

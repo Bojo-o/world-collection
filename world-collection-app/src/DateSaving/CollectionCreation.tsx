@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Collection } from "../Data/Database/Colection";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 
 export interface CollectionCreationProps{

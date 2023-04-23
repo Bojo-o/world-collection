@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Collectible } from "../Data/Database/Collectible";
 import data from '../Data/icons.json'
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import './IconsSelector.css'
 

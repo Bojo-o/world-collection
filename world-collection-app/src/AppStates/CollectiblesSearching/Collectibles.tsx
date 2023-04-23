@@ -16,7 +16,7 @@ function Collectibles({queryData} : CollectiblesProps){
 
     useEffect(() => {
         setLoading(true);
-        WikiDataAPI.searchCollectibles(queryData).then((data) => {
+        WikiDataAPI.searchForCollectibles(queryData).then((data) => {
             setLoading(false)
             setCollectibles(data);
         }).catch(() =>

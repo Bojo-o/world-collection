@@ -3,7 +3,7 @@ import { CustomDate, DatePrecision } from "../Data/CustomDate";
 import { Precision } from "../Data/CustomTime";
 import { Collectible } from "../Data/Database/Collectible";
 import { DATEOPTIONS } from "../Data/DateOption";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 
 enum Date{
@@ -43,7 +43,7 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
         setSavingError(false);
         setSavingStatus(null);
         
-        DatabaseAPI.postVisitation(collectible.QNumber,isVisited,(dateFrom == null) ? null : dateFrom.GetPrecision().toString(),dateFrom,dateTo).then((status) => {
+        DatabaseAPI.setCollectibleVisitation(collectible.QNumber,isVisited,(dateFrom == null) ? null : dateFrom.GetPrecision().toString(),dateFrom,dateTo).then((status) => {
             setSaving(false);
             setSavingStatus(status);
 

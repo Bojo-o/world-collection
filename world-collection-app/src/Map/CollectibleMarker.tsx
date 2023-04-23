@@ -12,7 +12,7 @@ import { CustomDate } from "../Data/CustomDate";
 import IconsSelector from "../ImageIcons/IconsSelector";
 import Notes from "../CollectibleEditationComponents/Notes";
 import CollectibleDetails from "../Details/CollectibleDetails";
-import { DatabaseAPI } from "../DatabaseGateway/DatabaseAPI";
+import { DatabaseAPI } from "../API/DatabaseAPI";
 
 export interface CollectibleMarkerProps{
     collectible : Collectible;

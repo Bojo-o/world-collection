@@ -20,7 +20,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
         setLoadingValueType(true)
         setErrorForFetchingValueType(false);
 
-        WikiDataAPI.searchForFilterDataWikibaseItem(filter.PNumber).then(
+        WikiDataAPI.getWikibaseItemFilterData(filter.PNumber).then(
             (data) => {
                 setLoadingValueType(false);
                 setFilterData(data);
@@ -49,7 +49,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
         }
     }
     const itemDataGetter =  (searchWord : string) => {
-        return WikiDataAPI.searchWikibaseItem(searchWord,filterData)
+        return WikiDataAPI.searchForWikibaseItem(searchWord,filterData)
     }
     useEffect(() => {
         fetchValueTypeData()
