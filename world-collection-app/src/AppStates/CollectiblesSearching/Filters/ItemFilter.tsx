@@ -1,9 +1,9 @@
 import { FILE } from "dns";
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
-import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
-import { FilterItemValueData } from "../../../Data/FiltersData/FilterItemValueData";
-import { WikibaseItemFilterData } from "../../../Data/FiltersData/WIkibaseItemFilterData";
+import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
+import { WikibaseItemValueData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WikibaseItemValueData";
+import { WikibaseItemFilterData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WIkibaseItemFilterData";
 import { Entity } from "../../../Data/SearchData/Entity";
 import { SearchData } from "../../../Data/SearchData/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
@@ -45,7 +45,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
     }
     const handleSave = () => {
         if (selectedItem != null){
-            handleAddFilterToAplied(new AppliedFilterData(filter,new FilterItemValueData(selectedItem)));
+            handleAddFilterToAplied(new AppliedFilterData(filter,new WikibaseItemValueData(selectedItem)));
         }
     }
     const itemDataGetter =  (searchWord : string) => {

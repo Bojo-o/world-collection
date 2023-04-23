@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Collectible } from "../Data/Database/Collectible";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import data from '../Data/icons.json'
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";

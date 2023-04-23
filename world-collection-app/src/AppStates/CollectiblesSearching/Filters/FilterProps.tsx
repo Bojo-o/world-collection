@@ -1,7 +1,7 @@
-import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
-import { FilterData } from "../../../Data/FiltersData/FilterData";
+import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
+import { FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
 
 export interface FilterProps{
-    filter : FilterData;
+    filter : FilterIdentificationData;
     handleAddFilterToAplied : (data : AppliedFilterData) => void;
 }

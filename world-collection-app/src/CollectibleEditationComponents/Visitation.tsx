@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { CustomDate, DatePrecision } from "../Data/CustomDate";
 import { Precision } from "../Data/CustomTime";
-import { Collectible } from "../Data/Database/Collectible";
-import { DATEOPTIONS } from "../Data/DateOption";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
+import { DATEOPTIONS } from "../Data/Enums/DateOption";
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 

@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Collectible } from "../Data/Database/Collectible";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import './Notes.css';
 
 export interface NotesProps{
     collectible : Collectible;
-    updateNotes : (notes : string) => void;
+    updateNotes : (notes : string|null) => void;
 }
 function Notes({collectible,updateNotes} : NotesProps){
-    const [notes,setNotes] = useState(collectible.notes);
+    const [notes,setNotes] = useState<string|null>(collectible.notes);
     const [saving,setSaving] = useState(false);
     const [savingError,setSavingError] = useState(false);
     const [savingStatus,setSavingStatus] = useState<string|null>(null)
@@ -32,7 +32,7 @@ function Notes({collectible,updateNotes} : NotesProps){
     return(
         <div className="d-flex flex-column">
             <div className="form-floating">
-                <textarea className="form-control" placeholder="Make some notes" id="notesTextArea" value={notes} maxLength={1024} onChange={handleChange}></textarea>
+                <textarea className="form-control" placeholder="Make some notes" id="notesTextArea" value={(notes == null) ? "" : notes} maxLength={1024} onChange={handleChange}></textarea>
                 <label htmlFor="notesTextArea">Collectible notes</label>
             </div>
             <br/>

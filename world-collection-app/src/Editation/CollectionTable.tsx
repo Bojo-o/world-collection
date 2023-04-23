@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Collection } from "../Data/Database/Colection";
+import { Collection } from "../Data/DatabaseModels/Colection";
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
 import IconsSelector from "../ImageIcons/IconsSelector";
@@ -11,7 +11,7 @@ function countPages(results: number,rowsPerPage : number) : number {
 
 export interface EditationTableProps{
     collections : Collection[];
-    edited : Collection;
+    edited : Collection|null;
     editItem: (row : Collection) => void;
     cancelEditation: () => void;
     removeItem: (row : Collection) => void;
@@ -20,7 +20,7 @@ export interface EditationTableProps{
     canSaveItem : boolean;
     merge : (collectionID : Number,intoCollectionID : Number) => void;
     mergeItem : (row : Collection) => void;
-    merging : Collection;
+    merging : Collection|null;
     editCollectibles : (row : Collection) => void;
 
 }
@@ -52,7 +52,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
     }
 
     const iconChange = (settedIcon : string) => {
-        return  DatabaseAPI.postCollectiblesInCollectionUpdateIcon(edited.collectionID,settedIcon);
+        return  DatabaseAPI.postCollectiblesInCollectionUpdateIcon(edited!.collectionID,settedIcon);
     }
     const renderBody = (currPage : number,rowsPerPage : number) => {
         return (
@@ -63,10 +63,10 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                 <>
                     <tr key={index}>
                        <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
-                        {edited.collectionID !== row.collectionID && merging.collectionID !== row.collectionID  &&(
+                        {(edited == null || edited.collectionID !== row.collectionID) && (merging == null || merging.collectionID !== row.collectionID)  &&(
                             <>
                                 <td>{row.name}</td>
-                                <td>{row.GetCountOfCollectibles().toString()}</td>
+                                <td>{row.getCountOfCollectibles().toString()}</td>
                                 <td>
                                     <div className="d-flex flex-wrap justify-content-center">
                                         <button type="button" className="btn btn-info" onClick={() => editCollectibles(row)}>Edit Collectibles</button>
@@ -77,10 +77,10 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                 </td>
                             </>     
                         )}
-                        {merging.collectionID === row.collectionID && (
+                        {merging!= null && merging.collectionID === row.collectionID && (
                             <>
                                 <td>{row.name}</td>
-                                <td>{row.GetCountOfCollectibles().toString()}</td>
+                                <td>{row.getCountOfCollectibles().toString()}</td>
                                 <td>
                                     <div className="d-flex flex-wrap justify-content-center">
                                         <p>Merge into collection:</p>
@@ -107,7 +107,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                 </td>
                             </>
                         )}
-                        {edited.collectionID === row.collectionID &&
+                        {edited != null && edited.collectionID === row.collectionID &&
                         (
                             <>
                                 <td>         
@@ -117,7 +117,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                                     )}
                                     
                                 </td>
-                                <td>{row.GetCountOfCollectibles().toString()}</td>
+                                <td>{row.getCountOfCollectibles().toString()}</td>
                                 <td >
                                     <div className="d-flex flex-wrap justify-content-center">
                                         <button type="button" className="btn btn-secondary" onClick={handleIconSetting}>{(!iconSetting) ? "Set Icon for all collectibles" : "Cancel"}</button>
@@ -133,7 +133,7 @@ function CollectionTable ({collections,edited,editItem,cancelEditation,removeIte
                             </>
                         )}
                         </tr>
-                        {edited.collectionID === row.collectionID && iconSetting && (
+                        {edited != null && edited.collectionID === row.collectionID && iconSetting && (
                             <>
                                 <tr>
                                     <th colSpan={4}>

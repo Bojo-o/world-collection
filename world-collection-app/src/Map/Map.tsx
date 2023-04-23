@@ -1,9 +1,9 @@
 import {Popup } from 'leaflet';
 import React, { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, ZoomControl, useMap } from 'react-leaflet';
-import { Collectible } from '../Data/Database/Collectible';
+import { Collectible } from '../Data/DatabaseModels/Collectible';
 import CollectibleMarker from './CollectibleMarker';
-import CollectibleWayPoint from './CollectibleWayPoint';
+
 import { convertToMapDataModel } from './ConvertToMapData';
 import './Map.css';
 import MapOptions from './MapOptions/MapOptions';

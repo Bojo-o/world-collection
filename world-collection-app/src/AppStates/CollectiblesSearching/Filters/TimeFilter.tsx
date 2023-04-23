@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Precision, CustomTime } from "../../../Data/CustomTime";
-import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
-import { FilterData } from "../../../Data/FiltersData/FilterData";
-import { FilterTimeValueData } from "../../../Data/FiltersData/FilterTimeValueData";
-import { FilterComparisonOperator } from "./FilterComparisonOperator";
+import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
+import { FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
+import { TimeValueData } from "../../../Data/FilterModels/TimeFilterModel/TimeValueData";
+import { ComparisonOperator } from "../../../Data/Enums/ComparisonOperator";
 import { FilterProps } from "./FilterProps";
 import { useMediaQuery } from "react-responsive";
 
@@ -17,7 +17,7 @@ export enum TimePrecision{
 
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const [timeRepresentation,setTimeRepresentation] = useState<TimePrecision>(TimePrecision.Year)
-    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.EqualTo)
+    const [comparisonOperator,setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
 
     const [isBC,setIsBC] = useState(false);
 
@@ -106,7 +106,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     }
     const handleSave = () => {
         if (time != null){
-            handleAddFilterToAplied(new AppliedFilterData(filter,new FilterTimeValueData(comparisonOperator,time)));
+            handleAddFilterToAplied(new AppliedFilterData(filter,new TimeValueData(comparisonOperator,time)));
         }
     }
 
@@ -133,13 +133,13 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                 <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column")}>
                     <h4>Selected time</h4>
                     <select className="form-select w-50 mx-2" onChange={handleComparisonOperatorSelect}>
-                        <option value={FilterComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
-                        <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
-                        <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
-                        <option value={FilterComparisonOperator.GreaterThan}>is greater than</option>
-                        <option value={FilterComparisonOperator.GreaterThanOrEqual}>is greater than or equal to</option>
-                        <option value={FilterComparisonOperator.LessThan}>is less than</option>
-                        <option value={FilterComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
+                        <option value={ComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
+                        <option value={ComparisonOperator.EqualTo}>is equal to</option>
+                        <option value={ComparisonOperator.NotEqual}> is not equal</option>
+                        <option value={ComparisonOperator.GreaterThan}>is greater than</option>
+                        <option value={ComparisonOperator.GreaterThanOrEqual}>is greater than or equal to</option>
+                        <option value={ComparisonOperator.LessThan}>is less than</option>
+                        <option value={ComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
                     </select>
                     <h4>"{filter.name}"</h4>
                 </div>

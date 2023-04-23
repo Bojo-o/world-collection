@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from "react";
 import Map from './Map/Map';
-import Form from './DataSearching/Form';
 import HomeState from './AppStates/HomeState';
 import Editation from './AppStates/Editation';
 import CollectibleSearching from './AppStates/CollectiblesSearching/CollectiblesSearching';

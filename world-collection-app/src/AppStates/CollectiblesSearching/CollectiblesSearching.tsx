@@ -14,7 +14,7 @@ import { Areas } from "./CollectiblesSearchingStates/AreaChoosing/Areas";
 import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates/CollectiblesSearchingStates";
 import TypeChoosing from "./CollectiblesSearchingStates/TypeChoosing";
 import SearchByAdministrativeArea from "./CollectiblesSearchingStates/SearchByAdministrativeArea";
-import { AppliedFilterData } from "../../Data/FiltersData/AppliedFilterData";
+import { AppliedFilterData } from "../../Data/FilterModels/AppliedFilterData";
 import Collectibles from "./Collectibles";
 import { CollectiblesSearchQueryData } from "./ColectiblesSearchQueryData";
 import SearchByRegion from "./CollectiblesSearchingStates/SearchByRegion";

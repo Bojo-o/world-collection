@@ -1,6 +1,6 @@
 import { CustomDate } from "../Data/CustomDate";
-import { Collection } from "../Data/Database/Colection";
-import { Collectible } from "../Data/Database/Collectible";
+import { Collection } from "../Data/DatabaseModels/Colection";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { RawCollectible } from "../Data/RawCollectible";
 import { Fetch } from "./Fetch";
 
@@ -229,7 +229,7 @@ export class DatabaseAPI {
      * @param notes Information, which user want to save to collectible.
      * @returns  Status message, if this process was successful.
      */
-    public static async postCollectibleUpdateNotes(collectibleQNumber : string,notes : string){
+    public static async postCollectibleUpdateNotes(collectibleQNumber : string,notes : string|null){
         let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleSetNotes,
             {
                 'q_number' : collectibleQNumber,

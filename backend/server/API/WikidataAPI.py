@@ -308,22 +308,12 @@ def get_filter_data():
         return "Invalid request, `property` and `data_type` parameters must be provided"
     
     type : DATATYPES = None
-    #match data_type:
-    #    case "Quantity":
-    #        type = DATATYPES.QUANTITY
-    #   case "Time":
-    #        type = DATATYPES.TIME
-    #    case "WikibaseItem":
-    #        type = DATATYPES.WIKIBASEITEM
+
 
     try:
         type : DATATYPES = DATATYPES(data_type)
     except:
         return "Invalid request, data_type parameter, allowed values are  Quantity, Time or WikibaseItem "
-    
-
-    #if type is None :
-    #    return "Invalid request, data_type parameter, allowed values are  Quantity, Time or WikibaseItem "
     
     match type:
         case DATATYPES.WIKIBASEITEM:

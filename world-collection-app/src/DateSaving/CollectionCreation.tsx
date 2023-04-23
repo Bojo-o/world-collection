@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Collection } from "../Data/Database/Colection";
+import { Collection } from "../Data/DatabaseModels/Colection";
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 

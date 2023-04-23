@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { json } from "stream/consumers";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
-import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
-import { FilterDataType, FilterData } from "../../../Data/FiltersData/FilterData";
+import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
+import { DataTypeOfFilter, FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
 import { Entity } from "../../../Data/SearchData/Entity";
 import './FiltersSelection.css';
 import ItemFilter from "./ItemFilter";
@@ -28,15 +28,15 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
     const [loadingFilters,setLoadingFilters] = useState(false);
     const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
 
-    const [showingFilters,setShowingFilters] = useState<FilterData[]>([]);
+    const [showingFilters,setShowingFilters] = useState<FilterIdentificationData[]>([]);
 
-    const [recomendedFilters,setRecomendedFilters] = useState<FilterData[]>([]);
+    const [recomendedFilters,setRecomendedFilters] = useState<FilterIdentificationData[]>([]);
 
-    const [allFilters,setAllFilters] = useState<FilterData[]>([]);
+    const [allFilters,setAllFilters] = useState<FilterIdentificationData[]>([]);
     const [loadingAllFilters,setLoadingAllFilters] = useState(false);
     const [errorForFetchingAllFilters,setErrorForFetchingAllFilters] = useState(false);
 
-    const [selectedFilter,setSelectedFilter] = useState<FilterData>(new FilterData());
+    const [selectedFilter,setSelectedFilter] = useState<FilterIdentificationData|null>(null);
     const [appliedFilters,setAppliedFilters] = useState<AppliedFilterData[]>(usedFilters);
 
     const [filterSearchWord,setFIlterSearchWord] = useState<string>("");
@@ -45,25 +45,25 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
 
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
-    const getColorByFilterType = (type : FilterDataType) => {
-        if (type === FilterDataType.Quantity){
+    const getColorByFilterType = (type : DataTypeOfFilter) => {
+        if (type === DataTypeOfFilter.Quantity){
             return "warning text-dark";
         }
-        if (type === FilterDataType.Time){
+        if (type === DataTypeOfFilter.Time){
             return "success";
         }
-        if (type === FilterDataType.WikibaseItem){
+        if (type === DataTypeOfFilter.WikibaseItem){
             return "info text-dark";
         }
         return "secondary";
     }
-    const handleShowingFilters = (filters : FilterData[]) => {
+    const handleShowingFilters = (filters : FilterIdentificationData[]) => {
         setShowingFilters(filters);
     }
 
     const handleAddFilterToAplied = (data : AppliedFilterData) => {
         setAppliedFilters([...appliedFilters, data]) //simple value
-        setSelectedFilter(new FilterData())
+        setSelectedFilter(null)
         setFilterState(FiltersState.UsedFilters);
     }
     const removeFilterFromApplied = (data : AppliedFilterData) => {
@@ -93,14 +93,14 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
             }
         ).catch(() => setErrorForFetchingAllFilters(true))
     }
-    const handleFilterSelection = (filter : FilterData) => {
+    const handleFilterSelection = (filter : FilterIdentificationData) => {
         setSelectedFilter(filter);
         setFilterState(FiltersState.Filter);
     }
     const handleFiltersSearch = (e : any) => {
         setFIlterSearchWord(e.target.value);
     }
-    const isFilterUsed = (filter : FilterData) => {
+    const isFilterUsed = (filter : FilterIdentificationData) => {
         let result = false;
         appliedFilters.forEach((appliedFilter) => {
             if (appliedFilter.getFilter().PNumber == filter.PNumber){
@@ -178,7 +178,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                                                         {filter.dataType}
                                                     </small>
                                                 </div>
-                                                <p className="mb-1">{filter.desc}</p>
+                                                <p className="mb-1">{filter.description}</p>
                                             </button>
                                         </>
                                         
@@ -198,12 +198,15 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                         <button type="button" className="btn btn-danger" onClick={() => setFilterState(FiltersState.Filters)}>
                             Back to filters
                         </button>
-                        {selectedFilter.dataType != FilterDataType.NotSupported && (
-                            <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
+                        {selectedFilter != null && (
+                            <>
+                                <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
+                                {selectedFilter.dataType == DataTypeOfFilter.Time && (<TimeFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                                {selectedFilter.dataType == DataTypeOfFilter.WikibaseItem && (<ItemFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                                {selectedFilter.dataType == DataTypeOfFilter.Quantity && (<QuantityFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                            </>
                         )}
-                        {selectedFilter.dataType == FilterDataType.Time && (<TimeFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                        {selectedFilter.dataType == FilterDataType.WikibaseItem && (<ItemFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                        {selectedFilter.dataType == FilterDataType.Quantity && (<QuantityFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                        
                     </div>
             </>
         )

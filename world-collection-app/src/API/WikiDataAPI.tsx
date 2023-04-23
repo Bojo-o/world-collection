@@ -1,8 +1,8 @@
 import { RawCollectible } from "../Data/RawCollectible";
-import { FilterData } from "../Data/FiltersData/FilterData";
-import { QuantityFilterData, ValueRange } from "../Data/FiltersData/QuantityFilterData";
-import { WikibaseItemFilterData } from "../Data/FiltersData/WIkibaseItemFilterData";
-import { WikibaseItemPropertyData } from "../Data/FiltersData/WikibaseItemPropertyData";
+import { FilterIdentificationData } from "../Data/FilterModels/FilterIdentificationData";
+import { QuantityFilterData, ValueRange } from "../Data/FilterModels/QuantityFilterModel/QuantityFilterData";
+import { WikibaseItemFilterData } from "../Data/FilterModels/WikibaseItemFilterModel/WIkibaseItemFilterData";
+import { WikibaseItemPropertyData } from "../Data/FilterModels/WikibaseItemFilterModel/WikibaseItemPropertyData";
 import { Entity } from "../Data/SearchData/Entity";
 import { SearchData } from "../Data/SearchData/SearchData";
 import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/ColectiblesSearchQueryData";
@@ -55,8 +55,8 @@ export class WikiDataAPI {
         return results;
     }
     
-    private static convertToListOfFilterDataModel(data : any[]) : FilterData[] {
-        let results : FilterData[] = data.map((d : any) => new FilterData(d));
+    private static convertToListOfFilterDataModel(data : any[]) : FilterIdentificationData[] {
+        let results : FilterIdentificationData[] = data.map((d : any) => new FilterIdentificationData(d));
         return results;
     }
     private static convertToListOfWIkibasePropertyDataModel(data : any[]) : WikibaseItemPropertyData[]{

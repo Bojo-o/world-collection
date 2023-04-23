@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Collection } from '../Data/Database/Colection';
-import { Collectible } from '../Data/Database/Collectible';
+import { Collection } from '../Data/DatabaseModels/Colection';
+import { Collectible } from '../Data/DatabaseModels/Collectible';
 import { DatabaseAPI } from '../API/DatabaseAPI';
 import IconsSelector from '../ImageIcons/IconsSelector';
 import Map from '../Map/Map';
@@ -13,7 +13,7 @@ function HomeState() {
     const [collectionLoading,setCollectionLoading] = useState(false);
 
     const [collectiblesToShow,setCollectiblesToShow] = useState<Collectible[]>([]);
-    const [selectedCollection,setSelectedCollection] = useState<Collection>(new Collection())
+    const [selectedCollection,setSelectedCollection] = useState<Collection|null>(null)
 
     const [filter,setfilter] = React.useState<string>('');
     
@@ -33,12 +33,12 @@ function HomeState() {
     }
     
     const convertStatus = (collection : Collection) => {
-        let sum = +collection.visited + +collection.notVisited
-        return   collection.visited.toString()+'/'+sum.toString()
+        let sum = +collection.visitedCollectibles + +collection.notVisitedCollectibles
+        return   collection.visitedCollectibles.toString()+'/'+sum.toString()
     }
     const computeProgress = (collection : Collection) => {
-        let sum = +collection.visited + +collection.notVisited
-        return (collection.visited/sum)*100;
+        let sum = +collection.visitedCollectibles + +collection.notVisitedCollectibles
+        return (collection.visitedCollectibles/sum)*100;
     }
     const handleClickOnCollection = (clickedCollection : Collection) => {
         setSelectedCollection(clickedCollection)
@@ -88,7 +88,7 @@ function HomeState() {
                         <ul className='list-group' id='collectionsList'>     
                             {collectionsToShow.map((collection,index) => {
                                 let className = "list-group-item list-group-item-action ";
-                                if (collection.collectionID == selectedCollection.collectionID){
+                                if (selectedCollection != null && collection.collectionID == selectedCollection.collectionID){
                                     className = className + "active"
                                 }
                                 let style = {
@@ -103,7 +103,7 @@ function HomeState() {
                                                     <span className="badge bg-info rounded-pill">{convertStatus(collection)}</span>
                                                 </div>
                                                 <div className="progress">
-                                                    <div className="progress-bar bg-success"  style={style} role="progressbar" aria-valuenow={collection.visited} aria-valuemin={0} aria-valuemax={collection.notVisited + collection.visited}></div>
+                                                    <div className="progress-bar bg-success"  style={style} role="progressbar" aria-valuenow={collection.visitedCollectibles} aria-valuemin={0} aria-valuemax={collection.notVisitedCollectibles + collection.visitedCollectibles}></div>
                                                 </div>
                                             </div>                                
                                         </li>

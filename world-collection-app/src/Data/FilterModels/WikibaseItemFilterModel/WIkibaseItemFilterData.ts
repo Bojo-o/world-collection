@@ -1,21 +1,21 @@
 import { WikibaseItemPropertyData } from "./WikibaseItemPropertyData";
 
+/**
+ * Data model representing property/filter, whose data type is "WikibaseItem".
+ * It contains data necessary for searching satisfying WikibaseItem values of this property/filter.
+ */
 export class WikibaseItemFilterData {
+    /** List of constraint, which cause conflict*/
     conflict_with_constraint : WikibaseItemPropertyData[] = []
+    /** List of constraints. Values allowed for given filter can be only one of those constraints. */
     one_of_constraint : WikibaseItemPropertyData[] = []
+    /** List of constraints defining that values in given property can not be those constraints */
     none_of_constraint : WikibaseItemPropertyData[] = []
+    /** List of allowed type constraint. In searching for values, which can be used as value in given filter, that values must be instance of those constraints. */
     value_type_constraint : WikibaseItemPropertyData[] = []
 
-    constructor(){
-    }
     private trasform(data : WikibaseItemPropertyData[]){
-        //let result : string = ""
         let result : string[]  =  data.map((d) => {
-            //if (result == ""){
-            //    result = d.QNumber
-            //}else{
-            //    result = result + "," +d.QNumber
-            //}
             return d.QNumber;
         })
         return result;

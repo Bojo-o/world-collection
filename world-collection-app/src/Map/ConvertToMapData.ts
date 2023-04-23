@@ -1,6 +1,9 @@
-import { MapData } from "../Data/MapData/MapData";
+import { Coordinates } from "../Data/MapModels/CoordinatesData";
 
-export function convertToMapDataModel(data : any[]) : MapData[] {
-    let mapData : MapData[] = data.map((d : any) => new MapData(d));
+export function convertToMapDataModel(data : any[]) : Coordinates[] {
+    let mapData : Coordinates[] = data.map((d : any) => {
+        return new Coordinates(d)
+        
+    });
     return mapData;
 }

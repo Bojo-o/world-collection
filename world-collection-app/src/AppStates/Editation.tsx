@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Collection } from "../Data/Database/Colection";
-import { Collectible } from "../Data/Database/Collectible";
+import { Collection } from "../Data/DatabaseModels/Colection";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import CollectiblesTable from "../Editation/CollectiblesTable";
 import CollectionTable from "../Editation/CollectionTable";
@@ -8,9 +8,9 @@ import CollectionTable from "../Editation/CollectionTable";
 function Editation(){
     const [collectionsLoading,setCollectionsLoading] = useState<boolean>(false);
     const [collections,setCollections] = useState<Collection[]>([]); 
-    const [edited,setEdited] = useState<Collection>(new Collection);
+    const [edited,setEdited] = useState<Collection|null>(null);
  
-    const [merging,setMerging] = useState<Collection>(new Collection);
+    const [merging,setMerging] = useState<Collection|null>(null);
     const [filter,setfilter] = useState<string>('');
 
     const [canSaveCollection,setCanSaveCollection] = useState(false);
@@ -20,7 +20,7 @@ function Editation(){
     const [collectiblesLoading,setCollectiblesLoading] = useState<boolean>(false);
 
 
-    const [editedCollectible,setEditedCollectible] = useState<Collectible>(new Collectible)
+    const [editedCollectible,setEditedCollectible] = useState<Collectible|null>(null)
     const [canSaveCollectible,setCanSaveCollectible] = useState(false);
 
     const handleSearch = (event : any) => {
@@ -54,16 +54,16 @@ function Editation(){
         }
     }
     const mergeItem = (row : Collection) => {
-        setMerging(new Collection(row));
-        setEdited(new Collection);
+        setMerging(new Collection(row.getObject()));
+        setEdited(null);
     }
     const editItem = (row : Collection) => {  
-        setEdited(new Collection(row));  
-        setMerging(new Collection);
+        setEdited(new Collection(row.getObject()));  
+        setMerging(null);
     }
     const cancel= () => {
-        setEdited(new Collection) 
-        setMerging(new Collection)
+        setEdited(null) 
+        setMerging(null)
     }
     const handleChange = (event : any) => {
         const value : string = event.target.value;
@@ -72,7 +72,12 @@ function Editation(){
             name: value,
         };
         setEdited((prev) => {
-            return new Collection({...prev,...change});
+            if (prev != null){
+                let temp = new Collection(prev.getObject());
+                temp.name = change.name;
+                return temp;
+            }
+            return null;
         });
 
         DatabaseAPI.existsCollectionWithName(value).then((r) => {
@@ -133,7 +138,7 @@ function Editation(){
         }))
     }
     const cancleCollectibleAction = () => {
-        setEditedCollectible(new Collectible);
+        setEditedCollectible(null);
         setCanSaveCollection(false);
     }
     
@@ -144,7 +149,12 @@ function Editation(){
             name: value,
         };
         setEditedCollectible((prev) => {
-            return new Collectible({...prev,...change});
+            if (prev != null){
+                let temp = new Collectible(prev.getObject());
+                temp.name = change.name;
+                return temp;
+            }
+            return null;
         });
         
         if (value.length > 2){
@@ -155,7 +165,7 @@ function Editation(){
     }
     return (
         <>
-            <h1>{editedCollectible.QNumber}</h1>
+            
             <h2>Edit your collections and collectibles</h2>
 
             {showingCollectionCollectibles === null ? (

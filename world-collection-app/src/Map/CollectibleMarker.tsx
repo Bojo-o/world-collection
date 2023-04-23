@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { WikiDataAPI } from "../API/WikiDataAPI";
 import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
-import { Collectible } from "../Data/Database/Collectible";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { GetIcon } from "./GetIcon";
 
 import "./CollectibleMarker.css"
@@ -50,7 +50,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     const handleIconChange = (icon : string) => {
         setIcon(icon);
     }
-    const handleNotesChange = (notes : string) => {
+    const handleNotesChange = (notes : string|null) => {
         collectible.notes = notes;
     }
     const handleVisitationChange = (isVisit : boolean,dateFrom : CustomDate|null,dateTo : CustomDate|null) => {
@@ -89,7 +89,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     return (
         <>
             <Marker 
-                position={[collectible.lati,collectible.long]}
+                position={[collectible.latitude,collectible.longitude]}
                 icon={GetIcon(icon,isVisit)}>
                 <Popup>
                     <div className="scroll">
@@ -109,7 +109,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                         <p className="card-text">{basicInfo.desc}</p>
                                         <p className="text-muted">{collectible.name} is type of:</p>
                                         <div className="d-flex flex-wrap">
-                                            {collectible.type.split('/').map((t,index) => {
+                                            {collectible.instanceOf.map((t,index) => {
                                                 return(
                                                     <span key={index} className="badge bg-info text-dark">{t}</span>
                                                 )

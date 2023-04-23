@@ -1,6 +1,6 @@
 import React from "react";
 import { RawCollectible } from "../Data/RawCollectible";
-import Details from "../Details/Details";
+
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
 import RawCollectibleInfoCard from "../Map/RawCollectibleInfoCard";

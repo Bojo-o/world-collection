@@ -1,4 +1,4 @@
-import { AppliedFilterData } from "../../Data/FiltersData/AppliedFilterData"
+import { AppliedFilterData } from "../../Data/FilterModels/AppliedFilterData"
 import { Entity } from "../../Data/SearchData/Entity"
 import { Areas } from "./CollectiblesSearchingStates/AreaChoosing/Areas"
 

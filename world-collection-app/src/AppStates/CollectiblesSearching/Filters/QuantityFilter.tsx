@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
-import { AppliedFilterData } from "../../../Data/FiltersData/AppliedFilterData";
-import { FilterQuantityValueData } from "../../../Data/FiltersData/FIlterQuantityValueData";
-import { QuantityFilterData, ValueRange } from "../../../Data/FiltersData/QuantityFilterData";
+import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
+import { QuantityValueData } from "../../../Data/FilterModels/QuantityFilterModel/QuantityValueData";
+import { QuantityFilterData, ValueRange } from "../../../Data/FilterModels/QuantityFilterModel/QuantityFilterData";
 import { Entity } from "../../../Data/SearchData/Entity";
-import { FilterComparisonOperator } from "./FilterComparisonOperator";
+import { ComparisonOperator } from "../../../Data/Enums/ComparisonOperator";
 import { FilterProps } from "./FilterProps";
 import { useMediaQuery } from "react-responsive";
 
 function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
-    const[filterData,setFilterData] = useState<QuantityFilterData>(new QuantityFilterData([],new ValueRange()));
+    const[filterData,setFilterData] = useState<QuantityFilterData>(new QuantityFilterData([],new ValueRange({max : null,min : null})));
     const[loadingValueType,setLoadingValueType] = useState(false);
     const[errorForFetchingValueType,setErrorForFetchingValueType] = useState(false);
 
     const[unit,setUnit] = useState<string|null>(null);
     const[value,setValue] = useState<number|undefined>(undefined);
-    const [comparisonOperator,setComparisonOperator] = useState<FilterComparisonOperator>(FilterComparisonOperator.EqualTo)
+    const [comparisonOperator,setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
 
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
@@ -36,7 +36,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     }
     const handleSave = () => {
         if (value != undefined){
-            handleAddFilterToAplied(new AppliedFilterData(filter,new FilterQuantityValueData(comparisonOperator,value,unit)));
+            handleAddFilterToAplied(new AppliedFilterData(filter,new QuantityValueData(comparisonOperator,value,unit)));
         }
     }
     const fetchFilterData = () => {
@@ -108,13 +108,13 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                         <h4>{(value!=undefined) ? value : "value"}</h4>
                         
                         <select className={"form-select w-50 mx-2"} onChange={handleComparisonOperatorSelect}>
-                            <option value={FilterComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
-                            <option value={FilterComparisonOperator.EqualTo}>is equal to</option>
-                            <option value={FilterComparisonOperator.NotEqual}> is not equal</option>
-                            <option value={FilterComparisonOperator.GreaterThan}>is greater than</option>
-                            <option value={FilterComparisonOperator.GreaterThanOrEqual}>is greater than or equal to</option>
-                            <option value={FilterComparisonOperator.LessThan}>is less than</option>
-                            <option value={FilterComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
+                            <option value={ComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
+                            <option value={ComparisonOperator.EqualTo}>is equal to</option>
+                            <option value={ComparisonOperator.NotEqual}> is not equal</option>
+                            <option value={ComparisonOperator.GreaterThan}>is greater than</option>
+                            <option value={ComparisonOperator.GreaterThanOrEqual}>is greater than or equal to</option>
+                            <option value={ComparisonOperator.LessThan}>is less than</option>
+                            <option value={ComparisonOperator.LessThanOrEqual}>is less than or equal to</option>
                         </select>
                         <h4>"{filter.name}"</h4>
                     </div>

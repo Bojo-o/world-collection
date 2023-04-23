@@ -1,9 +1,9 @@
-import { Collectible } from "../Data/Database/Collectible";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import Table from "../Table/Table";
 
 export interface CollectiblesTableProps{
     collectibles : Collectible[];
-    editedCollectible : Collectible;
+    editedCollectible : Collectible|null;
     removeCollectible : (collectible : Collectible) => void;
     editCollectible : (collectible : Collectible) => void;
     saveCollectible : (collectible : Collectible) => void;
@@ -12,11 +12,11 @@ export interface CollectiblesTableProps{
     canSaveCollectible : boolean;
 }
 function CollectiblesTable ({collectibles,editCollectible,removeCollectible,editedCollectible,saveCollectible,cancleCollectibleAction,handleCollectibleNameChange,canSaveCollectible} : CollectiblesTableProps) {
-    const renderTypesColumn = (types : string) => {
+    const renderTypesColumn = (types : string[]) => {
         return(
             <>
                 <div className="d-flex flex-wrap">
-                    {types.split('/').map((type,index) => {
+                    {types.map((type,index) => {
                         return (
                             <>
                                 <div key={index} className="badge bg-info text-wrap">
@@ -68,7 +68,7 @@ function CollectiblesTable ({collectibles,editCollectible,removeCollectible,edit
                             <tr key={index}>
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 <th scope="row">
-                                    {editedCollectible.QNumber === collectible.QNumber ? (
+                                    {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber ? (
                                         <>
                                             <input type="text" className="form-control" aria-describedby="collectibleInputNameHelp" value={editedCollectible.name} onChange={handleCollectibleNameChange}/>
                                             {!canSaveCollectible && (
@@ -81,11 +81,11 @@ function CollectiblesTable ({collectibles,editCollectible,removeCollectible,edit
                                         </>
                                     )}   
                                 </th>
-                                <th scope="row">{renderTypesColumn(collectible.type)}</th>
+                                <th scope="row">{renderTypesColumn(collectible.instanceOf)}</th>
                                 <th scope="row">{renderVisition(collectible.isVisit)}</th>
                                 <th scope="row">
                                     <div className="d-flex flex-wrap justify-content-center" >
-                                        {editedCollectible.QNumber === collectible.QNumber && (
+                                        {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber && (
                                             <>
                                                 {canSaveCollectible ? (
                                                     <button type="button" className="btn btn-success"  onClick={() => saveCollectible(editedCollectible)}>Save</button>
@@ -96,7 +96,7 @@ function CollectiblesTable ({collectibles,editCollectible,removeCollectible,edit
                                                 <button type="button" className="btn btn-danger" onClick={cancleCollectibleAction}>Cancel</button>
                                             </>
                                         )}
-                                        {editedCollectible.QNumber !== collectible.QNumber && (
+                                        {(editedCollectible == null || editedCollectible.QNumber !== collectible.QNumber) && (
                                             <>
                                                 <button type="button" className="btn btn-primary" onClick={() => editCollectible(collectible)}>Edit</button>
                                                 <button type="button" className="btn btn-danger" onClick={() => removeCollectible(collectible)}>Remove</button>

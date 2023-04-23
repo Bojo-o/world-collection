@@ -1,7 +1,6 @@
 import React from 'react'
 import { Marker, Popup} from 'react-leaflet';
 import { RawCollectible } from '../Data/RawCollectible';
-import Details from '../Details/Details';
 import RawCollectibleInfoCard from './RawCollectibleInfoCard';
 
 export interface WayPointProps {

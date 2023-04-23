@@ -1,4 +1,4 @@
-export enum FilterComparisonOperator{
+export enum ComparisonOperator{
     EqualTo = "=",
     NotEqual = "!=",
     GreaterThan = ">",

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../API/WikiDataAPI";
 import { CollectibleDetail } from "../Data/CollectibleDetails";
 
-import { Collectible } from "../Data/Database/Collectible";
+import { Collectible } from "../Data/DatabaseModels/Collectible";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import './CollectibleDetail.css';
 

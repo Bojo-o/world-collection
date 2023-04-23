@@ -1,10 +1,10 @@
 import { latLngBounds, LatLngBoundsExpression } from 'leaflet';
 import React from 'react'
 import { useMap } from 'react-leaflet';
-import { MapData } from '../../Data/MapData/MapData';
+import { Coordinates } from '../../Data/MapModels/CoordinatesData';
 
 export interface MapOptionsProps {
-    waypoints : MapData[]
+    waypoints : Coordinates[]
 }
 function MapOptions({waypoints}: MapOptionsProps) {
     const map = useMap(); 
