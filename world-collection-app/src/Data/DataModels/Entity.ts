@@ -1,3 +1,6 @@
+/**
+ * Data model wrapping QNumber of some entity, which exists on Wikidata, and name of that entity.
+ */
 export class Entity{
     private QNumber : string;
     private name : string;
@@ -7,10 +10,10 @@ export class Entity{
         this.name = name;
     }
 
-    public GetQNumber(){
+    public getQNumber(){
         return this.QNumber;
     }
-    public GetName(){
+    public getName(){
         return this.name;
     }
 }

@@ -1,4 +1,5 @@
-import { CustomDate, DatePrecision } from "../CustomDate";
+import { DatePrecision } from "../Enums/DatePrecision";
+import { DateWithPrecision } from "../TimeModels/DateWithPrecision";
 
 /**
  * Collectible Interface.
@@ -39,9 +40,9 @@ export class Collectible{
     /**Date format, for rendering a right precision of date. */
     dateFormat : DatePrecision;
     /** Date of visit - if dateTo is null. Starting point of visit - if dateTo is setted. */
-    dateFrom : CustomDate|null;
+    dateFrom : DateWithPrecision|null;
     /** Ending point of visit */
-    dateTo : CustomDate|null;
+    dateTo : DateWithPrecision|null;
     /** Name of icon, which renders as Marker icon on the map. */
     icon : string;
     /** Collectible notes, which user want to save with collectible. */
@@ -57,8 +58,8 @@ export class Collectible{
         this.isVisit = is_visited
         
         this.dateFormat = (visit_date_format == null) ? DatePrecision.Day : DatePrecision[visit_date_format as keyof typeof DatePrecision];  
-        this.dateFrom = (visit_date_from == null)  ? null : new CustomDate(visit_date_from,this.dateFormat); 
-        this.dateTo = (visit_date_to == null)  ? null : new CustomDate(visit_date_to,this.dateFormat);  
+        this.dateFrom = (visit_date_from == null)  ? null : new DateWithPrecision(visit_date_from,this.dateFormat); 
+        this.dateTo = (visit_date_to == null)  ? null : new DateWithPrecision(visit_date_to,this.dateFormat);  
         this.icon = icon;   
         this.notes = notes;
     }
@@ -72,8 +73,8 @@ export class Collectible{
             longitude : this.longitude,
             is_visited : this.isVisit,
             visit_date_format : this.dateFormat.valueOf(),
-            visit_date_from : (this.dateFrom == null) ? null : this.dateFrom.GetDate(),
-            visit_date_to : (this.dateTo == null) ? null : this.dateTo.GetDate(),
+            visit_date_from : (this.dateFrom == null) ? null : this.dateFrom.getDate(),
+            visit_date_to : (this.dateTo == null) ? null : this.dateTo.getDate(),
             icon : this.icon,
             notes : this.notes
         }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../API/WikiDataAPI";
-import { RawCollectible } from "../../Data/RawCollectible";
+import { RawCollectible } from "../../Data/CollectibleModels/RawCollectible";
 import Result from "../../DataSearching/Results";
 import { CollectiblesSearchQueryData } from "./ColectiblesSearchQueryData";
 

@@ -1,5 +1,5 @@
 import { runInThisContext } from "vm";
-import { RawCollectible } from "../../Data/RawCollectible";
+import { RawCollectible } from "../../Data/CollectibleModels/RawCollectible";
 import { ResultState, TypeOfChange } from "./ResultState";
 
 export class Caretaker {

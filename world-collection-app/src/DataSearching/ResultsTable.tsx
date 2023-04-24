@@ -1,5 +1,5 @@
 import React from "react";
-import { RawCollectible } from "../Data/RawCollectible";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 
 import Table from "../Table/Table";
 import TableFooter from "../Table/TableFooter";
@@ -11,8 +11,8 @@ function countPages(results: number,rowsPerPage : number) : number {
 
 export interface ResultsTableProps{
     results : RawCollectible[];
-    edited : RawCollectible;
-    detailShowing : RawCollectible;
+    edited : RawCollectible|null;
+    detailShowing : RawCollectible|null;
     removeItem : (item : RawCollectible) => void;
     editItem : (row : RawCollectible) => void;
     cancelItem : () => void;
@@ -44,13 +44,13 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                 <tr key={index}>
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 
-                                {edited.QNumber === row.QNumber && 
+                                {edited!=null && edited.QNumber === row.QNumber && 
                                     (
                                         <React.Fragment>
                                             <td><input type="text" className="form-control" value={edited.name} onChange={handleChange}/></td>
                                             <td>
                                                 <div className="d-flex flex-wrap">
-                                                    {row.subTypeOf.split('/').map((subType,index) => {
+                                                    {row.instanceOF.map((subType,index) => {
                                                         return (
                                                             <>
                                                                 <span key={index} className="badge bg-primary">{subType}</span>
@@ -68,13 +68,13 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                         </React.Fragment>
                                     )
                                 }
-                                {edited.QNumber !== row.QNumber && 
+                                {(edited == null || edited.QNumber !== row.QNumber) && 
                                     (
                                         <React.Fragment>
                                             <td>{row.name}</td>
                                             <td>
                                                 <div className="d-flex flex-wrap">
-                                                    {row.subTypeOf.split('/').map((subType,index) => {
+                                                    {row.instanceOF.map((subType,index) => {
                                                         return (
                                                             <>
                                                                 <span key={index} className="badge bg-primary">{subType}</span>
@@ -83,7 +83,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                                     })}
                                                 </div>
                                             </td>
-                                            {detailShowing.QNumber !== row.QNumber ? 
+                                            {(detailShowing == null || detailShowing.QNumber !== row.QNumber) ? 
                                             (
                                                 <React.Fragment>    
                                                     <td className="d-flex flex-wrap justify-content-center">
@@ -108,7 +108,7 @@ function ResultsTable ({results,edited,editItem,handleChange, cancelItem,removeI
                                     )
                                 }                               
                             </tr>
-                            {detailShowing.QNumber === row.QNumber && (
+                            {detailShowing != null && detailShowing.QNumber === row.QNumber && (
                                 <tr>
                                     <th colSpan={4}>
                                         <div className="d-flex justify-content-center">

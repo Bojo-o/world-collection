@@ -4,8 +4,8 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { WikibaseItemValueData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WikibaseItemValueData";
 import { WikibaseItemFilterData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WIkibaseItemFilterData";
-import { Entity } from "../../../Data/SearchData/Entity";
-import { SearchData } from "../../../Data/SearchData/SearchData";
+import { Entity } from "../../../Data/DataModels/Entity";
+import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
 import { FilterProps } from "./FilterProps";
 
@@ -140,7 +140,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
 
                     {selectedItem != null && (
                         <>
-                            <h3>Choosed, that item "{selectedItem.GetName()}" is value of "{filter.name}"</h3>
+                            <h3>Choosed, that item "{selectedItem.getName()}" is value of "{filter.name}"</h3>
                             <button type="button" className="btn btn-success" onClick={handleSave}>Use filter</button>
                         </>
                     )}

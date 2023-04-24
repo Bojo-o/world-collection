@@ -3,7 +3,7 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { QuantityValueData } from "../../../Data/FilterModels/QuantityFilterModel/QuantityValueData";
 import { QuantityFilterData, ValueRange } from "../../../Data/FilterModels/QuantityFilterModel/QuantityFilterData";
-import { Entity } from "../../../Data/SearchData/Entity";
+import { Entity } from "../../../Data/DataModels/Entity";
 import { ComparisonOperator } from "../../../Data/Enums/ComparisonOperator";
 import { FilterProps } from "./FilterProps";
 import { useMediaQuery } from "react-responsive";
@@ -76,7 +76,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                                 <option value="" selected disabled hidden>Choose unit</option>
                                 {filterData.supportedUnits.map((value,index) => {
                                     return (
-                                        <option key={index} value={value.GetQNumber()}>{value.GetName()}</option>
+                                        <option key={index} value={value.getQNumber()}>{value.getName()}</option>
                                     )
                                 })}
                             </select>

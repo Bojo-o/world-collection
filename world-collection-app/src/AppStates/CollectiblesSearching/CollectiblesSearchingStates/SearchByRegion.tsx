@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
-import { Entity } from "../../../Data/SearchData/Entity";
-import { SearchData } from "../../../Data/SearchData/SearchData";
+import { Entity } from "../../../Data/DataModels/Entity";
+import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
 import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
@@ -28,7 +28,7 @@ function SearchByRegion({handleNext} : SearchByRegionProps){
                 <SearchBar placeHolder={"Type region area"} handleClickedResult={handleClickedRegion} dataGetter={regionDataGetter} emptySearchingFlag={true}/>
                 {region != null && (
                     <div>
-                        <h3>Choosed region "{region.GetName()}"</h3>
+                        <h3>Choosed region "{region.getName()}"</h3>
                         <button type="button" className="btn btn-success" onClick={() => handleNext(region)} >Continue</button> 
                     </div>
                 )}

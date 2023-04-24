@@ -1,4 +1,4 @@
-import { Entity } from "../Data/SearchData/Entity";
+import { Entity } from "../Data/DataModels/Entity";
 
 export class SearchCollectiblesBuilderQuery{
 

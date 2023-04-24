@@ -1,4 +1,4 @@
-import { Entity } from "../../SearchData/Entity";
+import { Entity } from "../../DataModels/Entity";
 
 export interface IValueRange{
     max : number|null,

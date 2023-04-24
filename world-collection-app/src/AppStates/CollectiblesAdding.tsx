@@ -5,8 +5,8 @@ import MapFlyToOption from "../Map/MapOptions/MapFlyToOption";
 import '../Map/Map.css';
 import SearchBar from "../DataSearching/SearchBar/SearchBar";
 import { WikiDataAPI } from "../API/WikiDataAPI";
-import { SearchData } from "../Data/SearchData/SearchData";
-import { RawCollectible } from "../Data/RawCollectible";
+import { SearchData } from "../Data/DataModels/SearchData";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import './CollectiblesAdding.css'
 import CollectiblesSaving from "../DateSaving/CollectiblesSaving";
 import RawCollectibleInfoCard from "../Map/RawCollectibleInfoCard";
@@ -28,14 +28,14 @@ function CollectiblesAdding(){
     const [showingAddingMenu,setShowingAddingMenu] = useState(false);
 
     const changePosition = (providedCollectible : RawCollectible) => {
-        setPosition({lat : providedCollectible.lati,lng : providedCollectible.long});
+        setPosition({lat : providedCollectible.latitude,lng : providedCollectible.longitude});
     }
     const dataGetter = (searchWord : string) => {
         return WikiDataAPI.searchForCollectible(searchWord);
     }
     const handleClickedCollectible = (data : SearchData) => {
         fetchCollectibleData(data.QNumber);
-        setPosition({lat : Number(data.lati),lng : Number(data.long)})
+        setPosition({lat : data.latitude,lng : data.longitude})
     }   
     const addCollectible = (collectible : RawCollectible) => {
         setCollectibles([...collectibles, collectible]);
@@ -96,7 +96,7 @@ function CollectiblesAdding(){
                                 </div>
                                 
                                 <div className="d-flex flex-wrap">
-                                    {collectible.subTypeOf.split('/').map((type) => {
+                                    {collectible.instanceOF.map((type) => {
                                         return (
                                             <>
                                                 <span className="badge rounded-secondary bg-primary">{type}</span>
@@ -144,7 +144,7 @@ function CollectiblesAdding(){
                         />
                         {collectible != null && (
                             <>
-                                <Marker position={[collectible.lati,collectible.long]}>
+                                <Marker position={[collectible.latitude,collectible.longitude]}>
                                     <Popup>
                                         <RawCollectibleInfoCard rawCollectible={collectible} />
                                     </Popup>
@@ -155,7 +155,7 @@ function CollectiblesAdding(){
                         {collectibles.map((c) => {
                             return (
                                 <>
-                                    <Marker position={[c.lati,c.long]}>
+                                    <Marker position={[c.latitude,c.longitude]}>
                                         <Popup>
                                             <RawCollectibleInfoCard rawCollectible={c} />
                                         </Popup>

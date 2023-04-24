@@ -1,12 +1,12 @@
 import React from 'react'
 import { Marker, Popup} from 'react-leaflet';
-import { RawCollectible } from '../Data/RawCollectible';
+import { RawCollectible } from '../Data/CollectibleModels/RawCollectible';
 import RawCollectibleInfoCard from './RawCollectibleInfoCard';
 
 export interface WayPointProps {
     data: RawCollectible;
     removeItem : (item : RawCollectible) => void;
-    edited : RawCollectible;
+    edited : RawCollectible|null;
     editItem : (row : RawCollectible) => void;
     cancelItem : () => void;
     saveItem : (edited : RawCollectible) => void;
@@ -17,11 +17,11 @@ function WayPoint({data,removeItem,edited,editItem,cancelItem,saveItem,handleCha
     
     return (
         <>
-            <Marker position={[data.lati,data.long]}>
+            <Marker position={[data.latitude,data.longitude]}>
                 <Popup>  
                     <div>
                         <RawCollectibleInfoCard rawCollectible={data} />   
-                        {edited.QNumber === data.QNumber ? (
+                        { edited != null && edited.QNumber === data.QNumber ? (
                             <React.Fragment>
                                 
                                 <input type="text" className="form-control" value={edited.name} onChange={handleChange}/>

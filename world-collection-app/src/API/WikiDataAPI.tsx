@@ -1,13 +1,13 @@
-import { RawCollectible } from "../Data/RawCollectible";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import { FilterIdentificationData } from "../Data/FilterModels/FilterIdentificationData";
 import { QuantityFilterData, ValueRange } from "../Data/FilterModels/QuantityFilterModel/QuantityFilterData";
 import { WikibaseItemFilterData } from "../Data/FilterModels/WikibaseItemFilterModel/WIkibaseItemFilterData";
 import { WikibaseItemPropertyData } from "../Data/FilterModels/WikibaseItemFilterModel/WikibaseItemPropertyData";
-import { Entity } from "../Data/SearchData/Entity";
-import { SearchData } from "../Data/SearchData/SearchData";
+import { Entity } from "../Data/DataModels/Entity";
+import { SearchData } from "../Data/DataModels/SearchData";
 import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/ColectiblesSearchQueryData";
-import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
-import { CollectibleDetail } from "../Data/CollectibleDetails";
+import { CollectibleBasicInfo } from "../Data/CollectibleModels/CollectibleBasicInfo";
+import { CollectibleDetail } from "../Data/CollectibleModels/CollectibleDetails";
 import { Fetch } from "./Fetch";
 
 // URLS CONSTANTS

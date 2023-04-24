@@ -4,7 +4,7 @@ import ResultsTable from './ResultsTable';
 import './Results.css'
 import { Caretaker } from './Undo/Caretaker';
 import { TypeOfChange } from './Undo/ResultState';
-import { RawCollectible } from '../Data/RawCollectible';
+import { RawCollectible } from '../Data/CollectibleModels/RawCollectible';
 import CollectiblesSaving from '../DateSaving/CollectiblesSaving';
 
 export interface ResultProps{
@@ -21,8 +21,8 @@ function Result({data} : ResultProps) {
     const [resultsToRender,setResultsToRender] = React.useState<RawCollectible[]>(data);
     const [viewType,setViewType] = React.useState<View>(View.Table);
 
-    const [edited,setEdited] = React.useState<RawCollectible>(new RawCollectible);
-    const [showedDetails,setShowedDetails] = React.useState<RawCollectible>(new RawCollectible)
+    const [edited,setEdited] = React.useState<RawCollectible|null>(null);
+    const [showedDetails,setShowedDetails] = React.useState<RawCollectible|null>(null)
 
     const [nameFilter,setNameFilter] = React.useState<string>('');
     const [subTypeFilter,setSubTypeFilter] = React.useState<string>('');
@@ -32,11 +32,11 @@ function Result({data} : ResultProps) {
     //const [saveProcess,setSaveProcess] = React.useState(false);
 
     const editItem = (row : RawCollectible) => {
-        setEdited(new RawCollectible(row));     
+        setEdited(new RawCollectible(row.getObject()));     
     }
     const cancelItem = () => {
-        setEdited(new RawCollectible)
-        setShowedDetails(new RawCollectible)
+        setEdited(null)
+        setShowedDetails(null)
     }
 
     const setView = (view : View) => {
@@ -60,7 +60,13 @@ function Result({data} : ResultProps) {
             name: value,
         };
         setEdited((prev) => {
-            return new RawCollectible({...prev,...change});
+            if (prev != null){
+                let temp = new RawCollectible(prev.getObject());
+                temp.name = change.name;
+                return temp;
+            }
+            return null;
+            
         });
     }
     const saveItem = (edited : RawCollectible) => {
@@ -75,7 +81,7 @@ function Result({data} : ResultProps) {
             })
         })
         //resultsStateCaretaker.saveState(edited,TypeOfChange.EDIT);
-        setEdited(new RawCollectible)
+        setEdited(null)
     }
     const handleResultsSearch = (event : any) => {
         const value = event.target.value;
@@ -104,7 +110,7 @@ function Result({data} : ResultProps) {
             setResultsToRender((prev) => prev.filter((result) => result.name.toLocaleLowerCase().includes(nameFilter.toLocaleLowerCase())));
         }
         if (subTypeFilter !== ''){
-            setResultsToRender((prev) => prev.filter((result) => result.subTypeOf.toLocaleLowerCase().includes(subTypeFilter.toLocaleLowerCase())));
+            setResultsToRender((prev) => prev.filter((result) => result.instanceOF.join("").toLocaleLowerCase().includes(subTypeFilter.toLocaleLowerCase())));
         }
         
     },[nameFilter,subTypeFilter,resultData])

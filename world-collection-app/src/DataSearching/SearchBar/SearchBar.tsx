@@ -1,6 +1,6 @@
 import React, { FormEvent, SyntheticEvent, useEffect, useRef, useState } from "react";
 import { WikiDataAPI } from "../../API/WikiDataAPI";
-import { SearchData } from "../../Data/SearchData/SearchData";
+import { SearchData } from "../../Data/DataModels/SearchData";
 import RenderSearchInfo from "../RenderSearchInfo";
 import "./SearchBar.css";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../API/WikiDataAPI";
-import { CollectibleDetail } from "../Data/CollectibleDetails";
+import { CollectibleDetail } from "../Data/CollectibleModels/CollectibleDetails";
 
 import { Collectible } from "../Data/DatabaseModels/Collectible";
 import LoadingStatus from "../Gadgets/LoadingStatus";
@@ -101,12 +101,12 @@ function CollectibleDetails({collectibleQNumber} : CollectibleDetailsProps){
                 <input className="form-control mr-sm-2" type="search" placeholder="Search for detail"  onChange={handleDetailSearch}/>
                     <div className="details_scroll">
                         <ul className="list-group">
-                            {details.filter((d) =>  d.property.toLocaleLowerCase().includes(detailFilter.toLocaleLowerCase())).map((detail,index) => {
+                            {details.filter((d) =>  d.propertyName.toLocaleLowerCase().includes(detailFilter.toLocaleLowerCase())).map((detail,index) => {
                                 return(
                                     <>
                                         <li key={index} className="list-group-item">
                                             <div className="d-flex flex-column">
-                                                <h6><strong>{detail.property}</strong></h6>
+                                                <h6><strong>{detail.propertyName}</strong></h6>
                                                 <div className="d-flex flex-wrap">
                                                     {detail.values.map((value) => {
                                                         return(

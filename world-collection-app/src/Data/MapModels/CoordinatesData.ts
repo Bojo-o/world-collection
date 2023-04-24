@@ -2,6 +2,7 @@ export interface ICoordinates{
     latitude : number;
     longitude : number
 }
+/** Data model representing coordinates. */
 export class Coordinates{
     latitude : number = 0;
     longitude : number = 0;

@@ -1,4 +1,4 @@
-import { Entity } from "../Data/SearchData/Entity";
+import { Entity } from "../Data/DataModels/Entity";
 import { SearchCollectiblesBuilderQuery } from "./SearchCollectiblesQueryBuilder";
 
 export interface SearchCollectiblesQueryRendererProps{
@@ -25,7 +25,7 @@ export function TableForExceptions({data,handleRemove} : TableForExceptionsProps
                         return(
                             <>
                                 <tr key={index}>
-                                    <td>{type.GetName()}</td>
+                                    <td>{type.getName()}</td>
                                     <td><button type="button" className="btn btn-outline-danger" onClick={() => handleRemove(index)}>Remove</button></td>
                                 </tr>
                             </>
@@ -42,7 +42,7 @@ function SearchCollectiblesQueryRenderer({searchQueryBuilder,handleTypeException
         <div className="d-flex flex-column">
             {searchQueryBuilder.getType() != null && (
                 <>
-                    <h3>Search for collectibles of type "{searchQueryBuilder.getType()?.GetName()}"</h3>
+                    <h3>Search for collectibles of type "{searchQueryBuilder.getType()?.getName()}"</h3>
                     <h3>Type Exceptions:</h3>
                     {searchQueryBuilder.getTypeExceptions().length !== 0 && (
                         
@@ -53,7 +53,7 @@ function SearchCollectiblesQueryRenderer({searchQueryBuilder,handleTypeException
 
             {searchQueryBuilder.isAdministrativeAreaSet() && (
                 <>
-                    <h3>Search for collectibles in administrative area "{searchQueryBuilder.getAdministrativeArea()?.GetName()}"</h3>
+                    <h3>Search for collectibles in administrative area "{searchQueryBuilder.getAdministrativeArea()?.getName()}"</h3>
                     <h3>Administrative Area Exceptions:</h3>
                     {searchQueryBuilder.getAdministrativeAreaExceptions().length !== 0 && (
                         <TableForExceptions data={searchQueryBuilder.getAdministrativeAreaExceptions()} handleRemove={handleAreaExceptionRemove}/>

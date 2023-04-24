@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { WikiDataAPI } from "../API/WikiDataAPI";
-import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
+import { CollectibleBasicInfo } from "../Data/CollectibleModels/CollectibleBasicInfo";
 import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { GetIcon } from "./GetIcon";
 
 import "./CollectibleMarker.css"
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import Visitation from "../CollectibleEditationComponents/Visitation";
-import { CustomDate } from "../Data/CustomDate";
+import { DateWithPrecision } from "../Data/TimeModels/DateWithPrecision";
 import IconsSelector from "../ImageIcons/IconsSelector";
 import Notes from "../CollectibleEditationComponents/Notes";
 import CollectibleDetails from "../Details/CollectibleDetails";
@@ -53,7 +53,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     const handleNotesChange = (notes : string|null) => {
         collectible.notes = notes;
     }
-    const handleVisitationChange = (isVisit : boolean,dateFrom : CustomDate|null,dateTo : CustomDate|null) => {
+    const handleVisitationChange = (isVisit : boolean,dateFrom : DateWithPrecision|null,dateTo : DateWithPrecision|null) => {
         setIsVisit(isVisit);
         setDateFrom(dateFrom);
         setDateTo(dateTo);
@@ -101,12 +101,12 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                         {!loadingBasicInfo && (
                             <>
                                 <div className="card card-collectibles">
-                                    {basicInfo.image != null && (
-                                        <img src={basicInfo.image} className="card-img-top" alt={"image of " + collectible.name}/>
+                                    {basicInfo.imageURL != null && (
+                                        <img src={basicInfo.imageURL} className="card-img-top" alt={"image of " + collectible.name}/>
                                     )}
                                     <div className="card-body">
                                         <h4 className="card-title">{collectible.name}</h4>
-                                        <p className="card-text">{basicInfo.desc}</p>
+                                        <p className="card-text">{(basicInfo.description != null) ? basicInfo.description : ""}</p>
                                         <p className="text-muted">{collectible.name} is type of:</p>
                                         <div className="d-flex flex-wrap">
                                             {collectible.instanceOf.map((t,index) => {

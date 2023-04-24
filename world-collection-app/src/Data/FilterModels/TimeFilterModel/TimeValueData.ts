@@ -1,6 +1,6 @@
 
 import { ComparisonOperator } from "../../Enums/ComparisonOperator";
-import { CustomTime } from "../../CustomTime";
+import { TimeWithPrecision } from "../../TimeModels/TimeWithPrecision";
 
 /** 
  * Object storing value data for some filter/property, whose data type is Time.
@@ -9,9 +9,9 @@ export class TimeValueData{
     /** Comparison operator, which user want to use for filtering restriction. */
     private filterComparisonOperator :  ComparisonOperator;
     /** Time value */
-    private time: CustomTime;
+    private time: TimeWithPrecision;
 
-    constructor(comparisonOperator: ComparisonOperator,time : CustomTime){
+    constructor(comparisonOperator: ComparisonOperator,time : TimeWithPrecision){
         this.filterComparisonOperator = comparisonOperator;
         this.time = time;
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
-import { Entity } from "../../../Data/SearchData/Entity";
-import { SearchData } from "../../../Data/SearchData/SearchData";
+import { Entity } from "../../../Data/DataModels/Entity";
+import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
 import { CollectiblesSearchQueryData } from "../ColectiblesSearchQueryData";
 
@@ -31,14 +31,14 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
         setExceptionSubTypes([...exceptionSubTypes,new Entity(data.QNumber,data.name)])
     }
     const handleRemovingExceptionSubTypeChoosing = (entity : Entity) => {
-        setExceptionSubTypes((prev) => prev.filter((e) => e.GetQNumber() !== entity.GetQNumber()))
+        setExceptionSubTypes((prev) => prev.filter((e) => e.getQNumber() !== entity.getQNumber()))
     }
     const typesDataGetter = (searchWord : string) => {
         return WikiDataAPI.searchForTypesOfCollectibles(searchWord);
     }
     const subTypesDataGetter = (searchWord : string) => {
-        let exceptionSubTypesQNumbers  = exceptionSubTypes.map((type) => { return type.GetQNumber()})
-        return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord,(type == null) ? "" : type.GetQNumber(),exceptionSubTypesQNumbers);
+        let exceptionSubTypesQNumbers  = exceptionSubTypes.map((type) => { return type.getQNumber()})
+        return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord,(type == null) ? "" : type.getQNumber(),exceptionSubTypesQNumbers);
     }
 
     return(
@@ -59,7 +59,7 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
                 ) : (
                     <>
                         <div className="d-flex">
-                            <h1>Choosed type "{type.GetName()}" </h1>
+                            <h1>Choosed type "{type.getName()}" </h1>
                             <button type="button" className="btn btn-info" onClick={handleResetType} >Choose other</button> 
                         </div>
                         {exceptionSubTypes.length != 0 && (
@@ -71,7 +71,7 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
                                 {exceptionSubTypes.map((exc,index) => {
                                     return(
                                         <div key={index}>
-                                            <span className="badge bg-primary mx-1" >{exc.GetName()}
+                                            <span className="badge bg-primary mx-1" >{exc.getName()}
                                                 <button type="button" className="btn btn-danger ms-3" onClick={() => handleRemovingExceptionSubTypeChoosing(exc)}>x</button>
                                             </span>
                                         </div>

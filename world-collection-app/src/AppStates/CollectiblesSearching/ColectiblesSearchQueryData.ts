@@ -1,5 +1,5 @@
 import { AppliedFilterData } from "../../Data/FilterModels/AppliedFilterData"
-import { Entity } from "../../Data/SearchData/Entity"
+import { Entity } from "../../Data/DataModels/Entity"
 import { Areas } from "./CollectiblesSearchingStates/AreaChoosing/Areas"
 
 export class CollectiblesSearchQueryData{
@@ -39,8 +39,8 @@ export class CollectiblesSearchQueryData{
         return this.exceptionsSubTypes;
     }
     public setTypeAndExceptionSubTypes(type : Entity,exceptionsSubTypes : Entity[]){
-        this.type = type.GetQNumber();
-        this.exceptionsSubTypes = exceptionsSubTypes.map((e) => {return e.GetQNumber()}) ;
+        this.type = type.getQNumber();
+        this.exceptionsSubTypes = exceptionsSubTypes.map((e) => {return e.getQNumber()}) ;
         return new CollectiblesSearchQueryData(this);
     }
     public setFilters(filters : AppliedFilterData[]){
@@ -56,13 +56,13 @@ export class CollectiblesSearchQueryData{
     }
     public setAreaSearchTypeAsRegion(region : Entity){
         this.areaSearchType = Areas.REGION;
-        this.region = region.GetQNumber();
+        this.region = region.getQNumber();
         return new CollectiblesSearchQueryData(this);
     }
     public setAreaSearchTypeAsAdministrative(area : Entity,exceptionsSubAreas : Entity[]){
         this.areaSearchType = Areas.ADMINISTRAVIVE_AREA;
-        this.area= area.GetQNumber();
-        this.exceptionsSubAreas = exceptionsSubAreas.map((e) => {return e.GetQNumber()});
+        this.area= area.getQNumber();
+        this.exceptionsSubAreas = exceptionsSubAreas.map((e) => {return e.getQNumber()});
         return new CollectiblesSearchQueryData(this);
     }
     public setAreaSearchTypeAsWorld(){

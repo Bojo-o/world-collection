@@ -5,8 +5,8 @@ import TimeFilter from "./Filters/TimeFilter";
 import SearchByRadius from "./CollectiblesSearchingStates/SeachByRadius";
 import { SearchCollectiblesBuilderQuery } from "../../CollectiblesSearching/SearchCollectiblesQueryBuilder";
 import SearchCollectiblesQueryRenderer from "../../CollectiblesSearching/SearchCollectiblesQueryRenderer";
-import { Entity } from "../../Data/SearchData/Entity";
-import { SearchData } from "../../Data/SearchData/SearchData";
+import { Entity } from "../../Data/DataModels/Entity";
+import { SearchData } from "../../Data/DataModels/SearchData";
 import SearchBar from "../../DataSearching/SearchBar/SearchBar";
 import "./CollectiblesSearching.css"
 import AreaChoosing from "./CollectiblesSearchingStates/AreaChoosing/AreaChoosing";
@@ -35,7 +35,7 @@ function CollectibleSearching(){
     };
     const typeChoosingStateHandleNext = (type : Entity,exceptionSubTypes : Entity[]) => {
         setQueryData((prev) => prev.setTypeAndExceptionSubTypes(type,exceptionSubTypes))
-        if (type.GetQNumber() != pickedType?.GetQNumber()){
+        if (type.getQNumber() != pickedType?.getQNumber()){
             setUsedFilters([])
         }
         setPickedType(type);

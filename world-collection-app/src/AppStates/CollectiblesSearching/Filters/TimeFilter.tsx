@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Precision, CustomTime } from "../../../Data/CustomTime";
+import {TimeWithPrecision } from "../../../Data/TimeModels/TimeWithPrecision";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
 import { TimeValueData } from "../../../Data/FilterModels/TimeFilterModel/TimeValueData";
 import { ComparisonOperator } from "../../../Data/Enums/ComparisonOperator";
 import { FilterProps } from "./FilterProps";
 import { useMediaQuery } from "react-responsive";
+import { DatePrecision } from "../../../Data/Enums/DatePrecision";
 
 
 export enum TimePrecision{
@@ -21,7 +22,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
 
     const [isBC,setIsBC] = useState(false);
 
-    const [time,setTime] = useState<CustomTime|null>(null)
+    const [time,setTime] = useState<TimeWithPrecision|null>(null)
     
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
@@ -37,11 +38,11 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
         let dateSplited = date.split('-');
 
         if (dateSplited.length == 2){
-            setTime(new CustomTime(Precision.Month,isBC,parseInt(dateSplited[0]),parseInt(dateSplited[1])));
+            setTime(new TimeWithPrecision(DatePrecision.Month,isBC,parseInt(dateSplited[0]),parseInt(dateSplited[1])));
         }
 
         if (dateSplited.length == 3){
-            setTime(new CustomTime(Precision.Day,isBC,parseInt(dateSplited[0]),parseInt(dateSplited[1]),parseInt(dateSplited[2])));
+            setTime(new TimeWithPrecision(DatePrecision.Day,isBC,parseInt(dateSplited[0]),parseInt(dateSplited[1]),parseInt(dateSplited[2])));
         }
     }
     const renderDateInput = (name : string,renderAsMonthType = false) => {
@@ -58,13 +59,13 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const handleYear = (e : any) => {
         let year = e.target.value;
         if(year >= 0){
-            setTime(new CustomTime(Precision.Year,isBC,year));
+            setTime(new TimeWithPrecision(DatePrecision.Year,isBC,year));
         }
     }
     const handleCentury = (e : any) => {
         let century = e.target.value;
         if(century >= 1){
-            setTime(new CustomTime(Precision.Year,isBC,century * 100));
+            setTime(new TimeWithPrecision(DatePrecision.Year,isBC,century * 100));
         }
         
     }

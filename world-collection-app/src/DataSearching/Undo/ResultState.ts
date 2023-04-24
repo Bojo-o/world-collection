@@ -1,4 +1,4 @@
-import { RawCollectible } from "../../Data/RawCollectible";
+import { RawCollectible } from "../../Data/CollectibleModels/RawCollectible";
 
 export enum TypeOfChange {
     REMOVE,

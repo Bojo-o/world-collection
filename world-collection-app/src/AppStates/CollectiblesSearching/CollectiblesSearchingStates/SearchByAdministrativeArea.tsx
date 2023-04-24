@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
-import { Entity } from "../../../Data/SearchData/Entity";
-import { SearchData } from "../../../Data/SearchData/SearchData";
+import { Entity } from "../../../Data/DataModels/Entity";
+import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
 import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
@@ -16,8 +16,8 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
         return WikiDataAPI.searchForAdministrativeAreas(searchWord);
     }
     const subAreaDataGetter = (seachWord : string) => {
-        let exceptionSubAreasQNumbers = exceptionSubAreas.map((type) => { return type.GetQNumber()})
-        return WikiDataAPI.searchForSubAdministrativeAreasOfArea(seachWord,(area != null) ? area.GetQNumber() : null,exceptionSubAreasQNumbers)
+        let exceptionSubAreasQNumbers = exceptionSubAreas.map((type) => { return type.getQNumber()})
+        return WikiDataAPI.searchForSubAdministrativeAreasOfArea(seachWord,(area != null) ? area.getQNumber() : null,exceptionSubAreasQNumbers)
     }
     const handleAddingArea = (data : SearchData) => {
         setArea(new Entity(data.QNumber,data.name))
@@ -31,7 +31,7 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
         setExceptionSubAreas([...exceptionSubAreas,new Entity(data.QNumber,data.name)])
     }
     const handleRemovingExceptionSubArea = (entity : Entity) => {
-        setExceptionSubAreas((prev) => prev.filter((e) => e.GetQNumber() !== entity.GetQNumber()))
+        setExceptionSubAreas((prev) => prev.filter((e) => e.getQNumber() !== entity.getQNumber()))
     }
     return (
         <>
@@ -45,7 +45,7 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
                 ) : (
                     <>
                         <div className="d-flex flex-row">
-                            <h1>Choosed area "{area.GetName()}" </h1>
+                            <h1>Choosed area "{area.getName()}" </h1>
                             <button type="button" className="btn btn-info" onClick={handleResetArea} >Choose other area</button> 
                         </div>
                         {exceptionSubAreas.length != 0 && (
@@ -56,7 +56,7 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
                                     {exceptionSubAreas.map((exc,index) => {
                                         return(
                                             <div key={index}>
-                                                <span className="badge bg-primary mx-1" >{exc.GetName()}
+                                                <span className="badge bg-primary mx-1" >{exc.getName()}
                                                     <button type="button" className="btn btn-danger ms-3" onClick={() => handleRemovingExceptionSubArea(exc)}>x</button>
                                                 </span>
                                             </div>

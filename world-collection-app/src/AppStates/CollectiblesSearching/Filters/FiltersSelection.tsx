@@ -3,7 +3,7 @@ import { json } from "stream/consumers";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { DataTypeOfFilter, FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
-import { Entity } from "../../../Data/SearchData/Entity";
+import { Entity } from "../../../Data/DataModels/Entity";
 import './FiltersSelection.css';
 import ItemFilter from "./ItemFilter";
 import QuantityFilter from "./QuantityFilter";
@@ -74,7 +74,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
         setLoadingFilters(true)
         setErrorForFetchingFilters(false);
 
-        WikiDataAPI.searchForFilters(filtersForType.GetQNumber()).then(
+        WikiDataAPI.searchForFilters(filtersForType.getQNumber()).then(
             (data) => {
                 setLoadingFilters(false);
                 setRecomendedFilters(data);

@@ -1,7 +1,7 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Circle, MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { WikiDataAPI } from '../../../API/WikiDataAPI';
-import { SearchData } from '../../../Data/SearchData/SearchData';
+import { SearchData } from '../../../Data/DataModels/SearchData';
 import SearchBar from '../../../DataSearching/SearchBar/SearchBar';
 
 import "../../../Map/Map.css";
@@ -31,7 +31,7 @@ function SearchByRadius({handleNext: handleRadiusArea,handleBack} : SearchByRadi
     }
 
     const handleClickedPlace = (data : SearchData) => {
-        setPositionOfMarker({lat :  +data.lati,lng : +data.long})
+        setPositionOfMarker({lat :  data.latitude,lng : data.longitude})
     };
     const changePosition = (newPosition : {lat : number,lng : number}) => {
         setPositionOfMarker(newPosition);

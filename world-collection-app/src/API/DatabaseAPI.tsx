@@ -1,7 +1,7 @@
-import { CustomDate } from "../Data/CustomDate";
+import { DateWithPrecision } from "../Data/TimeModels/DateWithPrecision";
 import { Collection } from "../Data/DatabaseModels/Colection";
 import { Collectible } from "../Data/DatabaseModels/Collectible";
-import { RawCollectible } from "../Data/RawCollectible";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import { Fetch } from "./Fetch";
 
 // URLS CONSTANTS
@@ -83,14 +83,14 @@ export class DatabaseAPI {
      * @param dateTo Ending point of range of visit.
      * @returns Status message, if this process was successful.
      */
-    public static async setCollectibleVisitation(QNumberOfCollectible : string,isVisit : boolean,dateFormat : string|null=null,dateFrom : CustomDate|null=null,dateTo : CustomDate|null=null){
+    public static async setCollectibleVisitation(QNumberOfCollectible : string,isVisit : boolean,dateFormat : string|null=null,dateFrom : DateWithPrecision|null=null,dateTo : DateWithPrecision|null=null){
         let dateFromString  : string = 'null'
         let dateToString  : string = 'null'
         if (dateFrom != null){
-            dateFromString = dateFrom.GetDate();
+            dateFromString = dateFrom.getDate();
         }
         if (dateTo != null){
-            dateToString = dateTo.GetDate();
+            dateToString = dateTo.getDate();
         }
         let data =Fetch.postAndFetch(baseDatabaseAPIUrl + postVisitation,
             {

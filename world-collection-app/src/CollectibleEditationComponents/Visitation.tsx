@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { CustomDate, DatePrecision } from "../Data/CustomDate";
-import { Precision } from "../Data/CustomTime";
+import { DateWithPrecision } from "../Data/TimeModels/DateWithPrecision";
+
 import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { DATEOPTIONS } from "../Data/Enums/DateOption";
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
+import { DatePrecision } from "../Data/Enums/DatePrecision";
 
 enum Date{
     Date = "date",
@@ -13,7 +14,7 @@ enum Date{
 
 export interface VisitationProps{
     collectible : Collectible;
-    updateVisitation : (isVisited : boolean,dateFrom : CustomDate|null,dateTo : CustomDate|null) => void;
+    updateVisitation : (isVisited : boolean,dateFrom : DateWithPrecision|null,dateTo : DateWithPrecision|null) => void;
 }
 function Visitation({collectible,updateVisitation} : VisitationProps){
     const [isVisited,setIsVisited] = useState(collectible.isVisit)
@@ -23,10 +24,10 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
     const [savingError,setSavingError] = useState(false);
     const [savingStatus,setSavingStatus] = useState<string|null>(null)
 
-    const [todayDate,setTodayDate] = useState(new CustomDate(null,DatePrecision.Day));
-    const [dateFrom,setDateFrom] = useState<CustomDate|null>(null);
-    const [dateTo,setDateTo] = useState<CustomDate|null>(null);
-    const [year,setYear] = useState(todayDate.year);
+    const [todayDate,setTodayDate] = useState(new DateWithPrecision(null,DatePrecision.Day));
+    const [dateFrom,setDateFrom] = useState<DateWithPrecision|null>(null);
+    const [dateTo,setDateTo] = useState<DateWithPrecision|null>(null);
+    const [year,setYear] = useState(todayDate.getYear());
     const [dateOption,setDateOption] = useState<DATEOPTIONS>(DATEOPTIONS.Date);
 
     const handleChangeOfVisitationCheckbox = (e : any) => {
@@ -43,7 +44,7 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
         setSavingError(false);
         setSavingStatus(null);
         
-        DatabaseAPI.setCollectibleVisitation(collectible.QNumber,isVisited,(dateFrom == null) ? null : dateFrom.GetPrecision().toString(),dateFrom,dateTo).then((status) => {
+        DatabaseAPI.setCollectibleVisitation(collectible.QNumber,isVisited,(dateFrom == null) ? null : dateFrom.getPrecision().toString(),dateFrom,dateTo).then((status) => {
             setSaving(false);
             setSavingStatus(status);
 
@@ -61,19 +62,19 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
 
     }
     const handleDateFrom = (e: any,precision : DatePrecision) =>{
-        setDateFrom(new CustomDate(e.target.value,precision));
+        setDateFrom(new DateWithPrecision(e.target.value,precision));
     }
     const handleDateTo = (e: any,precision : DatePrecision) =>{
-        setDateTo(new CustomDate(e.target.value,precision));
+        setDateTo(new DateWithPrecision(e.target.value,precision));
     }
     
-    const renderDateInput = (type : Date,label : string,handleDate : (e: any,precision : DatePrecision) => void,max : CustomDate|null = null,min : CustomDate|null = null) => {
+    const renderDateInput = (type : Date,label : string,handleDate : (e: any,precision : DatePrecision) => void,max : DateWithPrecision|null = null,min : DateWithPrecision|null = null) => {
         return(
             <>
                 <label htmlFor={type}>{label}</label>
                 <input  className="form-control" type={type} id={type} name={type}
-                    max={(max == null) ? undefined : (type == Date.Date) ? max.GetDate() : max.GetMonthYear()}
-                    min={(min == null) ? undefined : (type == Date.Date) ? min.GetDate() : min.GetMonthYear()}
+                    max={(max == null) ? undefined : (type == Date.Date) ? max.getDate() : max.getMonthYear()}
+                    min={(min == null) ? undefined : (type == Date.Date) ? min.getDate() : min.getMonthYear()}
                     onChange={(e: any) => handleDate(e,(type == Date.Date) ? DatePrecision.Day : DatePrecision.Month)}/>
             </>
         )
@@ -81,16 +82,16 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
 
     const handleYear = (e: any) => {
         let year = e.target.value;
-        if(year <= todayDate.year && year > 1900){
+        if(year <= Number(todayDate.getYear()) && year > 1900){
             setYear(year);
-            setDateFrom(new CustomDate(e.target.value+"-01",DatePrecision.Year));
+            setDateFrom(new DateWithPrecision(e.target.value+"-01",DatePrecision.Year));
         }
     }
     const renderYearInput =  () => {
         return(
             <>
                 <label htmlFor='year'>Year of visit</label>
-                <input  className="form-control" type="number" id={"year"} name={'year'} min="1900" max={todayDate.GetYear()} step="1" value={year} onChange={handleYear}/>
+                <input  className="form-control" type="number" id={"year"} name={'year'} min="1900" max={todayDate.getYear()} step="1" value={year} onChange={handleYear}/>
             </>
         )
     }
@@ -102,7 +103,7 @@ function Visitation({collectible,updateVisitation} : VisitationProps){
         setDateFrom(null)
         setDateTo(null)
         if (dateOption == DATEOPTIONS.Year){
-            setDateFrom(new CustomDate(todayDate.year+"-01",DatePrecision.Year));
+            setDateFrom(new DateWithPrecision(todayDate.getYear()+"-01",DatePrecision.Year));
         }
     },[dateOption])
     return(

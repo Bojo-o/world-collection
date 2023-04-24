@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
 import { WikiDataAPI } from "../API/WikiDataAPI";
-import { CollectibleBasicInfo } from "../Data/CollectibleBasicInfo";
+import { CollectibleBasicInfo } from "../Data/CollectibleModels/CollectibleBasicInfo";
 
 import "./CollectibleMarker.css"
 import LoadingStatus from "../Gadgets/LoadingStatus";
 
 import CollectibleDetails from "../Details/CollectibleDetails";
-import { RawCollectible } from "../Data/RawCollectible";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 
 export interface RawCollectibleInfoCardProps{
     rawCollectible : RawCollectible;
@@ -51,15 +51,15 @@ function RawCollectibleInfoCard({rawCollectible} : RawCollectibleInfoCardProps){
                         {!loadingBasicInfo && (
                             <>
                                 <div className="card">
-                                    {basicInfo.image != null && (
-                                        <img src={basicInfo.image} className="card-img-top" alt={"image of " + rawCollectible.name}/>
+                                    {basicInfo.imageURL != null && (
+                                        <img src={basicInfo.imageURL} className="card-img-top" alt={"image of " + rawCollectible.name}/>
                                     )}
                                     <div className="card-body">
                                         <h4 className="card-title">{rawCollectible.name}</h4>
-                                        <p className="card-text">{basicInfo.desc}</p>
+                                        <p className="card-text">{(basicInfo.description != null) ? basicInfo.description : ""}</p>
                                         <p className="text-muted">{rawCollectible.name} is type of:</p>
                                         <div className="d-flex flex-wrap">
-                                            {rawCollectible.subTypeOf.split('/').map((t,index) => {
+                                            {rawCollectible.instanceOF.map((t,index) => {
                                                 return(
                                                     <span key={index} className="badge bg-info text-dark">{t}</span>
                                                 )

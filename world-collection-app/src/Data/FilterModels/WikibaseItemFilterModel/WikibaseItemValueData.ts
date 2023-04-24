@@ -1,4 +1,4 @@
-import { Entity } from "../../SearchData/Entity";
+import { Entity } from "../../DataModels/Entity";
 
 /**
  * Object storing value for some filter/property, whose data type is WikibaseItem.
@@ -12,12 +12,12 @@ export class WikibaseItemValueData{
     }
 
     public getString(){
-        return "\""  + this.item.GetName() + "\"  is value of item property"  
+        return "\""  + this.item.getName() + "\"  is value of item property"  
     }
 
     toJSON(){
         return {
-            item : this.item.GetQNumber()
+            item : this.item.getQNumber()
         }
     }
 }

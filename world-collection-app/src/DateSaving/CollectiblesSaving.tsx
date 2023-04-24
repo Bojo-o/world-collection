@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Collection } from "../Data/DatabaseModels/Colection";
-import { RawCollectible } from "../Data/RawCollectible";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import { DatabaseAPI } from "../API/DatabaseAPI";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import CollectionCreation from "./CollectionCreation";

@@ -1,5 +1,5 @@
 import React from "react";
-import { SearchData } from "../Data/SearchData/SearchData";
+import { SearchData } from "../Data/DataModels/SearchData";
 
 interface RenderSearchInfo{
     result : SearchData;
@@ -10,7 +10,7 @@ function RenderSearchInfo({result} : RenderSearchInfo) {
             <p className="h5">
                 {result.name}
                 <br />
-                <small className="text-muted">{result.desc}</small>
+                <small className="text-muted">{result.description}</small>
             </p>
         </>
     );

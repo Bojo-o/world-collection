@@ -1,7 +1,7 @@
 import React from "react";
 import './Map.css';
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl, useMap } from 'react-leaflet';
-import { RawCollectible } from "../Data/RawCollectible";
+import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import WayPoint from "./WayPoint";
 import { map } from "leaflet";
 import MapOptions from "./MapOptions/MapOptions";
@@ -9,7 +9,7 @@ import { convertToMapDataModel } from "./ConvertToMapData";
 
 export interface ViewMapProps {
     waypoints : RawCollectible[];
-    edited : RawCollectible;
+    edited : RawCollectible|null;
     removeItem : (item : RawCollectible) => void;
     editItem : (row : RawCollectible) => void;
     cancelItem : () => void;

@@ -1,14 +1,18 @@
-export enum DatePrecision {
-    Day = "Day",
-    Month = "Month",
-    Year = "Year",
-}
-export class CustomDate{
-    date : Date;
-    year : string;
-    month : string;
-    day : string;
-    precision : DatePrecision;
+import { DatePrecision } from "../Enums/DatePrecision";
+
+
+/**
+ * Data model representing date with precision.
+ * Precision represent date format.
+ * For example date is represented only as mounth and year when precison is setted as Month.
+ * In this project it is used in showing collectible date of visit.
+ */
+export class DateWithPrecision{
+    private date : Date;
+    private year : string;
+    private month : string;
+    private day : string;
+    private precision : DatePrecision;
 
     constructor(date: string|null,precision : DatePrecision){
         if(date == null){
@@ -21,27 +25,25 @@ export class CustomDate{
         this.month = (this.date.getMonth() + 1 < 10) ? "0" + (this.date.getMonth() + 1).toString() : (this.date.getMonth() + 1).toString();
         this.day = (this.date.getDate()< 10) ? "0" + (this.date.getDate()).toString() : (this.date.getDate()).toString();
     }
-    GetDate = () => {
+    getDate = () => {
         return this.year + '-' + this.month + '-' + this.day;
     }
-    // delete
-    GetDateToShow = () => {
-        return this.date.toDateString();
-    }
-    GetMonthYear = () => {
+    
+    getMonthYear = () => {
         return this.year + '-' + this.month;
     }
-    // delete
-    GetMonthYearToShow = () => {
-        let month = this.date.toLocaleString('default', {month : 'long'});
-        return month + ' ' + this.year;
-    }
-    GetYear = () => {
+    
+    getYear = () => {
         return this.year;
     }
-    GetPrecision = () => {
+    
+    getPrecision = () => {
         return this.precision;
     }
+    /**
+     * Date converted to string.
+     * @returns Date as string with applied precision.
+     */
     ToString = () => {
         switch(this.precision){
             case DatePrecision.Day:
