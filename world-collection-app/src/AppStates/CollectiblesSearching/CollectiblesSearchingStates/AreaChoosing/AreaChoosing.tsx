@@ -1,4 +1,3 @@
-import { CollectiblesSearchingStates } from "../CollectiblesSearchingStates";
 import { Areas } from "./Areas";
 import CardForArea from "./CardForArea";
 

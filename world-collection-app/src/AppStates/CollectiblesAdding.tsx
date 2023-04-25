@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
-import DraggableMarker from "../CollectiblesSearching/DraggableMarker";
+import DraggableMarker from "../Map/Markers/DraggableMarker";
 import MapFlyToOption from "../Map/MapOptions/MapFlyToOption";
 import '../Map/Map.css';
-import SearchBar from "../DataSearching/SearchBar/SearchBar";
+import SearchBar from "../SearchBar/SearchBar";
 import { WikiDataAPI } from "../API/WikiDataAPI";
 import { SearchData } from "../Data/DataModels/SearchData";
 import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import './CollectiblesAdding.css'
-import CollectiblesSaving from "../DateSaving/CollectiblesSaving";
-import RawCollectibleInfoCard from "../Map/RawCollectibleInfoCard";
+import RawCollectiblesSaving from "../DataSaving/RawCollectiblesSaving";
+import RawCollectibleCard from "../Map/Markers/RawCollectibleMarker/RawCollectibleCard";
 import { useMediaQuery } from "react-responsive";
 
 const center = {
@@ -70,7 +70,7 @@ function CollectiblesAdding(){
                     <h5>You can here search for collectible and add it to your collection.</h5>
                     
                     
-                    <SearchBar placeHolder={"Type some collectible, likes Eiffel tower"} handleClickedResult={handleClickedCollectible} dataGetter={dataGetter} emptySearchingFlag={false}/> 
+                    <SearchBar placeHolderText={"Type some collectible, likes Eiffel tower"} handleClickedResult={handleClickedCollectible} dataGetter={dataGetter} emptySearchingFlag={false}/> 
                     <div>
                         {loading && (<>
                             {error ? (
@@ -124,7 +124,7 @@ function CollectiblesAdding(){
                     </ul>
                     {collectibles.length != 0 && (
                         <>
-                            <CollectiblesSaving collectibles={collectibles} />
+                            <RawCollectiblesSaving rawCollectibles={collectibles} />
                         </>
                     )}
                 </div>
@@ -146,7 +146,7 @@ function CollectiblesAdding(){
                             <>
                                 <Marker position={[collectible.latitude,collectible.longitude]}>
                                     <Popup>
-                                        <RawCollectibleInfoCard rawCollectible={collectible} />
+                                        <RawCollectibleCard rawCollectible={collectible} />
                                     </Popup>
                                 </Marker>
                                 
@@ -157,13 +157,13 @@ function CollectiblesAdding(){
                                 <>
                                     <Marker position={[c.latitude,c.longitude]}>
                                         <Popup>
-                                            <RawCollectibleInfoCard rawCollectible={c} />
+                                            <RawCollectibleCard rawCollectible={c} />
                                         </Popup>
                                     </Marker>
                                 </>
                             )
                         })}
-                        <MapFlyToOption position={position} />
+                        <MapFlyToOption pointOfTheEarth={position} />
                         <ZoomControl position="bottomright" zoomInText="🔍" zoomOutText="🗺️" />
                     </MapContainer>
             </>

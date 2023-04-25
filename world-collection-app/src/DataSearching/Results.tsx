@@ -1,11 +1,10 @@
 import React from 'react'
-import ViewMap from '../Map/ViewMap';
-import ResultsTable from './ResultsTable';
-import './Results.css'
+import MapShowingRawCollectibles from '../Map/MapShowingRawCollectibles';
+import RawCollectiblesTable from '../Tables/RawCollectiblesTable/RawCollectiblesTable';
 import { Caretaker } from './Undo/Caretaker';
 import { TypeOfChange } from './Undo/ResultState';
 import { RawCollectible } from '../Data/CollectibleModels/RawCollectible';
-import CollectiblesSaving from '../DateSaving/CollectiblesSaving';
+import RawCollectiblesSaving from '../DataSaving/RawCollectiblesSaving';
 
 export interface ResultProps{
     data : RawCollectible[];
@@ -70,7 +69,7 @@ function Result({data} : ResultProps) {
         });
     }
     const saveItem = (edited : RawCollectible) => {
-        let itemIndex : number = 0;
+        
         setResultData((data) => {
             return data.map((d,index) => {
                 if (d.QNumber === edited.QNumber){
@@ -133,10 +132,10 @@ function Result({data} : ResultProps) {
                 ( <button type='button' className='btn btn-info' onClick={handleUndo} disabled>Undo</button>)}
 
             
-            <CollectiblesSaving collectibles={resultData} />
+            <RawCollectiblesSaving rawCollectibles={resultData} />
             <h4>{resultsToRender.length} results</h4>
-            {viewType === View.Table ? < ResultsTable results={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  detailShowing={showedDetails} editItem={editItem} removeItem={removeItem} saveItem={saveItem} showDetails={showDetails}/>
-            : <ViewMap waypoints={resultsToRender} removeItem={removeItem}  handleChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
+            {viewType === View.Table ? < RawCollectiblesTable records={resultsToRender} handleChange={handleChange} cancelItem={cancelItem} edited={edited}  detailShowing={showedDetails} editItem={editItem} removeItem={removeItem} saveItem={saveItem} showDetails={showDetails}/>
+            : <MapShowingRawCollectibles rawCollectiblesToShow={resultsToRender} removeItem={removeItem}  handleNameChange={handleChange} cancelItem={cancelItem} edited={edited}  editItem={editItem} saveItem={saveItem}/>}     
         </React.Fragment>
     );
 }

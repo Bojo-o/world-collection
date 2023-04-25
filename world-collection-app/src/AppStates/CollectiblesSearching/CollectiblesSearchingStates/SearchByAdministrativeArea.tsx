@@ -2,7 +2,7 @@ import { useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
-import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import SearchBar from "../../../SearchBar/SearchBar";
 import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
 export interface SearchByAdministrativeAreaProps{
@@ -40,7 +40,7 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
                 {area == null ? (
                     <div>
                         <h2>Choose the administrative area, in which collectibles will be searched</h2>
-                        <SearchBar placeHolder={"Type administrative area, country"} handleClickedResult={handleAddingArea} dataGetter={areaDataGetter} emptySearchingFlag={false}/>  
+                        <SearchBar placeHolderText={"Type administrative area, country"} handleClickedResult={handleAddingArea} dataGetter={areaDataGetter} emptySearchingFlag={false}/>  
                     </div>
                 ) : (
                     <>
@@ -74,7 +74,7 @@ function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaPro
                         <div className="border border-secondary rounded">
                             <h2>Also you can choose some sub areas, which will be ignored during searching process.</h2>
                             <h5>Clicking on "Show all", it shows you all possible sub areas, but only one level below.</h5>
-                            <SearchBar placeHolder={"Type administrative area"} handleClickedResult={handleAddingExceptionSubArea} dataGetter={subAreaDataGetter} emptySearchingFlag={true}/>
+                            <SearchBar placeHolderText={"Type administrative area"} handleClickedResult={handleAddingExceptionSubArea} dataGetter={subAreaDataGetter} emptySearchingFlag={true}/>
                         </div>
                         <br/>
                         <div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
-import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import SearchBar from "../../../SearchBar/SearchBar";
 import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
 export interface SearchByRegionProps{
@@ -25,7 +25,7 @@ function SearchByRegion({handleNext} : SearchByRegionProps){
                 <h2>Choose the region area, in which collectibles will be searched</h2>
                 <h5>By region its means continent likes "Europe" and sub areas of continents likes "Central Europe" or "East Asia"</h5>
                 <h5>Clicking on "Show all", it shows you all possible regions you can choose.</h5>
-                <SearchBar placeHolder={"Type region area"} handleClickedResult={handleClickedRegion} dataGetter={regionDataGetter} emptySearchingFlag={true}/>
+                <SearchBar placeHolderText={"Type region area"} handleClickedResult={handleClickedRegion} dataGetter={regionDataGetter} emptySearchingFlag={true}/>
                 {region != null && (
                     <div>
                         <h3>Choosed region "{region.getName()}"</h3>

@@ -1,13 +1,7 @@
-import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../API/WikiDataAPI";
+import { useState } from "react";
 import FiltersSelection from "./Filters/FiltersSelection";
-import TimeFilter from "./Filters/TimeFilter";
 import SearchByRadius from "./CollectiblesSearchingStates/SeachByRadius";
-import { SearchCollectiblesBuilderQuery } from "../../CollectiblesSearching/SearchCollectiblesQueryBuilder";
-import SearchCollectiblesQueryRenderer from "../../CollectiblesSearching/SearchCollectiblesQueryRenderer";
 import { Entity } from "../../Data/DataModels/Entity";
-import { SearchData } from "../../Data/DataModels/SearchData";
-import SearchBar from "../../DataSearching/SearchBar/SearchBar";
 import "./CollectiblesSearching.css"
 import AreaChoosing from "./CollectiblesSearchingStates/AreaChoosing/AreaChoosing";
 import { Areas } from "./CollectiblesSearchingStates/AreaChoosing/Areas";

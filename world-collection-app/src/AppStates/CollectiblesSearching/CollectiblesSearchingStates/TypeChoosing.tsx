@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
-import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import SearchBar from "../../../SearchBar/SearchBar";
 import { CollectiblesSearchQueryData } from "../ColectiblesSearchQueryData";
 
 export interface TypeChoosingProps{
@@ -54,7 +54,7 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
                             <button type="button" className="btn btn-warning  btn-sm" onClick={handleSuperTypeChoosing}>Anything</button>
                         </div>
                         
-                        <SearchBar placeHolder={"examples : castle, cave, museum"} handleClickedResult={handleAddingTypeChoosing} dataGetter={typesDataGetter} emptySearchingFlag={false}/> 
+                        <SearchBar placeHolderText={"examples : castle, cave, museum"} handleClickedResult={handleAddingTypeChoosing} dataGetter={typesDataGetter} emptySearchingFlag={false}/> 
                     </>
                 ) : (
                     <>
@@ -90,7 +90,7 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
                             <h5>For example: If you choose type "castle", then it also search for castles that are ruined, so if you want to skip these, choose here "castle ruin"</h5>
                             <h5>Clicking on "Show all", it shows you all possible sub types</h5>
                             <h6>Please take in mind that, if you choosed "anything", it would tried to show a large amount of sub types and it takes a very long time to process</h6>
-                            <SearchBar placeHolder={"Type type of collectibles"} handleClickedResult={handleAddingExceptionSubTypeChoosing} dataGetter={subTypesDataGetter} emptySearchingFlag={true}/>
+                            <SearchBar placeHolderText={"Type type of collectibles"} handleClickedResult={handleAddingExceptionSubTypeChoosing} dataGetter={subTypesDataGetter} emptySearchingFlag={true}/>
                         </div>
                         <br/>
                         <div>

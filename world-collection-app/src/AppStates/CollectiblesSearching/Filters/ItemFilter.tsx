@@ -6,7 +6,7 @@ import { WikibaseItemValueData } from "../../../Data/FilterModels/WikibaseItemFi
 import { WikibaseItemFilterData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WIkibaseItemFilterData";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
-import SearchBar from "../../../DataSearching/SearchBar/SearchBar";
+import SearchBar from "../../../SearchBar/SearchBar";
 import { FilterProps } from "./FilterProps";
 
 function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
@@ -131,7 +131,7 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                             )}
 
                             <h2>Search for item</h2>
-                            <SearchBar placeHolder={"Search for wikibase items"} handleClickedResult={handleClickedItem} dataGetter={itemDataGetter} emptySearchingFlag={false}/>
+                            <SearchBar placeHolderText={"Search for wikibase items"} handleClickedResult={handleClickedItem} dataGetter={itemDataGetter} emptySearchingFlag={false}/>
 
                             
                             

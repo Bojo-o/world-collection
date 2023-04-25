@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Collection } from '../Data/DatabaseModels/Colection';
 import { Collectible } from '../Data/DatabaseModels/Collectible';
 import { DatabaseAPI } from '../API/DatabaseAPI';
-import IconsSelector from '../ImageIcons/IconsSelector';
-import Map from '../Map/Map';
+import MapShowingCollectibles from '../Map/MapShowingCollectibles';
 import './HomeState.css';
 import { useMediaQuery } from 'react-responsive';
 
@@ -135,7 +134,7 @@ function HomeState() {
                 )}
                         
                 {(isBigScreen || !showingCollectionsMenu) && (
-                    <Map collectiblesToShow={collectiblesToShow}/>
+                    <MapShowingCollectibles collectiblesToShow={collectiblesToShow}/>
                 )}
             </div>
 

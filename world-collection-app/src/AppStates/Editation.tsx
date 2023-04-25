@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Collection } from "../Data/DatabaseModels/Colection";
 import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { DatabaseAPI } from "../API/DatabaseAPI";
-import CollectiblesTable from "../Editation/CollectiblesTable";
-import CollectionTable from "../Editation/CollectionTable";
+import CollectiblesEditingTable from "../Tables/EditationTable/CollectiblesEditingTable";
+import CollectionsEditingTable from "../Tables/EditationTable/CollectionsEditingTable";
 
 function Editation(){
     const [collectionsLoading,setCollectionsLoading] = useState<boolean>(false);
@@ -176,7 +176,7 @@ function Editation(){
                     <>
                     <input className="form-control mr-sm-2" type="search" placeholder="Search for collection" onChange={handleSearch} />
                     <h3>Collections:</h3>
-                    <CollectionTable collections={collections.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))} edited={edited}
+                    <CollectionsEditingTable records={collections.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))} edited={edited}
                     editItem={editItem} cancelEditation={cancel} removeItem={removeItem} handleChange={handleChange} saveItem={saveItem} canSaveItem={canSaveCollection}
                     merge={merge} mergeItem={mergeItem} merging={merging} editCollectibles={swicthToCollectiblesEditation}/>
                     </>
@@ -193,7 +193,7 @@ function Editation(){
                             <h3>Collectibles of {showingCollectionCollectibles.name} collection:</h3>
                         </div>
                         <input className="form-control mr-sm-2" type="search" placeholder="Search for collectible" onChange={handleSearch} />
-                        <CollectiblesTable collectibles={collectibles.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))}
+                        <CollectiblesEditingTable records={collectibles.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))}
                         removeCollectible={removeCollectible} editedCollectible={editedCollectible} editCollectible={editCollectible} saveCollectible={saveCollectible} cancleCollectibleAction={cancleCollectibleAction}
                         handleCollectibleNameChange={handleCollectibleNameChange} canSaveCollectible={canSaveCollectible}/>
                     </> 

@@ -2,11 +2,11 @@ import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Circle, MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { WikiDataAPI } from '../../../API/WikiDataAPI';
 import { SearchData } from '../../../Data/DataModels/SearchData';
-import SearchBar from '../../../DataSearching/SearchBar/SearchBar';
+import SearchBar from '../../../SearchBar/SearchBar';
 
 import "../../../Map/Map.css";
 import MapFlyToOption from '../../../Map/MapOptions/MapFlyToOption';
-import DraggableMarker from '../../../CollectiblesSearching/DraggableMarker';
+import DraggableMarker from '../../../Map/Markers/DraggableMarker';
 import { CollectiblesSearchingStates } from './CollectiblesSearchingStates';
 import { useMediaQuery } from 'react-responsive';
 
@@ -50,7 +50,7 @@ function SearchByRadius({handleNext: handleRadiusArea,handleBack} : SearchByRadi
                     </button>
                 </div>
                 
-                <SearchBar placeHolder={"Type some location"} handleClickedResult={handleClickedPlace} dataGetter={placesDataGetter} emptySearchingFlag={false}/> 
+                <SearchBar placeHolderText={"Type some location"} handleClickedResult={handleClickedPlace} dataGetter={placesDataGetter} emptySearchingFlag={false}/> 
 
                 <label htmlFor="radiusRange" className="form-label">
                     <h3>Set range radius</h3>
@@ -105,7 +105,7 @@ function SearchByRadius({handleNext: handleRadiusArea,handleBack} : SearchByRadi
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <DraggableMarker position={positionOfMarker} handleChangeOfPosition={changePosition}/>
-                    <MapFlyToOption position={positionOfMarker} />
+                    <MapFlyToOption pointOfTheEarth={positionOfMarker} />
                     <Circle center={positionOfMarker} pathOptions={fillBlueOptions} radius={ radius * 1000} />
                 </MapContainer>
                 )}
