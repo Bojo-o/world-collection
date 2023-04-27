@@ -25,7 +25,7 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
     const [errorForFetchingValueType, setErrorForFetchingValueType] = useState(false);
 
     const [unit, setUnit] = useState<string | null>(null);
-    const [value, setValue] = useState<number | undefined>(undefined);
+    const [value, setValue] = useState<number>(0);
 
     const [comparisonOperator, setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
 
@@ -35,12 +35,10 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
      * Sets filter quantity value from number input.
      */
     const handleNumberInput = (e: any) => {
-        if (e.target.value == "") {
-            setValue(undefined)
-            return;
-        }
+        let input : string = e.target.value
 
-        let number = Math.max(filterData.range.min, Math.min(filterData.range.max, Number(e.target.value)));
+        
+        let number = Math.max(filterData.range.min, Math.min(filterData.range.max, Number(input)));
         setValue(number);
     }
 
@@ -54,27 +52,30 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
      * Invoke func, which was provided from parent component to adds this filter with value into some list of applied filters.
      */
     const handleSave = () => {
-        if (value != undefined) {
+        if (value !== undefined) {
             handleAddFilterToAplied(new AppliedFilterData(filter, new QuantityValueData(comparisonOperator, value, unit)));
         }
     }
-    /**
-     * Fetches from Wikidata API posibble units, in which value can be expressed, max and min quantity value.
-     */
-    const fetchFilterData = () => {
-        setLoadingValueType(true)
-        setErrorForFetchingValueType(false);
-
-        WikiDataAPI.getQuantityFilterData(filter.PNumber).then(
-            (data) => {
-                setLoadingValueType(false);
-                setFilterData(data);
-
-            }
-        ).catch(() => setErrorForFetchingValueType(true))
-    }
 
     useEffect(() => {
+        /**
+         * Fetches from Wikidata API posibble units, in which value can be expressed, max and min quantity value.
+         */
+        const fetchFilterData = () => {
+            setLoadingValueType(true)
+            setErrorForFetchingValueType(false);
+
+            WikiDataAPI.getQuantityFilterData(filter.PNumber).then(
+                (data) => {
+                    setLoadingValueType(false);
+                    setFilterData(data);
+                    if (data.range.min > 0){
+                        setValue(data.range.min)
+                    }
+                    
+                }
+            ).catch(() => setErrorForFetchingValueType(true))
+        }
         fetchFilterData()
     }, [filter])
 
@@ -89,15 +90,15 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
             </>)}
             {!loadingValueType && (
                 <>
-                    {filterData.supportedUnits.length == 0 ? (
+                    {filterData.supportedUnits.length === 0 ? (
                         <>
                             <h3>This filter does not use units</h3>
                         </>
                     ) : (
                         <>
                             <h3>Choose which units you want to use</h3>
-                            <select className="form-select" onChange={handleUnitChange}>
-                                <option value="" selected disabled hidden>Choose unit</option>
+                            <select className="form-select" onChange={handleUnitChange} defaultValue={""}>
+                                <option value="" disabled hidden>Choose unit</option>
                                 {filterData.supportedUnits.map((value, index) => {
                                     return (
                                         <option key={index} value={value.getQNumber()}>{value.getName()}</option>
@@ -129,10 +130,9 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
                     )}
 
                     <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column")}>
-                        <h4>{(value != undefined) ? value : "value"}</h4>
+                        <h4>{(value !== undefined) ? value : "value"}</h4>
 
                         <select className={"form-select w-50 mx-2"} onChange={handleComparisonOperatorSelect}>
-                            <option value={ComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
                             <option value={ComparisonOperator.EqualTo}>is equal to</option>
                             <option value={ComparisonOperator.NotEqual}> is not equal</option>
                             <option value={ComparisonOperator.GreaterThan}>is greater than</option>
@@ -142,7 +142,7 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
                         </select>
                         <h4>"{filter.name}"</h4>
                     </div>
-                    {value != undefined && (
+                    {value !== undefined && (
                         <button type="button" className="btn btn-success" onClick={handleSave}>Use filter</button>
                     )}
                 </>

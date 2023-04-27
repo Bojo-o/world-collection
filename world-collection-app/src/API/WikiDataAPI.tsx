@@ -45,7 +45,7 @@ export class WikiDataAPI {
         return result;
     }
     private static convertToWikipediaLinkUrl(data: any[]): string {
-        if (data.length == 0) {
+        if (data.length === 0) {
             return "";
         }
         return data[0]['article'];

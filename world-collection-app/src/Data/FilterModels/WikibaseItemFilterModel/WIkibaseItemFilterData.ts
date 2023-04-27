@@ -22,14 +22,14 @@ export class WikibaseItemFilterData {
     }
     public getValueTypesRelation() {
         let result = ""
-        if (this.value_type_constraint.length != 0) {
+        if (this.value_type_constraint.length !== 0) {
             result = this.value_type_constraint[0].relation;
         }
         return result;
     }
     public getConflictTypesRelation() {
         let result = ""
-        if (this.conflict_with_constraint.length != 0) {
+        if (this.conflict_with_constraint.length !== 0) {
             result = this.conflict_with_constraint[0].relationQNumber;
         }
         return result;

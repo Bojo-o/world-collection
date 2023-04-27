@@ -47,7 +47,7 @@ export class Caretaker {
      * @returns True if stack contains some changes.
      */
     isUndoAvailable() {
-        return this.stack.length != 0;
+        return this.stack.length !== 0;
     }
     /**
      * Undo back one change made.

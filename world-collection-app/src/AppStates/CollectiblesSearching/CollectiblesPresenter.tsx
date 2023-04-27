@@ -13,6 +13,7 @@ export interface CollectiblesPresenterProps {
      */
     dataForWikibaseAPI: CollectiblesSearchQueryData;
 }
+
 /**
  * Func which fetches raw collectibles from WikidataAPI and then provides them to component, which renders that data.
  * @param CollectiblesPresenterProps See CollectiblesPresenterProps description.
@@ -32,7 +33,7 @@ function CollectiblesPresenter({ dataForWikibaseAPI }: CollectiblesPresenterProp
         }).catch(() =>
             setError(true)
         )
-    }, [])
+    }, [dataForWikibaseAPI])
     return (
         <>
 

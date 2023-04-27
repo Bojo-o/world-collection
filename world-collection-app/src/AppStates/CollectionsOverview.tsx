@@ -77,7 +77,7 @@ function CollectionsOverview() {
         if (filter !== '') {
             setCollectionsToShow((prev) => prev.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())));
         }
-    }, [filter])
+    }, [filter,collections])
     const handleCollectibleMenu = () => {
         setShowingCollectionsMenu((prev) => !prev);
     }
@@ -89,7 +89,7 @@ function CollectionsOverview() {
                     <div className='d-flex flex-row justify-content-between '>
                         <h1>Your Colections</h1>
                         <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu} >
-                            <img className="align " src={require('../static/Icons/close.png')} width="40" height="40" />
+                            <img className="align " src={require('../static/Icons/close.png')} width="40" height="40" alt='close icon'/>
                         </button>
                     </div>
 
@@ -102,27 +102,25 @@ function CollectionsOverview() {
                         <ul className='list-group' id='collectionsList'>
                             {collectionsToShow.map((collection, index) => {
                                 let className = "list-group-item list-group-item-action ";
-                                if (selectedCollection != null && collection.collectionID == selectedCollection.collectionID) {
+                                if (selectedCollection != null && collection.collectionID === selectedCollection.collectionID) {
                                     className = className + "active"
                                 }
                                 let style = {
                                     width: computeProgress(collection).toString() + "%"
                                 };
-                                return (
-                                    <>
-                                        <li key={index} className={className} onClick={() => handleClickOnCollection(collection)}>
-                                            <div className='d-flex flex-column'>
-                                                <div className="d-flex w-100 justify-content-between">
-                                                    <h4 className="mb-1">{collection.name}</h4>
-                                                    <span className="badge bg-info rounded-pill">{convertStatus(collection)}</span>
-                                                </div>
-                                                <div className="progress">
-                                                    <div className="progress-bar bg-success" style={style} role="progressbar" aria-valuenow={collection.visitedCollectibles} aria-valuemin={0} aria-valuemax={collection.notVisitedCollectibles + collection.visitedCollectibles}></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </>
 
+                                return (
+                                    <li key={index} className={className} onClick={() => handleClickOnCollection(collection)}>
+                                        <div className='d-flex flex-column'>
+                                            <div className="d-flex w-100 justify-content-between">
+                                                <h4 className="mb-1">{collection.name}</h4>
+                                                <span className="badge bg-info rounded-pill">{convertStatus(collection)}</span>
+                                            </div>
+                                            <div className="progress">
+                                                <div className="progress-bar bg-success" style={style} role="progressbar" aria-valuenow={collection.visitedCollectibles} aria-valuemin={0} aria-valuemax={collection.notVisitedCollectibles + collection.visitedCollectibles}></div>
+                                            </div>
+                                        </div>
+                                    </li>
                                 );
                             })}
                         </ul>
@@ -142,7 +140,7 @@ function CollectionsOverview() {
                     <>
                         <div className='side-menu'>
                             <button data-testid="buttonToOpenCollectionList" type="button" className="btn btn-outline-light" onClick={handleCollectibleMenu}>
-                                <img className="align " src={require('../static/Icons/menu.png')} width="40" height="40" />
+                                <img className="align " src={require('../static/Icons/menu.png')} width="40" height="40" alt='menu icon'/>
                             </button>
                         </div>
                     </>

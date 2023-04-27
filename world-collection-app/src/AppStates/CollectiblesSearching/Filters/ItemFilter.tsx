@@ -24,20 +24,6 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
 
     const [selectedValue, setSelectedValue] = useState<Entity | null>(null)
 
-    /**
-     * Fetches from Wikidata API constraints, which restrict which value can be selected.
-     */
-    const fetchFilterValueConstraintData = () => {
-        setLoadingValueType(true)
-        setErrorForFetchingValueType(false);
-
-        WikiDataAPI.getWikibaseItemFilterData(filter.PNumber).then(
-            (data) => {
-                setLoadingValueType(false);
-                setFilterConstraintData(data);
-            }
-        ).catch(() => setErrorForFetchingValueType(true))
-    }
 
     /**
      * Sets choosed value as value which is currently selected.
@@ -55,7 +41,7 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
         let valueQNumber = e.target.value;
         let item: Entity | null = null
         filterConstraintData.one_of_constraint.forEach((constraint) => {
-            if (constraint.QNumber == valueQNumber) {
+            if (constraint.QNumber === valueQNumber) {
 
                 item = new Entity(constraint.QNumber, constraint.name);
             }
@@ -78,6 +64,20 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
     }
 
     useEffect(() => {
+        /**
+         * Fetches from Wikidata API constraints, which restrict which value can be selected.
+        */
+        const fetchFilterValueConstraintData = () => {
+            setLoadingValueType(true)
+            setErrorForFetchingValueType(false);
+
+            WikiDataAPI.getWikibaseItemFilterData(filter.PNumber).then(
+                (data) => {
+                    setLoadingValueType(false);
+                    setFilterConstraintData(data);
+                }
+            ).catch(() => setErrorForFetchingValueType(true))
+        }
         fetchFilterValueConstraintData()
     }, [filter])
 
@@ -92,11 +92,11 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
             </>)}
             {!loadingValueType && (
                 <>
-                    {filterConstraintData.one_of_constraint.length != 0 && (
+                    {filterConstraintData.one_of_constraint.length !== 0 && (
                         <>
                             <h3>This filter supports choosing from list of constraint : </h3>
-                            <select className="form-select" onChange={handleSelectedItem}>
-                                <option value="" selected disabled hidden>Choose here</option>
+                            <select className="form-select" onChange={handleSelectedItem} defaultValue={""}>
+                                <option value="" disabled hidden>Choose here</option>
                                 {filterConstraintData.one_of_constraint.map((value, index) => {
                                     return (
                                         <option key={index} value={value.QNumber}>{value.name}</option>
@@ -105,51 +105,45 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
                             </select>
                         </>
                     )}
-                    {filterConstraintData.one_of_constraint.length == 0 && (
+                    {filterConstraintData.one_of_constraint.length === 0 && (
                         <>
-                            {filterConstraintData.value_type_constraint.length != 0 && (
+                            {filterConstraintData.value_type_constraint.length !== 0 && (
                                 <>
                                     <h3>Value types, you can used : </h3>
                                     <div className="d-flex flex-wrap">
                                         {filterConstraintData.value_type_constraint.map((value, index) => {
                                             return (
-                                                <>
-                                                    <small key={index} className={"badge bg-success text-wrap"}>
-                                                        {value.name}
-                                                    </small>
-                                                </>
+                                                <small key={index} className={"badge bg-success text-wrap"}>
+                                                    {value.name}
+                                                </small>
                                             )
                                         })}
                                     </div>
                                 </>
                             )}
-                            {filterConstraintData.conflict_with_constraint.length != 0 && (
+                            {filterConstraintData.conflict_with_constraint.length !== 0 && (
                                 <>
                                     <h3>Value type, which can not be used : </h3>
                                     <div className="d-flex flex-wrap">
                                         {filterConstraintData.conflict_with_constraint.map((value, index) => {
                                             return (
-                                                <>
-                                                    <small key={index} className={"badge bg-warning text-dark text-wrap"}>
-                                                        {value.name}
-                                                    </small>
-                                                </>
+                                                <small key={index} className={"badge bg-warning text-dark text-wrap"}>
+                                                    {value.name}
+                                                </small>
                                             )
                                         })}
                                     </div>
                                 </>
                             )}
-                            {filterConstraintData.none_of_constraint.length != 0 && (
+                            {filterConstraintData.none_of_constraint.length !== 0 && (
                                 <>
                                     <h3>Values, that can not be used</h3>
                                     <div className="d-flex flex-wrap">
                                         {filterConstraintData.none_of_constraint.map((value, index) => {
                                             return (
-                                                <>
-                                                    <small key={index} className={"badge bg-danger text-wrap"}>
-                                                        {value.name}
-                                                    </small>
-                                                </>
+                                                <small key={index} className={"badge bg-danger text-wrap"}>
+                                                    {value.name}
+                                                </small>
                                             )
                                         })}
                                     </div>

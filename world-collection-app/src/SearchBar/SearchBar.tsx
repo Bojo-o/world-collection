@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { SearchData } from "../Data/DataModels/SearchData";
 import RenderSearchResult from "./RenderSearchInfo";
 import "./SearchBar.css";
@@ -65,11 +65,12 @@ function SearchBar({ placeHolderText: placeHolder, handleClickedResult, dataGett
     const handleShowAll = () => {
         fetchData("")
     }
+
     /**
      * Fetches data from dataGetter.
      * @param word Search word.
      */
-    const fetchData = (word: string) => {
+    const fetchData = useCallback((word: string) => {
         setLoading(true)
         setIsError(false);
 
@@ -80,7 +81,7 @@ function SearchBar({ placeHolderText: placeHolder, handleClickedResult, dataGett
                 setDisplay(true)
             }
         ).catch(() => setIsError(true))
-    }
+    },[dataGetter])
     // if search word changes and search word is at least 3 symbols long, then it fetches from API data
     useEffect(() => {
         setDisplay(false)
@@ -88,7 +89,7 @@ function SearchBar({ placeHolderText: placeHolder, handleClickedResult, dataGett
             return;
         }
         fetchData(searchWord)
-    }, [searchWord]);
+    }, [searchWord,fetchData]);
     return (
         <>
             <div className="search-bar-dropdown">

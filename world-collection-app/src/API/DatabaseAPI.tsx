@@ -6,7 +6,6 @@ import { Fetch } from "./Fetch";
 
 // URLS CONSTANTS
 const baseDatabaseAPIUrl = "DatabaseAPI/";
-
 const getAllCollections = "get/collections";
 const getAllCollectiblesInCollection = "get/collectibles";
 const askIfCollectionExists = "get/exists_collections";
@@ -40,7 +39,7 @@ export class DatabaseAPI {
     }
     private static convertToAskedResult(data: any): boolean {
         let result = data['result'];
-        return (result == "1") ? true : false;
+        return (result === "1") ? true : false;
     }
     /**
      * Asks Database API if there exists collection with given name.

@@ -25,24 +25,7 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
     const [detailFilter, setDetailFilter] = useState<string>("");
     const [wikipediaLink, setWikipediaLink] = useState<string | null>(null);
 
-    const fetchWikipediaLink = () => {
-        WikiDataAPI.getCollectibleWikipediaLink(collectibleQNumber).then((data) => {
-            if (data != "") {
-                setWikipediaLink(data);
-            }
-        }).catch(() => { })
-    }
-    const fetchDetails = () => {
-        setLoading(true);
-        setError(false);
-        WikiDataAPI.getCollectibleDetails(collectibleQNumber).then((data) => {
-            setLoading(false);
-            setDetails(data);
 
-        }).catch(() => {
-            setError(true);
-        })
-    }
     /** Convert time as string with time precision into human readable text. */
     const timeToString = (value: string, timePrecision: number | null) => {
         const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -92,9 +75,27 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
     }
 
     useEffect(() => {
+        const fetchWikipediaLink = () => {
+            WikiDataAPI.getCollectibleWikipediaLink(collectibleQNumber).then((data) => {
+                if (data !== "") {
+                    setWikipediaLink(data);
+                }
+            }).catch(() => { })
+        }
+        const fetchDetails = () => {
+            setLoading(true);
+            setError(false);
+            WikiDataAPI.getCollectibleDetails(collectibleQNumber).then((data) => {
+                setLoading(false);
+                setDetails(data);
+
+            }).catch(() => {
+                setError(true);
+            })
+        }
         fetchDetails()
         fetchWikipediaLink();
-    }, [])
+    }, [collectibleQNumber])
 
     return (
         <>
@@ -108,7 +109,7 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
                     {wikipediaLink != null && (
                         <div className="d-flex flex-row">
                             <h6>Wikipedia Link: </h6>
-                            <a href={wikipediaLink} target="_blank">Link</a>
+                            <a href={wikipediaLink} target="_blank" rel="noopener noreferrer">Link</a>
                         </div>
                     )}
                     <input className="form-control mr-sm-2" type="search" placeholder="Search for detail" onChange={handleDetailSearch} />
@@ -116,50 +117,48 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
                         <ul className="list-group">
                             {details.filter((d) => d.propertyName.toLocaleLowerCase().includes(detailFilter.toLocaleLowerCase())).map((detail, index) => {
                                 return (
-                                    <>
-                                        <li key={index} className="list-group-item">
-                                            <div className="d-flex flex-column">
-                                                <h6><strong>{detail.propertyName}</strong></h6>
-                                                <div className="d-flex flex-wrap">
-                                                    {detail.values.map((value) => {
-                                                        return (
-                                                            <>
-                                                                {detail.dataType == "Url" && (
-                                                                    <>
-                                                                        <span key={index} className="badge bg-info text-dark">
-                                                                            <a href={value} target="_blank">Link</a>
-                                                                        </span>
-                                                                    </>
-                                                                )}
-                                                                {detail.dataType == "Quantity" && (
-                                                                    <>
-                                                                        <span key={index} className="badge bg-warning text-dark">
-                                                                            {(detail.unit != null && detail.unit != "1") ? value + " " + detail.unit : value}
-                                                                        </span>
-                                                                    </>
-                                                                )}
-                                                                {(detail.dataType == "Monolingualtext" || detail.dataType == "WikibaseItem") && (
-                                                                    <>
-                                                                        <span key={index} className="badge bg-primary">
-                                                                            {value}
-                                                                        </span>
-                                                                    </>
-                                                                )}
-                                                                {detail.dataType == "Time" && (
-                                                                    <>
-                                                                        <span key={index} className="badge bg-success">
-                                                                            {timeToString(value, detail.timePrecision)}
-                                                                        </span>
-                                                                    </>
-                                                                )}
-                                                            </>
-                                                        )
-                                                    })}
-                                                </div>
-
+                                    <li key={index} className="list-group-item">
+                                        <div className="d-flex flex-column">
+                                            <h6 key={index}><strong>{detail.propertyName}</strong></h6>
+                                            <div className="d-flex flex-wrap">
+                                                {detail.values.map((value,index) => {
+                                                    return (
+                                                        <div key={index}>
+                                                            {detail.dataType === "Url" && (
+                                                                <>
+                                                                    <span key={index} className="badge bg-info text-dark">
+                                                                        <a key={index} href={value} target="_blank" rel="noopener noreferrer">Link</a>
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                            {detail.dataType === "Quantity" && (
+                                                                <>
+                                                                    <span key={index} className="badge bg-warning text-dark">
+                                                                        {(detail.unit != null && detail.unit !== "1") ? value + " " + detail.unit : value}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                            {(detail.dataType === "Monolingualtext" || detail.dataType === "WikibaseItem") && (
+                                                                <>
+                                                                    <span key={index} className="badge bg-primary">
+                                                                        {value}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                            {detail.dataType === "Time" && (
+                                                                <>
+                                                                    <span key={index} className="badge bg-success">
+                                                                        {timeToString(value, detail.timePrecision)}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                        </div>
+                                                    )
+                                                })}
                                             </div>
-                                        </li>
-                                    </>
+
+                                        </div>
+                                    </li>
                                 )
                             })}
                         </ul>

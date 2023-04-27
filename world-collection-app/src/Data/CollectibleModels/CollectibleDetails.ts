@@ -23,7 +23,7 @@ export class CollectibleDetail {
         if (initializer.values) {
             let values: string = initializer.values;
             values.split("<space>").map((value) => {
-                this.values.push(value);
+                return this.values.push(value);
             })
         }
         if (initializer.unit) this.unit = initializer.unit;

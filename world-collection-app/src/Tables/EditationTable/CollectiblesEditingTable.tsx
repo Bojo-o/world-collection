@@ -1,3 +1,4 @@
+import React from "react";
 import { Collectible } from "../../Data/DatabaseModels/Collectible";
 import Table from "../Table/Table";
 
@@ -34,11 +35,9 @@ function CollectiblesEditingTable({ records: collectibles, editCollectible, remo
                 <div className="d-flex flex-wrap">
                     {types.map((type, index) => {
                         return (
-                            <>
-                                <div key={index} className="badge bg-info text-wrap">
-                                    {type}
-                                </div>
-                            </>
+                            <div key={index} className="badge bg-info text-wrap">
+                                {type}
+                            </div>
                         )
                     })}
                 </div>
@@ -80,8 +79,8 @@ function CollectiblesEditingTable({ records: collectibles, editCollectible, remo
             <>
                 {collectibles.slice(currPage * rowsPerPage - rowsPerPage, currPage * rowsPerPage).map((collectible, index) => {
                     return (
-                        <>
-                            <tr key={index}>
+                        <React.Fragment key={index}>
+                            <tr >
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 <th scope="row">
                                     {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber ? (
@@ -121,7 +120,7 @@ function CollectiblesEditingTable({ records: collectibles, editCollectible, remo
                                     </div>
                                 </th>
                             </tr>
-                        </>
+                        </React.Fragment>
                     )
                 })}
             </>

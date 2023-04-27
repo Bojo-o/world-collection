@@ -3,6 +3,7 @@ import { Collection } from "../../Data/DatabaseModels/Colection";
 import Table from "../Table/Table";
 import IconsSelector from "../../CollectibleEditableComponents/Icons/IconsSelector";
 import { DatabaseAPI } from "../../API/DatabaseAPI";
+import React from "react";
 
 
 /**
@@ -75,8 +76,8 @@ function CollectionsEditingTable({ records: collections, edited, editItem, cance
                 {
                     collections.slice(currPage * rowsPerPage - rowsPerPage, currPage * rowsPerPage).map((row, index) => {
                         return (
-                            <>
-                                <tr key={index}>
+                            <React.Fragment key={index}>
+                                <tr >
                                     <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                     {(edited == null || edited.collectionID !== row.collectionID) && (merging == null || merging.collectionID !== row.collectionID) && (
                                         <>
@@ -102,16 +103,14 @@ function CollectionsEditingTable({ records: collections, edited, editItem, cance
                                                     <select className="form-select" onChange={handleCollectionSelection} >
                                                         {collections.map((item, index) => {
                                                             if (item.collectionID === row.collectionID) {
-                                                                return (<></>)
+                                                                return (<React.Fragment key={index}></React.Fragment>)
                                                             }
                                                             return (
-                                                                <>
-                                                                    <option value={item.collectionID.toString()} key={index}>{item.name}</option>
-                                                                </>
+                                                                <option value={item.collectionID.toString()} key={index}>{item.name}</option>
                                                             )
                                                         })}
                                                     </select>
-                                                    <></>
+
                                                     {selectedCollectionID === -1 ? (
                                                         <button type="button" className="btn btn-success" disabled onClick={() => merge(row.collectionID, 0)}>Merge</button>
                                                     ) : (
@@ -149,17 +148,15 @@ function CollectionsEditingTable({ records: collections, edited, editItem, cance
                                         )}
                                 </tr>
                                 {edited != null && edited.collectionID === row.collectionID && iconSetting && (
-                                    <>
-                                        <tr>
-                                            <th colSpan={4}>
-                                                <div className="d-flex justify-content-center">
-                                                    <IconsSelector handleChangeOfIcon={() => { }} saveIconChange={saveIconChange} />
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </>
+                                    <tr key={index}>
+                                        <th colSpan={4}>
+                                            <div className="d-flex justify-content-center">
+                                                <IconsSelector handleChangeOfIcon={() => { }} saveIconChange={saveIconChange} />
+                                            </div>
+                                        </th>
+                                    </tr>
                                 )}
-                            </>
+                            </React.Fragment>
                         );
                     })
                 }

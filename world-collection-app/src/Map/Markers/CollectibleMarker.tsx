@@ -78,19 +78,7 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
         setDateOfVisitFrom(dateFrom);
         setDateOfVisitTo(dateTo);
     }
-    /**
-     * Fetches image and description of collectible.
-     */
-    const fetchCollectibleBasicInfo = () => {
-        setErrorBasicInfo(false);
-        setLoadingBasicInfo(true);
-        WikiDataAPI.getCollectibleBasicInfo(collectible.QNumber).then((data) => {
-            setLoadingBasicInfo(false);
-            setBasicInfoOfCollectible(data);
-        }).catch(() => {
-            setErrorBasicInfo(true);
-        })
-    }
+
     /** Save a new icon by invoking the right DatabaseAPI method. */
     const saveIcon = (settedIcon: string) => {
         return DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber, settedIcon);
@@ -108,8 +96,21 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
     }
     // when component mount meaning it is the first called, it invokes func fetching collecible basic data
     useEffect(() => {
+        /**
+        * Fetches image and description of collectible.
+        */
+        const fetchCollectibleBasicInfo = () => {
+            setErrorBasicInfo(false);
+            setLoadingBasicInfo(true);
+            WikiDataAPI.getCollectibleBasicInfo(collectible.QNumber).then((data) => {
+                setLoadingBasicInfo(false);
+                setBasicInfoOfCollectible(data);
+            }).catch(() => {
+                setErrorBasicInfo(true);
+            })
+        }
         fetchCollectibleBasicInfo()
-    }, [])
+    }, [collectible])
 
     return (
         <>

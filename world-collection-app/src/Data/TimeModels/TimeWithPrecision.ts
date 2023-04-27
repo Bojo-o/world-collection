@@ -34,10 +34,10 @@ export class TimeWithPrecision {
         let month = "00";
         let year = (this.isBC) ? "-" + this.year.toString() : this.year.toString();
 
-        if (this.precision == DatePrecision.Month || this.precision == DatePrecision.Day) {
+        if (this.precision === DatePrecision.Month || this.precision === DatePrecision.Day) {
             month = (this.month < 10) ? "0" + this.month.toString() : this.month.toString();
         }
-        if (this.precision == DatePrecision.Day) {
+        if (this.precision === DatePrecision.Day) {
             day = (this.day < 10) ? "0" + this.day.toString() : this.day.toString();
         }
 

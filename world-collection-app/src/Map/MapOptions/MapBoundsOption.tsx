@@ -30,7 +30,7 @@ function MapBoundsOption({ waypoints }: MapOptionProps) {
             return;
         }
         map.fitBounds(bounds)
-    }, [map, waypoints])
+    }, [map, waypoints,bounds])
 
     return (
         <></>

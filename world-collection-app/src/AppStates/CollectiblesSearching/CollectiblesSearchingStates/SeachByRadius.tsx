@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Circle, MapContainer, TileLayer, useMap } from 'react-leaflet';
+import { Circle } from 'react-leaflet';
 import { WikiDataAPI } from '../../../API/WikiDataAPI';
 import { SearchData } from '../../../Data/DataModels/SearchData';
 import SearchBar from '../../../SearchBar/SearchBar';
@@ -9,6 +9,7 @@ import MapFlyToOption from '../../../Map/MapOptions/MapFlyToOption';
 import DraggableMarker from '../../../Map/Markers/DraggableMarker';
 import { useMediaQuery } from 'react-responsive';
 import MapWrapper from '../../../Map/MapWrapper';
+
 
 
 /**
@@ -73,7 +74,7 @@ function SearchByRadius({ handleNext: handleRadiusArea, handleBack }: SearchByRa
                 <div className='d-flex flex-row'>
                     <h3>Seach for some location</h3>
                     <button type="button" className="btn btn-outline-light btn-lg" onClick={handleRadiusMenu}>
-                        <img className="align " src={require('../../../static/Icons/close.png')} width="40" height="40" />
+                        <img className="align " src={require('../../../static/Icons/close.png')} width="40" height="40" alt='close icon'/>
                     </button>
                 </div>
 
@@ -113,7 +114,7 @@ function SearchByRadius({ handleNext: handleRadiusArea, handleBack }: SearchByRa
                             Back to area choosing
                         </button>
                         <button type="button" className="btn btn-outline-light" onClick={handleRadiusMenu}>
-                            <img className="align " src={require('../../../static/Icons/menu.png')} width="40" height="40" />
+                            <img className="align " src={require('../../../static/Icons/menu.png')} width="40" height="40" alt='menu icon'/>
                         </button>
                         <button type="button" className="btn btn-outline-success" onClick={() => handleRadiusArea(positionOfMarker, radius)} >
                             Save & Continue

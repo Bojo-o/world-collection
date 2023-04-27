@@ -62,7 +62,7 @@ function NotesEditation({ collectible, updateNotes }: NotesEditationProps) {
                     </div>
                 </>
             )}
-            {notes == collectible.notes ? (
+            {notes === collectible.notes ? (
                 <>
                     <button type="button" className="btn btn-success" disabled>Save notes</button>
                 </>

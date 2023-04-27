@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { json } from "stream/consumers";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { DataTypeOfFilter, FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
@@ -92,37 +91,10 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
         setFilterState(FiltersState.UsedFilters);
     }
     const removeFilterFromApplied = (data: AppliedFilterData) => {
-        setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber != data.getFilter().PNumber))
+        setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber !== data.getFilter().PNumber))
     }
-    /**
-     * Fetches and sets recomended filters from Wikidata API.
-     */
-    const fetchRecomendedFiltersData = () => {
-        setLoadingFilters(true)
-        setErrorForFetchingFilters(false);
 
-        WikiDataAPI.searchForFilters(filtersForType.getQNumber()).then(
-            (data) => {
-                setLoadingFilters(false);
-                setRecomendedFilters(data);
-                setShowingFilters(data);
-            }
-        ).catch(() => setErrorForFetchingFilters(true))
-    }
-    /**
-     * Fetches and sets all filters from Wikidata API.
-     */
-    const fetchAllFiltersData = () => {
-        setLoadingAllFilters(true)
-        setErrorForFetchingAllFilters(false);
 
-        WikiDataAPI.searchForFilters().then(
-            (data) => {
-                setLoadingAllFilters(false);
-                setAllFilters(data);
-            }
-        ).catch(() => setErrorForFetchingAllFilters(true))
-    }
     const handleFilterSelection = (filter: FilterIdentificationData) => {
         setSelectedFilter(filter);
         setFilterState(FiltersState.Filter);
@@ -135,13 +107,42 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
         handleNext(appliedFilters)
     }
     useEffect(() => {
+        /**
+        * Fetches and sets recomended filters from Wikidata API.
+        */
+        const fetchRecomendedFiltersData = () => {
+            setLoadingFilters(true)
+            setErrorForFetchingFilters(false);
+
+            WikiDataAPI.searchForFilters(filtersForType.getQNumber()).then(
+                (data) => {
+                    setLoadingFilters(false);
+                    setRecomendedFilters(data);
+                    setShowingFilters(data);
+                }
+            ).catch(() => setErrorForFetchingFilters(true))
+        }
+        /**
+        * Fetches and sets all filters from Wikidata API.
+        */
+        const fetchAllFiltersData = () => {
+            setLoadingAllFilters(true)
+            setErrorForFetchingAllFilters(false);
+
+            WikiDataAPI.searchForFilters().then(
+                (data) => {
+                    setLoadingAllFilters(false);
+                    setAllFilters(data);
+                }
+            ).catch(() => setErrorForFetchingAllFilters(true))
+        }
         fetchRecomendedFiltersData()
         fetchAllFiltersData()
-    }, [])
+    }, [filtersForType])
 
     useEffect(() => {
         handleUsedFiltersChange(appliedFilters)
-    }, [appliedFilters])
+    }, [appliedFilters, handleUsedFiltersChange])
     /**
      * Renders UI containg list of filters with filter description (the user can switch between viewing all or recomnded filters).
      * @returns JSX element.
@@ -161,9 +162,10 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
                                     <li>
                                         <button className="dropdown-item" disabled>All filters
                                             {
-                                                <div className="spinner-border text-info" role="status">
-                                                    <span className="visually-hidden">Loading...</span>
-                                                </div>
+                                                errorForFetchingAllFilters ? "Some error occurs, try later" :
+                                                    <div className="spinner-border text-info" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
                                             }
                                         </button>
                                     </li>
@@ -193,19 +195,15 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
                                     return filter.name.toLocaleLowerCase().includes(filterSearchWord.toLocaleLowerCase())
                                 }).map((filter, index) => {
                                     return (
-                                        <>
-
-                                            <button key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
-                                                <div className="d-flex w-100 flex-wrap justify-content-between">
-                                                    <h5 className="mb-1">{filter.name}</h5>
-                                                    <small className={"badge bg-" + getColorByFilterType(filter.dataType) + " text-wrap"}>
-                                                        {filter.dataType}
-                                                    </small>
-                                                </div>
-                                                <p className="mb-1">{filter.description}</p>
-                                            </button>
-                                        </>
-
+                                        <button key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
+                                            <div className="d-flex w-100 flex-wrap justify-content-between">
+                                                <h5 className="mb-1">{filter.name}</h5>
+                                                <small className={"badge bg-" + getColorByFilterType(filter.dataType) + " text-wrap"}>
+                                                    {filter.dataType}
+                                                </small>
+                                            </div>
+                                            <p className="mb-1">{filter.description}</p>
+                                        </button>
                                     )
                                 })}
                             </>
@@ -230,9 +228,9 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
                     {selectedFilter != null && (
                         <>
                             <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
-                            {selectedFilter.dataType == DataTypeOfFilter.Time && (<TimeFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
-                            {selectedFilter.dataType == DataTypeOfFilter.WikibaseItem && (<ItemFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
-                            {selectedFilter.dataType == DataTypeOfFilter.Quantity && (<QuantityFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
+                            {selectedFilter.dataType === DataTypeOfFilter.Time && (<TimeFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
+                            {selectedFilter.dataType === DataTypeOfFilter.WikibaseItem && (<ItemFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
+                            {selectedFilter.dataType === DataTypeOfFilter.Quantity && (<QuantityFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
                         </>
                     )}
 
@@ -297,9 +295,9 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
                 </div>
 
                 <div className="w-100 filter-container">
-                    {filterState == FiltersState.Filters && renderFilters()}
-                    {filterState == FiltersState.UsedFilters && renderUsedFilters()}
-                    {filterState == FiltersState.Filter && renderFilter()}
+                    {filterState === FiltersState.Filters && renderFilters()}
+                    {filterState === FiltersState.UsedFilters && renderUsedFilters()}
+                    {filterState === FiltersState.Filter && renderFilter()}
                 </div>
 
 

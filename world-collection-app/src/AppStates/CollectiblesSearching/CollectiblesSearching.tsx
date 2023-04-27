@@ -31,7 +31,7 @@ function CollectibleSearching() {
     };
     const typeChoosingStateHandleNext = (type: Entity, exceptionSubTypes: Entity[]) => {
         setQueryData((prev) => prev.setTypeAndExceptionSubTypes(type, exceptionSubTypes))
-        if (type.getQNumber() != selectedType?.getQNumber()) {
+        if (type.getQNumber() !== selectedType?.getQNumber()) {
             setUsedFilters([])
         }
         setSelectedType(type);

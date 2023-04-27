@@ -29,23 +29,24 @@ function RawCollectibleCard({ rawCollectible }: RawCollectibleCardProps) {
     const handleShowingDetails = () => {
         setShowingDetails((prev) => !prev);
     }
-    /**
-     * Fetches image and description of raw collectible.
-     */
-    const fetchCollectibleBasicInfo = () => {
-        setErrorBasicInfo(false);
-        setLoadingBasicInfo(true);
-        WikiDataAPI.getCollectibleBasicInfo(rawCollectible.QNumber).then((data) => {
-            setLoadingBasicInfo(false);
-            setBasicInfo(data);
-        }).catch(() => {
-            setErrorBasicInfo(true);
-        })
-    }
+
     // when it is mounted (the first time rendered) it will fetch image and description
     useEffect(() => {
+        /**
+        * Fetches image and description of raw collectible.
+        */
+        const fetchCollectibleBasicInfo = () => {
+            setErrorBasicInfo(false);
+            setLoadingBasicInfo(true);
+            WikiDataAPI.getCollectibleBasicInfo(rawCollectible.QNumber).then((data) => {
+                setLoadingBasicInfo(false);
+                setBasicInfo(data);
+            }).catch(() => {
+                setErrorBasicInfo(true);
+            })
+        }
         fetchCollectibleBasicInfo()
-    }, [, rawCollectible])
+    }, [rawCollectible])
 
     return (
         <>

@@ -72,7 +72,7 @@ function SearchByAdministrativeArea({ handleNext }: SearchByAdministrativeAreaPr
                             <h1>Choosed area "{area.getName()}" </h1>
                             <button type="button" className="btn btn-info" onClick={handleResetArea} >Choose other area</button>
                         </div>
-                        {exceptionSubAreas.length != 0 && (
+                        {exceptionSubAreas.length !== 0 && (
                             <>
                                 <h2>Choosed exception administrative sub areas :</h2>
                                 <h6>Click red "x" to removing sub area exception</h6>

@@ -91,7 +91,7 @@ function TypeChoosing({ handleNext, selectedType, selectedExceptionSubTypes }: T
                             <h1>Choosed type "{type.getName()}" </h1>
                             <button type="button" className="btn btn-info" onClick={handleResetType} >Choose other</button>
                         </div>
-                        {exceptionSubTypes.length != 0 && (
+                        {exceptionSubTypes.length !== 0 && (
                             <>
                                 <h2>Choosed exception sub types :</h2>
                                 <h6>Click red "x" to removing exception</h6>

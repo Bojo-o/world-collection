@@ -81,9 +81,9 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
             <>
                 <label htmlFor={type}>{label}</label>
                 <input className="form-control" type={type} id={type} name={type}
-                    max={(max == null) ? undefined : (type == Date.Date) ? max.getDate() : max.getMonthYear()}
-                    min={(min == null) ? undefined : (type == Date.Date) ? min.getDate() : min.getMonthYear()}
-                    onChange={(e: any) => handleDate(e, (type == Date.Date) ? DatePrecision.Day : DatePrecision.Month)} />
+                    max={(max === null) ? undefined : (type === Date.Date) ? max.getDate() : max.getMonthYear()}
+                    min={(min === null) ? undefined : (type === Date.Date) ? min.getDate() : min.getMonthYear()}
+                    onChange={(e: any) => handleDate(e, (type === Date.Date) ? DatePrecision.Day : DatePrecision.Month)} />
             </>
         )
     }
@@ -110,10 +110,10 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
     useEffect(() => {
         setDateFrom(null)
         setDateTo(null)
-        if (dateOption == DATEOPTIONS.Year) {
+        if (dateOption === DATEOPTIONS.Year) {
             setDateFrom(new DateWithPrecision(todayDate.getYear() + "-01", DatePrecision.Year));
         }
-    }, [dateOption])
+    }, [dateOption,todayDate])
     return (
         <>
             <div className="d-flex flex-column">
@@ -135,22 +135,22 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
 
                         </select>
 
-                        {dateOption == DATEOPTIONS.Date && (
+                        {dateOption === DATEOPTIONS.Date && (
                             <>
                                 {renderDateInput(Date.Date, "Date of visit", handleDateFrom, todayDate)}
                             </>
                         )}
-                        {dateOption == DATEOPTIONS.Month && (
+                        {dateOption === DATEOPTIONS.Month && (
                             <>
                                 {renderDateInput(Date.Month, "Month of visit", handleDateFrom, todayDate)}
                             </>
                         )}
-                        {dateOption == DATEOPTIONS.Year && (
+                        {dateOption === DATEOPTIONS.Year && (
                             <>
                                 {renderYearInput()}
                             </>
                         )}
-                        {dateOption == DATEOPTIONS.RangeInDate && (
+                        {dateOption === DATEOPTIONS.RangeInDate && (
                             <>
                                 <h3>Date of visit</h3>
                                 {renderDateInput(Date.Date, "Visit from", handleDateFrom, (dateTo != null) ? dateTo : todayDate)}
@@ -158,7 +158,7 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
                                 {renderDateInput(Date.Date, "Visit to", handleDateTo, todayDate, (dateFrom != null) ? dateFrom : null)}
                             </>
                         )}
-                        {dateOption == DATEOPTIONS.RangeInMonth && (
+                        {dateOption === DATEOPTIONS.RangeInMonth && (
                             <>
                                 <h3>Month of visit</h3>
                                 {renderDateInput(Date.Month, "Visit from", handleDateFrom, (dateTo != null) ? dateTo : todayDate)}
@@ -166,7 +166,7 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
                                 {renderDateInput(Date.Month, "Visit to", handleDateTo, todayDate, (dateFrom != null) ? dateFrom : null)}
                             </>
                         )}
-                        {(dateOption == DATEOPTIONS.RangeInDate || dateOption == DATEOPTIONS.RangeInMonth) ? (
+                        {(dateOption === DATEOPTIONS.RangeInDate || dateOption === DATEOPTIONS.RangeInMonth) ? (
                             <>
                                 {dateFrom != null && (
                                     <>

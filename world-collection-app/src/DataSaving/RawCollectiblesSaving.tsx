@@ -103,7 +103,7 @@ function RawCollectiblesSaving({ rawCollectibles: collectibles }: RawCollectible
                                 ) : (
                                     <>
                                         <select className="form-select" onChange={handleCollectionSelection}>
-                                            <option value="" selected disabled hidden>Choose Collection</option>
+                                            <option value="" disabled hidden>Choose Collection</option>
                                             {collections.map((c, index) => {
                                                 return (
                                                     <option key={index} value={c.collectionID}>{c.name}</option>

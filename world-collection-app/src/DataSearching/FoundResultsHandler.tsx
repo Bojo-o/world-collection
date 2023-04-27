@@ -65,7 +65,7 @@ function FoundResultsHandler({ results }: FoundResultsHandlerProps) {
     const handleResultDeletion = (result: RawCollectible) => {
         setResultsData((prevData) =>
             prevData.filter((d, index) => {
-                if (d.QNumber != result.QNumber) {
+                if (d.QNumber !== result.QNumber) {
                     return true;
                 }
                 resultsStateCaretaker.saveState(d, TypeOfChange.REMOVE, index);
@@ -120,7 +120,7 @@ function FoundResultsHandler({ results }: FoundResultsHandlerProps) {
     // when results changes, it notifies caretaker
     React.useEffect(() => {
         resultsStateCaretaker.changeResults(resultsData);
-    }, [resultsData])
+    }, [resultsData, resultsStateCaretaker])
 
     // when some value of filter change, then it re-filters results again.
     React.useEffect(() => {
@@ -136,14 +136,13 @@ function FoundResultsHandler({ results }: FoundResultsHandlerProps) {
 
     return (
         <>
-
             <div className="btn-group dropend">
                 <button type="button" className="btn btn-danger dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     View
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a className="dropdown-item" onClick={() => setView(View.Table)}>Table</a></li>
-                    <li><a className="dropdown-item" onClick={() => setView(View.Map)}>Map</a></li>
+                    <li className="dropdown-item" onClick={() => setView(View.Table)}>Table</li>
+                    <li className="dropdown-item" onClick={() => setView(View.Map)}>Map</li>
                 </ul>
             </div>
 

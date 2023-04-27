@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import MapFlyToOption from "../Map/MapOptions/MapFlyToOption";
 import '../Map/Map.css';
 import SearchBar from "../SearchBar/SearchBar";
@@ -65,7 +65,7 @@ function CollectiblesAdding() {
         })
     }
     const handleRemove = (collectible: RawCollectible) => {
-        setCollectibles((prev) => prev.filter((c) => c.QNumber != collectible.QNumber))
+        setCollectibles((prev) => prev.filter((c) => c.QNumber !== collectible.QNumber))
     }
     /**
      * Renders side menu containg Search bar for searhing specific collectibles.
@@ -75,77 +75,71 @@ function CollectiblesAdding() {
      */
     const renderAddingMenu = () => {
         return (
-            <>
-                <div className="d-flex flex-column border border-dark border-2 rounded-end container" >
-                    <div className='d-flex flex-row justify-content-between '>
-                        <h1>Add collectibles</h1>
-                        <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
-                            <img className="align " src={require('../static/Icons/close.png')} width="40" height="40" />
-                        </button>
-                    </div>
+            <div className="d-flex flex-column border border-dark border-2 rounded-end container" >
+                <div className='d-flex flex-row justify-content-between '>
+                    <h1>Add collectibles</h1>
+                    <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
+                        <img className="align " src={require('../static/Icons/close.png')} width="40" height="40" alt="close icon" />
+                    </button>
+                </div>
 
-                    <h5>You can here search for collectible and add it to your collection.</h5>
+                <h5>You can here search for collectible and add it to your collection.</h5>
 
 
-                    <SearchBar placeHolderText={"Type some collectible, likes Eiffel tower"} handleClickedResult={handleClickedCollectible} dataGetter={dataGetter} emptySearchingFlag={false} />
-                    <div>
-                        {loading && (<>
-                            {error ? (
-                                <>
-                                    <h4>Some error occurs, try again or later</h4>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="d-flex flex-row">
-                                        <h4>Getting collectible data</h4>
-                                        <div className="spinner-border text-info" role="status">
-                                            <span className="visually-hidden">Loading...</span>
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </>)}
-                        {collectible != null && (
+                <SearchBar placeHolderText={"Type some collectible, likes Eiffel tower"} handleClickedResult={handleClickedCollectible} dataGetter={dataGetter} emptySearchingFlag={false} />
+                <div>
+                    {loading && (<>
+                        {error ? (
+                            <>
+                                <h4>Some error occurs, try again or later</h4>
+                            </>
+                        ) : (
                             <>
                                 <div className="d-flex flex-row">
-                                    <h4>Choosed"{collectible.name}"</h4>
-                                    <button type="button" className="btn btn-success" onClick={() => { addCollectible(collectible) }}>Add</button>
-                                </div>
-
-                                <div className="d-flex flex-wrap">
-                                    {collectible.instanceOF.map((type) => {
-                                        return (
-                                            <>
-                                                <span className="badge rounded-secondary bg-primary">{type}</span>
-                                            </>
-                                        )
-                                    })}
+                                    <h4>Getting collectible data</h4>
+                                    <div className="spinner-border text-info" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
                                 </div>
                             </>
                         )}
-                    </div>
-                    <h2>Collectibles:</h2>
-                    <ul className="list-group" id="list">
-                        {collectibles.map((c) => {
-                            return (
-                                <>
-                                    <li className="list-group-item position-static" onClick={() => changePosition(c)}>
-                                        <div className="d-flex flex-row justify-content-between">
-                                            <h4>{c.name}</h4>
-                                            <button type="button" className="btn btn-danger" onClick={() => handleRemove(c)}>Remove</button>
-                                        </div>
-                                    </li>
-                                </>
-                            )
-                        })}
-                    </ul>
-                    {collectibles.length != 0 && (
+                    </>)}
+                    {collectible != null && (
                         <>
-                            <RawCollectiblesSaving rawCollectibles={collectibles} />
+                            <div className="d-flex flex-row">
+                                <h4>Choosed"{collectible.name}"</h4>
+                                <button type="button" className="btn btn-success" onClick={() => { addCollectible(collectible) }}>Add</button>
+                            </div>
+
+                            <div className="d-flex flex-wrap">
+                                {collectible.instanceOF.map((type, index) => {
+                                    return (
+                                        <span key={index} className="badge rounded-secondary bg-primary">{type}</span>
+                                    )
+                                })}
+                            </div>
                         </>
                     )}
                 </div>
-            </>
+                <h2>Collectibles:</h2>
+                <ul className="list-group" id="list">
+                    {collectibles.map((c, index) => {
+                        return (
+                            <li key={index} className="list-group-item position-static" onClick={() => changePosition(c)}>
+                                <div key={index} className="d-flex flex-row justify-content-between">
+                                    <h4>{c.name}</h4>
+                                    <button type="button" className="btn btn-danger" onClick={() => handleRemove(c)}>Remove</button>
+                                </div>
+                            </li>
+                        )
+                    })}
+                </ul>
+                {collectibles.length !== 0 && (
+                    <>
+                        <RawCollectiblesSaving rawCollectibles={collectibles} />
+                    </>
+                )}
+            </div>
         )
     }
     const handleAddingMenu = () => {
@@ -162,24 +156,19 @@ function CollectiblesAdding() {
                     return (
                         <>
                             {collectible != null && (
-                                <>
-                                    <Marker position={[collectible.latitude, collectible.longitude]}>
+                                <Marker position={[collectible.latitude, collectible.longitude]}>
+                                    <Popup>
+                                        <RawCollectibleCard rawCollectible={collectible} />
+                                    </Popup>
+                                </Marker>
+                            )}
+                            {collectibles.map((c, index) => {
+                                return (
+                                    <Marker key={index} position={[c.latitude, c.longitude]}>
                                         <Popup>
-                                            <RawCollectibleCard rawCollectible={collectible} />
+                                            <RawCollectibleCard rawCollectible={c} />
                                         </Popup>
                                     </Marker>
-
-                                </>
-                            )}
-                            {collectibles.map((c) => {
-                                return (
-                                    <>
-                                        <Marker position={[c.latitude, c.longitude]}>
-                                            <Popup>
-                                                <RawCollectibleCard rawCollectible={c} />
-                                            </Popup>
-                                        </Marker>
-                                    </>
                                 )
                             })}
                             <MapFlyToOption pointOfTheEarth={position} />
@@ -201,7 +190,7 @@ function CollectiblesAdding() {
                     <>
                         <div className='side-menu'>
                             <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
-                                <img className="align " src={require('../static/Icons/menu.png')} width="40" height="40" />
+                                <img className="align " src={require('../static/Icons/menu.png')} width="40" height="40" alt="menu icon" />
                             </button>
                         </div>
                     </>

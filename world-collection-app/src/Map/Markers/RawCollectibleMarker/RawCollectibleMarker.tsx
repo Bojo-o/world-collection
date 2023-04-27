@@ -21,7 +21,6 @@ export interface RawCollectibleMarkerProps {
     saveItem: (item: RawCollectible) => void;
     /** Func for handling and propagating change of name. */
     handleNameChange: (event: any) => void;
-
 }
 /**
  * Func rendering raw collectible marker into map.

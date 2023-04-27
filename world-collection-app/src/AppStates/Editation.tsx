@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Collection } from "../Data/DatabaseModels/Colection";
 import { Collectible } from "../Data/DatabaseModels/Collectible";
 import { DatabaseAPI } from "../API/DatabaseAPI";
@@ -33,13 +33,20 @@ function Editation() {
         const value = event.target.value;
         setfilter(value);
     }
-    useEffect(() => {
-        fetchCollections()
-    }, [])
-    useEffect(() => {
-        fetchCollectibles()
-        setfilter('')
-    }, [showingCollectionCollectibles])
+    /**
+     * Fetches the user`s collectibles from database via DatabaseAPI.
+     */
+    const fetchCollectibles =useCallback(() => {
+        if (showingCollectionCollectibles !== null) {
+            setCollectiblesLoading(true);
+            DatabaseAPI.getCollectiblesInCollection(showingCollectionCollectibles.collectionID).then((collectibles) => {
+                setCollectiblesLoading(false);
+                setCollectibles(collectibles)
+
+            })
+        }
+    },[showingCollectionCollectibles])
+    
     /**
      * Fetches the user`s collections from database via DatabaseAPI.
      */
@@ -51,19 +58,15 @@ function Editation() {
         }
         );
     }
-    /**
-     * Fetches the user`s collectibles from database via DatabaseAPI.
-     */
-    const fetchCollectibles = () => {
-        if (showingCollectionCollectibles !== null) {
-            setCollectiblesLoading(true);
-            DatabaseAPI.getCollectiblesInCollection(showingCollectionCollectibles.collectionID).then((collectibles) => {
-                setCollectiblesLoading(false);
-                setCollectibles(collectibles)
-
-            })
-        }
-    }
+    useEffect(() => {
+        fetchCollections()
+    }, [])
+    useEffect(() => {
+        fetchCollectibles()
+        setfilter('')
+    }, [showingCollectionCollectibles,fetchCollectibles])
+    
+    
     const mergeItem = (row: Collection) => {
         setMerging(new Collection(row.getObject()));
         setEdited(null);

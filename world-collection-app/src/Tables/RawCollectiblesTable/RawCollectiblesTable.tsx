@@ -49,7 +49,7 @@ function RawCollectiblesTable({ records: results, edited, editItem, handleChange
                 {
                     results.slice(currPage * rowsPerPage - rowsPerPage, currPage * rowsPerPage).map((row, index) => {
                         return (
-                            <>
+                            <React.Fragment key={index}>
                                 <tr key={index}>
                                     <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
 
@@ -61,9 +61,7 @@ function RawCollectiblesTable({ records: results, edited, editItem, handleChange
                                                     <div className="d-flex flex-wrap">
                                                         {row.instanceOF.map((subType, index) => {
                                                             return (
-                                                                <>
-                                                                    <span key={index} className="badge bg-primary">{subType}</span>
-                                                                </>
+                                                                <span key={index} className="badge bg-primary">{subType}</span>
                                                             )
                                                         })}
                                                     </div>
@@ -85,31 +83,24 @@ function RawCollectiblesTable({ records: results, edited, editItem, handleChange
                                                     <div className="d-flex flex-wrap">
                                                         {row.instanceOF.map((subType, index) => {
                                                             return (
-                                                                <>
-                                                                    <span key={index} className="badge bg-primary">{subType}</span>
-                                                                </>
+                                                                <span key={index} className="badge bg-primary">{subType}</span>
                                                             )
                                                         })}
                                                     </div>
                                                 </td>
                                                 {(detailShowing == null || detailShowing.QNumber !== row.QNumber) ?
                                                     (
-                                                        <>
-                                                            <td className="d-flex flex-wrap justify-content-center">
-                                                                <button type="button" className="btn btn-info" onClick={() => showDetails(row)}>Details</button>
-                                                                <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
-                                                                <button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button>
-                                                            </td>
-
-                                                        </>
+                                                        <td className="d-flex flex-wrap justify-content-center">
+                                                            <button type="button" className="btn btn-info" onClick={() => showDetails(row)}>Details</button>
+                                                            <button type="button" className="btn btn-primary" onClick={() => editItem(row)}>Edit</button>
+                                                            <button key={index} type="button" className="btn btn-danger" onClick={() => removeItem(row)}>Remove</button>
+                                                        </td>
                                                     )
                                                     :
                                                     (
-                                                        <>
-                                                            <td className="d-flex flex-wrap justify-content-center">
-                                                                <button key={index} type="button" className="btn btn-danger" onClick={cancel}>Cancel</button>
-                                                            </td>
-                                                        </>
+                                                        <td className="d-flex flex-wrap justify-content-center">
+                                                            <button key={index} type="button" className="btn btn-danger" onClick={cancel}>Cancel</button>
+                                                        </td>
                                                     )
                                                 }
 
@@ -126,7 +117,7 @@ function RawCollectiblesTable({ records: results, edited, editItem, handleChange
                                         </th>
                                     </tr>
                                 )}
-                            </>
+                            </React.Fragment>
                         );
                     })
                 }

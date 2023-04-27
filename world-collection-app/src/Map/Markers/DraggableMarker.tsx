@@ -28,7 +28,7 @@ function DraggableMarker({ position, handleChangeOfPosition }: DraggableMarkerPr
                     handleChangeOfPosition(marker.getLatLng())
                 }
             },
-        }), [],)
+        }), [handleChangeOfPosition])
 
     return (
         <Marker

@@ -40,7 +40,7 @@ function Table({ recordsCount: rowsCount, renderHead, renderBody }: TableProps) 
         if (currPage > newNumberOfPages) {
             setCurrPage((prev) => prev === 1 ? 0 : newNumberOfPages)
         }
-    }, [recordsPerPage])
+    }, [recordsPerPage,currPage,rowsCount])
 
     const handleNextPage = () => {
         if (currPage !== numberOfPages) {

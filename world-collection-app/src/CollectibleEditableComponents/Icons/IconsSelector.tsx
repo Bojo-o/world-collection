@@ -50,11 +50,9 @@ function IconsSelector({ handleChangeOfIcon, saveIconChange }: IconsSelectorProp
                 <div className="d-flex flex-wrap">
                     {listOfIcons.map((icon, index) => {
                         return (
-                            <>
-                                <div key={index} className="">
-                                    <img onClick={() => handleIconChange(icon)} src={require('../../static/Icons/' + icon + '.png')} className="img-thumbnail icon" alt={icon} />
-                                </div>
-                            </>
+                            <div key={index} className="">
+                                <img key={index} onClick={() => handleIconChange(icon)} src={require('../../static/Icons/' + icon + '.png')} className="img-thumbnail icon" alt={icon} />
+                            </div>
                         )
                     })}
                 </div>
