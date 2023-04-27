@@ -1,4 +1,4 @@
-export enum DATEOPTIONS{
+export enum DATEOPTIONS {
     Date = "Date",
     Month = "Month and year",
     Year = "Year",

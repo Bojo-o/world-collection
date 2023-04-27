@@ -1,4 +1,4 @@
-import { latLngBounds} from 'leaflet';
+import { latLngBounds } from 'leaflet';
 import React from 'react'
 import { useMap } from 'react-leaflet';
 import { Coordinates } from '../../Data/MapModels/CoordinatesData';
@@ -6,7 +6,7 @@ import { Coordinates } from '../../Data/MapModels/CoordinatesData';
 /** Props neccesary for Map Bounds option. */
 export interface MapOptionProps {
     /** Array of coordinates, which map takes and then sets zoom and view to see all waypoint on the map.*/
-    waypoints : Coordinates[]
+    waypoints: Coordinates[]
 }
 /**
  * Options, which can be used in MapContainer element.
@@ -14,23 +14,23 @@ export interface MapOptionProps {
  * @param MapOptionProps See MapOptionProps desciption.
  * @returns Nothing.
  */
-function MapBoundsOption({waypoints}: MapOptionProps) {
-    const map = useMap(); 
+function MapBoundsOption({ waypoints }: MapOptionProps) {
+    const map = useMap();
 
     const bounds = React.useMemo(() => {
         const b = latLngBounds([])
         waypoints.forEach((waypoint) => {
-            b.extend([waypoint.latitude,waypoint.longitude])
+            b.extend([waypoint.latitude, waypoint.longitude])
         })
         return b
     }, [waypoints])
 
     React.useEffect(() => {
-        if (waypoints.length === 0){
+        if (waypoints.length === 0) {
             return;
         }
         map.fitBounds(bounds)
-    },[map,waypoints])
+    }, [map, waypoints])
 
     return (
         <></>

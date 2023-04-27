@@ -4,9 +4,9 @@ import { SearchData } from "../Data/DataModels/SearchData";
 /**
  * Props necessary for RenderSearchResult.
  */
-interface RenderSearchResultProps{
+interface RenderSearchResultProps {
     /** the result for which we want to render information */
-    result : SearchData;
+    result: SearchData;
 }
 /**
  * Renders SearchData information to show that to the user.
@@ -14,7 +14,7 @@ interface RenderSearchResultProps{
  * @param RenderSearchResultProps See RenderSearchResultProps descriptions.
  * @returns JSX element rendering SearchData information.
  */
-function RenderSearchResult({result} : RenderSearchResultProps) {
+function RenderSearchResult({ result }: RenderSearchResultProps) {
     return (
         <>
             <p className="h5">

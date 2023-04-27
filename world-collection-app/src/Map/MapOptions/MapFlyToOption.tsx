@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 
 /** Props neccesary for Map FlyTo option. */
-export interface MapFlyToOptionProps{
+export interface MapFlyToOptionProps {
     /** The object representing pair of coordinates of the point, to which the view will fly. */
-    pointOfTheEarth : {lat : number,lng : number}
+    pointOfTheEarth: { lat: number, lng: number }
 }
 /**
  * Options, which can be used in MapContainer element.
@@ -12,12 +12,12 @@ export interface MapFlyToOptionProps{
  * @param MapFlyToOptionProps See MapFlyToOptionProps desciption.
  * @returns Nothing.
  */
-function MapFlyToOption({pointOfTheEarth: point} : MapFlyToOptionProps){
-    const map = useMap(); 
-    
+function MapFlyToOption({ pointOfTheEarth: point }: MapFlyToOptionProps) {
+    const map = useMap();
+
     useEffect(() => {
         map.flyTo(point);
-    },[map,point])
+    }, [map, point])
 
     return (
         <></>

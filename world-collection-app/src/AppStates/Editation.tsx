@@ -11,79 +11,79 @@ import CollectionsEditingTable from "../Tables/EditationTable/CollectionsEditing
  * It contains implementation of all func, which manage and handle editation action such as change of name, removing, merging.
  * @returns JSX element rendering UI for editing the user`s collections and collectibles.
  */
-function Editation(){
-    const [collectionsLoading,setCollectionsLoading] = useState<boolean>(false);
-    const [collections,setCollections] = useState<Collection[]>([]); 
-    const [edited,setEdited] = useState<Collection|null>(null);
+function Editation() {
+    const [collectionsLoading, setCollectionsLoading] = useState<boolean>(false);
+    const [collections, setCollections] = useState<Collection[]>([]);
+    const [edited, setEdited] = useState<Collection | null>(null);
 
-    const [merging,setMerging] = useState<Collection|null>(null);
-    const [filter,setfilter] = useState<string>('');
+    const [merging, setMerging] = useState<Collection | null>(null);
+    const [filter, setfilter] = useState<string>('');
 
-    const [canSaveCollection,setCanSaveCollection] = useState(false);
+    const [canSaveCollection, setCanSaveCollection] = useState(false);
 
-    const [showingCollectionCollectibles,setShowingCollectionCollectibles] = useState<null|Collection>(null);
-    const [collectibles,setCollectibles] = useState<Collectible[]>([])
-    const [collectiblesLoading,setCollectiblesLoading] = useState<boolean>(false);
+    const [showingCollectionCollectibles, setShowingCollectionCollectibles] = useState<null | Collection>(null);
+    const [collectibles, setCollectibles] = useState<Collectible[]>([])
+    const [collectiblesLoading, setCollectiblesLoading] = useState<boolean>(false);
 
 
-    const [editedCollectible,setEditedCollectible] = useState<Collectible|null>(null)
-    const [canSaveCollectible,setCanSaveCollectible] = useState(false);
+    const [editedCollectible, setEditedCollectible] = useState<Collectible | null>(null)
+    const [canSaveCollectible, setCanSaveCollectible] = useState(false);
 
-    const handleSearch = (event : any) => {
+    const handleSearch = (event: any) => {
         const value = event.target.value;
-        setfilter(value);  
+        setfilter(value);
     }
     useEffect(() => {
         fetchCollections()
-    },[])
+    }, [])
     useEffect(() => {
         fetchCollectibles()
         setfilter('')
-    },[showingCollectionCollectibles])
+    }, [showingCollectionCollectibles])
     /**
      * Fetches the user`s collections from database via DatabaseAPI.
      */
     const fetchCollections = () => {
         setCollectionsLoading(true);
-        DatabaseAPI.getAllCollections().then( (collections) => {
+        DatabaseAPI.getAllCollections().then((collections) => {
             setCollectionsLoading(false);
-            setCollections(collections);            
-        }        
+            setCollections(collections);
+        }
         );
     }
     /**
      * Fetches the user`s collectibles from database via DatabaseAPI.
      */
     const fetchCollectibles = () => {
-        if (showingCollectionCollectibles !== null){
+        if (showingCollectionCollectibles !== null) {
             setCollectiblesLoading(true);
             DatabaseAPI.getCollectiblesInCollection(showingCollectionCollectibles.collectionID).then((collectibles) => {
                 setCollectiblesLoading(false);
                 setCollectibles(collectibles)
-                console.log(collectibles)
+
             })
         }
     }
-    const mergeItem = (row : Collection) => {
+    const mergeItem = (row: Collection) => {
         setMerging(new Collection(row.getObject()));
         setEdited(null);
     }
-    const editItem = (row : Collection) => {  
-        setEdited(new Collection(row.getObject()));  
+    const editItem = (row: Collection) => {
+        setEdited(new Collection(row.getObject()));
         setMerging(null);
     }
-    const cancel= () => {
-        setEdited(null) 
+    const cancel = () => {
+        setEdited(null)
         setMerging(null)
     }
-    const handleChange = (event : any) => {
-        const value : string = event.target.value;
-        
+    const handleChange = (event: any) => {
+        const value: string = event.target.value;
+
         const change = {
             name: value,
         };
         setEdited((prev) => {
-            if (prev != null){
+            if (prev != null) {
                 let temp = new Collection(prev.getObject());
                 temp.name = change.name;
                 return temp;
@@ -92,28 +92,28 @@ function Editation(){
         });
 
         DatabaseAPI.existsCollectionWithName(value).then((r) => {
-            if (value.length > 2){
+            if (value.length > 2) {
                 setCanSaveCollection(!r)
-            }else{
+            } else {
                 setCanSaveCollection(false)
             }
         })
-        
+
     }
-    const saveItem = (edited : Collection) => { 
-        DatabaseAPI.postCollectionUpdateRename(edited.collectionID,edited.name)
+    const saveItem = (edited: Collection) => {
+        DatabaseAPI.postCollectionUpdateRename(edited.collectionID, edited.name)
         cancel();
         fetchCollections();
     }
-    const removeItem = (row : Collection) => {
+    const removeItem = (row: Collection) => {
         DatabaseAPI.postCollectionUpdateDelete(row.collectionID);
         fetchCollections();
     }
-    const merge = (collectionID : Number,intoCollectionID : Number) => {
-        DatabaseAPI.postCollectionUpdateMerge(collectionID,intoCollectionID)
+    const merge = (collectionID: Number, intoCollectionID: Number) => {
+        DatabaseAPI.postCollectionUpdateMerge(collectionID, intoCollectionID)
         fetchCollections();
-    } 
-    const swicthToCollectiblesEditation = (row : Collection) => {
+    }
+    const swicthToCollectiblesEditation = (row: Collection) => {
         setShowingCollectionCollectibles(row);
         fetchCollectibles();
     }
@@ -122,11 +122,11 @@ function Editation(){
         setShowingCollectionCollectibles(null)
     }
 
-    const removeCollectible = (collectible : Collectible) => {
-        if(showingCollectionCollectibles !== null){
-            DatabaseAPI.postCollectibleDeletion(collectible.QNumber,showingCollectionCollectibles?.collectionID);
+    const removeCollectible = (collectible: Collectible) => {
+        if (showingCollectionCollectibles !== null) {
+            DatabaseAPI.postCollectibleDeletion(collectible.QNumber, showingCollectionCollectibles?.collectionID);
             setCollectibles((prev) => prev.filter((c) => {
-                if (c.QNumber === collectible.QNumber){
+                if (c.QNumber === collectible.QNumber) {
                     return false;
                 }
                 return true;
@@ -134,15 +134,15 @@ function Editation(){
         }
     }
 
-    const editCollectible = (collectible : Collectible) => {
+    const editCollectible = (collectible: Collectible) => {
         setEditedCollectible(collectible);
         setCanSaveCollectible(false);
     }
-    const saveCollectible = (collectible : Collectible) => {
-        DatabaseAPI.postCollectibleUpdateName(collectible.QNumber,collectible.name);
+    const saveCollectible = (collectible: Collectible) => {
+        DatabaseAPI.postCollectibleUpdateName(collectible.QNumber, collectible.name);
         cancleCollectibleAction();
         setCollectibles((prev) => prev.map((c) => {
-            if (c.QNumber === collectible.QNumber){
+            if (c.QNumber === collectible.QNumber) {
                 return collectible;
             }
             return c;
@@ -152,66 +152,66 @@ function Editation(){
         setEditedCollectible(null);
         setCanSaveCollection(false);
     }
-    
-    const handleCollectibleNameChange = (event : any) => {
-        const value : string = event.target.value;
-        
+
+    const handleCollectibleNameChange = (event: any) => {
+        const value: string = event.target.value;
+
         const change = {
             name: value,
         };
         setEditedCollectible((prev) => {
-            if (prev != null){
+            if (prev != null) {
                 let temp = new Collectible(prev.getObject());
                 temp.name = change.name;
                 return temp;
             }
             return null;
         });
-        
-        if (value.length > 2){
+
+        if (value.length > 2) {
             setCanSaveCollectible(true)
-        }else{
+        } else {
             setCanSaveCollectible(false)
         }
     }
     return (
         <>
-            
+
             <h2>Edit your collections and collectibles</h2>
 
             {showingCollectionCollectibles === null ? (
                 <>
-                {collectionsLoading ? (
-                    <h3>Loading..</h3>
-                ) : (
-                    <>
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search for collection" onChange={handleSearch} />
-                    <h3>Collections:</h3>
-                    <CollectionsEditingTable records={collections.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))} edited={edited}
-                    editItem={editItem} cancelEditation={cancel} removeItem={removeItem} handleChange={handleChange} saveItem={saveItem} canSaveItem={canSaveCollection}
-                    merge={merge} mergeItem={mergeItem} merging={merging} editCollectibles={swicthToCollectiblesEditation}/>
-                    </>
-                )}
+                    {collectionsLoading ? (
+                        <h3>Loading..</h3>
+                    ) : (
+                        <>
+                            <input className="form-control mr-sm-2" type="search" placeholder="Search for collection" onChange={handleSearch} />
+                            <h3>Collections:</h3>
+                            <CollectionsEditingTable records={collections.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))} edited={edited}
+                                editItem={editItem} cancelEditation={cancel} removeItem={removeItem} handleChange={handleChange} saveItem={saveItem} canSaveItem={canSaveCollection}
+                                merge={merge} mergeItem={mergeItem} merging={merging} editCollectibles={swicthToCollectiblesEditation} />
+                        </>
+                    )}
                 </>
             ) : (
                 <>
-                {collectiblesLoading ? (
-                    <h3>Loading..</h3>
-                ) : (
-                    <>
-                        <div className="d-flex">
-                            <button type="button" className="btn btn-secondary" onClick={returnBackToCollectionsView}>Back to Collections</button>
-                            <h3>Collectibles of {showingCollectionCollectibles.name} collection:</h3>
-                        </div>
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search for collectible" onChange={handleSearch} />
-                        <CollectiblesEditingTable records={collectibles.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))}
-                        removeCollectible={removeCollectible} editedCollectible={editedCollectible} editCollectible={editCollectible} saveCollectible={saveCollectible} cancleCollectibleAction={cancleCollectibleAction}
-                        handleCollectibleNameChange={handleCollectibleNameChange} canSaveCollectible={canSaveCollectible}/>
-                    </> 
-                )}
+                    {collectiblesLoading ? (
+                        <h3>Loading..</h3>
+                    ) : (
+                        <>
+                            <div className="d-flex">
+                                <button type="button" className="btn btn-secondary" onClick={returnBackToCollectionsView}>Back to Collections</button>
+                                <h3>Collectibles of {showingCollectionCollectibles.name} collection:</h3>
+                            </div>
+                            <input className="form-control mr-sm-2" type="search" placeholder="Search for collectible" onChange={handleSearch} />
+                            <CollectiblesEditingTable records={collectibles.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))}
+                                removeCollectible={removeCollectible} editedCollectible={editedCollectible} editCollectible={editCollectible} saveCollectible={saveCollectible} cancleCollectibleAction={cancleCollectibleAction}
+                                handleCollectibleNameChange={handleCollectibleNameChange} canSaveCollectible={canSaveCollectible} />
+                        </>
+                    )}
                 </>
             )}
-            
+
         </>
     )
 }

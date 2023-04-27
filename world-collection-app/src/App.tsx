@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState} from "react";
+import React, { useState } from "react";
 import CollectionsOverview from './AppStates/CollectionsOverview';
 import Editation from './AppStates/Editation';
 import CollectibleSearching from './AppStates/CollectiblesSearching/CollectiblesSearching';
@@ -50,7 +50,7 @@ function App() {
    * @returns JSX element rendering editation state.
    */
   const renderEditationState = () => {
-    return(
+    return (
       <>
         <Editation />
       </>
@@ -58,8 +58,8 @@ function App() {
   }
 
   // STATES
-  const [currentState,setCurrentState] = useState<JSX.Element>(renderCollectionsOverviewState);
-  
+  const [currentState, setCurrentState] = useState<JSX.Element>(renderCollectionsOverviewState);
+
   /**
    * Flag for determining, if entity will be rendered for small or big screens.
    * To achieve responsiveness, it is necessary to render menu bar otherwise on the small screens than big screens.
@@ -71,17 +71,17 @@ function App() {
    * @param renderNameFlag Flag, if true, then it also render name of application.
    * @returns JSX element, which renders brand of app.
    */
-  const renderBrand = (renderNameFlag : boolean) => {
+  const renderBrand = (renderNameFlag: boolean) => {
     return (
       <>
-          <div className="navbar-header">
-            <div className="navbar-brand d-flex ">
-              <img src="/logoEarth.png" width="50" height="50" className="d-inline-block align-top" alt="logo"/>
-              {renderNameFlag && (
-                <h2 className='text-white'>World Collection</h2>
-              )}
-            </div>
+        <div className="navbar-header">
+          <div className="navbar-brand d-flex ">
+            <img src="/logoEarth.png" width="50" height="50" className="d-inline-block align-top" alt="logo" />
+            {renderNameFlag && (
+              <h2 className='text-white'>World Collection</h2>
+            )}
           </div>
+        </div>
       </>
     )
   }
@@ -90,20 +90,20 @@ function App() {
    * @param classNameOfLi Value of className for <li> element.
    * @returns JSX element represinting list of buttons, which set state of app.
    */
-  const renderListWithStateButtons = (classNameOfLi : string) => {
+  const renderListWithStateButtons = (classNameOfLi: string) => {
     return (
       <>
         <li className={classNameOfLi}>
-          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => {setCurrentState(renderCollectionsOverviewState)}}>Home</button>
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => { setCurrentState(renderCollectionsOverviewState) }}>Home</button>
         </li>
         <li className={classNameOfLi}>
-          <button type='button' className='btn btn-outline-light btn-lg'onClick={() => {setCurrentState(renderCollectiblesSearchingState)}}>Find collectibles</button>
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => { setCurrentState(renderCollectiblesSearchingState) }}>Find collectibles</button>
         </li>
         <li className={classNameOfLi}>
-          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => {setCurrentState(renderCollectibleAdditionState)}}>Add Collectibles</button> 
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => { setCurrentState(renderCollectibleAdditionState) }}>Add Collectibles</button>
         </li>
         <li className={classNameOfLi}>
-          <button type='button' className='btn btn-outline-light btn-lg'onClick={() => {setCurrentState(renderEditationState)}}>Edit collections</button>
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => { setCurrentState(renderEditationState) }}>Edit collections</button>
         </li>
       </>
     )
@@ -119,7 +119,7 @@ function App() {
           {renderBrand(true)}
           <div className="collapse navbar-collapse" id="Navbar">
             <ul className='navbar-nav mr-auto'>
-                {renderListWithStateButtons("nav-link")}
+              {renderListWithStateButtons("nav-link")}
             </ul>
           </div>
         </nav>
@@ -134,35 +134,35 @@ function App() {
     return (
       <>
         <nav className='navbar navbar-expand-lg navbar-dark bg-dark' id='navbar'>
-            <div className='d-flex flex-row'>
-            
-              <div className='dropdown'> 
-                <button type='button' className='btn btn-outline-light btn-lg me-3 dropdown-toggle' id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  <span className="navbar-toggler-icon"></span>
-                </button>
+          <div className='d-flex flex-row'>
 
-                <ul className="dropdown-menu bg-dark " aria-labelledby="navbarDropdown">
-                  {renderListWithStateButtons("dropdown-item")}               
-                </ul>  
-                      
-              </div>
-              {renderBrand(false)}
+            <div className='dropdown'>
+              <button type='button' className='btn btn-outline-light btn-lg me-3 dropdown-toggle' id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+
+              <ul className="dropdown-menu bg-dark " aria-labelledby="navbarDropdown">
+                {renderListWithStateButtons("dropdown-item")}
+              </ul>
+
             </div>
-            
+            {renderBrand(false)}
+          </div>
+
 
         </nav>
       </>
     )
   }
   return (
-    
+
     <>
       {isBigScreen && renderNavbarForDeskop()}
       {!isBigScreen && renderNavbarForMobile()}
       <div >
         {currentState}
-      </div>    
-    </>  
+      </div>
+    </>
   );
 }
 

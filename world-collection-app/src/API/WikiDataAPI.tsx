@@ -28,72 +28,72 @@ const getCollectibleWikipediaLink = "WikidataAPI/get/collectible_wikipedia_link"
  * Class for posting data to backend Wikidata API and then retriving data or status from backend Wikidata API.
  */
 export class WikiDataAPI {
-    private static convertToListOfCollectibleModel(data : any[]) : RawCollectible[] {
-        let result : RawCollectible[] = data.map((d : any) => new RawCollectible(d));
+    private static convertToListOfCollectibleModel(data: any[]): RawCollectible[] {
+        let result: RawCollectible[] = data.map((d: any) => new RawCollectible(d));
         return result;
     }
-    private static convertToCollectibleModel(data : any) : RawCollectible {
-        let result : RawCollectible =  new RawCollectible(data[0]);
+    private static convertToCollectibleModel(data: any): RawCollectible {
+        let result: RawCollectible = new RawCollectible(data[0]);
         return result;
     }
-    private static convertToCollectibleBasicInfoModel(data : any) : CollectibleBasicInfo {
-        let result : CollectibleBasicInfo =  new CollectibleBasicInfo(data[0]);
+    private static convertToCollectibleBasicInfoModel(data: any): CollectibleBasicInfo {
+        let result: CollectibleBasicInfo = new CollectibleBasicInfo(data[0]);
         return result;
     }
-    private static convertToListOFCollectibleDetailModel(data : any) : CollectibleDetail[] {
-        let result : CollectibleDetail[] = data.map((d : any) => new CollectibleDetail(d));
+    private static convertToListOFCollectibleDetailModel(data: any): CollectibleDetail[] {
+        let result: CollectibleDetail[] = data.map((d: any) => new CollectibleDetail(d));
         return result;
     }
-    private static convertToWikipediaLinkUrl(data : any[]) : string {
-        if (data.length == 0){
+    private static convertToWikipediaLinkUrl(data: any[]): string {
+        if (data.length == 0) {
             return "";
         }
         return data[0]['article'];
     }
-    private static convertToListOfSearchDataModel(data: any[]) : SearchData[] {
-        let results : SearchData[] = data.map((d : any) => new SearchData(d));
+    private static convertToListOfSearchDataModel(data: any[]): SearchData[] {
+        let results: SearchData[] = data.map((d: any) => new SearchData(d));
         return results;
     }
-    
-    private static convertToListOfFilterDataModel(data : any[]) : FilterIdentificationData[] {
-        let results : FilterIdentificationData[] = data.map((d : any) => new FilterIdentificationData(d));
+
+    private static convertToListOfFilterDataModel(data: any[]): FilterIdentificationData[] {
+        let results: FilterIdentificationData[] = data.map((d: any) => new FilterIdentificationData(d));
         return results;
     }
-    private static convertToListOfWIkibasePropertyDataModel(data : any[]) : WikibaseItemPropertyData[]{
-        let results : WikibaseItemPropertyData[] = data.map((d : any) =>{
+    private static convertToListOfWIkibasePropertyDataModel(data: any[]): WikibaseItemPropertyData[] {
+        let results: WikibaseItemPropertyData[] = data.map((d: any) => {
             return new WikibaseItemPropertyData(d);
         });
         return results;
     }
-    private static convertToWikibaseItemFilterDataModel(data : any) : WikibaseItemFilterData {
-        
+    private static convertToWikibaseItemFilterDataModel(data: any): WikibaseItemFilterData {
+
         let result = new WikibaseItemFilterData()
         result.conflict_with_constraint = this.convertToListOfWIkibasePropertyDataModel(data["conflict_with_constraint"])
         result.none_of_constraint = this.convertToListOfWIkibasePropertyDataModel(data["none_of_constraint"])
-        result.value_type_constraint= this.convertToListOfWIkibasePropertyDataModel(data["value_type_constraint"])
+        result.value_type_constraint = this.convertToListOfWIkibasePropertyDataModel(data["value_type_constraint"])
         result.one_of_constraint = this.convertToListOfWIkibasePropertyDataModel(data["one_of_constraint"])
-        
+
         return result;
     }
-    private static convertToQuantityFilterDataModel(data : any) : QuantityFilterData {
-        let units : Entity[] = data["units"].map((unit : any) => {
-            return new Entity(unit["QNumber"],unit["name"]);
+    private static convertToQuantityFilterDataModel(data: any): QuantityFilterData {
+        let units: Entity[] = data["units"].map((unit: any) => {
+            return new Entity(unit["QNumber"], unit["name"]);
         })
-        let range : ValueRange = new ValueRange(data["range"][0]);
-        return new QuantityFilterData(units,range)
+        let range: ValueRange = new ValueRange(data["range"][0]);
+        return new QuantityFilterData(units, range)
     }
-    
+
     /**
      * Obtains from WikidataAPI data of filter, which are necessary for future use.
      * @param property PNUmber of property/filter of which we want to obtain data.
      * @returns Data model containing data of filter such as max,min value restriction and list of supported units.
      */
-    static async getQuantityFilterData(property: string){
+    static async getQuantityFilterData(property: string) {
         let params = {
-            property : property,
-            data_type : "Quantity"
+            property: property,
+            data_type: "Quantity"
         }
-        const data = await Fetch.postAndFetch(getFilterData,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(getFilterData, JSON.stringify(params));
         return this.convertToQuantityFilterDataModel(data);
     }
     /**
@@ -101,12 +101,12 @@ export class WikiDataAPI {
      * @param property PNUmber of property/filter of which we want to obtain data.
      * @returns Data model containing data of WikibaseItem filter.
      */
-    static async getWikibaseItemFilterData(property: string){      
+    static async getWikibaseItemFilterData(property: string) {
         let params = {
-            property : property,
-            data_type : "WikibaseItem"
+            property: property,
+            data_type: "WikibaseItem"
         }
-        const data = await Fetch.postAndFetch(getFilterData,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(getFilterData, JSON.stringify(params));
         return this.convertToWikibaseItemFilterDataModel(data);
     }
     /**
@@ -114,9 +114,9 @@ export class WikiDataAPI {
      * @param searchWord Key word that the search results must contain.
      * @returns Data model containing list of the found data.
      */
-    static async searchForTypesOfCollectibles(searchWord : string){
+    static async searchForTypesOfCollectibles(searchWord: string) {
         let params = {
-            search_word : searchWord
+            search_word: searchWord
         }
         const data = await Fetch.postAndFetch(searchCollectiblesTypes, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
@@ -128,11 +128,11 @@ export class WikiDataAPI {
      * @param exceptionClasses Array of exception classes, found results can not be sub-class of those exception classes.
      * @returns Data model containing list of the found data.
      */
-    static async searchForSubTypesOfTypesOfCollectibles(searchWord : string,superClass : string,exceptionClasses : string[]){
+    static async searchForSubTypesOfTypesOfCollectibles(searchWord: string, superClass: string, exceptionClasses: string[]) {
         let params = {
-            search_word : searchWord,
-            super_class : superClass,
-            exception_classes : exceptionClasses
+            search_word: searchWord,
+            super_class: superClass,
+            exception_classes: exceptionClasses
         }
         const data = await Fetch.postAndFetch(searchCollectiblesTypes, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
@@ -142,11 +142,11 @@ export class WikiDataAPI {
      * @param searchWord Key word that the search results must contain.
      * @returns Data model containing list of the found data.
      */
-    static async searchForCollectible(searchWord : string){
+    static async searchForCollectible(searchWord: string) {
         let params = {
-            search_word : searchWord
+            search_word: searchWord
         }
-        const data = await Fetch.postAndFetch(searchPlacesOrCollectibles,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(searchPlacesOrCollectibles, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -154,10 +154,10 @@ export class WikiDataAPI {
      * @param searchWord Key word that the search results must contain.
      * @returns Data model containing list of the found data.
      */
-    static async searchForAdministrativeAreas(searchWord : string){
+    static async searchForAdministrativeAreas(searchWord: string) {
         let params = {
-            search_word : searchWord,
-            
+            search_word: searchWord,
+
         }
         const data = await Fetch.postAndFetch(searchAdministrativeAreas, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
@@ -169,11 +169,11 @@ export class WikiDataAPI {
      * @param exceptionAdministrativeAreas Array of QNumbers of exception areas. Found results can not locate in those exception areas.
      * @returns Data model containing list of the found data.
      */
-    static async searchForSubAdministrativeAreasOfArea(searchWord : string,superAdministrativeArea : string|null,exceptionAdministrativeAreas : string[]){
+    static async searchForSubAdministrativeAreasOfArea(searchWord: string, superAdministrativeArea: string | null, exceptionAdministrativeAreas: string[]) {
         let params = {
-            search_word : searchWord,
-            located_in_area : superAdministrativeArea,
-            not_located_in_areas : exceptionAdministrativeAreas
+            search_word: searchWord,
+            located_in_area: superAdministrativeArea,
+            not_located_in_areas: exceptionAdministrativeAreas
         }
         const data = await Fetch.postAndFetch(searchAdministrativeAreas, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
@@ -184,9 +184,9 @@ export class WikiDataAPI {
      * @param QNumberOfType QNumber of class/type, for which we want to obtain filters.
      * @returns Data model containing filters.
      */
-    static async searchForFilters(QNumberOfType :  string | null = null){
-        let params =  {
-            type : QNumberOfType
+    static async searchForFilters(QNumberOfType: string | null = null) {
+        let params = {
+            type: QNumberOfType
         }
         const data = await Fetch.postAndFetch(getRecomendedFilters, JSON.stringify(params));
         return this.convertToListOfFilterDataModel(data);
@@ -198,16 +198,16 @@ export class WikiDataAPI {
      *  conflict type meaning the found results can not be instance, sub-type of conflict type.
      * @returns Data model containing list of the found data.
      */
-    static async searchForWikibaseItem(searchWord : string, wikibaseItemFilterData : WikibaseItemFilterData){
-        let params  = {
-            search_word : searchWord,
-            value_type : wikibaseItemFilterData.getValueTypeQNumbers(),
-            value_type_relation : wikibaseItemFilterData.getValueTypesRelation(),
-            conflict_type : wikibaseItemFilterData.getConflictTypeQNumbers(),
-            conflict_type_relation : wikibaseItemFilterData.getConflictTypesRelation(),
+    static async searchForWikibaseItem(searchWord: string, wikibaseItemFilterData: WikibaseItemFilterData) {
+        let params = {
+            search_word: searchWord,
+            value_type: wikibaseItemFilterData.getValueTypeQNumbers(),
+            value_type_relation: wikibaseItemFilterData.getValueTypesRelation(),
+            conflict_type: wikibaseItemFilterData.getConflictTypeQNumbers(),
+            conflict_type_relation: wikibaseItemFilterData.getConflictTypesRelation(),
             none_values: wikibaseItemFilterData.getNoneValuesQNumbers()
         }
-        const data = await Fetch.postAndFetch(searchWikibaseItem,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(searchWikibaseItem, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -215,8 +215,8 @@ export class WikiDataAPI {
      * @param params Data model, which contains requirments fro collectible searching such as area restriction, type restriction and filters.
      * @returns List of found collectibles, which satisfies given parameters.
      */
-    static async searchForCollectibles(params : CollectiblesSearchQueryData){
-        const data = await Fetch.postAndFetch(searchCollectibles,JSON.stringify(params));
+    static async searchForCollectibles(params: CollectiblesSearchQueryData) {
+        const data = await Fetch.postAndFetch(searchCollectibles, JSON.stringify(params));
         return this.convertToListOfCollectibleModel(data);
     }
     /**
@@ -224,11 +224,11 @@ export class WikiDataAPI {
      * @param searchWord Key word that the search results must contain.
      * @returns Data model containing list of the found data.
      */
-    static async searchForRegions(searchWord : string){
-        let params  = {
-            search_word : (searchWord === "") ? null : searchWord
+    static async searchForRegions(searchWord: string) {
+        let params = {
+            search_word: (searchWord === "") ? null : searchWord
         }
-        const data = await Fetch.postAndFetch(searchRegions,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(searchRegions, JSON.stringify(params));
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -236,11 +236,11 @@ export class WikiDataAPI {
      * @param collectibleQNumber QNumber of collectible.
      * @returns Data model representing collectible.
      */
-    static async getCollectibleData(collectibleQNumber : string){
-        let params  = {
-            collectible_QNumber : collectibleQNumber
+    static async getCollectibleData(collectibleQNumber: string) {
+        let params = {
+            collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleData,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(getCollectibleData, JSON.stringify(params));
         return this.convertToCollectibleModel(data);
     }
     /**
@@ -248,11 +248,11 @@ export class WikiDataAPI {
      * @param collectibleQNumber QNumber of collectible.
      * @returns Data model containing collectible description and image.
      */
-    static async getCollectibleBasicInfo(collectibleQNumber : string){
-        let params  = {
-            collectible_QNumber : collectibleQNumber
+    static async getCollectibleBasicInfo(collectibleQNumber: string) {
+        let params = {
+            collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleBasicInfo,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(getCollectibleBasicInfo, JSON.stringify(params));
         return this.convertToCollectibleBasicInfoModel(data);
     }
     /**
@@ -260,11 +260,11 @@ export class WikiDataAPI {
      * @param collectibleQNumber QNUmber of collectible.
      * @returns Data model cointaining collectible details.
      */
-    static async getCollectibleDetails(collectibleQNumber : string){
-        let params  = {
-            collectible_QNumber : collectibleQNumber
+    static async getCollectibleDetails(collectibleQNumber: string) {
+        let params = {
+            collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleDetails,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(getCollectibleDetails, JSON.stringify(params));
         return this.convertToListOFCollectibleDetailModel(data);
     }
     /**
@@ -272,11 +272,11 @@ export class WikiDataAPI {
      * @param collectibleQNumber QNUmber of collectible.
      * @returns String URL to Wikipedia article about given collectible if exists.
      */
-    static async getCollectibleWikipediaLink(collectibleQNumber : string){
-        let params  = {
-            collectible_QNumber : collectibleQNumber
+    static async getCollectibleWikipediaLink(collectibleQNumber: string) {
+        let params = {
+            collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleWikipediaLink,JSON.stringify(params));
+        const data = await Fetch.postAndFetch(getCollectibleWikipediaLink, JSON.stringify(params));
         return this.convertToWikipediaLinkUrl(data);
     }
 }

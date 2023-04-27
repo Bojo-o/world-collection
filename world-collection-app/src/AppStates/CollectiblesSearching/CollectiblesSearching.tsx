@@ -18,83 +18,84 @@ import SearchByRegion from "./CollectiblesSearchingStates/SearchByRegion";
  * It stores current state and contains methods for handling going from one state to next state.
  * @returns JSX element with current state of collectible searching process.
  */
-function CollectibleSearching(){
-    const [state,setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.TypeChoosing)
-    const [queryData,setQueryData] = useState<CollectiblesSearchQueryData>(new CollectiblesSearchQueryData())
+function CollectibleSearching() {
+    const [state, setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.TypeChoosing)
+    const [queryData, setQueryData] = useState<CollectiblesSearchQueryData>(new CollectiblesSearchQueryData())
 
-    const [selectedType,setSelectedType] = useState<Entity|null>(null)
-    const [selectedExceptionSubTypes,setSelectedExceptionSubTypes] = useState<Entity[]>([])
+    const [selectedType, setSelectedType] = useState<Entity | null>(null)
+    const [selectedExceptionSubTypes, setSelectedExceptionSubTypes] = useState<Entity[]>([])
 
-    const [usedFilters,setUsedFilters] = useState<AppliedFilterData[]>([]);
-    const handleUsedFiltersChange = (filters : AppliedFilterData[]) => {
+    const [usedFilters, setUsedFilters] = useState<AppliedFilterData[]>([]);
+    const handleUsedFiltersChange = (filters: AppliedFilterData[]) => {
         setUsedFilters(filters);
     };
-    const typeChoosingStateHandleNext = (type : Entity,exceptionSubTypes : Entity[]) => {
-        setQueryData((prev) => prev.setTypeAndExceptionSubTypes(type,exceptionSubTypes))
-        if (type.getQNumber() != selectedType?.getQNumber()){
+    const typeChoosingStateHandleNext = (type: Entity, exceptionSubTypes: Entity[]) => {
+        setQueryData((prev) => prev.setTypeAndExceptionSubTypes(type, exceptionSubTypes))
+        if (type.getQNumber() != selectedType?.getQNumber()) {
             setUsedFilters([])
         }
         setSelectedType(type);
         setSelectedExceptionSubTypes(exceptionSubTypes);
         setState(CollectiblesSearchingStates.AreaChoosing)
     }
-    const handleSetState = (newState : CollectiblesSearchingStates) => {
+    const handleSetState = (newState: CollectiblesSearchingStates) => {
         setState(newState);
     }
     const renderTypeChoosingState = () => {
-        return(
+        return (
             <>
-                <TypeChoosing handleNext={typeChoosingStateHandleNext} selectedType={selectedType} selectedExceptionSubTypes={selectedExceptionSubTypes}/>
+                <TypeChoosing handleNext={typeChoosingStateHandleNext} selectedType={selectedType} selectedExceptionSubTypes={selectedExceptionSubTypes} />
             </>
-            
+
         );
     }
-    const areaChoosingStatehandleNext = (areaType : Areas) => {
-        
-        switch (areaType){
-            case Areas.ADMINISTRAVIVE_AREA: { 
+    const areaChoosingStatehandleNext = (areaType: Areas) => {
+
+        switch (areaType) {
+            case Areas.ADMINISTRAVIVE_AREA: {
                 setState(CollectiblesSearchingStates.AdministrativeArea)
-                break; 
-            } 
-            case Areas.RADIUS: { 
+                break;
+            }
+            case Areas.RADIUS: {
                 setState(CollectiblesSearchingStates.RadiusArea)
-                break; 
-            } 
-            case Areas.REGION: { 
+                break;
+            }
+            case Areas.REGION: {
                 setState(CollectiblesSearchingStates.RegionArea)
-                break; 
-            } 
+                break;
+            }
             case Areas.WORLD: {
                 setQueryData((prev) => prev.setAreaSearchTypeAsWorld())
                 setState(CollectiblesSearchingStates.FiltersSelection)
                 break;
             }
-            default: { 
-                break; } 
+            default: {
+                break;
+            }
         }
     }
     const renderAreaChoosingState = () => {
-        return(
+        return (
             <>
                 <div>
                     <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.TypeChoosing)}>Back to type choosing</button>
                 </div>
-                <AreaChoosing handleSelection={areaChoosingStatehandleNext}/>
+                <AreaChoosing handleSelection={areaChoosingStatehandleNext} />
             </>
         );
     }
-    const radiusAreaStateHandleNext = (center : {lat : number,lng : number}, radius : number) => {
-        setQueryData((prev) => prev.setAreaSearchTypeAsRadius(radius,center))
+    const radiusAreaStateHandleNext = (center: { lat: number, lng: number }, radius: number) => {
+        setQueryData((prev) => prev.setAreaSearchTypeAsRadius(radius, center))
         setState(CollectiblesSearchingStates.FiltersSelection);
     }
     const renderRadiusAreaState = () => {
         return (
             <>
-                <SearchByRadius handleNext={radiusAreaStateHandleNext} handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}/>
+                <SearchByRadius handleNext={radiusAreaStateHandleNext} handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)} />
             </>
         )
     }
-    const regionAreaStateHandleNext = (region : Entity) => {
+    const regionAreaStateHandleNext = (region: Entity) => {
         setQueryData((prev) => prev.setAreaSearchTypeAsRegion(region))
         setState(CollectiblesSearchingStates.FiltersSelection);
     }
@@ -108,9 +109,9 @@ function CollectibleSearching(){
             </>
         )
     }
-    const administrativeAreaStateHandleNext = (area : Entity,exceptionSubAreas : Entity[]) => {     
+    const administrativeAreaStateHandleNext = (area: Entity, exceptionSubAreas: Entity[]) => {
         setState(CollectiblesSearchingStates.FiltersSelection)
-        setQueryData((prev) => prev.setAreaSearchTypeAsAdministrative(area,exceptionSubAreas))
+        setQueryData((prev) => prev.setAreaSearchTypeAsAdministrative(area, exceptionSubAreas))
     }
     const renderAdministrativeAreaState = () => {
         return (
@@ -118,40 +119,40 @@ function CollectibleSearching(){
                 <div>
                     <button type="button" className="btn btn-secondary" onClick={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}>Back to area choosing</button>
                 </div>
-                <SearchByAdministrativeArea handleNext={administrativeAreaStateHandleNext}/>
+                <SearchByAdministrativeArea handleNext={administrativeAreaStateHandleNext} />
             </>
         )
     }
-    const filtersSelectionStateHandleNext = (appliedFilters : AppliedFilterData[]) => {
+    const filtersSelectionStateHandleNext = (appliedFilters: AppliedFilterData[]) => {
         setState(CollectiblesSearchingStates.Collectibles)
         setQueryData((prev) => prev.setFilters(appliedFilters));
     }
     const renderFiltersSelectionState = () => {
         return (
             <>
-                <FiltersSelection superClass={new Entity(queryData.getType(),"filter")}
-                handleNext={filtersSelectionStateHandleNext} usedFilters={usedFilters} handleUsedFiltersChange={handleUsedFiltersChange}
-                handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}/>
+                <FiltersSelection superClass={new Entity(queryData.getType(), "filter")}
+                    handleNext={filtersSelectionStateHandleNext} usedFilters={usedFilters} handleUsedFiltersChange={handleUsedFiltersChange}
+                    handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)} />
             </>
         )
     }
-    const renderCollectiblesState = () =>{
-        return(
+    const renderCollectiblesState = () => {
+        return (
             <>
-                <CollectiblesPresenter dataForWikibaseAPI={queryData}/>
+                <CollectiblesPresenter dataForWikibaseAPI={queryData} />
             </>
         )
     }
-    return(
+    return (
         <>
             <div >
-                { state === CollectiblesSearchingStates.TypeChoosing && renderTypeChoosingState()}
-                { state === CollectiblesSearchingStates.AreaChoosing && renderAreaChoosingState()}
-                { state === CollectiblesSearchingStates.RadiusArea && renderRadiusAreaState()}
-                { state === CollectiblesSearchingStates.RegionArea && renderRegionAreaState()}
-                { state === CollectiblesSearchingStates.AdministrativeArea && renderAdministrativeAreaState()}
-                { state === CollectiblesSearchingStates.FiltersSelection && renderFiltersSelectionState()}
-                { state === CollectiblesSearchingStates.Collectibles && renderCollectiblesState()}
+                {state === CollectiblesSearchingStates.TypeChoosing && renderTypeChoosingState()}
+                {state === CollectiblesSearchingStates.AreaChoosing && renderAreaChoosingState()}
+                {state === CollectiblesSearchingStates.RadiusArea && renderRadiusAreaState()}
+                {state === CollectiblesSearchingStates.RegionArea && renderRegionAreaState()}
+                {state === CollectiblesSearchingStates.AdministrativeArea && renderAdministrativeAreaState()}
+                {state === CollectiblesSearchingStates.FiltersSelection && renderFiltersSelectionState()}
+                {state === CollectiblesSearchingStates.Collectibles && renderCollectiblesState()}
             </div>
         </>
     )

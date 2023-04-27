@@ -1,18 +1,18 @@
 /**
  * Class for posting data in json format to backend API and then retriving data or status from backend API.
  */
-export class Fetch{
-    private static parseJson(response : Response){
+export class Fetch {
+    private static parseJson(response: Response) {
         return response.json();
     }
-    private static checkStatus(response: any){
-        if (response.ok){
+    private static checkStatus(response: any) {
+        if (response.ok) {
             return response;
-        }else {
+        } else {
             const httpErrorInfo = {
-                status : response.status,
-                statusText : response.statusText,
-                url : response.url,
+                status: response.status,
+                statusText: response.statusText,
+                url: response.url,
             }
             console.log(`log server http error: ${JSON.stringify(httpErrorInfo)}`);
             throw new Error("Error occurred during fetching data");
@@ -25,7 +25,7 @@ export class Fetch{
      * @returns 
      * Promise containing backend response in json format.
      */
-    public static async postAndFetch(url : string,data : {}){
+    public static async postAndFetch(url: string, data: {}) {
         try {
             const response = await fetch(url,
                 {

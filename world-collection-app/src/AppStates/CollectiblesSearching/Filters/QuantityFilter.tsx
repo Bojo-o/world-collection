@@ -18,44 +18,44 @@ import { useMediaQuery } from "react-responsive";
  * @param FilterProps See FilterProps description.
  * @returns JSX element rendering UI for setting a value of specific Quantity filter.
  */
-function QuantityFilter({filterData: filter,handleAddFilterToAplied} : FilterProps){
-    const[filterData,setFilterData] = useState<QuantityFilterData>(new QuantityFilterData([],new ValueRange({max : null,min : null})));
+function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps) {
+    const [filterData, setFilterData] = useState<QuantityFilterData>(new QuantityFilterData([], new ValueRange({ max: null, min: null })));
 
-    const[loadingValueType,setLoadingValueType] = useState(false);
-    const[errorForFetchingValueType,setErrorForFetchingValueType] = useState(false);
+    const [loadingValueType, setLoadingValueType] = useState(false);
+    const [errorForFetchingValueType, setErrorForFetchingValueType] = useState(false);
 
-    const[unit,setUnit] = useState<string|null>(null);
-    const[value,setValue] = useState<number|undefined>(undefined);
+    const [unit, setUnit] = useState<string | null>(null);
+    const [value, setValue] = useState<number | undefined>(undefined);
 
-    const [comparisonOperator,setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
+    const [comparisonOperator, setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
 
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
     /**
      * Sets filter quantity value from number input.
      */
-    const handleNumberInput = (e : any) => {
-        if (e.target.value == ""){
+    const handleNumberInput = (e: any) => {
+        if (e.target.value == "") {
             setValue(undefined)
             return;
         }
-        
+
         let number = Math.max(filterData.range.min, Math.min(filterData.range.max, Number(e.target.value)));
         setValue(number);
     }
 
-    const handleUnitChange = (e : any) => {
+    const handleUnitChange = (e: any) => {
         setUnit(e.target.value)
     }
-    const handleComparisonOperatorSelect = (e : any) => {
+    const handleComparisonOperatorSelect = (e: any) => {
         setComparisonOperator(e.target.value);
     }
     /**
      * Invoke func, which was provided from parent component to adds this filter with value into some list of applied filters.
      */
     const handleSave = () => {
-        if (value != undefined){
-            handleAddFilterToAplied(new AppliedFilterData(filter,new QuantityValueData(comparisonOperator,value,unit)));
+        if (value != undefined) {
+            handleAddFilterToAplied(new AppliedFilterData(filter, new QuantityValueData(comparisonOperator, value, unit)));
         }
     }
     /**
@@ -76,12 +76,12 @@ function QuantityFilter({filterData: filter,handleAddFilterToAplied} : FilterPro
 
     useEffect(() => {
         fetchFilterData()
-    },[filter])
+    }, [filter])
 
-    return(
-        <div>           
+    return (
+        <div>
             {loadingValueType && (<>
-                <button type="button" className="list-group-item list-group-item-action">{errorForFetchingValueType ? "Some error occurs, try later" : 
+                <button type="button" className="list-group-item list-group-item-action">{errorForFetchingValueType ? "Some error occurs, try later" :
                     <div className="spinner-border text-info" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
@@ -98,7 +98,7 @@ function QuantityFilter({filterData: filter,handleAddFilterToAplied} : FilterPro
                             <h3>Choose which units you want to use</h3>
                             <select className="form-select" onChange={handleUnitChange}>
                                 <option value="" selected disabled hidden>Choose unit</option>
-                                {filterData.supportedUnits.map((value,index) => {
+                                {filterData.supportedUnits.map((value, index) => {
                                     return (
                                         <option key={index} value={value.getQNumber()}>{value.getName()}</option>
                                     )
@@ -107,30 +107,30 @@ function QuantityFilter({filterData: filter,handleAddFilterToAplied} : FilterPro
                         </>
                     )}
                     <h3>Choose value</h3>
-                    
-                        {isBigScreen ? (
-                            <>
-                                <div className="input-group mb-3">
+
+                    {isBigScreen ? (
+                        <>
+                            <div className="input-group mb-3">
                                 <span className="input-group-text">Min : {filterData.range.min}</span>
-                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleNumberInput} />
+                                <input type="number" className="form-control" placeholder="Type value" value={value} onChange={handleNumberInput} />
                                 <span className="input-group-text">Max : {filterData.range.max}</span>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="d-flex flex-wrap justify-content-between">
-                                    <h6 className="input-group-text">Min : {filterData.range.min}</h6>
-                                    <h6 className="input-group-text">Max : {filterData.range.max}</h6>
-                                </div>
-                                
-                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleNumberInput} />
-                                
-                            </>
-                        )}
-                        
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="d-flex flex-wrap justify-content-between">
+                                <h6 className="input-group-text">Min : {filterData.range.min}</h6>
+                                <h6 className="input-group-text">Max : {filterData.range.max}</h6>
+                            </div>
+
+                            <input type="number" className="form-control" placeholder="Type value" value={value} onChange={handleNumberInput} />
+
+                        </>
+                    )}
+
                     <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column")}>
-                        <h4>{(value!=undefined) ? value : "value"}</h4>
-                        
+                        <h4>{(value != undefined) ? value : "value"}</h4>
+
                         <select className={"form-select w-50 mx-2"} onChange={handleComparisonOperatorSelect}>
                             <option value={ComparisonOperator.EqualTo} selected disabled hidden>Choose here</option>
                             <option value={ComparisonOperator.EqualTo}>is equal to</option>

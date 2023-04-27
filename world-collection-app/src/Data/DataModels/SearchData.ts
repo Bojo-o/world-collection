@@ -5,14 +5,14 @@
  * All attributes are optional, because places and collectibles also need to contains latitude and longitute, while classes not.
  */
 export class SearchData {
-    QNumber : string = '';
-    name : string = '';
-    description : string = '';
-    latitude : number = 0;
-    longitude : number = 0;
+    QNumber: string = '';
+    name: string = '';
+    description: string = '';
+    latitude: number = 0;
+    longitude: number = 0;
 
-    constructor(initializer?: any){
-        if(!initializer) return;
+    constructor(initializer?: any) {
+        if (!initializer) return;
         if (initializer.QNumber) this.QNumber = initializer.QNumber;
         if (initializer.name) this.name = initializer.name;
         if (initializer.description) this.description = initializer.description;

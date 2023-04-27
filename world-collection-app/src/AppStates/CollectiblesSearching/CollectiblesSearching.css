@@ -1,5 +1,4 @@
-
-.button-area-choosing{
+.button-area-choosing {
     width: 500px;
     height: 500px;
     background-position: center;
@@ -8,10 +7,11 @@
     border-radius: 40px;
     text-align: center;
     font-size: 32px;
-    font-weight:bolder;
-    color:crimson;
+    font-weight: bolder;
+    color: crimson;
 }
-.button-area-choosing:hover{
+
+.button-area-choosing:hover {
     opacity: 0.5;
 }
 

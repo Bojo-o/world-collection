@@ -7,23 +7,23 @@ import { CollectiblesSearchQueryData } from "../../Data/CollectibleSearching/Col
 /**
  * Props necessary for CollectiblePresenter component.
  */
-export interface CollectiblesPresenterProps{
+export interface CollectiblesPresenterProps {
     /**
      * Data neccesary for WikibaseAPI to search for collectibles.
      */
-    dataForWikibaseAPI : CollectiblesSearchQueryData;
+    dataForWikibaseAPI: CollectiblesSearchQueryData;
 }
 /**
  * Func which fetches raw collectibles from WikidataAPI and then provides them to component, which renders that data.
  * @param CollectiblesPresenterProps See CollectiblesPresenterProps description.
  * @returns JSX element rendering UI for managing found collectibles.
  */
-function CollectiblesPresenter({dataForWikibaseAPI} : CollectiblesPresenterProps){
-    const [collectibles,setCollectibles]  = useState<RawCollectible[]|null>(null);
+function CollectiblesPresenter({ dataForWikibaseAPI }: CollectiblesPresenterProps) {
+    const [collectibles, setCollectibles] = useState<RawCollectible[] | null>(null);
 
-    const [loading,setLoading] = useState(false);
-    const [error,setError] = useState(false);
-    
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+
     useEffect(() => {
         setLoading(true);
         WikiDataAPI.searchForCollectibles(dataForWikibaseAPI).then((data) => {
@@ -32,38 +32,38 @@ function CollectiblesPresenter({dataForWikibaseAPI} : CollectiblesPresenterProps
         }).catch(() =>
             setError(true)
         )
-    },[])
-    return(
+    }, [])
+    return (
         <>
-        
+
             <div>
-                    <h1>Collectibles </h1>
-                    {loading && (
-                        <>
-                            {error ? (
-                                <>
-                                    <h3>Some error occurs, try later, or try query with less parameters</h3>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="d-flex flex-row">
-                                        <h3>Searching for collectibles</h3>
-                                        <div className="spinner-border text-info" role="status">
-                                            <span className="visually-hidden">Loading...</span>
-                                        </div>
+                <h1>Collectibles </h1>
+                {loading && (
+                    <>
+                        {error ? (
+                            <>
+                                <h3>Some error occurs, try later, or try query with less parameters</h3>
+                            </>
+                        ) : (
+                            <>
+                                <div className="d-flex flex-row">
+                                    <h3>Searching for collectibles</h3>
+                                    <div className="spinner-border text-info" role="status">
+                                        <span className="visually-hidden">Loading...</span>
                                     </div>
-                                </>
-                            )}
-                        </>
-                    )}
-                
-                    {!loading && collectibles != null &&(
-                        <>
-                            <FoundResultsHandler results={collectibles}/>
-                        </>
-                    )}
-                </div>
-            
+                                </div>
+                            </>
+                        )}
+                    </>
+                )}
+
+                {!loading && collectibles != null && (
+                    <>
+                        <FoundResultsHandler results={collectibles} />
+                    </>
+                )}
+            </div>
+
         </>
     )
 }

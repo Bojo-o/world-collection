@@ -2,7 +2,7 @@
  * Enums with states of collectible searching process.
  * Each reporesents one of state of that process.
  */
-export enum CollectiblesSearchingStates{
+export enum CollectiblesSearchingStates {
     // select super class, which describes what colelctibles the user wants to search for
     TypeChoosing,
     // choose area restriciton

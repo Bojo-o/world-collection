@@ -1,4 +1,4 @@
-export enum DatePrecision{
+export enum DatePrecision {
     Day = "Day",
     Month = "Month",
     Year = "Year",

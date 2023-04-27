@@ -7,16 +7,16 @@ import SearchBar from "../../../SearchBar/SearchBar";
 /**
  * Props necessary for TypeChoosing component.
  */
-export interface TypeChoosingProps{
+export interface TypeChoosingProps {
     /**
      * Func from parent component to handle going to the next step of search process.
      * @param type Entity representing selected type/class.
      */
-    handleNext : (type : Entity,exceptionSubTypes : Entity[]) => void;
+    handleNext: (type: Entity, exceptionSubTypes: Entity[]) => void;
     /** Selected type/class by the user.*/
-    selectedType :Entity|null;
+    selectedType: Entity | null;
     /** Array of selected exceptions types/classes by the user.*/
-    selectedExceptionSubTypes : Entity[];
+    selectedExceptionSubTypes: Entity[];
 }
 /**
  * Func rendering UI for searching allowed types/classes, which can be parent class of collectilbes, exceptions types/classes 
@@ -29,13 +29,13 @@ export interface TypeChoosingProps{
  * @param TypeChoosingProps See TypeChoosingProps description. 
  * @returns JSX element rendering UI for selecting parent type/class of collectibles.
  */
-function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : TypeChoosingProps){
-    const SUPER_TYPE : Entity = new Entity("Q2221906","Anything") // geographic location
-    const [type,setType] = useState<Entity|null>(selectedType)
-    const [exceptionSubTypes,setExceptionSubTypes] = useState<Entity[]>(selectedExceptionSubTypes)
+function TypeChoosing({ handleNext, selectedType, selectedExceptionSubTypes }: TypeChoosingProps) {
+    const SUPER_TYPE: Entity = new Entity("Q2221906", "Anything") // geographic location
+    const [type, setType] = useState<Entity | null>(selectedType)
+    const [exceptionSubTypes, setExceptionSubTypes] = useState<Entity[]>(selectedExceptionSubTypes)
 
-    const handleAddingTypeChoosing = (data : SearchData) => {
-        setType(new Entity(data.QNumber,data.name))
+    const handleAddingTypeChoosing = (data: SearchData) => {
+        setType(new Entity(data.QNumber, data.name))
         setExceptionSubTypes([])
     }
     const handleResetType = () => {
@@ -46,10 +46,10 @@ function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : Type
         setType(SUPER_TYPE)
         setExceptionSubTypes([])
     }
-    const handleAddingExceptionSubTypeChoosing = (data : SearchData) => {
-        setExceptionSubTypes([...exceptionSubTypes,new Entity(data.QNumber,data.name)])
+    const handleAddingExceptionSubTypeChoosing = (data: SearchData) => {
+        setExceptionSubTypes([...exceptionSubTypes, new Entity(data.QNumber, data.name)])
     }
-    const handleRemovingExceptionSubTypeChoosing = (entity : Entity) => {
+    const handleRemovingExceptionSubTypeChoosing = (entity: Entity) => {
         setExceptionSubTypes((prev) => prev.filter((e) => e.getQNumber() !== entity.getQNumber()))
     }
     /**
@@ -57,7 +57,7 @@ function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : Type
      * @param searchWord Key word used for searching.
      * @returns Found types/classes.
      */
-    const typesDataGetter = (searchWord : string) => {
+    const typesDataGetter = (searchWord: string) => {
         return WikiDataAPI.searchForTypesOfCollectibles(searchWord);
     }
     /**
@@ -65,31 +65,31 @@ function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : Type
      * @param searchWord Key word used for searching.
      * @returns Found sub types/classes of selected type.
      */
-    const subTypesDataGetter = (searchWord : string) => {
-        let exceptionSubTypesQNumbers  = exceptionSubTypes.map((type) => { return type.getQNumber()})
-        return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord,(type == null) ? "" : type.getQNumber(),exceptionSubTypesQNumbers);
+    const subTypesDataGetter = (searchWord: string) => {
+        let exceptionSubTypesQNumbers = exceptionSubTypes.map((type) => { return type.getQNumber() })
+        return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord, (type == null) ? "" : type.getQNumber(), exceptionSubTypesQNumbers);
     }
 
-    return(
+    return (
         <>
-            
+
             <div className="d-flex flex-column" >
                 <h1>Type of collectibles choosing</h1>
                 {type == null ? (
                     <>
                         <h2>Choose what type of collectibles you want to search for</h2>
                         <h6>If you want to search for all possible things, which you can collect, click button "anything"</h6>
-                        <div className="d-flex"> 
+                        <div className="d-flex">
                             <button type="button" className="btn btn-warning  btn-sm" onClick={handleSuperTypeChoosing}>Anything</button>
                         </div>
-                        
-                        <SearchBar placeHolderText={"examples : castle, cave, museum"} handleClickedResult={handleAddingTypeChoosing} dataGetter={typesDataGetter} emptySearchingFlag={false}/> 
+
+                        <SearchBar placeHolderText={"examples : castle, cave, museum"} handleClickedResult={handleAddingTypeChoosing} dataGetter={typesDataGetter} emptySearchingFlag={false} />
                     </>
                 ) : (
                     <>
                         <div className="d-flex">
                             <h1>Choosed type "{type.getName()}" </h1>
-                            <button type="button" className="btn btn-info" onClick={handleResetType} >Choose other</button> 
+                            <button type="button" className="btn btn-info" onClick={handleResetType} >Choose other</button>
                         </div>
                         {exceptionSubTypes.length != 0 && (
                             <>
@@ -97,16 +97,16 @@ function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : Type
                                 <h6>Click red "x" to removing exception</h6>
                                 <div className="d-flex flex-row">
 
-                                {exceptionSubTypes.map((exc,index) => {
-                                    return(
-                                        <div key={index}>
-                                            <span className="badge bg-primary mx-1" >{exc.getName()}
-                                                <button type="button" className="btn btn-danger ms-3" onClick={() => handleRemovingExceptionSubTypeChoosing(exc)}>x</button>
-                                            </span>
-                                        </div>
-                                    )
+                                    {exceptionSubTypes.map((exc, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <span className="badge bg-primary mx-1" >{exc.getName()}
+                                                    <button type="button" className="btn btn-danger ms-3" onClick={() => handleRemovingExceptionSubTypeChoosing(exc)}>x</button>
+                                                </span>
+                                            </div>
+                                        )
                                     })
-                                }
+                                    }
                                 </div>
                             </>
                         )}
@@ -119,11 +119,11 @@ function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : Type
                             <h5>For example: If you choose type "castle", then it also search for castles that are ruined, so if you want to skip these, choose here "castle ruin"</h5>
                             <h5>Clicking on "Show all", it shows you all possible sub types</h5>
                             <h6>Please take in mind that, if you choosed "anything", it would tried to show a large amount of sub types and it takes a very long time to process</h6>
-                            <SearchBar placeHolderText={"Type type of collectibles"} handleClickedResult={handleAddingExceptionSubTypeChoosing} dataGetter={subTypesDataGetter} emptySearchingFlag={true}/>
+                            <SearchBar placeHolderText={"Type type of collectibles"} handleClickedResult={handleAddingExceptionSubTypeChoosing} dataGetter={subTypesDataGetter} emptySearchingFlag={true} />
                         </div>
-                        <br/>
+                        <br />
                         <div>
-                            <button type="button" className="btn btn-success" onClick={() => handleNext(type,exceptionSubTypes)} >Continue</button> 
+                            <button type="button" className="btn btn-success" onClick={() => handleNext(type, exceptionSubTypes)} >Continue</button>
                         </div>
                     </>
                 )}

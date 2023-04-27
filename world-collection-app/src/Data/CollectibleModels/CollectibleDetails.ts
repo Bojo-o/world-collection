@@ -4,24 +4,24 @@
  * There are some attributes, which make sense only when specific detail is given.Thats are unit and timePrecision.
  * For that reason, all attributes are optional.
  */
-export class CollectibleDetail{
+export class CollectibleDetail {
     /** Name of detail. */
-    propertyName : string = "";
+    propertyName: string = "";
     /** Data type of value, whose detail it contains. */
-    dataType : string = "";
+    dataType: string = "";
     /** List of values, which details contains.*/
-    values : string[] = [];
+    values: string[] = [];
     /** Unit in whose is value expressed. Used when dataType is "Quantity" */
-    unit : string|null = null;
+    unit: string | null = null;
     /** Precision in whose is time value expressed. Used when dataType is "Time" */
-    timePrecision : number|null = null;
+    timePrecision: number | null = null;
 
-    constructor(initializer?: any){
-        if(!initializer) return;
+    constructor(initializer?: any) {
+        if (!initializer) return;
         if (initializer.property) this.propertyName = initializer.property;
         if (initializer.dataType) this.dataType = initializer.dataType;
-        if (initializer.values){
-            let values : string = initializer.values;
+        if (initializer.values) {
+            let values: string = initializer.values;
             values.split("<space>").map((value) => {
                 this.values.push(value);
             })

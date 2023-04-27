@@ -4,19 +4,19 @@ import Table from "../Table/Table";
 /**
  * Props necessary for CollectiblesEditingTable.
  */
-export interface CollectiblesEditingTableProps{
+export interface CollectiblesEditingTableProps {
     /** Collectibles as records of table. */
-    records : Collectible[];
+    records: Collectible[];
     /** Collectible, which is actually edited by user. */
-    editedCollectible : Collectible|null;
+    editedCollectible: Collectible | null;
     /** Flag representing if collecttible can be saved. If can not be, button for saving will be disabled.*/
-    canSaveCollectible : boolean;
-     // func for managing and handling editaion of collection, here are only invoked.
-    removeCollectible : (collectible : Collectible) => void;
-    editCollectible : (collectible : Collectible) => void;
-    saveCollectible : (collectible : Collectible) => void;
-    cancleCollectibleAction : () => void;
-    handleCollectibleNameChange : (event : any) => void;
+    canSaveCollectible: boolean;
+    // func for managing and handling editaion of collection, here are only invoked.
+    removeCollectible: (collectible: Collectible) => void;
+    editCollectible: (collectible: Collectible) => void;
+    saveCollectible: (collectible: Collectible) => void;
+    cancleCollectibleAction: () => void;
+    handleCollectibleNameChange: (event: any) => void;
 }
 /**
  * Func rendering table with collectibles as records.
@@ -27,12 +27,12 @@ export interface CollectiblesEditingTableProps{
  * @param CollectiblesEditingTableProps See CollectiblesEditingTableProps description.
  * @returns JSX element rendering table with collections, which can be edited.
  */
-function CollectiblesEditingTable ({records: collectibles,editCollectible,removeCollectible,editedCollectible,saveCollectible,cancleCollectibleAction,handleCollectibleNameChange,canSaveCollectible} : CollectiblesEditingTableProps) {
-    const renderTypesColumn = (types : string[]) => {
-        return(
+function CollectiblesEditingTable({ records: collectibles, editCollectible, removeCollectible, editedCollectible, saveCollectible, cancleCollectibleAction, handleCollectibleNameChange, canSaveCollectible }: CollectiblesEditingTableProps) {
+    const renderTypesColumn = (types: string[]) => {
+        return (
             <>
                 <div className="d-flex flex-wrap">
-                    {types.map((type,index) => {
+                    {types.map((type, index) => {
                         return (
                             <>
                                 <div key={index} className="badge bg-info text-wrap">
@@ -45,7 +45,7 @@ function CollectiblesEditingTable ({records: collectibles,editCollectible,remove
             </>
         )
     }
-    const renderVisition = (visit : boolean) => {
+    const renderVisition = (visit: boolean) => {
         return (
             <>
                 {visit ? (
@@ -60,7 +60,7 @@ function CollectiblesEditingTable ({records: collectibles,editCollectible,remove
                             Not visited
                         </div>
                     </>
-                )}               
+                )}
             </>
         )
     }
@@ -75,18 +75,18 @@ function CollectiblesEditingTable ({records: collectibles,editCollectible,remove
             </>
         )
     }
-    const renderBody = (currPage : number,rowsPerPage : number) => {
+    const renderBody = (currPage: number, rowsPerPage: number) => {
         return (
             <>
-                {collectibles.slice(currPage * rowsPerPage - rowsPerPage,currPage * rowsPerPage).map((collectible,index) => {
-                    return(
+                {collectibles.slice(currPage * rowsPerPage - rowsPerPage, currPage * rowsPerPage).map((collectible, index) => {
+                    return (
                         <>
                             <tr key={index}>
                                 <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
                                 <th scope="row">
                                     {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber ? (
                                         <>
-                                            <input type="text" className="form-control" aria-describedby="collectibleInputNameHelp" value={editedCollectible.name} onChange={handleCollectibleNameChange}/>
+                                            <input type="text" className="form-control" aria-describedby="collectibleInputNameHelp" value={editedCollectible.name} onChange={handleCollectibleNameChange} />
                                             {!canSaveCollectible && (
                                                 <div id="collectibleInputNameHelp" className="form-text">{editedCollectible.name === collectible.name ? ("You need change name") : ("Name must be at least 3 character long.")}</div>
                                             )}
@@ -95,7 +95,7 @@ function CollectiblesEditingTable ({records: collectibles,editCollectible,remove
                                         <>
                                             {collectible.name}
                                         </>
-                                    )}   
+                                    )}
                                 </th>
                                 <th scope="row">{renderTypesColumn(collectible.instanceOf)}</th>
                                 <th scope="row">{renderVisition(collectible.isVisit)}</th>
@@ -104,11 +104,11 @@ function CollectiblesEditingTable ({records: collectibles,editCollectible,remove
                                         {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber && (
                                             <>
                                                 {canSaveCollectible ? (
-                                                    <button type="button" className="btn btn-success"  onClick={() => saveCollectible(editedCollectible)}>Save</button>
+                                                    <button type="button" className="btn btn-success" onClick={() => saveCollectible(editedCollectible)}>Save</button>
                                                 ) : (
-                                                    <button type="button" className="btn btn-success"  disabled onClick={() => saveCollectible(editedCollectible)}>Save</button>
+                                                    <button type="button" className="btn btn-success" disabled onClick={() => saveCollectible(editedCollectible)}>Save</button>
                                                 )}
-                                                
+
                                                 <button type="button" className="btn btn-danger" onClick={cancleCollectibleAction}>Cancel</button>
                                             </>
                                         )}
@@ -117,7 +117,7 @@ function CollectiblesEditingTable ({records: collectibles,editCollectible,remove
                                                 <button type="button" className="btn btn-primary" onClick={() => editCollectible(collectible)}>Edit</button>
                                                 <button type="button" className="btn btn-danger" onClick={() => removeCollectible(collectible)}>Remove</button>
                                             </>
-                                        )}                                       
+                                        )}
                                     </div>
                                 </th>
                             </tr>

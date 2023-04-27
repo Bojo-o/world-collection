@@ -1,9 +1,11 @@
 .gray {
     filter: grayscale(1);
 }
-.scroll{
+
+.scroll {
     list-style: none;
-    overflow:hidden; overflow-y:scroll;
+    overflow: hidden;
+    overflow-y: scroll;
     height: 50vh;
 }
 
@@ -20,10 +22,9 @@
         width: 15rem;
     }
 }
+
 @media only screen and ((min-width: 800px)) {
     .card-collectibles {
         width: 20rem;
     }
 }
-
-

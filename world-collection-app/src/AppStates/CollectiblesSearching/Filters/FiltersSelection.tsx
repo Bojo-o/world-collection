@@ -13,17 +13,17 @@ import { useMediaQuery } from "react-responsive";
 /**
  * Props necessary for FiltersSelection component.
  */
-export interface FiltersSelectionProps{
+export interface FiltersSelectionProps {
     /** Super class, which defines super parent of all searching collectibles. It will fetch filters, which are recomended (make a sense) for this class. */
-    superClass : Entity;
+    superClass: Entity;
     /** Func for handling going to the next step in search collectibles process.*/
-    handleNext : (appliedFilters : AppliedFilterData[]) => void;
+    handleNext: (appliedFilters: AppliedFilterData[]) => void;
     /** Filter, which have already been applied. */
-    usedFilters : AppliedFilterData[];
+    usedFilters: AppliedFilterData[];
     /** Notify parent component that the user want to change applied filters. The user want to remove some applied filter. */
-    handleUsedFiltersChange : (filters : AppliedFilterData[]) => void;
+    handleUsedFiltersChange: (filters: AppliedFilterData[]) => void;
     /** Func for handling going one step back in search collectible process. */
-    handleBack : () => void;
+    handleBack: () => void;
 }
 
 
@@ -34,34 +34,34 @@ export interface FiltersSelectionProps{
  * @param FiltersSelectionProps See FiltersSelectionProps description.
  * @returns JSX element rendering UI for viewing filters for provided super class, choosing and setting filter values, managing applied filters.
  */
-function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,handleUsedFiltersChange,handleBack} : FiltersSelectionProps){
+function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters, handleUsedFiltersChange, handleBack }: FiltersSelectionProps) {
     /** Enum with values representing state of filter selection.
      * Filters => To view list of all/recomended filters.
      * UsedFilters => TO view and manage list of applied filters.
      * Filter => render UI for specific filter, where the user can sets filter value and adds it to the list of applied filters
      */
-    enum FiltersState{
+    enum FiltersState {
         Filters,
         UsedFilters,
         Filter
     }
-    const [loadingFilters,setLoadingFilters] = useState(false);
-    const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
+    const [loadingFilters, setLoadingFilters] = useState(false);
+    const [errorForFetchingFilters, setErrorForFetchingFilters] = useState(false);
 
-    const [showingFilters,setShowingFilters] = useState<FilterIdentificationData[]>([]);
+    const [showingFilters, setShowingFilters] = useState<FilterIdentificationData[]>([]);
 
-    const [recomendedFilters,setRecomendedFilters] = useState<FilterIdentificationData[]>([]);
+    const [recomendedFilters, setRecomendedFilters] = useState<FilterIdentificationData[]>([]);
 
-    const [allFilters,setAllFilters] = useState<FilterIdentificationData[]>([]);
-    const [loadingAllFilters,setLoadingAllFilters] = useState(false);
-    const [errorForFetchingAllFilters,setErrorForFetchingAllFilters] = useState(false);
+    const [allFilters, setAllFilters] = useState<FilterIdentificationData[]>([]);
+    const [loadingAllFilters, setLoadingAllFilters] = useState(false);
+    const [errorForFetchingAllFilters, setErrorForFetchingAllFilters] = useState(false);
 
-    const [selectedFilter,setSelectedFilter] = useState<FilterIdentificationData|null>(null);
-    const [appliedFilters,setAppliedFilters] = useState<AppliedFilterData[]>(usedFilters);
+    const [selectedFilter, setSelectedFilter] = useState<FilterIdentificationData | null>(null);
+    const [appliedFilters, setAppliedFilters] = useState<AppliedFilterData[]>(usedFilters);
 
-    const [filterSearchWord,setFIlterSearchWord] = useState<string>("");
+    const [filterSearchWord, setFIlterSearchWord] = useState<string>("");
 
-    const [filterState,setFilterState] = useState<FiltersState>(FiltersState.Filters)
+    const [filterState, setFilterState] = useState<FiltersState>(FiltersState.Filters)
 
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
@@ -70,28 +70,28 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
      * @param type Type of value of filter.
      * @returns bootstrapt class name representing color.
      */
-    const getColorByFilterType = (type : DataTypeOfFilter) => {
-        if (type === DataTypeOfFilter.Quantity){
+    const getColorByFilterType = (type: DataTypeOfFilter) => {
+        if (type === DataTypeOfFilter.Quantity) {
             return "warning text-dark";
         }
-        if (type === DataTypeOfFilter.Time){
+        if (type === DataTypeOfFilter.Time) {
             return "success";
         }
-        if (type === DataTypeOfFilter.WikibaseItem){
+        if (type === DataTypeOfFilter.WikibaseItem) {
             return "info text-dark";
         }
         return "secondary";
     }
-    const handleShowingFilters = (filters : FilterIdentificationData[]) => {
+    const handleShowingFilters = (filters: FilterIdentificationData[]) => {
         setShowingFilters(filters);
     }
 
-    const handleAddFilterToAplied = (data : AppliedFilterData) => {
-        setAppliedFilters([...appliedFilters, data]) 
+    const handleAddFilterToAplied = (data: AppliedFilterData) => {
+        setAppliedFilters([...appliedFilters, data])
         setSelectedFilter(null)
         setFilterState(FiltersState.UsedFilters);
     }
-    const removeFilterFromApplied = (data : AppliedFilterData) => {
+    const removeFilterFromApplied = (data: AppliedFilterData) => {
         setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber != data.getFilter().PNumber))
     }
     /**
@@ -123,26 +123,25 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
             }
         ).catch(() => setErrorForFetchingAllFilters(true))
     }
-    const handleFilterSelection = (filter : FilterIdentificationData) => {
+    const handleFilterSelection = (filter: FilterIdentificationData) => {
         setSelectedFilter(filter);
         setFilterState(FiltersState.Filter);
     }
-    const handleFiltersSearch = (e : any) => {
+    const handleFiltersSearch = (e: any) => {
         setFIlterSearchWord(e.target.value);
     }
     /** Invokes func provided from parent component to move to the next step of search collectible process. */
-    const saveAndContinue = () =>{
+    const saveAndContinue = () => {
         handleNext(appliedFilters)
     }
     useEffect(() => {
         fetchRecomendedFiltersData()
         fetchAllFiltersData()
-    },[])
-    
+    }, [])
+
     useEffect(() => {
         handleUsedFiltersChange(appliedFilters)
-        console.log(appliedFilters)
-    },[appliedFilters])
+    }, [appliedFilters])
     /**
      * Renders UI containg list of filters with filter description (the user can switch between viewing all or recomnded filters).
      * @returns JSX element.
@@ -151,62 +150,62 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
         return (
             <>
                 <div className="border border-dark rounded" >
-                <div className="btn-group">
-                    <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Filters
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li><button className="dropdown-item" onClick={() => handleShowingFilters(recomendedFilters)}>Recomended Filters</button></li>
-                        {loadingAllFilters ? (
-                            <>
-                                <li>
-                                    <button className="dropdown-item" disabled>All filters 
-                                        {
-                                            <div className="spinner-border text-info" role="status">
-                                                <span className="visually-hidden">Loading...</span>
-                                            </div>
-                                        }
-                                    </button>
-                                </li>
-                            </>
-                        ) : (
-                            <>
-                                <li>
-                                    <button className="dropdown-item" onClick={() => handleShowingFilters(allFilters)}>All filters</button>
-                                </li>
-                            </>
-                        )}
-                    </ul>
-                </div>
+                    <div className="btn-group">
+                        <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filters
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><button className="dropdown-item" onClick={() => handleShowingFilters(recomendedFilters)}>Recomended Filters</button></li>
+                            {loadingAllFilters ? (
+                                <>
+                                    <li>
+                                        <button className="dropdown-item" disabled>All filters
+                                            {
+                                                <div className="spinner-border text-info" role="status">
+                                                    <span className="visually-hidden">Loading...</span>
+                                                </div>
+                                            }
+                                        </button>
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li>
+                                        <button className="dropdown-item" onClick={() => handleShowingFilters(allFilters)}>All filters</button>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    </div>
 
-                <input className="form-control mr-sm-2" type="search" placeholder="Search for filter" onChange={handleFiltersSearch} />
+                    <input className="form-control mr-sm-2" type="search" placeholder="Search for filter" onChange={handleFiltersSearch} />
                     <div className="list-group" id="filters">
                         {loadingFilters && (<>
-                            <button type="button" className="list-group-item list-group-item-action">{errorForFetchingFilters ? "Some error occurs, try later" : 
-                                    <div className="spinner-border text-info" role="status">
-                                        <span className="visually-hidden">Loading...</span>
-                                    </div>
+                            <button type="button" className="list-group-item list-group-item-action">{errorForFetchingFilters ? "Some error occurs, try later" :
+                                <div className="spinner-border text-info" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
                             }</button>
                         </>)}
                         {!loadingFilters && (
                             <>
                                 {showingFilters.filter((filter) => {
                                     return filter.name.toLocaleLowerCase().includes(filterSearchWord.toLocaleLowerCase())
-                                }).map((filter,index) => {
-                                    return(
+                                }).map((filter, index) => {
+                                    return (
                                         <>
-                                            
-                                            <button  key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
+
+                                            <button key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
                                                 <div className="d-flex w-100 flex-wrap justify-content-between">
                                                     <h5 className="mb-1">{filter.name}</h5>
-                                                    <small className={"badge bg-" + getColorByFilterType(filter.dataType) +" text-wrap"}>
+                                                    <small className={"badge bg-" + getColorByFilterType(filter.dataType) + " text-wrap"}>
                                                         {filter.dataType}
                                                     </small>
                                                 </div>
                                                 <p className="mb-1">{filter.description}</p>
                                             </button>
                                         </>
-                                        
+
                                     )
                                 })}
                             </>
@@ -224,20 +223,20 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
     const renderFilter = () => {
         return (
             <>
-                    <div className="m-2">
-                        <button type="button" className="btn btn-danger" onClick={() => setFilterState(FiltersState.Filters)}>
-                            Back to filters
-                        </button>
-                        {selectedFilter != null && (
-                            <>
-                                <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
-                                {selectedFilter.dataType == DataTypeOfFilter.Time && (<TimeFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                                {selectedFilter.dataType == DataTypeOfFilter.WikibaseItem && (<ItemFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                                {selectedFilter.dataType == DataTypeOfFilter.Quantity && (<QuantityFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                            </>
-                        )}
-                        
-                    </div>
+                <div className="m-2">
+                    <button type="button" className="btn btn-danger" onClick={() => setFilterState(FiltersState.Filters)}>
+                        Back to filters
+                    </button>
+                    {selectedFilter != null && (
+                        <>
+                            <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
+                            {selectedFilter.dataType == DataTypeOfFilter.Time && (<TimeFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
+                            {selectedFilter.dataType == DataTypeOfFilter.WikibaseItem && (<ItemFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
+                            {selectedFilter.dataType == DataTypeOfFilter.Quantity && (<QuantityFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied} />)}
+                        </>
+                    )}
+
+                </div>
             </>
         )
     }
@@ -251,14 +250,14 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
                 <div className="border border-dark rounded">
                     <h3>Used filters :</h3>
                     <ul className="list-group" id="used-filters">
-                        {appliedFilters.map((filter,index) => {
-                            return(
+                        {appliedFilters.map((filter, index) => {
+                            return (
                                 <li key={index} className="list-group-item ">
                                     <div className={"d-flex flex-" + ((isBigScreen) ? "row" : "column") + " justify-content-between"}>
                                         <div >
                                             <h5 className="mb-1"> {filter.getFilter().name}</h5>
-                                            <small className={"badge bg-" + getColorByFilterType(filter.getFilter().dataType) +" text-wrap "}>
-                                                            {filter.getFilter().dataType}
+                                            <small className={"badge bg-" + getColorByFilterType(filter.getFilter().dataType) + " text-wrap "}>
+                                                {filter.getFilter().dataType}
                                             </small>
                                             <p>{filter.getValueOfFilter().getString()}</p>
                                         </div>
@@ -274,9 +273,9 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
             </>
         )
     }
-    return(
-        <>  
-            <div className='d-flex flex-row  '> 
+    return (
+        <>
+            <div className='d-flex flex-row  '>
 
                 <div className='side-menu d-flex flex-column '>
                     <button type="button" className="btn btn-outline-light" onClick={handleBack}>
@@ -296,14 +295,14 @@ function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,han
                     </button>
 
                 </div>
-            
+
                 <div className="w-100 filter-container">
-                    {filterState==FiltersState.Filters && renderFilters()}
-                    {filterState==FiltersState.UsedFilters && renderUsedFilters()}
-                    {filterState==FiltersState.Filter && renderFilter()}
+                    {filterState == FiltersState.Filters && renderFilters()}
+                    {filterState == FiltersState.UsedFilters && renderUsedFilters()}
+                    {filterState == FiltersState.Filter && renderFilter()}
                 </div>
-                
-            
+
+
             </div>
         </>
     )

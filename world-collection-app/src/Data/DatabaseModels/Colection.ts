@@ -2,11 +2,11 @@
  * Collection Interface.
  * Properties names coresponds with names of collection on the backend.
  */
-export interface ICollection{
-    collection_id : number,
-    name : string,
-    visited : number,
-    notVisited : number
+export interface ICollection {
+    collection_id: number,
+    name: string,
+    visited: number,
+    notVisited: number
 }
 /**
  * Data model representing collection.
@@ -15,13 +15,13 @@ export class Collection {
     /**The unique ID of collection */
     collectionID: number;
     /** Name of collection */
-    name : string ;
+    name: string;
     /** Number of collectibles, which have been already visited by user and belong to this collection */
-    visitedCollectibles : number;
+    visitedCollectibles: number;
     /** Number of collectibles, which have not been visited yet by user and belong to this collection*/
-    notVisitedCollectibles : number;
+    notVisitedCollectibles: number;
 
-    constructor({collection_id,name,visited,notVisited} : ICollection){
+    constructor({ collection_id, name, visited, notVisited }: ICollection) {
         this.collectionID = collection_id;
         this.name = name;
         this.visitedCollectibles = visited;
@@ -29,13 +29,13 @@ export class Collection {
     }
 
     getObject = () => {
-        return {collection_id : this.collectionID,name : this.name,visited : this.visitedCollectibles,notVisited : this.notVisitedCollectibles}
+        return { collection_id: this.collectionID, name: this.name, visited: this.visitedCollectibles, notVisited: this.notVisitedCollectibles }
     }
     /**
      * Help method for computing number of all collectibles belonging to the collection.
      * @returns Number of all collectibles, which belong to the collection.
      */
-    getCountOfCollectibles = () => {       
+    getCountOfCollectibles = () => {
         return +this.visitedCollectibles + +this.notVisitedCollectibles;
     }
 }

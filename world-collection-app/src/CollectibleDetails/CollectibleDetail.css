@@ -1,5 +1,6 @@
 .details_scroll {
     list-style: none;
-    overflow:hidden; overflow-y:scroll;
+    overflow: hidden;
+    overflow-y: scroll;
     height: 25vh;
 }

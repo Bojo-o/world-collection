@@ -16,9 +16,9 @@ import { DatabaseAPI } from "../../API/DatabaseAPI";
 /**
  * Props neccesary for CollectibleMarker.
  */
-export interface CollectibleMarkerProps{
+export interface CollectibleMarkerProps {
     /** Collectible data model containing data about collectible, for which it renders marker and card when marker was clicked on by user*/
-    collectible : Collectible;
+    collectible: Collectible;
 }
 /**
  * Func rendering collectible marker into map.
@@ -36,23 +36,23 @@ export interface CollectibleMarkerProps{
  * @param CollectibleMarkerProps See CollectibleMarkerProps description.
  * @returns JSX element rendering collectible marker, which if was clicked by user it also will render collectible card.
  */
-function CollectibleMarker({collectible} : CollectibleMarkerProps){
+function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
     // icon
-    const [icon,setIcon] = useState(collectible.icon);
-    const [editingIcon,setEditingIcon] = useState(false);
+    const [icon, setIcon] = useState(collectible.icon);
+    const [editingIcon, setEditingIcon] = useState(false);
     // visitation
-    const [wasCollectibleVisited,setwasCollectibleVisited] = useState(collectible.isVisit);
-    const [dateOfVisitFrom,setDateOfVisitFrom] = useState(collectible.dateFrom);
-    const [dateOfVisitTo,setDateOfVisitTo] = useState(collectible.dateTo);
-    const [editingVisitation,setEditingVisitation] = useState(false);
+    const [wasCollectibleVisited, setwasCollectibleVisited] = useState(collectible.isVisit);
+    const [dateOfVisitFrom, setDateOfVisitFrom] = useState(collectible.dateFrom);
+    const [dateOfVisitTo, setDateOfVisitTo] = useState(collectible.dateTo);
+    const [editingVisitation, setEditingVisitation] = useState(false);
     // notes
-    const [editingNotes,setEditingNotes] = useState(false);
+    const [editingNotes, setEditingNotes] = useState(false);
     // details
-    const [showingDetails,setShowingDetails] = useState(false);
+    const [showingDetails, setShowingDetails] = useState(false);
     // basic info - image, description of collectible
-    const [basicInfoOfCollectible,setBasicInfoOfCollectible] = useState<CollectibleBasicInfo>(new CollectibleBasicInfo());
-    const [loadingBasicInfo,setLoadingBasicInfo] = useState(false);
-    const [errorBasicInfo,setErrorBasicInfo] = useState(false);
+    const [basicInfoOfCollectible, setBasicInfoOfCollectible] = useState<CollectibleBasicInfo>(new CollectibleBasicInfo());
+    const [loadingBasicInfo, setLoadingBasicInfo] = useState(false);
+    const [errorBasicInfo, setErrorBasicInfo] = useState(false);
 
     const handleEditingVisitation = () => {
         setEditingVisitation((prev) => !prev);
@@ -66,14 +66,14 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     const handleEditingNotes = () => {
         setEditingNotes((prev) => !prev);
     }
-    const handleIconChange = (icon : string) => {
+    const handleIconChange = (icon: string) => {
         setIcon(icon);
     }
-    const handleNotesChange = (notes : string|null) => {
+    const handleNotesChange = (notes: string | null) => {
         collectible.notes = notes;
     }
 
-    const handleVisitationChange = (isVisit : boolean,dateFrom : DateWithPrecision|null,dateTo : DateWithPrecision|null) => {
+    const handleVisitationChange = (isVisit: boolean, dateFrom: DateWithPrecision | null, dateTo: DateWithPrecision | null) => {
         setwasCollectibleVisited(isVisit);
         setDateOfVisitFrom(dateFrom);
         setDateOfVisitTo(dateTo);
@@ -92,15 +92,15 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
         })
     }
     /** Save a new icon by invoking the right DatabaseAPI method. */
-    const saveIcon = (settedIcon : string) => {
-        return  DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber,settedIcon);
+    const saveIcon = (settedIcon: string) => {
+        return DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber, settedIcon);
     }
 
     const renderDateOfVisit = () => {
-        if (wasCollectibleVisited && dateOfVisitFrom != null){
-            if(dateOfVisitTo == null){
+        if (wasCollectibleVisited && dateOfVisitFrom != null) {
+            if (dateOfVisitTo == null) {
                 return (<h5>{dateOfVisitFrom.ToString()}</h5>);
-            }else{
+            } else {
                 return (<h5>{dateOfVisitFrom.ToString()} - {dateOfVisitTo.ToString()}</h5>)
             }
         }
@@ -109,13 +109,13 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
     // when component mount meaning it is the first called, it invokes func fetching collecible basic data
     useEffect(() => {
         fetchCollectibleBasicInfo()
-    },[])
+    }, [])
 
     return (
         <>
-            <Marker 
-                position={[collectible.latitude,collectible.longitude]}
-                icon={getIcon(icon,wasCollectibleVisited)}>
+            <Marker
+                position={[collectible.latitude, collectible.longitude]}
+                icon={getIcon(icon, wasCollectibleVisited)}>
                 <Popup>
                     <div className="scroll">
                         {loadingBasicInfo && (
@@ -127,15 +127,15 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                             <>
                                 <div className="card card-collectibles">
                                     {basicInfoOfCollectible.imageURL != null && (
-                                        <img src={basicInfoOfCollectible.imageURL} className="card-img-top" alt={"image of " + collectible.name}/>
+                                        <img src={basicInfoOfCollectible.imageURL} className="card-img-top" alt={"image of " + collectible.name} />
                                     )}
                                     <div className="card-body">
                                         <h4 className="card-title">{collectible.name}</h4>
                                         <p className="card-text">{(basicInfoOfCollectible.description != null) ? basicInfoOfCollectible.description : ""}</p>
                                         <p className="text-muted">{collectible.name} is type of:</p>
                                         <div className="d-flex flex-wrap">
-                                            {collectible.instanceOf.map((t,index) => {
-                                                return(
+                                            {collectible.instanceOf.map((t, index) => {
+                                                return (
                                                     <span key={index} className="badge bg-info text-dark">{t}</span>
                                                 )
                                             })}
@@ -148,7 +148,7 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                         )}
                                         {renderDateOfVisit()}
                                         <h5 className="text-muted">Notes</h5>
-                                            <p>{collectible.notes}</p>
+                                        <p>{collectible.notes}</p>
                                         <h5 className="text-muted">Actions</h5>
                                         <p className="text-muted">Here you can edit, visitation, icon image and see more details.</p>
                                         <div className="d-flex flex-column">
@@ -165,22 +165,22 @@ function CollectibleMarker({collectible} : CollectibleMarkerProps){
                                             </>
                                         )}
                                         {editingVisitation && (
-                                                <>
-                                                    <h5>Editing Visitation</h5>
-                                                    <Visitation collectible={collectible} updateVisitation={handleVisitationChange}/>
-                                                </>
+                                            <>
+                                                <h5>Editing Visitation</h5>
+                                                <Visitation collectible={collectible} updateVisitation={handleVisitationChange} />
+                                            </>
                                         )}
                                         {editingIcon && (
-                                                <>
-                                                    <h5>Editing Icon</h5>
-                                                    <IconsSelector  handleChangeOfIcon={handleIconChange} saveIconChange={saveIcon}/>
-                                                </>
+                                            <>
+                                                <h5>Editing Icon</h5>
+                                                <IconsSelector handleChangeOfIcon={handleIconChange} saveIconChange={saveIcon} />
+                                            </>
                                         )}
 
                                         {editingNotes && (
                                             <>
                                                 <h5>Editing Notes</h5>
-                                                <NotesEditation collectible={collectible} updateNotes={handleNotesChange}/>
+                                                <NotesEditation collectible={collectible} updateNotes={handleNotesChange} />
                                             </>
                                         )}
                                     </div>

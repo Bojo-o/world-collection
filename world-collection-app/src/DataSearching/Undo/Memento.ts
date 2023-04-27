@@ -15,13 +15,13 @@ export enum TypeOfChange {
  */
 export class Memento {
     /** Original raw collectible, before editation */
-    private item : RawCollectible;
+    private item: RawCollectible;
     /**Type of change. To knows how to undo that. */
-    private change : TypeOfChange;
+    private change: TypeOfChange;
     /** Number of index, which has raw collectible. Important for removing item, then restoring it backs at the original index. */
-    private changeAtIndex : number;
+    private changeAtIndex: number;
 
-    constructor(result : RawCollectible,change : TypeOfChange, changeAtIndex : number){
+    constructor(result: RawCollectible, change: TypeOfChange, changeAtIndex: number) {
         this.item = result;
         this.change = change;
         this.changeAtIndex = changeAtIndex;
@@ -29,9 +29,9 @@ export class Memento {
     // get state
     get = () => {
         return {
-            result : this.item,
-            change : this.change,
-            index : this.changeAtIndex,
+            result: this.item,
+            change: this.change,
+            index: this.changeAtIndex,
         }
     }
 }

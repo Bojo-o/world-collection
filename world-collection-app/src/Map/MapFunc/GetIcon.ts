@@ -6,10 +6,10 @@ import L from "leaflet";
  * @param grayFlag Flag, true if into image icon className will be assinged "gray" value.
  * @returns icon object, which can be assing into marker property icon.
  */
-export function getIcon(nameOfIcon : string,grayFlag : boolean){
+export function getIcon(nameOfIcon: string, grayFlag: boolean) {
     return L.icon({
-        iconUrl : require('../../static/Icons/'+nameOfIcon+'.png'),
-        iconSize : [64,64],
-        className :  (grayFlag) ? "" : "gray"
+        iconUrl: require('../../static/Icons/' + nameOfIcon + '.png'),
+        iconSize: [64, 64],
+        className: (grayFlag) ? "" : "gray"
     })
 }

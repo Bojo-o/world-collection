@@ -6,31 +6,31 @@ import LoadingStatus from "../Gadgets/LoadingStatus";
 /**
  * Props necessary for CollectionCreation.
  */
-export interface CollectionCreationProps{
+export interface CollectionCreationProps {
     /** Array of all collection, which exist in database, it is necessary have this data for checking id a name of new collection is unique and is still not used.*/
-    collection : Collection[];
+    collection: Collection[];
     /** Func for notify parent component to handle cancel of creation of collection. */
-    handleCancel : () => void;
+    handleCancel: () => void;
 }
 /**
  * Func rendering UI for creating and saving a new collection.
  * @param CollectionCreationProps See CollectionCreationProps description.
  * @returns JSX element rendering UI for creating a new collection.
  */
-function CollectionCreation({collection,handleCancel} : CollectionCreationProps){
-    const [value,setValue] = useState<string>('')
-    const [savingCollection,setSavingCollection] = useState(false);
-    const [savingCollectionError,setSavingCollectionError] = useState(false);
-    const [status,setStatus] = useState<string|null>(null);
+function CollectionCreation({ collection, handleCancel }: CollectionCreationProps) {
+    const [value, setValue] = useState<string>('')
+    const [savingCollection, setSavingCollection] = useState(false);
+    const [savingCollectionError, setSavingCollectionError] = useState(false);
+    const [status, setStatus] = useState<string | null>(null);
 
-    const handleChange = (event : any) => {
+    const handleChange = (event: any) => {
         const value = event.target.value;
         setValue(value);
     }
-    const existCollectionByThisName = (name : string) => {
+    const existCollectionByThisName = (name: string) => {
         let result = false;
         collection.forEach((c) => {
-            if (c.name === name){
+            if (c.name === name) {
                 result = true;
             }
         })
@@ -39,13 +39,12 @@ function CollectionCreation({collection,handleCancel} : CollectionCreationProps)
     const saveCollection = () => {
         setSavingCollectionError(false)
         setSavingCollection(true)
-        DatabaseAPI.postCollectionCreation(value).then((status) =>
-        {
+        DatabaseAPI.postCollectionCreation(value).then((status) => {
             setStatus(status);
             setSavingCollection(false)
         }).catch(() => {
             setSavingCollectionError(true)
-        }) 
+        })
     }
     const handleClose = () => {
         setStatus(null);
@@ -53,7 +52,7 @@ function CollectionCreation({collection,handleCancel} : CollectionCreationProps)
         setSavingCollection(false)
         handleCancel()
     }
-    return(
+    return (
         <>
             <h3>Create new Collection</h3>
             <div className='mb-3'>
@@ -69,11 +68,11 @@ function CollectionCreation({collection,handleCancel} : CollectionCreationProps)
                         <div id="collectionNameHelp" className="form-text">Collection name already have existed. Use another.</div>
                     </>
                 )}
-                
+
             </div>
             {savingCollection && (
                 <>
-                    <LoadingStatus error={savingCollectionError} errorText={"Something went wrong, try again"} loadingText={"Saving collection"}/>
+                    <LoadingStatus error={savingCollectionError} errorText={"Something went wrong, try again"} loadingText={"Saving collection"} />
                 </>
             )}
             {status != null && (<>

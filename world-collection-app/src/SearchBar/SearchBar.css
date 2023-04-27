@@ -1,9 +1,10 @@
 .searchedResults {
     list-style: none;
-    overflow:hidden; overflow-y:scroll;
+    overflow: hidden;
+    overflow-y: scroll;
     height: 30vh;
 }
 
-.search-bar-dropdown{
+.search-bar-dropdown {
     width: 80%;
 }

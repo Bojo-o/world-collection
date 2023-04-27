@@ -16,8 +16,8 @@ const postVisitation = "post/set_visit";
 const postCollectionRename = "post/collection_update_rename";
 const postCollectionDelete = "post/collection_update_delete";
 const postCollectionsMerge = "post/collection_update_merge";
-const postCollectibleDelete="/post/collectible_delete";
-const postCollectibleRename="/post/collectible_update_name";
+const postCollectibleDelete = "/post/collectible_delete";
+const postCollectibleRename = "/post/collectible_update_name";
 const postCreateCollection = "/post/collection_creation";
 const postCollectibleSetIcon = "/post/collectible_update_icon";
 const postSetIconForAllCollectiblesInCollection = "/post/collectibles_in_collection_update_icons";
@@ -27,19 +27,18 @@ const postCollectibleSetNotes = "/post/collectible_update_notes";
  * Class for posting data to backend Database API and then retriving data or status from backend Database API.
  */
 export class DatabaseAPI {
-    private static convertToStatusMSG(data : any) : string {
+    private static convertToStatusMSG(data: any): string {
         return data['status'];
     }
-    private static convertToListOfCollectionDataModel(data : any[]) : Collection[] {
-        let collections : Collection[] = data.map((d : any) => new Collection(d));
+    private static convertToListOfCollectionDataModel(data: any[]): Collection[] {
+        let collections: Collection[] = data.map((d: any) => new Collection(d));
         return collections;
     }
-    private static convertToListOfCollectibleDataModel(data : any[]) : Collectible[] {
-        let collectibles : Collectible[] = data.map((d : any) => new Collectible(d));
-        console.log(collectibles)
+    private static convertToListOfCollectibleDataModel(data: any[]): Collectible[] {
+        let collectibles: Collectible[] = data.map((d: any) => new Collectible(d));
         return collectibles;
     }
-    private static convertToAskedResult(data : any) : boolean {
+    private static convertToAskedResult(data: any): boolean {
         let result = data['result'];
         return (result == "1") ? true : false;
     }
@@ -48,20 +47,19 @@ export class DatabaseAPI {
      * @param name Name, which we want to check if is already used.
      * @returns True if name is taken.
      */
-    public static async existsCollectionWithName(name : string){
+    public static async existsCollectionWithName(name: string) {
         let data = Fetch.postAndFetch(baseDatabaseAPIUrl + askIfCollectionExists,
             {
-            'name' :name,
-        });
+                'name': name,
+            });
         return this.convertToAskedResult(data);
     }
     /**
      * Obtains from Database API all collections.
      * @returns Array of Collections.
      */
-    public static async getAllCollections(){
-        let data  = Fetch.postAndFetch(baseDatabaseAPIUrl + getAllCollections,{});
-        console.log(data)
+    public static async getAllCollections() {
+        let data = Fetch.postAndFetch(baseDatabaseAPIUrl + getAllCollections, {});
         return data.then(this.convertToListOfCollectionDataModel);
     }
     /**
@@ -69,9 +67,9 @@ export class DatabaseAPI {
      * @param collectionID Number of collection, from whom we want to obtain collectibles.
      * @returns Array of Collectibles.
      */
-    public static async getCollectiblesInCollection(collectionID : Number){
-        let data  = Fetch.postAndFetch(baseDatabaseAPIUrl + getAllCollectiblesInCollection,{
-            'collectionID' : collectionID
+    public static async getCollectiblesInCollection(collectionID: Number) {
+        let data = Fetch.postAndFetch(baseDatabaseAPIUrl + getAllCollectiblesInCollection, {
+            'collectionID': collectionID
         });
         return data.then(this.convertToListOfCollectibleDataModel);
     }
@@ -84,23 +82,23 @@ export class DatabaseAPI {
      * @param dateTo Ending point of range of visit.
      * @returns Status message, if this process was successful.
      */
-    public static async setCollectibleVisitation(QNumberOfCollectible : string,isVisit : boolean,dateFormat : string|null=null,dateFrom : DateWithPrecision|null=null,dateTo : DateWithPrecision|null=null){
-        let dateFromString  : string = 'null'
-        let dateToString  : string = 'null'
-        if (dateFrom != null){
+    public static async setCollectibleVisitation(QNumberOfCollectible: string, isVisit: boolean, dateFormat: string | null = null, dateFrom: DateWithPrecision | null = null, dateTo: DateWithPrecision | null = null) {
+        let dateFromString: string = 'null'
+        let dateToString: string = 'null'
+        if (dateFrom != null) {
             dateFromString = dateFrom.getDate();
         }
-        if (dateTo != null){
+        if (dateTo != null) {
             dateToString = dateTo.getDate();
         }
-        let data =Fetch.postAndFetch(baseDatabaseAPIUrl + postVisitation,
+        let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postVisitation,
             {
-            'QNumber': QNumberOfCollectible,
-            'isVisit' : isVisit,
-            'dateFormat' : dateFormat,
-            'dateFrom' : dateFromString,
-            'dateTo' : dateToString
-        });
+                'QNumber': QNumberOfCollectible,
+                'isVisit': isVisit,
+                'dateFormat': dateFormat,
+                'dateFrom': dateFromString,
+                'dateTo': dateToString
+            });
         return this.convertToStatusMSG(data);
     }
     /**
@@ -109,12 +107,12 @@ export class DatabaseAPI {
      * @param collectibles Collectibles, which we want to add into collection.
      * @returns Status message, if this process was successful.
      */
-    public static async addCollectiblesIntoCollection(collectionID : number,collectibles : RawCollectible[]){
+    public static async addCollectiblesIntoCollection(collectionID: number, collectibles: RawCollectible[]) {
         let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postPushCollectiblesIntoCollection,
             {
-            'collectibles' : collectibles,
-            'collectionID' : collectionID
-        });
+                'collectibles': collectibles,
+                'collectionID': collectionID
+            });
         return this.convertToStatusMSG(data);
     }
     /**
@@ -122,11 +120,11 @@ export class DatabaseAPI {
      * @param collectionName Name of the new collection.
      * @returns Status message, if this process was successful.
      */
-    public static async postCollectionCreation(collectionName : string){
+    public static async postCollectionCreation(collectionName: string) {
         let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postCreateCollection,
             {
-            'collection_name' : collectionName
-        });
+                'collection_name': collectionName
+            });
         return this.convertToStatusMSG(data);
     }
     /**
@@ -134,11 +132,11 @@ export class DatabaseAPI {
      * @param updatedCollectionID ID of existed collection.
      * @param newName A new name of collection.
      */
-    public static postCollectionUpdateRename(updatedCollectionID : Number,newName : string){
+    public static postCollectionUpdateRename(updatedCollectionID: Number, newName: string) {
         Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionRename,
             {
-                'CollectionID' : updatedCollectionID,
-                'newName' : newName
+                'CollectionID': updatedCollectionID,
+                'newName': newName
             }
         );
     }
@@ -147,10 +145,10 @@ export class DatabaseAPI {
      * Note that, each collectible belonging to this collection will be deleted.
      * @param CollectionID ID of existed collection.
      */
-    public static postCollectionUpdateDelete(CollectionID : Number){
+    public static postCollectionUpdateDelete(CollectionID: Number) {
         Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionDelete,
             {
-                'CollectionID' : CollectionID
+                'CollectionID': CollectionID
             }
         );
     }
@@ -160,11 +158,11 @@ export class DatabaseAPI {
      * @param CollectionID ID of collection, which will be merged into other.
      * @param newCollectionID ID of collection, into which collectibles will be moved.
      */
-    public static postCollectionUpdateMerge(CollectionID : Number,newCollectionID : Number){
+    public static postCollectionUpdateMerge(CollectionID: Number, newCollectionID: Number) {
         Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionsMerge,
             {
-                'CollectionID' : CollectionID,
-                'NewCollectionID' : newCollectionID
+                'CollectionID': CollectionID,
+                'NewCollectionID': newCollectionID
             }
         );
     }
@@ -173,11 +171,11 @@ export class DatabaseAPI {
      * @param collectibleQNumber QNUmber of collectible, which will be deleted.
      * @param CollectionID ID of collection, in which collectible resides.
      */
-    public static postCollectibleDeletion(collectibleQNumber : string,CollectionID : Number){
+    public static postCollectibleDeletion(collectibleQNumber: string, CollectionID: Number) {
         Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleDelete,
             {
-                'q_number' : collectibleQNumber,
-                'CollectionID' : CollectionID
+                'q_number': collectibleQNumber,
+                'CollectionID': CollectionID
             }
         )
     }
@@ -186,11 +184,11 @@ export class DatabaseAPI {
      * @param collectibleQNumber QNUmber of collectible, which name will be updated.
      * @param newName A new name of collectible.
      */
-    public static postCollectibleUpdateName(collectibleQNumber : string,newName : string){
+    public static postCollectibleUpdateName(collectibleQNumber: string, newName: string) {
         Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleRename,
             {
-                'q_number' : collectibleQNumber,
-                'name' : newName
+                'q_number': collectibleQNumber,
+                'name': newName
             }
         )
     }
@@ -200,11 +198,11 @@ export class DatabaseAPI {
      * @param icon Name of icon, which is used for rendering.
      * @returns Status message, if this process was successful.
      */
-    public static async postCollectibleUpdateIcon(collectibleQNumber : string,icon : string){
+    public static async postCollectibleUpdateIcon(collectibleQNumber: string, icon: string) {
         let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleSetIcon,
             {
-                'q_number' : collectibleQNumber,
-                'icon' : icon
+                'q_number': collectibleQNumber,
+                'icon': icon
             }
         )
         return this.convertToStatusMSG(data);
@@ -215,11 +213,11 @@ export class DatabaseAPI {
      * @param icon Name of icon, which is used for rendering.
      * @returns  Status message, if this process was successful.
      */
-    public static async postCollectiblesInCollectionUpdateIcon(collectionID : number,icon : string){
-        let data =Fetch.postAndFetch(baseDatabaseAPIUrl + postSetIconForAllCollectiblesInCollection,
+    public static async postCollectiblesInCollectionUpdateIcon(collectionID: number, icon: string) {
+        let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postSetIconForAllCollectiblesInCollection,
             {
-                'collectionID' : collectionID,
-                'icon' : icon
+                'collectionID': collectionID,
+                'icon': icon
             }
         )
         return this.convertToStatusMSG(data);
@@ -230,14 +228,14 @@ export class DatabaseAPI {
      * @param notes Information, which user want to save to collectible.
      * @returns  Status message, if this process was successful.
      */
-    public static async postCollectibleUpdateNotes(collectibleQNumber : string,notes : string|null){
+    public static async postCollectibleUpdateNotes(collectibleQNumber: string, notes: string | null) {
         let data = Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleSetNotes,
             {
-                'q_number' : collectibleQNumber,
-                'notes' : notes
+                'q_number': collectibleQNumber,
+                'notes': notes
             }
         )
         return this.convertToStatusMSG(data);
     }
-    
+
 }
