@@ -1,19 +1,38 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
-import { CollectiblesSearchQueryData } from "../ColectiblesSearchQueryData";
 
+/**
+ * Props necessary for TypeChoosing component.
+ */
 export interface TypeChoosingProps{
+    /**
+     * Func from parent component to handle going to the next step of search process.
+     * @param type Entity representing selected type/class.
+     */
     handleNext : (type : Entity,exceptionSubTypes : Entity[]) => void;
-    pickedType :Entity|null;
-    pickedExceptionSubTypes : Entity[];
+    /** Selected type/class by the user.*/
+    selectedType :Entity|null;
+    /** Array of selected exceptions types/classes by the user.*/
+    selectedExceptionSubTypes : Entity[];
 }
-function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoosingProps){
+/**
+ * Func rendering UI for searching allowed types/classes, which can be parent class of collectilbes, exceptions types/classes 
+ * (collectible have to be instance of some class, which is sub-class of type/class the user chooese, but exceptions classes
+ * are sub-class of that selected class, so it means collectible can not be instance of those exception classes).
+ * By allowed we means that those classes, which are sub-class of class "Q2221906 - geographic location".
+ * The user want to search for entities, which can be represented as collectibles (the user can visit those entities).
+ * So it makes sense to restrict list of possible options to geographic location.
+ * Then it contains mechanism for managing selection of class and exception classes.
+ * @param TypeChoosingProps See TypeChoosingProps description. 
+ * @returns JSX element rendering UI for selecting parent type/class of collectibles.
+ */
+function TypeChoosing({handleNext,selectedType,selectedExceptionSubTypes} : TypeChoosingProps){
     const SUPER_TYPE : Entity = new Entity("Q2221906","Anything") // geographic location
-    const [type,setType] = useState<Entity|null>(pickedType)
-    const [exceptionSubTypes,setExceptionSubTypes] = useState<Entity[]>(pickedExceptionSubTypes)
+    const [type,setType] = useState<Entity|null>(selectedType)
+    const [exceptionSubTypes,setExceptionSubTypes] = useState<Entity[]>(selectedExceptionSubTypes)
 
     const handleAddingTypeChoosing = (data : SearchData) => {
         setType(new Entity(data.QNumber,data.name))
@@ -33,9 +52,19 @@ function TypeChoosing({handleNext,pickedType,pickedExceptionSubTypes} : TypeChoo
     const handleRemovingExceptionSubTypeChoosing = (entity : Entity) => {
         setExceptionSubTypes((prev) => prev.filter((e) => e.getQNumber() !== entity.getQNumber()))
     }
+    /**
+     * Data getter for Search bar to search for allowed types.
+     * @param searchWord Key word used for searching.
+     * @returns Found types/classes.
+     */
     const typesDataGetter = (searchWord : string) => {
         return WikiDataAPI.searchForTypesOfCollectibles(searchWord);
     }
+    /**
+     * Data getter for Search bar to search for sub-types ofselected type.
+     * @param searchWord Key word used for searching.
+     * @returns Found sub types/classes of selected type.
+     */
     const subTypesDataGetter = (searchWord : string) => {
         let exceptionSubTypesQNumbers  = exceptionSubTypes.map((type) => { return type.getQNumber()})
         return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord,(type == null) ? "" : type.getQNumber(),exceptionSubTypesQNumbers);

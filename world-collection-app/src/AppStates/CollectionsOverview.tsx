@@ -3,10 +3,16 @@ import { Collection } from '../Data/DatabaseModels/Colection';
 import { Collectible } from '../Data/DatabaseModels/Collectible';
 import { DatabaseAPI } from '../API/DatabaseAPI';
 import MapShowingCollectibles from '../Map/MapShowingCollectibles';
-import './HomeState.css';
+import './CollectionsOverview.css';
 import { useMediaQuery } from 'react-responsive';
 
-function HomeState() {
+/**
+ * Func rendering UI, where the user can see his collections, see on tha map collection`s collectibles as markers, which are clickable.
+ * When the user click on them, it displayes collectibles card, where the user can makes visitaion, notes and icon editation.
+ * That card also contains option to see collectible`s image anddetails.
+ * @returns JSX element rendering UI for watching the uses`s collections with collectibles into them.
+ */
+function CollectionsOverview() {
     const [collections,setCollections] = useState<Collection[]>([]);
     const [collectionsToShow,setCollectionsToShow] = useState<Collection[]>([]);
     const [collectionLoading,setCollectionLoading] = useState(false);
@@ -30,11 +36,21 @@ function HomeState() {
             console.log(collectibles)
         })
     }
-    
+    /**
+     * Helping func for creating status from collections.
+     * Status format : number of visited collectibles in collection / all collectibles in collection
+     * @param collection Collection
+     * @returns String representing status.
+     */
     const convertStatus = (collection : Collection) => {
         let sum = +collection.visitedCollectibles + +collection.notVisitedCollectibles
         return   collection.visitedCollectibles.toString()+'/'+sum.toString()
     }
+    /**
+     * Helping func for computing from collection in % how many collectibles have already been visited by user.
+     * @param collection Collection
+     * @returns Number representing %.
+     */
     const computeProgress = (collection : Collection) => {
         let sum = +collection.visitedCollectibles + +collection.notVisitedCollectibles
         return (collection.visitedCollectibles/sum)*100;
@@ -52,7 +68,7 @@ function HomeState() {
             setCollectionLoading(false);
             setCollections(collections);
             setCollectionsToShow(collections)
-            console.log(collections)
+            
         }        
         );
     },[])
@@ -70,10 +86,10 @@ function HomeState() {
         return (
             <>
                 
-                <div className=' d-flex flex-column border border-dark border-2 rounded-end container' >
+                <div data-testid="collectionsMenu" className=' d-flex flex-column border border-dark border-2 rounded-end container' >
                     <div className='d-flex flex-row justify-content-between '>
                         <h1>Your Colections</h1>
-                        <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu}>
+                        <button  type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu} >
                                 <img className="align " src={ require('../static/Icons/close.png') }  width="40" height="40"/>
                         </button>
                     </div>
@@ -126,7 +142,7 @@ function HomeState() {
                 ) : (
                     <>
                         <div className='side-menu'>
-                            <button type="button" className="btn btn-outline-light" onClick={handleCollectibleMenu}>
+                            <button data-testid="buttonToOpenCollectionList" type="button" className="btn btn-outline-light" onClick={handleCollectibleMenu}>
                                 <img className="align " src={ require('../static/Icons/menu.png') }  width="40" height="40"/>
                             </button>
                         </div>
@@ -142,4 +158,4 @@ function HomeState() {
     );
 }
 
-export default HomeState;
+export default CollectionsOverview;

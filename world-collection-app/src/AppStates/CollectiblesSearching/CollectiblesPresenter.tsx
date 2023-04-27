@@ -1,22 +1,32 @@
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../API/WikiDataAPI";
 import { RawCollectible } from "../../Data/CollectibleModels/RawCollectible";
-import Result from "../../DataSearching/Results";
-import { CollectiblesSearchQueryData } from "./ColectiblesSearchQueryData";
+import FoundResultsHandler from "../../DataSearching/FoundResultsHandler";
+import { CollectiblesSearchQueryData } from "../../Data/CollectibleSearching/ColectiblesSearchQueryData";
 
-export interface CollectiblesProps{
-    queryData : CollectiblesSearchQueryData;
+/**
+ * Props necessary for CollectiblePresenter component.
+ */
+export interface CollectiblesPresenterProps{
+    /**
+     * Data neccesary for WikibaseAPI to search for collectibles.
+     */
+    dataForWikibaseAPI : CollectiblesSearchQueryData;
 }
-
-function Collectibles({queryData} : CollectiblesProps){
+/**
+ * Func which fetches raw collectibles from WikidataAPI and then provides them to component, which renders that data.
+ * @param CollectiblesPresenterProps See CollectiblesPresenterProps description.
+ * @returns JSX element rendering UI for managing found collectibles.
+ */
+function CollectiblesPresenter({dataForWikibaseAPI} : CollectiblesPresenterProps){
     const [collectibles,setCollectibles]  = useState<RawCollectible[]|null>(null);
 
     const [loading,setLoading] = useState(false);
     const [error,setError] = useState(false);
-
+    
     useEffect(() => {
         setLoading(true);
-        WikiDataAPI.searchForCollectibles(queryData).then((data) => {
+        WikiDataAPI.searchForCollectibles(dataForWikibaseAPI).then((data) => {
             setLoading(false)
             setCollectibles(data);
         }).catch(() =>
@@ -49,7 +59,7 @@ function Collectibles({queryData} : CollectiblesProps){
                 
                     {!loading && collectibles != null &&(
                         <>
-                            <Result data={collectibles}/>
+                            <FoundResultsHandler results={collectibles}/>
                         </>
                     )}
                 </div>
@@ -58,4 +68,4 @@ function Collectibles({queryData} : CollectiblesProps){
     )
 }
 
-export default Collectibles;
+export default CollectiblesPresenter;

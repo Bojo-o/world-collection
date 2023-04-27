@@ -138,13 +138,17 @@ def insert_collectibles_into_collection():
     """
 
     data = request.get_json()
-
     collectionID = data['collectionID']
     collectibles = data['collectibles']
 
+    
+    
+
     errors = []
     for collectible in collectibles:
-        insert_status = db_CRUD.create_collectible(collectible['QNumber'],collectionID,collectible['name'],collectible['subTypeOf'],collectible['lati'],collectible['long'])
+        instanceOFArr : list[str] = collectible['instanceOF']
+        instanceOF : str = '/'.join(instanceOFArr)
+        insert_status = db_CRUD.create_collectible(collectible['QNumber'],collectionID,collectible['name'],instanceOF,collectible['latitude'],collectible['longitude'])
         if insert_status is False:
             errors.append(collectible['name'])
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from "react-leaflet";
-import DraggableMarker from "../Map/Markers/DraggableMarker";
 import MapFlyToOption from "../Map/MapOptions/MapFlyToOption";
 import '../Map/Map.css';
 import SearchBar from "../SearchBar/SearchBar";
@@ -11,13 +10,18 @@ import './CollectiblesAdding.css'
 import RawCollectiblesSaving from "../DataSaving/RawCollectiblesSaving";
 import RawCollectibleCard from "../Map/Markers/RawCollectibleMarker/RawCollectibleCard";
 import { useMediaQuery } from "react-responsive";
+import MapWrapper from "../Map/MapWrapper";
 
-const center = {
-    lat: 51.505,
-    lng: -0.09,
-}
-
+/**
+ * Func rendering UI, where the user can search for colectible by Search bar, which search for collectibles by name.
+ * Found collectible can be added into list (list containing raw collectibles, which the user want to collect), which can be then saved into some collection.
+ * @returns JSX element rendering UI for searching and saving collectible.
+ */
 function CollectiblesAdding(){
+    const center = {
+        lat: 51.505,
+        lng: -0.09,
+    }
     const [position,setPosition] = useState<{lat : number,lng : number}>(center);
     const [collectibles,setCollectibles] = useState<RawCollectible[]>([]);
     const [collectible,setCollectible] = useState<RawCollectible|null>(null);
@@ -30,6 +34,11 @@ function CollectiblesAdding(){
     const changePosition = (providedCollectible : RawCollectible) => {
         setPosition({lat : providedCollectible.latitude,lng : providedCollectible.longitude});
     }
+    /**
+     * Data getter for Search bar to search for collectibles by name.
+     * @param searchWord Key word used for searching.
+     * @returns Found collectibles.
+     */
     const dataGetter = (searchWord : string) => {
         return WikiDataAPI.searchForCollectible(searchWord);
     }
@@ -41,13 +50,15 @@ function CollectiblesAdding(){
         setCollectibles([...collectibles, collectible]);
         setCollectible(null)
     }
+    /**
+    * Fetches data about collectible by QNUmber.
+    * @param QNumber QNumber of collectible.
+    */
     const fetchCollectibleData = (QNumber : string) => {
         setLoading(true)
         setError(false)
         WikiDataAPI.getCollectibleData(QNumber).then((data) => {
-            console.log(data)
             setCollectible(data)
-
             setLoading(false)
         }).catch(() => {
             setError(true)
@@ -56,6 +67,12 @@ function CollectiblesAdding(){
     const handleRemove = (collectible : RawCollectible) =>{
         setCollectibles((prev) => prev.filter((c) => c.QNumber != collectible.QNumber))
     }
+    /**
+     * Renders side menu containg Search bar for searhing specific collectibles.
+     * It manages adding to and removing from list of raw collectibles, which the user want to collect.
+     * 
+     * @returns JSX element
+     */
     const renderAddingMenu = () => {
         return (
             <>
@@ -134,15 +151,17 @@ function CollectiblesAdding(){
     const handleAddingMenu = () => {
         setShowingAddingMenu((prev) => !prev);
     }
+    /**
+     * Renders map with raw collectibles, which are in the list of raw collectibles and the current found and select collectible.
+     * @returns JSX element
+     */
     const renderMap = () => {
         return (
             <>
-                <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true} zoomControl={false}>
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        {collectible != null && (
+                <MapWrapper mapContainerBody={() => {
+                    return(
+                        <>
+                            {collectible != null && (
                             <>
                                 <Marker position={[collectible.latitude,collectible.longitude]}>
                                     <Popup>
@@ -151,21 +170,22 @@ function CollectiblesAdding(){
                                 </Marker>
                                 
                             </>
-                        )}
-                        {collectibles.map((c) => {
-                            return (
-                                <>
-                                    <Marker position={[c.latitude,c.longitude]}>
-                                        <Popup>
-                                            <RawCollectibleCard rawCollectible={c} />
-                                        </Popup>
-                                    </Marker>
-                                </>
-                            )
-                        })}
-                        <MapFlyToOption pointOfTheEarth={position} />
-                        <ZoomControl position="bottomright" zoomInText="🔍" zoomOutText="🗺️" />
-                    </MapContainer>
+                            )}
+                            {collectibles.map((c) => {
+                                return (
+                                    <>
+                                        <Marker position={[c.latitude,c.longitude]}>
+                                            <Popup>
+                                                <RawCollectibleCard rawCollectible={c} />
+                                            </Popup>
+                                        </Marker>
+                                    </>
+                                )
+                            })}
+                            <MapFlyToOption pointOfTheEarth={position} />
+                        </>
+                    )
+                }}/>
             </>
         )
     }

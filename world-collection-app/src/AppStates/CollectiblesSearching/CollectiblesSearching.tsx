@@ -4,24 +4,26 @@ import SearchByRadius from "./CollectiblesSearchingStates/SeachByRadius";
 import { Entity } from "../../Data/DataModels/Entity";
 import "./CollectiblesSearching.css"
 import AreaChoosing from "./CollectiblesSearchingStates/AreaChoosing/AreaChoosing";
-import { Areas } from "./CollectiblesSearchingStates/AreaChoosing/Areas";
-import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates/CollectiblesSearchingStates";
+import { Areas } from "../../Data/Enums/Areas";
+import { CollectiblesSearchingStates } from "../../Data/Enums/CollectiblesSearchingStates";
 import TypeChoosing from "./CollectiblesSearchingStates/TypeChoosing";
 import SearchByAdministrativeArea from "./CollectiblesSearchingStates/SearchByAdministrativeArea";
 import { AppliedFilterData } from "../../Data/FilterModels/AppliedFilterData";
-import Collectibles from "./Collectibles";
-import { CollectiblesSearchQueryData } from "./ColectiblesSearchQueryData";
+import CollectiblesPresenter from "./CollectiblesPresenter";
+import { CollectiblesSearchQueryData } from "../../Data/CollectibleSearching/ColectiblesSearchQueryData";
 import SearchByRegion from "./CollectiblesSearchingStates/SearchByRegion";
 
-
+/**
+ * Func managing states of collectible searching process.
+ * It stores current state and contains methods for handling going from one state to next state.
+ * @returns JSX element with current state of collectible searching process.
+ */
 function CollectibleSearching(){
-    //const [searchQuery,setSearchQuery] = useState<SearchCollectiblesBuilderQuery>(new SearchCollectiblesBuilderQuery());
-
     const [state,setState] = useState<CollectiblesSearchingStates>(CollectiblesSearchingStates.TypeChoosing)
     const [queryData,setQueryData] = useState<CollectiblesSearchQueryData>(new CollectiblesSearchQueryData())
 
-    const [pickedType,setPickedType] = useState<Entity|null>(null)
-    const [pickedExceptionSubTypes,setPickedExceptionSubTypes] = useState<Entity[]>([])
+    const [selectedType,setSelectedType] = useState<Entity|null>(null)
+    const [selectedExceptionSubTypes,setSelectedExceptionSubTypes] = useState<Entity[]>([])
 
     const [usedFilters,setUsedFilters] = useState<AppliedFilterData[]>([]);
     const handleUsedFiltersChange = (filters : AppliedFilterData[]) => {
@@ -29,11 +31,11 @@ function CollectibleSearching(){
     };
     const typeChoosingStateHandleNext = (type : Entity,exceptionSubTypes : Entity[]) => {
         setQueryData((prev) => prev.setTypeAndExceptionSubTypes(type,exceptionSubTypes))
-        if (type.getQNumber() != pickedType?.getQNumber()){
+        if (type.getQNumber() != selectedType?.getQNumber()){
             setUsedFilters([])
         }
-        setPickedType(type);
-        setPickedExceptionSubTypes(exceptionSubTypes);
+        setSelectedType(type);
+        setSelectedExceptionSubTypes(exceptionSubTypes);
         setState(CollectiblesSearchingStates.AreaChoosing)
     }
     const handleSetState = (newState : CollectiblesSearchingStates) => {
@@ -42,7 +44,7 @@ function CollectibleSearching(){
     const renderTypeChoosingState = () => {
         return(
             <>
-                <TypeChoosing handleNext={typeChoosingStateHandleNext} pickedType={pickedType} pickedExceptionSubTypes={pickedExceptionSubTypes}/>
+                <TypeChoosing handleNext={typeChoosingStateHandleNext} selectedType={selectedType} selectedExceptionSubTypes={selectedExceptionSubTypes}/>
             </>
             
         );
@@ -82,7 +84,6 @@ function CollectibleSearching(){
         );
     }
     const radiusAreaStateHandleNext = (center : {lat : number,lng : number}, radius : number) => {
-        //setSearchQuery(searchQuery.setRadius(center,radius));
         setQueryData((prev) => prev.setAreaSearchTypeAsRadius(radius,center))
         setState(CollectiblesSearchingStates.FiltersSelection);
     }
@@ -94,7 +95,6 @@ function CollectibleSearching(){
         )
     }
     const regionAreaStateHandleNext = (region : Entity) => {
-        //setSearchQuery(searchQuery.setRadius(center,radius));
         setQueryData((prev) => prev.setAreaSearchTypeAsRegion(region))
         setState(CollectiblesSearchingStates.FiltersSelection);
     }
@@ -129,7 +129,7 @@ function CollectibleSearching(){
     const renderFiltersSelectionState = () => {
         return (
             <>
-                <FiltersSelection filtersForType={new Entity(queryData.getType(),"filter")}
+                <FiltersSelection superClass={new Entity(queryData.getType(),"filter")}
                 handleNext={filtersSelectionStateHandleNext} usedFilters={usedFilters} handleUsedFiltersChange={handleUsedFiltersChange}
                 handleBack={() => handleSetState(CollectiblesSearchingStates.AreaChoosing)}/>
             </>
@@ -138,7 +138,7 @@ function CollectibleSearching(){
     const renderCollectiblesState = () =>{
         return(
             <>
-                <Collectibles queryData={queryData}/>
+                <CollectiblesPresenter dataForWikibaseAPI={queryData}/>
             </>
         )
     }

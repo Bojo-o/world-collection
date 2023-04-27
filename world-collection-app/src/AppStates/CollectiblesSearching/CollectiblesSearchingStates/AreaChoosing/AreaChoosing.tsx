@@ -1,9 +1,20 @@
-import { Areas } from "./Areas";
+import { Areas } from "../../../../Data/Enums/Areas";
 import CardForArea from "./CardForArea";
-
+/**
+ * Props neccesary for AreaChoosing component.
+ */
 export interface AreaChoosingProps{
+    /**
+     * Func from parent class to handles selection of area, which will be used in search collectibles process.
+     * @param areaType Type of area restriction.
+     */
     handleSelection : (areaType : Areas) => void;
 }
+/**
+ * Func rendering UI, where the user view as cards all types of area restriction, which can be used.
+ * @param AreaChoosingProps See AreaChoosingProps description. 
+ * @returns JSX element rendering UI for area type restriction selection.
+ */
 function AreaChoosing({handleSelection} : AreaChoosingProps){
     return(
         <>

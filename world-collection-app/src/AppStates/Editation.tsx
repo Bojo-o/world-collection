@@ -5,11 +5,17 @@ import { DatabaseAPI } from "../API/DatabaseAPI";
 import CollectiblesEditingTable from "../Tables/EditationTable/CollectiblesEditingTable";
 import CollectionsEditingTable from "../Tables/EditationTable/CollectionsEditingTable";
 
+/**
+ * Func rendering UI, where the user can make editation of his collection and collectibles.
+ * Collections and collectibles are displayed in editation tables.
+ * It contains implementation of all func, which manage and handle editation action such as change of name, removing, merging.
+ * @returns JSX element rendering UI for editing the user`s collections and collectibles.
+ */
 function Editation(){
     const [collectionsLoading,setCollectionsLoading] = useState<boolean>(false);
     const [collections,setCollections] = useState<Collection[]>([]); 
     const [edited,setEdited] = useState<Collection|null>(null);
- 
+
     const [merging,setMerging] = useState<Collection|null>(null);
     const [filter,setfilter] = useState<string>('');
 
@@ -34,7 +40,9 @@ function Editation(){
         fetchCollectibles()
         setfilter('')
     },[showingCollectionCollectibles])
-
+    /**
+     * Fetches the user`s collections from database via DatabaseAPI.
+     */
     const fetchCollections = () => {
         setCollectionsLoading(true);
         DatabaseAPI.getAllCollections().then( (collections) => {
@@ -43,6 +51,9 @@ function Editation(){
         }        
         );
     }
+    /**
+     * Fetches the user`s collectibles from database via DatabaseAPI.
+     */
     const fetchCollectibles = () => {
         if (showingCollectionCollectibles !== null){
             setCollectiblesLoading(true);

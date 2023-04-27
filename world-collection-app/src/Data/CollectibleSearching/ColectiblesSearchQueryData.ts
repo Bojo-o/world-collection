@@ -1,7 +1,13 @@
-import { AppliedFilterData } from "../../Data/FilterModels/AppliedFilterData"
-import { Entity } from "../../Data/DataModels/Entity"
-import { Areas } from "./CollectiblesSearchingStates/AreaChoosing/Areas"
+import { AppliedFilterData } from "../FilterModels/AppliedFilterData"
+import { Entity } from "../DataModels/Entity"
+import { Areas } from "../Enums/Areas"
 
+/**
+ * Data model representing data necessary for WikibaseAPI to search for specific collectibles.
+ * It contains methods for gradually packing more data about query.
+ * In this project is this data model used by seach collectible process, when it is converted to json object and posts to backend via WikidataAPI.
+ * During that process user choose some options, which are stored into this data model.
+ */
 export class CollectiblesSearchQueryData{
     private type : string|null = null
     private exceptionsSubTypes : string[] = []

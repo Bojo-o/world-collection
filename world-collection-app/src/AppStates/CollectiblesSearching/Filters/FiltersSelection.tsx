@@ -10,21 +10,41 @@ import QuantityFilter from "./QuantityFilter";
 import TimeFilter from "./TimeFilter";
 import { useMediaQuery } from "react-responsive";
 
+/**
+ * Props necessary for FiltersSelection component.
+ */
 export interface FiltersSelectionProps{
-    filtersForType : Entity;
+    /** Super class, which defines super parent of all searching collectibles. It will fetch filters, which are recomended (make a sense) for this class. */
+    superClass : Entity;
+    /** Func for handling going to the next step in search collectibles process.*/
     handleNext : (appliedFilters : AppliedFilterData[]) => void;
+    /** Filter, which have already been applied. */
     usedFilters : AppliedFilterData[];
+    /** Notify parent component that the user want to change applied filters. The user want to remove some applied filter. */
     handleUsedFiltersChange : (filters : AppliedFilterData[]) => void;
+    /** Func for handling going one step back in search collectible process. */
     handleBack : () => void;
 }
 
-enum FiltersState{
-    Filters,
-    UsedFilters,
-    Filter
-}
 
-function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFiltersChange,handleBack} : FiltersSelectionProps){
+/**
+ * Func rendering UI for viewing all or recomended filters (fetches from Wikidata API) for provided super class.
+ * Choosing some filter from the list and then setting filter value.
+ * Managing applied filters. The user can remove applied filter from list.
+ * @param FiltersSelectionProps See FiltersSelectionProps description.
+ * @returns JSX element rendering UI for viewing filters for provided super class, choosing and setting filter values, managing applied filters.
+ */
+function FiltersSelection({superClass: filtersForType,handleNext,usedFilters,handleUsedFiltersChange,handleBack} : FiltersSelectionProps){
+    /** Enum with values representing state of filter selection.
+     * Filters => To view list of all/recomended filters.
+     * UsedFilters => TO view and manage list of applied filters.
+     * Filter => render UI for specific filter, where the user can sets filter value and adds it to the list of applied filters
+     */
+    enum FiltersState{
+        Filters,
+        UsedFilters,
+        Filter
+    }
     const [loadingFilters,setLoadingFilters] = useState(false);
     const [errorForFetchingFilters,setErrorForFetchingFilters] = useState(false);
 
@@ -45,6 +65,11 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
 
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
+    /**
+     * Obtains specific color for specific type of value of filter.
+     * @param type Type of value of filter.
+     * @returns bootstrapt class name representing color.
+     */
     const getColorByFilterType = (type : DataTypeOfFilter) => {
         if (type === DataTypeOfFilter.Quantity){
             return "warning text-dark";
@@ -62,14 +87,16 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
     }
 
     const handleAddFilterToAplied = (data : AppliedFilterData) => {
-        setAppliedFilters([...appliedFilters, data]) //simple value
+        setAppliedFilters([...appliedFilters, data]) 
         setSelectedFilter(null)
         setFilterState(FiltersState.UsedFilters);
     }
     const removeFilterFromApplied = (data : AppliedFilterData) => {
         setAppliedFilters((prev) => prev.filter((f) => f.getFilter().PNumber != data.getFilter().PNumber))
     }
-
+    /**
+     * Fetches and sets recomended filters from Wikidata API.
+     */
     const fetchRecomendedFiltersData = () => {
         setLoadingFilters(true)
         setErrorForFetchingFilters(false);
@@ -82,6 +109,9 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
             }
         ).catch(() => setErrorForFetchingFilters(true))
     }
+    /**
+     * Fetches and sets all filters from Wikidata API.
+     */
     const fetchAllFiltersData = () => {
         setLoadingAllFilters(true)
         setErrorForFetchingAllFilters(false);
@@ -100,15 +130,7 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
     const handleFiltersSearch = (e : any) => {
         setFIlterSearchWord(e.target.value);
     }
-    const isFilterUsed = (filter : FilterIdentificationData) => {
-        let result = false;
-        appliedFilters.forEach((appliedFilter) => {
-            if (appliedFilter.getFilter().PNumber == filter.PNumber){
-                result = true;
-            }
-        })
-        return result;
-    }
+    /** Invokes func provided from parent component to move to the next step of search collectible process. */
     const saveAndContinue = () =>{
         handleNext(appliedFilters)
     }
@@ -121,7 +143,10 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
         handleUsedFiltersChange(appliedFilters)
         console.log(appliedFilters)
     },[appliedFilters])
-
+    /**
+     * Renders UI containg list of filters with filter description (the user can switch between viewing all or recomnded filters).
+     * @returns JSX element.
+     */
     const renderFilters = () => {
         return (
             <>
@@ -191,6 +216,11 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
             </>
         )
     }
+    /**
+     * Renders UI containg mechanism for setting filter value.
+     * It calls specific filter UI component based on the data type of value of filter.
+     * @returns JSX element.
+     */
     const renderFilter = () => {
         return (
             <>
@@ -201,9 +231,9 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
                         {selectedFilter != null && (
                             <>
                                 <h2>Applying {selectedFilter.dataType} filter for "{selectedFilter.name}" property</h2>
-                                {selectedFilter.dataType == DataTypeOfFilter.Time && (<TimeFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                                {selectedFilter.dataType == DataTypeOfFilter.WikibaseItem && (<ItemFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
-                                {selectedFilter.dataType == DataTypeOfFilter.Quantity && (<QuantityFilter filter={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                                {selectedFilter.dataType == DataTypeOfFilter.Time && (<TimeFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                                {selectedFilter.dataType == DataTypeOfFilter.WikibaseItem && (<ItemFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
+                                {selectedFilter.dataType == DataTypeOfFilter.Quantity && (<QuantityFilter filterData={selectedFilter} handleAddFilterToAplied={handleAddFilterToAplied}/>)}
                             </>
                         )}
                         
@@ -211,6 +241,10 @@ function FiltersSelection({filtersForType,handleNext,usedFilters,handleUsedFilte
             </>
         )
     }
+    /**
+     * Renders UI with list of applied filters. Also contains mechanism for removing applied filters from that list.
+     * @returns JSX element.
+     */
     const renderUsedFilters = () => {
         return (
             <>

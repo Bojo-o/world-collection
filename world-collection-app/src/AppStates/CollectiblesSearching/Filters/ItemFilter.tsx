@@ -1,4 +1,3 @@
-import { FILE } from "dns";
 import { useEffect, useState } from "react";
 import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
@@ -9,50 +8,77 @@ import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
 import { FilterProps } from "./FilterProps";
 
-function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
-    const[filterData,setFilterData] = useState<WikibaseItemFilterData>(new WikibaseItemFilterData());
+/**
+ * Func rendering UI, which serves to the user to searching, choosing and then setting filter value.
+ * Filter value is of WikibaseItem data type.
+ * WikibaseItem or for brevity item is value, which is some other item existing on Wikidata as item (has its own QNumber).
+ * Func contains mechanism for fetching necessary data about the given filter to restrict searching and choosing.
+ * @param FilterProps See FilterProps description.
+ * @returns JSX element rendering UI for setting a value of specific WikibaseItem filter.
+ */
+function ItemFilter({filterData: filter,handleAddFilterToAplied} : FilterProps){
+    const[filterConstraintData,setFilterConstraintData] = useState<WikibaseItemFilterData>(new WikibaseItemFilterData());
+
     const[loadingValueType,setLoadingValueType] = useState(false);
     const[errorForFetchingValueType,setErrorForFetchingValueType] = useState(false);
 
-    const [selectedItem,setSelectedItem] = useState<Entity|null>(null)
+    const [selectedValue,setSelectedValue] = useState<Entity|null>(null)
 
-    const fetchValueTypeData = () => {
+    /**
+     * Fetches from Wikidata API constraints, which restrict which value can be selected.
+     */
+    const fetchFilterValueConstraintData = () => {
         setLoadingValueType(true)
         setErrorForFetchingValueType(false);
 
         WikiDataAPI.getWikibaseItemFilterData(filter.PNumber).then(
             (data) => {
                 setLoadingValueType(false);
-                setFilterData(data);
+                setFilterConstraintData(data);
             }
         ).catch(() => setErrorForFetchingValueType(true))
     }
 
-    const handleClickedItem =  (data: SearchData) => {
-        setSelectedItem(new Entity(data.QNumber,data.name));
+    /**
+     * Sets choosed value as value which is currently selected.
+     * @param filterValue Found data as filter value, which contains necessary information to identify this value.
+     */
+    const handleChoosedValue =  (filterValue: SearchData) => {
+        setSelectedValue(new Entity(filterValue.QNumber,filterValue.name));
     }
+    /**
+     * Some filters have a predefined set of allowed values. For this filters it renders selector
+     * and this func is called when the user select some value from that selection.
+     * @param e event
+     */
     const handleSelectedItem = (e : any) => {
-        
         let valueQNumber = e.target.value;
         let item : Entity|null = null
-        filterData.one_of_constraint.forEach((constraint) => {
+        filterConstraintData.one_of_constraint.forEach((constraint) => {
             if (constraint.QNumber == valueQNumber){
                 
                 item = new Entity(constraint.QNumber,constraint.name);
             }
         })
-        setSelectedItem(item);
+        setSelectedValue(item);
     }
+    /**
+     * Invoke func, which was provided from parent component to adds this filter with value into some list of applied filters.
+     */
     const handleSave = () => {
-        if (selectedItem != null){
-            handleAddFilterToAplied(new AppliedFilterData(filter,new WikibaseItemValueData(selectedItem)));
+        if (selectedValue != null){
+            handleAddFilterToAplied(new AppliedFilterData(filter,new WikibaseItemValueData(selectedValue)));
         }
     }
-    const itemDataGetter =  (searchWord : string) => {
-        return WikiDataAPI.searchForWikibaseItem(searchWord,filterData)
+    /** Func for Search bar as data getter, which provides searching for filters WikibaseItem values. 
+     * @param searchWord Key word used for searching.
+    */
+    const valuesDataGetter =  (searchWord : string) => {
+        return WikiDataAPI.searchForWikibaseItem(searchWord,filterConstraintData)
     }
+
     useEffect(() => {
-        fetchValueTypeData()
+        fetchFilterValueConstraintData()
     },[filter])
 
     return(
@@ -66,12 +92,12 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
             </>)}
             {!loadingValueType && (
                 <>
-                    {filterData.one_of_constraint.length != 0 && (
+                    {filterConstraintData.one_of_constraint.length != 0 && (
                         <>
                             <h3>This filter supports choosing from list of constraint : </h3>
                             <select className="form-select" onChange={handleSelectedItem}>
                                 <option value="" selected disabled hidden>Choose here</option>
-                                {filterData.one_of_constraint.map((value,index) => {
+                                {filterConstraintData.one_of_constraint.map((value,index) => {
                                     return (
                                         <option key={index} value={value.QNumber}>{value.name}</option>
                                     )
@@ -79,13 +105,13 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                             </select>
                         </>
                     )}
-                    {filterData.one_of_constraint.length == 0 && (
+                    {filterConstraintData.one_of_constraint.length == 0 && (
                         <>
-                            {filterData.value_type_constraint.length != 0 && (
+                            {filterConstraintData.value_type_constraint.length != 0 && (
                                 <>
                                     <h3>Value types, you can used : </h3>
                                     <div className="d-flex flex-wrap">
-                                        {filterData.value_type_constraint.map((value,index) => {
+                                        {filterConstraintData.value_type_constraint.map((value,index) => {
                                             return (
                                                 <>
                                                     <small key={index} className={"badge bg-success text-wrap"}>
@@ -97,11 +123,11 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                                     </div>
                                 </>
                             )}
-                            {filterData.conflict_with_constraint.length != 0 && (
+                            {filterConstraintData.conflict_with_constraint.length != 0 && (
                                 <>
                                     <h3>Value type, which can not be used : </h3>
                                     <div className="d-flex flex-wrap">
-                                        {filterData.conflict_with_constraint.map((value,index) => {
+                                        {filterConstraintData.conflict_with_constraint.map((value,index) => {
                                             return (
                                                 <>
                                                     <small key={index} className={"badge bg-warning text-dark text-wrap"}>
@@ -113,11 +139,11 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                                     </div>
                                 </>
                             )}
-                            {filterData.none_of_constraint.length != 0 && (
+                            {filterConstraintData.none_of_constraint.length != 0 && (
                                 <>
                                     <h3>Values, that can not be used</h3>
                                     <div className="d-flex flex-wrap">                          
-                                        {filterData.none_of_constraint.map((value,index) => {
+                                        {filterConstraintData.none_of_constraint.map((value,index) => {
                                             return (
                                                 <>
                                                     <small key={index} className={"badge bg-danger text-wrap"}>
@@ -131,16 +157,16 @@ function ItemFilter({filter,handleAddFilterToAplied} : FilterProps){
                             )}
 
                             <h2>Search for item</h2>
-                            <SearchBar placeHolderText={"Search for wikibase items"} handleClickedResult={handleClickedItem} dataGetter={itemDataGetter} emptySearchingFlag={false}/>
+                            <SearchBar placeHolderText={"Search for wikibase items"} handleClickedResult={handleChoosedValue} dataGetter={valuesDataGetter} emptySearchingFlag={false}/>
 
                             
                             
                         </>
                     )}
 
-                    {selectedItem != null && (
+                    {selectedValue != null && (
                         <>
-                            <h3>Choosed, that item "{selectedItem.getName()}" is value of "{filter.name}"</h3>
+                            <h3>Choosed, that item "{selectedValue.getName()}" is value of "{filter.name}"</h3>
                             <button type="button" className="btn btn-success" onClick={handleSave}>Use filter</button>
                         </>
                     )}

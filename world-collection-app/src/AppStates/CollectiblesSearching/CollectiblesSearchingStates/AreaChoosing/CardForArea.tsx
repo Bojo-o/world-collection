@@ -1,5 +1,8 @@
-import { Areas } from "./Areas";
+import { Areas } from "../../../../Data/Enums/Areas";
 
+/**
+ * Props necessary for CardForArea component.
+ */
 export interface CardForAreaProps{
     imgSrc : string
     title : string
@@ -7,6 +10,12 @@ export interface CardForAreaProps{
     areaType : Areas
     handleSelection : (areaType : Areas) => void;
 }
+/**
+ * Func rendering bootstrap card element containg area information, which inform the user.
+ * Also contains button to choosing this area type for search collectibles process.
+ * @param CardForAreaProps See CardForAreaProps desciption.
+ * @returns JSX element rendering card with information about area type.
+ */
 function CardForArea({imgSrc,title,text,areaType,handleSelection} : CardForAreaProps){
     return(
         <div className="card text-center m-3" >

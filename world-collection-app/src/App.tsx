@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useState} from "react";
-import HomeState from './AppStates/HomeState';
+import CollectionsOverview from './AppStates/CollectionsOverview';
 import Editation from './AppStates/Editation';
 import CollectibleSearching from './AppStates/CollectiblesSearching/CollectiblesSearching';
 import CollectiblesAdding from './AppStates/CollectiblesAdding';
@@ -20,9 +20,9 @@ function App() {
    * Renders home state. It is the part of the app where user can view his collection, see his collectibles,that are displayed on the map.
    * @returns JSX element rendering home state.
    */
-  const renderHomeState = () => {
+  const renderCollectionsOverviewState = () => {
     return (
-      <HomeState />
+      <CollectionsOverview />
     )
   }
   /**
@@ -58,7 +58,7 @@ function App() {
   }
 
   // STATES
-  const [currentState,setCurrentState] = useState<JSX.Element>(renderHomeState);
+  const [currentState,setCurrentState] = useState<JSX.Element>(renderCollectionsOverviewState);
   
   /**
    * Flag for determining, if entity will be rendered for small or big screens.
@@ -78,7 +78,7 @@ function App() {
             <div className="navbar-brand d-flex ">
               <img src="/logoEarth.png" width="50" height="50" className="d-inline-block align-top" alt="logo"/>
               {renderNameFlag && (
-                <h2 className='text-white'>World Colletion</h2>
+                <h2 className='text-white'>World Collection</h2>
               )}
             </div>
           </div>
@@ -94,7 +94,7 @@ function App() {
     return (
       <>
         <li className={classNameOfLi}>
-          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => {setCurrentState(renderHomeState)}}>Home</button>
+          <button type='button' className='btn btn-outline-light btn-lg' onClick={() => {setCurrentState(renderCollectionsOverviewState)}}>Home</button>
         </li>
         <li className={classNameOfLi}>
           <button type='button' className='btn btn-outline-light btn-lg'onClick={() => {setCurrentState(renderCollectiblesSearchingState)}}>Find collectibles</button>

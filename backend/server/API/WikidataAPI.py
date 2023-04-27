@@ -530,7 +530,7 @@ def search_for_collectibles():
         Found collectibles data.
     '''
     data = json.loads(request.get_json())
-
+    print(data)
     # type parsing
     super_class : str = data['type']
     if super_class is None:

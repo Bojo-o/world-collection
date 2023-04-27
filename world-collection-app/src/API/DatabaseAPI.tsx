@@ -61,6 +61,7 @@ export class DatabaseAPI {
      */
     public static async getAllCollections(){
         let data  = Fetch.postAndFetch(baseDatabaseAPIUrl + getAllCollections,{});
+        console.log(data)
         return data.then(this.convertToListOfCollectionDataModel);
     }
     /**

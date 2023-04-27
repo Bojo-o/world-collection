@@ -5,7 +5,7 @@ import { WikibaseItemFilterData } from "../Data/FilterModels/WikibaseItemFilterM
 import { WikibaseItemPropertyData } from "../Data/FilterModels/WikibaseItemFilterModel/WikibaseItemPropertyData";
 import { Entity } from "../Data/DataModels/Entity";
 import { SearchData } from "../Data/DataModels/SearchData";
-import { CollectiblesSearchQueryData } from "../AppStates/CollectiblesSearching/ColectiblesSearchQueryData";
+import { CollectiblesSearchQueryData } from "../Data/CollectibleSearching/ColectiblesSearchQueryData";
 import { CollectibleBasicInfo } from "../Data/CollectibleModels/CollectibleBasicInfo";
 import { CollectibleDetail } from "../Data/CollectibleModels/CollectibleDetails";
 import { Fetch } from "./Fetch";

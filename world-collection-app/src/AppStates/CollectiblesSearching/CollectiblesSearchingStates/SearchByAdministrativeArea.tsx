@@ -3,18 +3,42 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
-import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
+/**
+ * Props necessary for SearchByAdministrativeArea component.
+ */
 export interface SearchByAdministrativeAreaProps{
+    /**
+     * Func from parent component to handle going to the next step of search process.
+     * @param area Entity representing selected administrative area.
+     * @param exceptionSubAreas Array of enities representing area exceptions. Found collectibles can not locate in those areas.
+     */
     handleNext : (area : Entity,exceptionSubAreas : Entity[]) => void;
 }
+/**
+ * Func rendering UI for searching and then selecting administrative area for collectilbe search query.
+ * It also allows to the user to select some exceptions area, which are areas located in selected administravive area.
+ * In those exceptions area found collectibles can not locate.
+ * By administrative area we mean like countries and then their sub administrave areas.
+ * @param SearchByAdministrativeAreaProps See SearchByAdministrativeAreaProps description.
+ * @returns JSX element rendering UI for administrative area selection.
+ */
 function SearchByAdministrativeArea({handleNext} : SearchByAdministrativeAreaProps){
     const [area,setArea] = useState<Entity|null>(null)
     const [exceptionSubAreas,setExceptionSubAreas] = useState<Entity[]>([])
-
+    /**
+     * Data getter for Search bar to search for administrative area.
+     * @param searchWord Key word used for searching.
+     * @returns Found administrative areas.
+     */
     const areaDataGetter = (searchWord : string) => {
         return WikiDataAPI.searchForAdministrativeAreas(searchWord);
     }
+    /**
+     * Data getter for Search bar to search for administrative area exceptions, which locate in selected area.
+     * @param searchWord Key word used for searching.
+     * @returns Found administrative areas.
+     */
     const subAreaDataGetter = (seachWord : string) => {
         let exceptionSubAreasQNumbers = exceptionSubAreas.map((type) => { return type.getQNumber()})
         return WikiDataAPI.searchForSubAdministrativeAreasOfArea(seachWord,(area != null) ? area.getQNumber() : null,exceptionSubAreasQNumbers)

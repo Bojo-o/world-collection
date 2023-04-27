@@ -16,7 +16,7 @@ export interface RawCollectiblesTableProps{
     // functions for editing, showing etc.. of raw collectibles
     removeItem : (item : RawCollectible) => void;
     editItem : (row : RawCollectible) => void;
-    cancelItem : () => void;
+    cancel : () => void;
     saveItem : (edited : RawCollectible) => void;
     handleChange : (event : any) => void;
     showDetails : (item : RawCollectible) => void;
@@ -30,7 +30,7 @@ export interface RawCollectiblesTableProps{
  * @param RawCollectiblesTableProps See RawCollectiblesTableProps description.
  * @returns JSX element rendering table with raw collectibles, which can be edited.
  */
-function RawCollectiblesTable ({records: results,edited,editItem,handleChange, cancelItem,removeItem,saveItem,showDetails,detailShowing} : RawCollectiblesTableProps) {
+function RawCollectiblesTable ({records: results,edited,editItem,handleChange,cancel,removeItem,saveItem,showDetails,detailShowing} : RawCollectiblesTableProps) {
 
     const renderHead = () => {
         return (
@@ -71,7 +71,7 @@ function RawCollectiblesTable ({records: results,edited,editItem,handleChange, c
 
                                             <td className="d-flex flex-wrap justify-content-center">
                                                 <button type="button" className="btn btn-success" onClick={() =>  saveItem(edited)}>Save</button>
-                                                <button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button>
+                                                <button key={index} type="button" className="btn btn-danger" onClick={cancel}>Cancel</button>
                                             </td>
                                             
                                         </>
@@ -107,7 +107,7 @@ function RawCollectiblesTable ({records: results,edited,editItem,handleChange, c
                                             (
                                                 <>    
                                                     <td className="d-flex flex-wrap justify-content-center">
-                                                        <button key={index} type="button" className="btn btn-danger" onClick={cancelItem}>Cancel</button>
+                                                        <button key={index} type="button" className="btn btn-danger" onClick={cancel}>Cancel</button>
                                                     </td>                                                   
                                                 </>   
                                             )

@@ -3,14 +3,32 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
-import { CollectiblesSearchingStates } from "./CollectiblesSearchingStates";
 
+
+/**
+ * Props necessary for SeachByRegion component.
+ */
 export interface SearchByRegionProps{
+    /**
+     * Func from parent component to handle going to the next step of search process.
+     * @param region Entity representing selected region.
+     */
     handleNext : (region : Entity) => void;
 }
 
+/**
+ * Func rendering UI for searching and then selecting region for collectilbe search query.
+ * By regions we mean like Europe , East Asia ... (no country or administative areas).
+ * @param SearchByRegionProps See SearchByRegionProps description.
+ * @returns JSX element rendering UI for region selection.
+ */
 function SearchByRegion({handleNext} : SearchByRegionProps){
     const [region,setRegion] = useState<Entity|null>(null)
+    /**
+     * Data getter for Search bar to search for regions.
+     * @param searchWord Key word used for searching.
+     * @returns Found regions.
+     */
     const regionDataGetter = (searchWord : string) => {
     
         return WikiDataAPI.searchForRegions(searchWord);

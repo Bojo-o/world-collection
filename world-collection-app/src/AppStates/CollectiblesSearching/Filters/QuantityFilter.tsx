@@ -3,23 +3,38 @@ import { WikiDataAPI } from "../../../API/WikiDataAPI";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { QuantityValueData } from "../../../Data/FilterModels/QuantityFilterModel/QuantityValueData";
 import { QuantityFilterData, ValueRange } from "../../../Data/FilterModels/QuantityFilterModel/QuantityFilterData";
-import { Entity } from "../../../Data/DataModels/Entity";
 import { ComparisonOperator } from "../../../Data/Enums/ComparisonOperator";
 import { FilterProps } from "./FilterProps";
 import { useMediaQuery } from "react-responsive";
 
-function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
+/**
+ * Func rendering UI, which serves to the user to sets unit of provided value and for setting number representing that value.
+ * Also the user sets comparison operator for filtering.
+ * Filter value is of Quantity data type.
+ * Quantity means number value of filter. This is used  by filters such as for example elevation above see, when the user sets 
+ * height above sea level in unit which he choose.
+ * Func contains mechanism for fetching necessary data about the given filter to gets info about max and min allowed quantity of value.
+ * Also data about all units, in which the user can expressed value of filter.
+ * @param FilterProps See FilterProps description.
+ * @returns JSX element rendering UI for setting a value of specific Quantity filter.
+ */
+function QuantityFilter({filterData: filter,handleAddFilterToAplied} : FilterProps){
     const[filterData,setFilterData] = useState<QuantityFilterData>(new QuantityFilterData([],new ValueRange({max : null,min : null})));
+
     const[loadingValueType,setLoadingValueType] = useState(false);
     const[errorForFetchingValueType,setErrorForFetchingValueType] = useState(false);
 
     const[unit,setUnit] = useState<string|null>(null);
     const[value,setValue] = useState<number|undefined>(undefined);
+
     const [comparisonOperator,setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
 
     const isBigScreen = useMediaQuery({ query: '(min-width: 1024px)' })
 
-    const handleInput = (e : any) => {
+    /**
+     * Sets filter quantity value from number input.
+     */
+    const handleNumberInput = (e : any) => {
         if (e.target.value == ""){
             setValue(undefined)
             return;
@@ -28,17 +43,24 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
         let number = Math.max(filterData.range.min, Math.min(filterData.range.max, Number(e.target.value)));
         setValue(number);
     }
+
     const handleUnitChange = (e : any) => {
         setUnit(e.target.value)
     }
     const handleComparisonOperatorSelect = (e : any) => {
         setComparisonOperator(e.target.value);
     }
+    /**
+     * Invoke func, which was provided from parent component to adds this filter with value into some list of applied filters.
+     */
     const handleSave = () => {
         if (value != undefined){
             handleAddFilterToAplied(new AppliedFilterData(filter,new QuantityValueData(comparisonOperator,value,unit)));
         }
     }
+    /**
+     * Fetches from Wikidata API posibble units, in which value can be expressed, max and min quantity value.
+     */
     const fetchFilterData = () => {
         setLoadingValueType(true)
         setErrorForFetchingValueType(false);
@@ -51,9 +73,11 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
             }
         ).catch(() => setErrorForFetchingValueType(true))
     }
+
     useEffect(() => {
         fetchFilterData()
     },[filter])
+
     return(
         <div>           
             {loadingValueType && (<>
@@ -88,7 +112,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                             <>
                                 <div className="input-group mb-3">
                                 <span className="input-group-text">Min : {filterData.range.min}</span>
-                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleInput} />
+                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleNumberInput} />
                                 <span className="input-group-text">Max : {filterData.range.max}</span>
                                 </div>
                             </>
@@ -99,7 +123,7 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
                                     <h6 className="input-group-text">Max : {filterData.range.max}</h6>
                                 </div>
                                 
-                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleInput} />
+                                <input type="number" className="form-control"  placeholder="Type value" value={value} onChange={handleNumberInput} />
                                 
                             </>
                         )}
@@ -126,4 +150,4 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
         </div>
     )
 }
-export default TimeFilter;
+export default QuantityFilter;

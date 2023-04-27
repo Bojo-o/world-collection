@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {TimeWithPrecision } from "../../../Data/TimeModels/TimeWithPrecision";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
-import { FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
 import { TimeValueData } from "../../../Data/FilterModels/TimeFilterModel/TimeValueData";
 import { ComparisonOperator } from "../../../Data/Enums/ComparisonOperator";
 import { FilterProps } from "./FilterProps";
@@ -9,14 +8,27 @@ import { useMediaQuery } from "react-responsive";
 import { DatePrecision } from "../../../Data/Enums/DatePrecision";
 
 
-export enum TimePrecision{
-    Date,
-    Month,
-    Year,
-    Century
-}
 
-function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
+/**
+ * Func rendering UI, which serves to the user to sets time value for specific time filter.
+ * Also the user sets comparison operator for filtering.
+ * Filter value is of Time data type.
+ * Time value is represented as point of time.
+ * Func contains a mechanism for choosing how to enter the time. the user can enter a value such as date, year or century.
+ * Also the user can set if the setted time is before year 0 (BC).
+ * @param FilterProps See FilterProps description.
+ * @returns JSX element rendering UI for setting a time value of specific Time filter.
+ */
+function TimeFilter({filterData: filter,handleAddFilterToAplied} : FilterProps){
+    /**
+     * Enum with time precision representing date format, which the user will used.
+     */
+    enum TimePrecision{
+        Date,
+        Month,
+        Year,
+        Century
+    }
     const [timeRepresentation,setTimeRepresentation] = useState<TimePrecision>(TimePrecision.Year)
     const [comparisonOperator,setComparisonOperator] = useState<ComparisonOperator>(ComparisonOperator.EqualTo)
 
@@ -45,13 +57,19 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
             setTime(new TimeWithPrecision(DatePrecision.Day,isBC,parseInt(dateSplited[0]),parseInt(dateSplited[1]),parseInt(dateSplited[2])));
         }
     }
-    const renderDateInput = (name : string,renderAsMonthType = false) => {
+    /**
+     * Renders input, into which the user can type date.
+     * @param name Name for heading naming date input.
+     * @param renderAsMonthFlag True if the user is allowed to picks only mounth and year (mm-yyyy). False represents date (dd-mm-yyyy)
+     * @returns JSX element rendering date/mounth input with description.
+     */
+    const renderDateInput = (name : string,renderAsMonthFlag = false) => {
         return(
             <>
                 <h4>Choose {name}:</h4>
                     <div className="input-group mb-3">
                         <span className="input-group-text" id={"date-addon-"}>{name}</span>
-                        <input className="form-control" type={renderAsMonthType ? "month" : "date"} name={name} aria-describedby={"date-addon-"} onChange={handleDate}></input>
+                        <input className="form-control" type={renderAsMonthFlag ? "month" : "date"} name={name} aria-describedby={"date-addon-"} onChange={handleDate}></input>
                     </div>
             </>
         )
@@ -72,10 +90,16 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
     const handleIsBC = () => {
         setIsBC((p) => !p);
     }
-
-    const renderTimeNumberInput = (name : string,handleFunc : (e : any) => void ,showAsCentury : boolean = false) => {
+    /**
+     * Renders input, into which the user can type number representing years or centuries.
+     * @param name Name for heading naming number input.
+     * @param handleFunc Func for handling change of value.
+     * @param showAsCenturyFlag True means that input value represents century. False represents years.
+     * @returns JSX element rendering number input with description and checkbox for setting BC years.
+     */
+    const renderTimeNumberInput = (name : string,handleFunc : (e : any) => void ,showAsCenturyFlag : boolean = false) => {
         let value : number =  (time == null) ? 1 : time.getYear();
-        if (showAsCentury){
+        if (showAsCenturyFlag){
             if (value%100 == 0){
                 value = ~~(value/100);
             }else{
@@ -105,6 +129,9 @@ function TimeFilter({filter,handleAddFilterToAplied} : FilterProps){
             </>
         )
     }
+    /**
+     * Invoke func, which was provided from parent component to adds this filter with value into some list of applied filters.
+     */
     const handleSave = () => {
         if (time != null){
             handleAddFilterToAplied(new AppliedFilterData(filter,new TimeValueData(comparisonOperator,time)));

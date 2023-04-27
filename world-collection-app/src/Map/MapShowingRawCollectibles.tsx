@@ -13,7 +13,7 @@ export interface MapShowingRawCollectiblesProps {
     edited : RawCollectible|null;
     removeItem : (item : RawCollectible) => void;
     editItem : (item : RawCollectible) => void;
-    cancelItem : () => void;
+    cancel : () => void;
     saveItem : (item : RawCollectible) => void;
     handleNameChange : (event : any) => void;
 }
@@ -22,7 +22,7 @@ export interface MapShowingRawCollectiblesProps {
  * @param MapShowingRawCollectiblesProps See MapShowingRawCollectiblesProps description.
  * @returns JSX elemnt rendering map, which contains markers with raw collectibles.
  */
-function MapShowingRawCollectibles({rawCollectiblesToShow: markers,edited,removeItem,editItem,cancelItem,saveItem,handleNameChange: handleChange}: MapShowingRawCollectiblesProps) {  
+function MapShowingRawCollectibles({rawCollectiblesToShow: markers,edited,removeItem,editItem,cancel,saveItem,handleNameChange: handleChange}: MapShowingRawCollectiblesProps) {  
     
     return (
         <>
@@ -30,7 +30,7 @@ function MapShowingRawCollectibles({rawCollectiblesToShow: markers,edited,remove
                 return(
                     <>
                         {markers.map((waypoint,index) => {                  
-                        return <RawCollectibleMarker key={index} rawCollectible={waypoint} removeItem={removeItem} edited={edited} editItem={editItem} cancelItem={cancelItem} saveItem={saveItem} handleNameChange={handleChange}/>
+                        return <RawCollectibleMarker key={index} rawCollectible={waypoint} removeItem={removeItem} edited={edited} editItem={editItem} cancelItem={cancel} saveItem={saveItem} handleNameChange={handleChange}/>
                         })}
 
                         <MapBoundsOption waypoints={extractFromObjectCoordinateData(markers)}/>
