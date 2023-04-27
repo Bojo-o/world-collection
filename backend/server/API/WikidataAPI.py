@@ -7,22 +7,22 @@ from .WikidataQueries.CollectiblesSearchQueries.AroundCollectiblesSearchQueryBui
 from .WikidataQueries.CollectiblesSearchQueries.AdministrativeAreaCollectiblesSearchQueryBuilder import AdministrativeAreaCollectiblesSearchQueryBuilder
 
 from .WikidataQueries.SearchQueries.SearchByClassRestrictionQueryBuilder import TYPES
-#from .SearchQuery.SearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
+# from .SearchQuery.SearchQueryBuilder import SearchClassesQueryBuilder, SearchInstancesQueryBuilder
 from . import SparqlPoint
 from . import Formater
 from .WikidataQueries.SearchQueries.SearchAreaQueryBuilders import SearchAreaQueryBuilder
 from .WikidataQueries.SearchQueries.SearchCollectibleTypesQueryBuilder import SearchCollectibleTypesQueryBuilder
 from flask import (
-    Blueprint, current_app,request
+    Blueprint, current_app, request
 )
 from .WikidataQueries.FilterQueries.FilterSearchQueryBuilder import FilterSearchQueryBuilder
-from .WikidataQueries.FilterQueries.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder , DATATYPES
+from .WikidataQueries.FilterQueries.FilterDataQueryBuilder import PROPERTY_CONSTRAINT_TYPE, FilterDataQueryBuilder, DATATYPES
 from .WikidataQueries.SearchQueries.SearchWikibaseItemQueryBuilder import SearchWikibaseItemQueryBuilder
 
 from .WikidataQueries.CollectiblesSearchQueries.CollectiblesSearchQueryBuilder import CollectiblesSearchQueryBuilder
 from .WikidataQueries.CollectiblesSearchQueries.FiltersData.ComparisonOperators import get_ComparisonOperator
 from .WikidataQueries.CollectiblesSearchQueries.FiltersData.FilterType import FilterType, get_FilterType
-from .WikidataQueries.CollectiblesSearchQueries.CollectiblesSearchType import CollectiblesSearchType , Get_CollectiblesSearchType
+from .WikidataQueries.CollectiblesSearchQueries.CollectiblesSearchType import CollectiblesSearchType, Get_CollectiblesSearchType
 from .WikidataQueries.SearchQueries.SearchRegionQueryBuilder import SearchRegionQueryBuilder
 from .WikidataQueries.CollectiblesSearchQueries.RegionCollectiblesSearchQueryBuilder import RegionCollectiblesSearchQueryBuilder
 from .WikidataQueries.CollectiblesSearchQueries.WorldCollectiblesSearchQueryBuilder import WorldCollectiblesSearchQueryBuilder
@@ -38,12 +38,14 @@ API = Blueprint('WikidataAPI', __name__, url_prefix='/WikidataAPI')
 endpoint_url = "https://query.wikidata.org/sparql"
 
 # constants
-GEO_LOCATION : str = "Q2221906" # geographic location
-ADMINISTRATIVE_AREA : str = "Q56061" # administrative territorial entity
-FORMAR_AREA : str = "Q19832712" #historical administrative division
-NOT_ADMINISTRATIVE_AREA : str = "Q15642566" # non-political administrative territorial entity
+GEO_LOCATION: str = "Q2221906"  # geographic location
+ADMINISTRATIVE_AREA: str = "Q56061"  # administrative territorial entity
+FORMAR_AREA: str = "Q19832712"  # historical administrative division
+# non-political administrative territorial entity
+NOT_ADMINISTRATIVE_AREA: str = "Q15642566"
 
-def process_query(query : str):
+
+def process_query(query: str):
     '''
     Function wrapping sending query to endpoint and retriving result from it and converting it into JSON format.
 
@@ -58,18 +60,19 @@ def process_query(query : str):
         Result of query in JSON formatted str, that result will be transformed by json tranformation, which is implemented in `Formater.py`.
     '''
     try:
-        result = SparqlPoint.get_query_results(endpoint_url,query)
+        result = SparqlPoint.get_query_results(endpoint_url, query)
         return Formater.toJson(result)
     except:
         return "Invalid query, query is somewhat corrupted"
 
-@API.route('/search/collectible_allowed_types',methods=['POST'])
+
+@API.route('/search/collectible_allowed_types', methods=['POST'])
 def search_for_classes():
     '''
     API route function seaching for allowed types of collectible.
     That means it search for all classes, which can be used as `super classes` of collectibles.
     For example collectible might be instance of class `castle` or `city`, but it not make sense for classes such as for example `planet`, `language`.
-    
+
     Required json parameters
     -----------------------
     search_word : str 
@@ -85,25 +88,27 @@ def search_for_classes():
         Data of found allowed types, which can be used as `super class` for collectible searching.
     '''
     data = json.loads(request.get_json())
-    
+
     search_word = None
     super_class = None
     exception_classes = []
     try:
         search_word = data["search_word"]
         super_class = data["super_class"]
-        exception_classes : list[str] = data["exception_classes"]
+        exception_classes: list[str] = data["exception_classes"]
     except:
         pass
 
-    builder = SearchCollectibleTypesQueryBuilder(super_class,exception_classes)
-    
+    builder = SearchCollectibleTypesQueryBuilder(
+        super_class, exception_classes)
+
     if search_word is not None and search_word != "":
         builder.set_searched_word(search_word)
 
     return process_query(builder.build())
 
-@API.route('/search/placesOrCollectibles',methods=['POST'])
+
+@API.route('/search/placesOrCollectibles', methods=['POST'])
 def search_for_places_or_collectibles():
     '''
     API route function seaching for places of collectibles.
@@ -125,13 +130,14 @@ def search_for_places_or_collectibles():
 
     if search_word is None:
         return "Invalid request, `search_word parameter` must be provided"
-    
+
     builder = SearchCollectibleQueryBuilder()
     builder.set_searched_word(search_word)
-    
+
     return process_query(builder.build())
 
-@API.route('/get/collectible_data',methods = ['POST'])
+
+@API.route('/get/collectible_data', methods=['POST'])
 def get_collectible_data():
     '''
     API route function, for obtaining data of collectible.
@@ -153,13 +159,14 @@ def get_collectible_data():
     Qnumber = data['collectible_QNumber']
     if Qnumber is None:
         return "Invalid request, param : collectible_QNumber must be provided"
-    
+
     builder = CollectibleDataGetter()
     builder.set_collectible(Qnumber)
 
     return process_query(builder.build())
 
-@API.route('/search/regions',methods=['POST'])
+
+@API.route('/search/regions', methods=['POST'])
 def search_regions():
     '''
     API route function, for obtaining list of data of regions.
@@ -187,7 +194,8 @@ def search_regions():
 
     return process_query(builder.build())
 
-@API.route('/search/administrative_areas',methods=['POST'])
+
+@API.route('/search/administrative_areas', methods=['POST'])
 def search_for_administrative_areas():
     '''
     API route function, for obtaining list of recomended filters/properties from Wikidata.
@@ -217,19 +225,18 @@ def search_for_administrative_areas():
 
     located_in_area = None
     not_located_in_areas = []
-    try:       
+    try:
         located_in_area = data["located_in_area"]
-        not_located_in_areas : list[str] = data["not_located_in_areas"]
+        not_located_in_areas: list[str] = data["not_located_in_areas"]
     except:
         pass
-
 
     builder = SearchAreaQueryBuilder()
     builder.set_recursive_searching(True)
     if search_word != "":
         builder.set_searched_word(search_word)
         builder.set_recursive_searching_for_located_in_area()
-    
+
     builder.add_super_class(ADMINISTRATIVE_AREA)
     builder.add_exception_class(NOT_ADMINISTRATIVE_AREA)
     builder.add_exception_class(FORMAR_AREA)
@@ -239,10 +246,11 @@ def search_for_administrative_areas():
 
     for item in not_located_in_areas:
         builder.add_not_located_in_area_resctriction(item)
-            
+
     return process_query(builder.build())
 
-@API.route('/get/recomended_filters',methods=['POST'])
+
+@API.route('/get/recomended_filters', methods=['POST'])
 def get_recomened_filters():
     '''
     API route function, for obtaining list of recomended filters/properties from Wikidata.
@@ -267,7 +275,6 @@ def get_recomened_filters():
     builder = FilterSearchQueryBuilder()
 
     if type is None:
-        print()
         with current_app.open_resource('Data/AllFilters.json') as file:
             data = json.load(file)
             return json.dumps(data)
@@ -277,7 +284,7 @@ def get_recomened_filters():
     return process_query(builder.build())
 
 
-@API.route('/get/filter_data',methods=['POST'])
+@API.route('/get/filter_data', methods=['POST'])
 def get_filter_data():
     '''
     API route function, for obtaining filter/property data from Wikidata.
@@ -292,7 +299,7 @@ def get_filter_data():
         Data type of property as string. 
         Allowed values are "Time","Quantity","WikibaseItem".
         Note : In this project if we call this route function, we already have known property data type, so we provided it then, insted of fetching this information again.
-    
+
     Return
     ------
     JSON formatted str
@@ -306,45 +313,54 @@ def get_filter_data():
 
     if property is None or data_type is None:
         return "Invalid request, `property` and `data_type` parameters must be provided"
-    
-    type : DATATYPES = None
 
+    type: DATATYPES = None
 
     try:
-        type : DATATYPES = DATATYPES(data_type)
+        type: DATATYPES = DATATYPES(data_type)
     except:
         return "Invalid request, data_type parameter, allowed values are  Quantity, Time or WikibaseItem "
-    
+
     match type:
         case DATATYPES.WIKIBASEITEM:
             d = collections.OrderedDict()
 
-            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.ONE_OF_CONSTRAINT)
+            builder = FilterDataQueryBuilder(
+                property, type, PROPERTY_CONSTRAINT_TYPE.ONE_OF_CONSTRAINT)
             d["one_of_constraint"] = json.loads(process_query(builder.build()))
 
-            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.NONE_OF_CONSTRAINT)   
-            d["none_of_constraint"] = json.loads(process_query(builder.build()))
+            builder = FilterDataQueryBuilder(
+                property, type, PROPERTY_CONSTRAINT_TYPE.NONE_OF_CONSTRAINT)
+            d["none_of_constraint"] = json.loads(
+                process_query(builder.build()))
 
-            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.CONFLICT_WITH_CONSTRAINT)   
-            d["conflict_with_constraint"] = json.loads(process_query(builder.build()))
+            builder = FilterDataQueryBuilder(
+                property, type, PROPERTY_CONSTRAINT_TYPE.CONFLICT_WITH_CONSTRAINT)
+            d["conflict_with_constraint"] = json.loads(
+                process_query(builder.build()))
 
-            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.VALUE_TYPE_CONSTRAINT)   
-            d["value_type_constraint"] = json.loads(process_query(builder.build()))
-            
+            builder = FilterDataQueryBuilder(
+                property, type, PROPERTY_CONSTRAINT_TYPE.VALUE_TYPE_CONSTRAINT)
+            d["value_type_constraint"] = json.loads(
+                process_query(builder.build()))
+
             return json.dumps(d)
-        
+
         case DATATYPES.QUANTITY:
             d = collections.OrderedDict()
-            
-            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.ALLOWED_UNITS_CONSTRAINT)
+
+            builder = FilterDataQueryBuilder(
+                property, type, PROPERTY_CONSTRAINT_TYPE.ALLOWED_UNITS_CONSTRAINT)
             d["units"] = json.loads(process_query(builder.build()))
 
-            builder = FilterDataQueryBuilder(property,type,PROPERTY_CONSTRAINT_TYPE.RANGE_CONSTRAINT)
+            builder = FilterDataQueryBuilder(
+                property, type, PROPERTY_CONSTRAINT_TYPE.RANGE_CONSTRAINT)
             d["range"] = json.loads(process_query(builder.build()))
-            return  json.dumps(d)
-    return "" 
+            return json.dumps(d)
+    return ""
 
-@API.route('/search/wikibase_item',methods=['POST'])
+
+@API.route('/search/wikibase_item', methods=['POST'])
 def search_wikibase_item():
     '''
     API route function searching for Wikibase item from Wikidata.
@@ -371,26 +387,27 @@ def search_wikibase_item():
         Data on found satisfying Wikibase items from Wikidata.
     '''
     data = json.loads(request.get_json())
-    print(data)
-    search_word : str = data["search_word"]
+
+    search_word: str = data["search_word"]
 
     if search_word is None:
         return "Invalid request, `search_word` paramter must be provided"
-    
-    value_type : list[str] = data["value_type"]
+
+    value_type: list[str] = data["value_type"]
     value_type_relation = data["value_type_relation"]
-    conflict_type : list[str] = data["conflict_type"]
+    conflict_type: list[str] = data["conflict_type"]
     conflict_type_relation = data["conflict_type_relation"]
-    none_values : list[str] = data["none_values"]
+    none_values: list[str] = data["none_values"]
 
     builder = SearchWikibaseItemQueryBuilder()
     builder.set_recursive_searching(True)
     builder.set_at_least_one_super_class_mandatory(False)
     builder.set_searched_word(search_word)
     builder.set_distinct(True)
-    
+
     if conflict_type_relation is not None:
-        builder.set_type_for_exceptions_classes("wdt:" + conflict_type_relation)
+        builder.set_type_for_exceptions_classes(
+            "wdt:" + conflict_type_relation)
     if value_type_relation is not None:
         match value_type_relation:
             case "instance of":
@@ -408,10 +425,11 @@ def search_wikibase_item():
 
     for none_value in none_values:
         builder.add_exception_constraint(none_value)
-    
+
     return process_query(builder.build())
 
-@API.route('/get/collectible_basic_info',methods=['POST'])
+
+@API.route('/get/collectible_basic_info', methods=['POST'])
 def get_collectible_basic_info():
     '''
     API route function for obtaining collectible`s base info from Wikidata.
@@ -430,17 +448,17 @@ def get_collectible_basic_info():
 
     data = json.loads(request.get_json())
 
-    collectible : str = data['collectible_QNumber']
-
+    collectible: str = data['collectible_QNumber']
 
     if collectible is None:
         return "Invalid request, `collectible_QNumber` parameter must be provided"
-    
+
     builder = CollectibleBasicInfoQuery(collectible)
 
     return process_query(builder.build())
 
-@API.route('/get/collectible_details',methods=['POST'])
+
+@API.route('/get/collectible_details', methods=['POST'])
 def get_collectible_details():
     '''
     API route function for obtaining collectible`s details from Wikidata.
@@ -457,16 +475,17 @@ def get_collectible_details():
     '''
     data = json.loads(request.get_json())
 
-    collectible : str = data['collectible_QNumber']
+    collectible: str = data['collectible_QNumber']
 
     if collectible is None:
         return "Invalid request, `collectible_QNumber` parameter must be provided"
-    
+
     builder = CollectibleDetailsQuery(collectible)
 
     return process_query(builder.build())
 
-@API.route('/get/collectible_wikipedia_link',methods=['POST'])
+
+@API.route('/get/collectible_wikipedia_link', methods=['POST'])
 def get_collectible_wikipedia_link():
     '''
     API route function for obtaining collectible`s link to wikipedia if exists.
@@ -483,17 +502,17 @@ def get_collectible_wikipedia_link():
     '''
     data = json.loads(request.get_json())
 
-    collectible : str = data['collectible_QNumber']
+    collectible: str = data['collectible_QNumber']
 
     if collectible is None:
         return "Invalid request,`collectible_QNumber` parameter must be provided"
-    
+
     builder = WikiPediaLinkQuery(collectible)
 
     return process_query(builder.build())
 
 
-@API.route('/search/collectibles',methods=['POST'])
+@API.route('/search/collectibles', methods=['POST'])
 def search_for_collectibles():
     '''
     From provided input json data, it constructs query, which fetches all satysfying collectibles from Wikidata.
@@ -523,24 +542,24 @@ def search_for_collectibles():
     filter : list[dict] [optional]
         List of dict containing data about filter, which will be applied in searching.
         Each filter contains necessary data of that filter. See `FilterData` for gaining knowleadge.
-    
+
     Return
     ------
     JSON formatted str
         Found collectibles data.
     '''
     data = json.loads(request.get_json())
-    print(data)
+
     # type parsing
-    super_class : str = data['type']
+    super_class: str = data['type']
     if super_class is None:
         return "Invalid request, `type` parameter must be provided"
-    
+
     # exception sub-types parsing
-    exceptions_sub_classes : list[str] = data['exceptionsSubTypes']
+    exceptions_sub_classes: list[str] = data['exceptionsSubTypes']
 
     # resolving type of area restriction
-    search_area_type : str = data['areaSearchType']
+    search_area_type: str = data['areaSearchType']
     if search_area_type is None:
         return "Invalid request, `areaSearchType` parameter must be provided"
     type_of_area_restriction = Get_CollectiblesSearchType(search_area_type)
@@ -549,68 +568,73 @@ def search_for_collectibles():
 
     # resolving area restriction
     match type_of_area_restriction:
-            case CollectiblesSearchType.ADMINISTRATIVE:
-                builder = AdministrativeAreaCollectiblesSearchQueryBuilder(super_class)
-                area : str = data['area']
-                if area is None:
-                    return "Invalid request,`administrative_area` parameter must be provided"
-                builder.set_administrative_area(area)
+        case CollectiblesSearchType.ADMINISTRATIVE:
+            builder = AdministrativeAreaCollectiblesSearchQueryBuilder(
+                super_class)
+            area: str = data['area']
+            if area is None:
+                return "Invalid request,`administrative_area` parameter must be provided"
+            builder.set_administrative_area(area)
 
-                area_exceptions : list[str] = data['exceptionsSubAreas']
-                if area_exceptions is not None:
-                    for exc in area_exceptions:
-                        builder.add_administrative_area_exception(exc)
-    
-            case CollectiblesSearchType.AROUND:
-                builder = AroundCollectiblesSearchQueryBuilder(super_class)
-                radius : int = int(data['radius'])
-                if radius is None:
-                    return "Invalid request,`radius` parameter must be provided"
-                builder.set_radius(radius)
+            area_exceptions: list[str] = data['exceptionsSubAreas']
+            if area_exceptions is not None:
+                for exc in area_exceptions:
+                    builder.add_administrative_area_exception(exc)
 
-                center = data['center']
-                lat : float = float(center['lat'])
-                if lat is None:
-                    return "Invalid request,`lat` must be provided in list `center` parameter"
-                lng : float = float(center['lng'])
-                if lng is None:
-                    return "Invalid request,`lng` must be provided in list `center` parameter"
-                builder.set_center_by_coordinates(lat,lng)
-            case CollectiblesSearchType.REGION:
-                builder = RegionCollectiblesSearchQueryBuilder(super_class)
+        case CollectiblesSearchType.AROUND:
+            builder = AroundCollectiblesSearchQueryBuilder(super_class)
+            radius: int = int(data['radius'])
+            if radius is None:
+                return "Invalid request,`radius` parameter must be provided"
+            builder.set_radius(radius)
 
-                region : str = data["region"]
-                if region is None:
-                    return "Invalid request,`region` parameter must be provided"
-                
-                builder.set_region_area(region)
-            case CollectiblesSearchType.WORLD:
-                builder = WorldCollectiblesSearchQueryBuilder(super_class)
-    
+            center = data['center']
+            lat: float = float(center['lat'])
+            if lat is None:
+                return "Invalid request,`lat` must be provided in list `center` parameter"
+            lng: float = float(center['lng'])
+            if lng is None:
+                return "Invalid request,`lng` must be provided in list `center` parameter"
+            builder.set_center_by_coordinates(lat, lng)
+        case CollectiblesSearchType.REGION:
+            builder = RegionCollectiblesSearchQueryBuilder(super_class)
+
+            region: str = data["region"]
+            if region is None:
+                return "Invalid request,`region` parameter must be provided"
+
+            builder.set_region_area(region)
+        case CollectiblesSearchType.WORLD:
+            builder = WorldCollectiblesSearchQueryBuilder(super_class)
+
     if exceptions_sub_classes is not None:
         for exc in exceptions_sub_classes:
             builder.add_class_exception(exc)
-    
-    filters : list[dict] = data['filters']
+
+    filters: list[dict] = data['filters']
     # filter resolving
     if filters is not None:
         try:
             for item in filters:
-                property : str = item['property']
-                filter_type =  get_FilterType(item['filterType'])
+                property: str = item['property']
+                filter_type = get_FilterType(item['filterType'])
                 match (filter_type):
                     case FilterType.WIKIBASEITEM:
-                        value : str = item['data']['item']
-                        builder.add_item_filter(property,value)
+                        value: str = item['data']['item']
+                        builder.add_item_filter(property, value)
                     case FilterType.QUANTITY:
-                        comparison_operator = get_ComparisonOperator(item['data']['comparisonOperator'])
-                        quantity_value : int = item['data']['value']
-                        unit :str =  item['data']['unit']
-                        builder.add_quantity_filter(property,comparison_operator,quantity_value,unit )
+                        comparison_operator = get_ComparisonOperator(
+                            item['data']['comparisonOperator'])
+                        quantity_value: int = item['data']['value']
+                        unit: str = item['data']['unit']
+                        builder.add_quantity_filter(
+                            property, comparison_operator, quantity_value, unit)
                     case FilterType.TIME:
-                        comparison_operator = get_ComparisonOperator(item['data']['comparisonOperator'])
-                        time_value : str = item['data']['time']
-                        builder.add_time_filter(property,comparison_operator,time_value)
+                        comparison_operator = get_ComparisonOperator(
+                            item['data']['comparisonOperator'])
+                        time_value: str = item['data']['time']
+                        builder.add_time_filter(
+                            property, comparison_operator, time_value)
         except:
             return "Invalid request,parameter `filter` was provided incorect"
 

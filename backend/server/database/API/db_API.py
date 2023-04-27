@@ -1,12 +1,13 @@
 from flask import (
-    Blueprint,request
+    Blueprint, request
 )
 
 import json
 
 from ..Database_operations import db_CRUD
 
-bp_database_gateway = Blueprint('DatabaseAPI', __name__, url_prefix='/DatabaseAPI')
+bp_database_gateway = Blueprint(
+    'DatabaseAPI', __name__, url_prefix='/DatabaseAPI')
 
 
 @bp_database_gateway.route('/get/collections', methods=['POST'])
@@ -24,18 +25,19 @@ def get_collections():
     collections = db_CRUD.get_all_collections()
     if collections is None:
         return "Error, there occurs some problem with getting collections from database"
-    
-    data = json.loads(collections) 
+
+    data = json.loads(collections)
     i = 0
     for collection in data:
         collection_id = collection['collection_id']
         status = json.loads(db_CRUD.get_collection_status(collection_id))
         data[i]['visited'] = status['visited']
         data[i]['notVisited'] = status['notVisited']
-        i+=1
+        i += 1
     return json.dumps(data)
 
-@bp_database_gateway.route('/get/collectibles',methods=['POST'])
+
+@bp_database_gateway.route('/get/collectibles', methods=['POST'])
 def get_collectibles_in_collection():
     """
     Obtain data of all collectibles in specific collection.
@@ -56,7 +58,7 @@ def get_collectibles_in_collection():
     data = request.get_json()
 
     collection_id = data["collectionID"]
-    
+
     if collection_id is None:
         return "Invalid request, collectionID=< existing collectionID> must be provided"
 
@@ -66,7 +68,8 @@ def get_collectibles_in_collection():
         return "Error, there occurs some problem with getting collectibles from database"
     return result
 
-@bp_database_gateway.route('/get/exists_collections',methods=['POST'])
+
+@bp_database_gateway.route('/get/exists_collections', methods=['POST'])
 def exists_collections():
     """
     Ask database if there exists collection with specific name.
@@ -75,7 +78,7 @@ def exists_collections():
     ----------
     name : str
         Name of collection.
-    
+
     Returns
     -------
     bool as str
@@ -95,6 +98,7 @@ def exists_collections():
     if result is None:
         return "Error, there occurs some problem with asking of database"
     return result
+
 
 @bp_database_gateway.route('/post/collection_creation', methods=['POST'])
 def create_collection():
@@ -117,8 +121,9 @@ def create_collection():
     status = db_CRUD.create_collection(collection_name)
 
     if status is False:
-        return  json.dumps({'status' : "Error, collection was not created"})
-    return  json.dumps({'status' : "Succesfully created"})
+        return json.dumps({'status': "Error, collection was not created"})
+    return json.dumps({'status': "Succesfully created"})
+
 
 @bp_database_gateway.route('/post/collectibles', methods=['POST'])
 def insert_collectibles_into_collection():
@@ -141,21 +146,20 @@ def insert_collectibles_into_collection():
     collectionID = data['collectionID']
     collectibles = data['collectibles']
 
-    
-    
-
     errors = []
     for collectible in collectibles:
-        instanceOFArr : list[str] = collectible['instanceOF']
-        instanceOF : str = '/'.join(instanceOFArr)
-        insert_status = db_CRUD.create_collectible(collectible['QNumber'],collectionID,collectible['name'],instanceOF,collectible['latitude'],collectible['longitude'])
+        instanceOFArr: list[str] = collectible['instanceOF']
+        instanceOF: str = '/'.join(instanceOFArr)
+        insert_status = db_CRUD.create_collectible(
+            collectible['QNumber'], collectionID, collectible['name'], instanceOF, collectible['latitude'], collectible['longitude'])
         if insert_status is False:
             errors.append(collectible['name'])
 
     if len(errors) != 0:
-        return  json.dumps({'status' : "Error, not saved collectibles :" + ','.join(errors)})
+        return json.dumps({'status': "Error, not saved collectibles :" + ','.join(errors)})
 
-    return  json.dumps({'status' : "Succesfully saved"})
+    return json.dumps({'status': "Succesfully saved"})
+
 
 @bp_database_gateway.route('/post/set_visit', methods=['POST'])
 def set_visit_of_collectible():
@@ -182,25 +186,27 @@ def set_visit_of_collectible():
         Contain status report.
     """
     data = request.get_json()
-    
+
     is_visit = 0
     visition = data['isVisit']
     if visition:
         is_visit = 1
 
     date_format = None if data['dateFormat'] == 'null' else data['dateFormat']
-    date_from = None if data['dateFrom'] == 'null' else data['dateFrom'] 
-    date_to = None if data['dateTo'] == 'null' else data['dateTo']  
-    
-    status_visit =  db_CRUD.update_collectible_visit(data['QNumber'],is_visit)
-    status_date =  db_CRUD.update_collectible_visit_date(data['QNumber'],date_format,date_from,date_to)
-    
+    date_from = None if data['dateFrom'] == 'null' else data['dateFrom']
+    date_to = None if data['dateTo'] == 'null' else data['dateTo']
+
+    status_visit = db_CRUD.update_collectible_visit(data['QNumber'], is_visit)
+    status_date = db_CRUD.update_collectible_visit_date(
+        data['QNumber'], date_format, date_from, date_to)
+
     if status_date and status_visit:
-        return  json.dumps({'status' : "Succesfully saved"})
+        return json.dumps({'status': "Succesfully saved"})
 
-    return json.dumps({'status' : "Error, visitation was not updated"})
+    return json.dumps({'status': "Error, visitation was not updated"})
 
-@bp_database_gateway.route('/post/collection_update_rename',methods=['POST'])
+
+@bp_database_gateway.route('/post/collection_update_rename', methods=['POST'])
 def update_collection():
     """
     Update collection name.
@@ -217,15 +223,16 @@ def update_collection():
         Contain status report.
     """
     data = request.get_json()
-    
-    status = db_CRUD.update_collection(data['CollectionID'],data['newName'])
+
+    status = db_CRUD.update_collection(data['CollectionID'], data['newName'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully saved"})
-    
-    return  json.dumps({'status' : "Error, collection name was not updated"})
+        return json.dumps({'status': "Succesfully saved"})
 
-@bp_database_gateway.route('/post/collection_update_merge',methods=['POST'])
+    return json.dumps({'status': "Error, collection name was not updated"})
+
+
+@bp_database_gateway.route('/post/collection_update_merge', methods=['POST'])
 def merge_collection():
     """
     Merge one collection into other.
@@ -244,19 +251,22 @@ def merge_collection():
     data = request.get_json()
 
     if data['CollectionID'] == data['NewCollectionID']:
-        json.dumps({'status' : "Provided collections are the same ones"})
+        json.dumps({'status': "Provided collections are the same ones"})
 
-    collectibles = json.loads(db_CRUD.get_all_collectibles_in_collection(data['CollectionID']))
+    collectibles = json.loads(
+        db_CRUD.get_all_collectibles_in_collection(data['CollectionID']))
     for collectible in collectibles:
-        db_CRUD.update_collectible_collection(collectible['q_number'],data['CollectionID'],data['NewCollectionID'])
-    
+        db_CRUD.update_collectible_collection(
+            collectible['q_number'], data['CollectionID'], data['NewCollectionID'])
+
     status = db_CRUD.delete_collection(data['CollectionID'])
     if status:
-        return  json.dumps({'status' : "Collections were succesfully merged"})
-    
-    return  json.dumps({'status' : "Error, collections were not merged"})
+        return json.dumps({'status': "Collections were succesfully merged"})
 
-@bp_database_gateway.route('/post/collection_update_delete',methods=['POST'])
+    return json.dumps({'status': "Error, collections were not merged"})
+
+
+@bp_database_gateway.route('/post/collection_update_delete', methods=['POST'])
 def delete_collection():
     """
     Delete collection from database.
@@ -272,15 +282,16 @@ def delete_collection():
         Contain status report.
     """
     data = request.get_json()
-    
+
     status = db_CRUD.delete_collection(data['CollectionID'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully deleted"})
-    
-    return  json.dumps({'status' : "Error, collection was not deleted"})
+        return json.dumps({'status': "Succesfully deleted"})
 
-@bp_database_gateway.route('/post/collectible_delete',methods=['POST'])
+    return json.dumps({'status': "Error, collection was not deleted"})
+
+
+@bp_database_gateway.route('/post/collectible_delete', methods=['POST'])
 def delete_collectible():
     """
     Remove collectible from collection.
@@ -298,14 +309,15 @@ def delete_collectible():
         Contain status report.
     """
     data = request.get_json()
-    status = db_CRUD.delete_collectible(data['q_number'],data['CollectionID'])
+    status = db_CRUD.delete_collectible(data['q_number'], data['CollectionID'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully deleted"})
-    
-    return  json.dumps({'status' : "Error, collectible was not deleted"})
+        return json.dumps({'status': "Succesfully deleted"})
 
-@bp_database_gateway.route('/post/collectible_update_name',methods=['POST'])
+    return json.dumps({'status': "Error, collectible was not deleted"})
+
+
+@bp_database_gateway.route('/post/collectible_update_name', methods=['POST'])
 def update_collectible_name():
     """
     Update collectible name property .
@@ -323,14 +335,15 @@ def update_collectible_name():
         Contain status report.
     """
     data = request.get_json()
-    status = db_CRUD.update_collectible_name(data['q_number'],data['name'])
+    status = db_CRUD.update_collectible_name(data['q_number'], data['name'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully saved"})
-    
-    return  json.dumps({'status' : "Error, name was not updated"})
+        return json.dumps({'status': "Succesfully saved"})
 
-@bp_database_gateway.route('/post/collectible_update_icon',methods=['POST'])
+    return json.dumps({'status': "Error, name was not updated"})
+
+
+@bp_database_gateway.route('/post/collectible_update_icon', methods=['POST'])
 def update_collectible_icon():
     """
     Update collectible icon property of collectible.
@@ -348,15 +361,15 @@ def update_collectible_icon():
         Contain status report.
     """
     data = request.get_json()
-    status = db_CRUD.update_collectible_icon(data['q_number'],data['icon'])
-
+    status = db_CRUD.update_collectible_icon(data['q_number'], data['icon'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully saved"})
-    
-    return  json.dumps({'status' : "Error, icon was not updated"})
+        return json.dumps({'status': "Succesfully saved"})
 
-@bp_database_gateway.route('/post/collectibles_in_collection_update_icons',methods=['POST'])
+    return json.dumps({'status': "Error, icon was not updated"})
+
+
+@bp_database_gateway.route('/post/collectibles_in_collection_update_icons', methods=['POST'])
 def update_collectibles_icons_in_collection():
     """
     Update collectible icon property for all collectibles in specific collection.
@@ -374,13 +387,15 @@ def update_collectibles_icons_in_collection():
         Contain status report.
     """
     data = request.get_json()
-    status = db_CRUD.update_collectibles_in_collection_icon(data['collectionID'],data['icon'])
+    status = db_CRUD.update_collectibles_in_collection_icon(
+        data['collectionID'], data['icon'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully saved"})    
-    return  json.dumps({'status' : "Error, some icons were not updated"})
+        return json.dumps({'status': "Succesfully saved"})
+    return json.dumps({'status': "Error, some icons were not updated"})
 
-@bp_database_gateway.route('/post/collectible_update_notes',methods=['POST'])
+
+@bp_database_gateway.route('/post/collectible_update_notes', methods=['POST'])
 def update_collectible_notes():
     """
     Update collectible notes property in database.
@@ -398,9 +413,9 @@ def update_collectible_notes():
         Contain status report.
     """
     data = request.get_json()
-    status = db_CRUD.update_collectible_notes(data['q_number'],data['notes'])
+    status = db_CRUD.update_collectible_notes(data['q_number'], data['notes'])
 
     if status:
-        return  json.dumps({'status' : "Succesfully saved"})
-    
-    return  json.dumps({'status' : "Error, notes were not updated"})
+        return json.dumps({'status': "Succesfully saved"})
+
+    return json.dumps({'status': "Error, notes were not updated"})

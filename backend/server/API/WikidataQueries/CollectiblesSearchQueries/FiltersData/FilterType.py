@@ -7,7 +7,8 @@ class FilterType(Enum):
     '''
     WIKIBASEITEM = "Item"
     QUANTITY = "Quantity"
-    TIME= "Time"
+    TIME = "Time"
 
-def get_FilterType(value : str):
+
+def get_FilterType(value: str):
     return FilterType(value)

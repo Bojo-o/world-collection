@@ -1,6 +1,7 @@
 import sqlite3
 from flask import current_app, g
 
+
 def get_db():
     """Return connection to database."""
     if 'db' not in g:
@@ -10,6 +11,7 @@ def get_db():
         )
         g.db.row_factory = sqlite3.Row
     return g.db
+
 
 def close_db(e=None):
     """Close database connection."""

@@ -1,6 +1,7 @@
 import collections
 import json
 
+
 def toJson(input):
     '''
     Convert provided input to json format.
@@ -22,7 +23,7 @@ def toJson(input):
         d = collections.OrderedDict()
         for bindings_in_item in item:
             type = item[bindings_in_item]['type']
-            value : str = item[bindings_in_item]['value']
+            value: str = item[bindings_in_item]['value']
             match type:
                 case "literal":
                     d[bindings_in_item] = value
@@ -30,7 +31,7 @@ def toJson(input):
                     if bindings_in_item == "image" or bindings_in_item == "article":
                         d[bindings_in_item] = value
                         break
-                    temp : str = value.split('/')[-1]
+                    temp: str = value.split('/')[-1]
                     if temp.startswith("ontology#"):
                         temp = temp.lstrip("ontology#")
                     d[bindings_in_item] = temp

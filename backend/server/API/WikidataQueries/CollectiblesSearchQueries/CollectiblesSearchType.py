@@ -10,5 +10,6 @@ class CollectiblesSearchType(Enum):
     REGION = "Region"
     WORLD = "World"
 
-def Get_CollectiblesSearchType(value : str):
+
+def Get_CollectiblesSearchType(value: str):
     return CollectiblesSearchType(value)

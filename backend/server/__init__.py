@@ -5,13 +5,15 @@ import os
 
 from flask import Flask
 
+
 def create_app(test_config=None):
-    #create and configure the app
+    # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    #sets default configuration that the app will use
+    # sets default configuration that the app will use
     app.config.from_mapping(
         SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'WorldCollectionDatabase.sqlite'),
+        DATABASE=os.path.join(
+            app.instance_path, 'WorldCollectionDatabase.sqlite'),
     )
 
     if test_config is None:
@@ -30,7 +32,7 @@ def create_app(test_config=None):
     # add database init command to app
     from .Database.Database_operations import db_initiazition
     db_initiazition.init_app(app)
-    
+
     # register Wikidata API blueprint to app
     from .API import WikidataAPI
     app.register_blueprint(WikidataAPI.API)
