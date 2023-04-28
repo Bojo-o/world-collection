@@ -75,10 +75,10 @@ function CollectiblesAdding() {
      */
     const renderAddingMenu = () => {
         return (
-            <div className="d-flex flex-column border border-dark border-2 rounded-end container" >
+            <div data-testid="adding menu" className="d-flex flex-column border border-dark border-2 rounded-end container" >
                 <div className='d-flex flex-row justify-content-between '>
                     <h1>Add collectibles</h1>
-                    <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
+                    <button data-testid="close adding menu" type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
                         <img className="align " src={require('../static/Icons/close.png')} width="40" height="40" alt="close icon" />
                     </button>
                 </div>
@@ -189,7 +189,7 @@ function CollectiblesAdding() {
                 ) : (
                     <>
                         <div className='side-menu'>
-                            <button type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
+                            <button data-testid="open adding menu" type="button" className="btn btn-outline-light btn-lg" onClick={handleAddingMenu}>
                                 <img className="align " src={require('../static/Icons/menu.png')} width="40" height="40" alt="menu icon" />
                             </button>
                         </div>

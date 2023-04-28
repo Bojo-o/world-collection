@@ -116,7 +116,7 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
     }, [dateOption,todayDate])
     return (
         <>
-            <div className="d-flex flex-column">
+            <div data-testid="visitation container" className="d-flex flex-column">
                 <div>
                     {isVisited ? (<input type="checkbox" id="visition" name="visition" onChange={handleChangeOfVisitationCheckbox} checked />) : (<input type="checkbox" id="visition" name="visition" value="Visited" onChange={handleChangeOfVisitationCheckbox} />)}
                     <label htmlFor="visition">Visited this place? </label>

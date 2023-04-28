@@ -81,8 +81,8 @@ function CollectiblesEditingTable({ records: collectibles, editCollectible, remo
                     return (
                         <React.Fragment key={index}>
                             <tr >
-                                <th scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</th>
-                                <th scope="row">
+                                <td scope="row">{currPage * rowsPerPage - rowsPerPage + index + 1}</td>
+                                <td scope="row">
                                     {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber ? (
                                         <>
                                             <input type="text" className="form-control" aria-describedby="collectibleInputNameHelp" value={editedCollectible.name} onChange={handleCollectibleNameChange} />
@@ -95,10 +95,10 @@ function CollectiblesEditingTable({ records: collectibles, editCollectible, remo
                                             {collectible.name}
                                         </>
                                     )}
-                                </th>
-                                <th scope="row">{renderTypesColumn(collectible.instanceOf)}</th>
-                                <th scope="row">{renderVisition(collectible.isVisit)}</th>
-                                <th scope="row">
+                                </td>
+                                <td scope="row">{renderTypesColumn(collectible.instanceOf)}</td>
+                                <td scope="row">{renderVisition(collectible.isVisit)}</td>
+                                <td scope="row">
                                     <div className="d-flex flex-wrap justify-content-center" >
                                         {editedCollectible != null && editedCollectible.QNumber === collectible.QNumber && (
                                             <>
@@ -118,7 +118,7 @@ function CollectiblesEditingTable({ records: collectibles, editCollectible, remo
                                             </>
                                         )}
                                     </div>
-                                </th>
+                                </td>
                             </tr>
                         </React.Fragment>
                     )

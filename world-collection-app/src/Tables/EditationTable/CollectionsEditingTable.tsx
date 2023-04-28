@@ -149,11 +149,11 @@ function CollectionsEditingTable({ records: collections, edited, editItem, cance
                                 </tr>
                                 {edited != null && edited.collectionID === row.collectionID && iconSetting && (
                                     <tr key={index}>
-                                        <th colSpan={4}>
+                                        <td colSpan={4}>
                                             <div className="d-flex justify-content-center">
                                                 <IconsSelector handleChangeOfIcon={() => { }} saveIconChange={saveIconChange} />
                                             </div>
-                                        </th>
+                                        </td>
                                     </tr>
                                 )}
                             </React.Fragment>

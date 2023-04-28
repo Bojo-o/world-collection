@@ -178,7 +178,7 @@ function Editation() {
         }
     }
     return (
-        <>
+        <div data-testid="editation container">
 
             <h2>Edit your collections and collectibles</h2>
 
@@ -204,7 +204,7 @@ function Editation() {
                         <>
                             <div className="d-flex">
                                 <button type="button" className="btn btn-secondary" onClick={returnBackToCollectionsView}>Back to Collections</button>
-                                <h3>Collectibles of {showingCollectionCollectibles.name} collection:</h3>
+                                <h3>Collectibles of {showingCollectionCollectibles.name}:</h3>
                             </div>
                             <input className="form-control mr-sm-2" type="search" placeholder="Search for collectible" onChange={handleSearch} />
                             <CollectiblesEditingTable records={collectibles.filter((result) => result.name.toLocaleLowerCase().includes(filter.toLocaleLowerCase()))}
@@ -215,7 +215,7 @@ function Editation() {
                 </>
             )}
 
-        </>
+        </div>
     )
 }
 export default Editation;

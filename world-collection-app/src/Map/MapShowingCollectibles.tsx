@@ -16,12 +16,14 @@ export interface MapShowingCollectiblesProps {
  * @returns JSX elemnt rendering map, which contains markers with collectibles
  */
 function MapShowingCollectibles({ collectiblesToShow }: MapShowingCollectiblesProps) {
+    
     return (
         <>
             <MapWrapper mapContainerBody={() => {
                 return (<>
                     {
                         collectiblesToShow.map((collectible, index) => {
+                            console.log(collectible)
                             return (<CollectibleMarker key={index} collectible={collectible} />)
                         })
                     }

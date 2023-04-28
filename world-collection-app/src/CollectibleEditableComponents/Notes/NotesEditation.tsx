@@ -44,7 +44,7 @@ function NotesEditation({ collectible, updateNotes }: NotesEditationProps) {
         })
     }
     return (
-        <div className="d-flex flex-column">
+        <div data-testid="notes" className="d-flex flex-column">
             <div className="form-floating">
                 <textarea className="form-control" placeholder="Make some notes" id="notesTextArea" value={(notes == null) ? "" : notes} maxLength={1024} onChange={handleChange}></textarea>
                 <label htmlFor="notesTextArea">Collectible notes</label>

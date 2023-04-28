@@ -152,7 +152,7 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
             <>
                 <div className="border border-dark rounded" >
                     <div className="btn-group">
-                        <button type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button data-testid="filters dropdown" type="button" className="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             Filters
                         </button>
                         <ul className="dropdown-menu">
@@ -195,7 +195,7 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
                                     return filter.name.toLocaleLowerCase().includes(filterSearchWord.toLocaleLowerCase())
                                 }).map((filter, index) => {
                                     return (
-                                        <button key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
+                                        <button data-testid="filter option" key={index} type="button" className="list-group-item list-group-item-action" onClick={() => handleFilterSelection(filter)} >
                                             <div className="d-flex w-100 flex-wrap justify-content-between">
                                                 <h5 className="mb-1">{filter.name}</h5>
                                                 <small className={"badge bg-" + getColorByFilterType(filter.dataType) + " text-wrap"}>

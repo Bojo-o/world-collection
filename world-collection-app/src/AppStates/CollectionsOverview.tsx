@@ -32,6 +32,7 @@ function CollectionsOverview() {
 
     const handleCollectionSelect = (collectionID: Number) => {
         DatabaseAPI.getCollectiblesInCollection(collectionID).then((collectibles) => {
+            console.log(collectibles)
             setCollectiblesToShow(collectibles);
         })
     }
@@ -88,7 +89,7 @@ function CollectionsOverview() {
                 <div data-testid="collectionsMenu" className=' d-flex flex-column border border-dark border-2 rounded-end container' >
                     <div className='d-flex flex-row justify-content-between '>
                         <h1>Your Colections</h1>
-                        <button type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu} >
+                        <button data-testid="close collectionsMenu" type="button" className="btn btn-outline-light btn-lg" onClick={handleCollectibleMenu} >
                             <img className="align " src={require('../static/Icons/close.png')} width="40" height="40" alt='close icon'/>
                         </button>
                     </div>

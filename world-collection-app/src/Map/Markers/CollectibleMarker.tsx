@@ -38,6 +38,7 @@ export interface CollectibleMarkerProps {
  */
 function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
     // icon
+    
     const [icon, setIcon] = useState(collectible.icon);
     const [editingIcon, setEditingIcon] = useState(false);
     // visitation
@@ -53,7 +54,7 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
     const [basicInfoOfCollectible, setBasicInfoOfCollectible] = useState<CollectibleBasicInfo>(new CollectibleBasicInfo());
     const [loadingBasicInfo, setLoadingBasicInfo] = useState(false);
     const [errorBasicInfo, setErrorBasicInfo] = useState(false);
-
+    
     const handleEditingVisitation = () => {
         setEditingVisitation((prev) => !prev);
     }
@@ -96,6 +97,10 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
     }
     // when component mount meaning it is the first called, it invokes func fetching collecible basic data
     useEffect(() => {
+        setIcon(collectible.icon)
+        setwasCollectibleVisited(collectible.isVisit)
+        setDateOfVisitFrom(collectible.dateFrom)
+        setDateOfVisitTo(collectible.dateTo)
         /**
         * Fetches image and description of collectible.
         */
@@ -126,7 +131,7 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
                         )}
                         {!loadingBasicInfo && (
                             <>
-                                <div className="card card-collectibles">
+                                <div data-testid="collectible card" className="card card-collectibles">
                                     {basicInfoOfCollectible.imageURL != null && (
                                         <img src={basicInfoOfCollectible.imageURL} className="card-img-top" alt={"image of " + collectible.name} />
                                     )}

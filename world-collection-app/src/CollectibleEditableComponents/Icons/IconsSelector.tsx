@@ -46,7 +46,7 @@ function IconsSelector({ handleChangeOfIcon, saveIconChange }: IconsSelectorProp
     }, [])
     return (
         <div>
-            <div className="d-flex flex column">
+            <div data-testid="icon selector" className="d-flex flex column">
                 <div className="d-flex flex-wrap">
                     {listOfIcons.map((icon, index) => {
                         return (

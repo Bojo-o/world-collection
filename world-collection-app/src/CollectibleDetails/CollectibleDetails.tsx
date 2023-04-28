@@ -114,7 +114,7 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
                     )}
                     <input className="form-control mr-sm-2" type="search" placeholder="Search for detail" onChange={handleDetailSearch} />
                     <div className="details_scroll">
-                        <ul className="list-group">
+                        <ul data-testid="list of details" className="list-group">
                             {details.filter((d) => d.propertyName.toLocaleLowerCase().includes(detailFilter.toLocaleLowerCase())).map((detail, index) => {
                                 return (
                                     <li key={index} className="list-group-item">
