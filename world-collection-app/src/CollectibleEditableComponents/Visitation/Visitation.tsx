@@ -122,7 +122,7 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
                     <label htmlFor="visition">Visited this place? </label>
                 </div>
 
-                {isVisited && (
+                {isVisited == true && (
                     <>
                         <p>Set date of visit:</p>
                         <p>Select date format you want to use</p>

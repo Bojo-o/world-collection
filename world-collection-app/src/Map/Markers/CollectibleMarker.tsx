@@ -76,6 +76,7 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
 
     const handleVisitationChange = (isVisit: boolean, dateFrom: DateWithPrecision | null, dateTo: DateWithPrecision | null) => {
         setwasCollectibleVisited(isVisit);
+        collectible.isVisit = isVisit;
         setDateOfVisitFrom(dateFrom);
         setDateOfVisitTo(dateTo);
     }

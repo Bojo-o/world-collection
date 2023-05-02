@@ -42,6 +42,7 @@ function CollectionCreation({ collection, handleCancel }: CollectionCreationProp
         DatabaseAPI.postCollectionCreation(value).then((status) => {
             setStatus(status);
             setSavingCollection(false)
+            handleCancel()
         }).catch(() => {
             setSavingCollectionError(true)
         })

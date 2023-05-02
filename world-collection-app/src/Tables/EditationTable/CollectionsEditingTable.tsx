@@ -100,7 +100,8 @@ function CollectionsEditingTable({ records: collections, edited, editItem, cance
                                             <td>
                                                 <div className="d-flex flex-wrap justify-content-center">
                                                     <p>Merge into collection:</p>
-                                                    <select className="form-select" onChange={handleCollectionSelection} >
+                                                    <select className="form-select" onChange={handleCollectionSelection} defaultValue={""} >
+                                                        <option value="" disabled hidden>Choose collection</option>
                                                         {collections.map((item, index) => {
                                                             if (item.collectionID === row.collectionID) {
                                                                 return (<React.Fragment key={index}></React.Fragment>)

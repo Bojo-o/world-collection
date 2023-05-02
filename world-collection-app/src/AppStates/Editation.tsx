@@ -36,7 +36,7 @@ function Editation() {
     /**
      * Fetches the user`s collectibles from database via DatabaseAPI.
      */
-    const fetchCollectibles =useCallback(() => {
+    const fetchCollectibles = useCallback(() => {
         if (showingCollectionCollectibles !== null) {
             setCollectiblesLoading(true);
             DatabaseAPI.getCollectiblesInCollection(showingCollectionCollectibles.collectionID).then((collectibles) => {
@@ -45,8 +45,8 @@ function Editation() {
 
             })
         }
-    },[showingCollectionCollectibles])
-    
+    }, [showingCollectionCollectibles])
+
     /**
      * Fetches the user`s collections from database via DatabaseAPI.
      */
@@ -64,9 +64,9 @@ function Editation() {
     useEffect(() => {
         fetchCollectibles()
         setfilter('')
-    }, [showingCollectionCollectibles,fetchCollectibles])
-    
-    
+    }, [showingCollectionCollectibles, fetchCollectibles])
+
+
     const mergeItem = (row: Collection) => {
         setMerging(new Collection(row.getObject()));
         setEdited(null);
@@ -104,17 +104,17 @@ function Editation() {
 
     }
     const saveItem = (edited: Collection) => {
-        DatabaseAPI.postCollectionUpdateRename(edited.collectionID, edited.name)
-        cancel();
-        fetchCollections();
+        DatabaseAPI.postCollectionUpdateRename(edited.collectionID, edited.name).then(() => {
+            cancel();
+            fetchCollections();
+        }
+        )
     }
     const removeItem = (row: Collection) => {
-        DatabaseAPI.postCollectionUpdateDelete(row.collectionID);
-        fetchCollections();
+        DatabaseAPI.postCollectionUpdateDelete(row.collectionID).then(() => fetchCollections());
     }
     const merge = (collectionID: Number, intoCollectionID: Number) => {
-        DatabaseAPI.postCollectionUpdateMerge(collectionID, intoCollectionID)
-        fetchCollections();
+        DatabaseAPI.postCollectionUpdateMerge(collectionID, intoCollectionID).then(() => fetchCollections())
     }
     const swicthToCollectiblesEditation = (row: Collection) => {
         setShowingCollectionCollectibles(row);

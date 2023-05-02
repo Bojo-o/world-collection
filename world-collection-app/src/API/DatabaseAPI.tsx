@@ -132,7 +132,7 @@ export class DatabaseAPI {
      * @param newName A new name of collection.
      */
     public static postCollectionUpdateRename(updatedCollectionID: Number, newName: string) {
-        Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionRename,
+        return Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionRename,
             {
                 'CollectionID': updatedCollectionID,
                 'newName': newName
@@ -145,7 +145,7 @@ export class DatabaseAPI {
      * @param CollectionID ID of existed collection.
      */
     public static postCollectionUpdateDelete(CollectionID: Number) {
-        Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionDelete,
+        return Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionDelete,
             {
                 'CollectionID': CollectionID
             }
@@ -158,7 +158,7 @@ export class DatabaseAPI {
      * @param newCollectionID ID of collection, into which collectibles will be moved.
      */
     public static postCollectionUpdateMerge(CollectionID: Number, newCollectionID: Number) {
-        Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionsMerge,
+        return Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectionsMerge,
             {
                 'CollectionID': CollectionID,
                 'NewCollectionID': newCollectionID
@@ -171,7 +171,7 @@ export class DatabaseAPI {
      * @param CollectionID ID of collection, in which collectible resides.
      */
     public static postCollectibleDeletion(collectibleQNumber: string, CollectionID: Number) {
-        Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleDelete,
+        return Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleDelete,
             {
                 'q_number': collectibleQNumber,
                 'CollectionID': CollectionID
@@ -184,7 +184,7 @@ export class DatabaseAPI {
      * @param newName A new name of collectible.
      */
     public static postCollectibleUpdateName(collectibleQNumber: string, newName: string) {
-        Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleRename,
+        return Fetch.postAndFetch(baseDatabaseAPIUrl + postCollectibleRename,
             {
                 'q_number': collectibleQNumber,
                 'name': newName
