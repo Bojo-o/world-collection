@@ -30,7 +30,7 @@ def create_app(test_config=None):
         pass
 
     # add database init command to app
-    from .Database.Database_operations import db_initiazition
+    from .database.Database_operations import db_initiazition
     db_initiazition.init_app(app)
 
     # register Wikidata API blueprint to app
@@ -38,7 +38,7 @@ def create_app(test_config=None):
     app.register_blueprint(WikidataAPI.API)
 
     # register database gateway to app
-    from .Database.API import db_API
+    from .database.API import db_API
     app.register_blueprint(db_API.bp_database_gateway)
 
     return app
