@@ -89,7 +89,7 @@ function SearchBar({ placeHolderText: placeHolder, handleClickedResult, dataGett
             return;
         }
         fetchData(searchWord)
-    }, [searchWord,fetchData]);
+    }, [searchWord]);
     return (
         <>
             <div className="search-bar-dropdown">

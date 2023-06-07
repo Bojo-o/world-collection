@@ -32,7 +32,6 @@ function CollectionsOverview() {
 
     const handleCollectionSelect = (collectionID: Number) => {
         LocalAPIProxy.getCollectiblesInCollection(collectionID).then((collectibles) => {
-            console.log(collectibles)
             setCollectiblesToShow(collectibles);
         })
     }

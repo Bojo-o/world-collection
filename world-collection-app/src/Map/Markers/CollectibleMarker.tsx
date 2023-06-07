@@ -96,6 +96,16 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
         }
         return (<></>)
     }
+    const fetchCollectibleBasicInfo = () => {
+        setErrorBasicInfo(false);
+        setLoadingBasicInfo(true);
+        WikiDataAPIProxy.getCollectibleBasicInfo(collectible.QNumber).then((data) => {
+            setLoadingBasicInfo(false);
+            setBasicInfoOfCollectible(data);
+        }).catch(() => {
+            setErrorBasicInfo(true);
+        })
+    }
     // when component mount meaning it is the first called, it invokes func fetching collecible basic data
     useEffect(() => {
         setIcon(collectible.icon)
@@ -105,24 +115,20 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
         /**
         * Fetches image and description of collectible.
         */
-        const fetchCollectibleBasicInfo = () => {
-            setErrorBasicInfo(false);
-            setLoadingBasicInfo(true);
-            WikiDataAPIProxy.getCollectibleBasicInfo(collectible.QNumber).then((data) => {
-                setLoadingBasicInfo(false);
-                setBasicInfoOfCollectible(data);
-            }).catch(() => {
-                setErrorBasicInfo(true);
-            })
-        }
-        fetchCollectibleBasicInfo()
+        
+        //fetchCollectibleBasicInfo()
     }, [collectible])
 
     return (
         <>
             <Marker
                 position={[collectible.latitude, collectible.longitude]}
-                icon={getIcon(icon, wasCollectibleVisited)}>
+                icon={getIcon(icon, wasCollectibleVisited)}
+                eventHandlers={{
+                    click: () => {
+                        fetchCollectibleBasicInfo()
+                    },
+                  }}>
                 <Popup>
                     <div className="scroll">
                         {loadingBasicInfo && (
