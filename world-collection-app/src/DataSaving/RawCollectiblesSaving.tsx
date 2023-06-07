@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Collection } from "../Data/DatabaseModels/Colection";
 import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
-import { DatabaseAPI } from "../API/DatabaseAPI";
+import { LocalAPIProxy } from "../API/LocalAPIProxy";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import CollectionCreation from "./CollectionCreation";
 
@@ -37,7 +37,7 @@ function RawCollectiblesSaving({ rawCollectibles: collectibles }: RawCollectible
     const fetchCollection = () => {
         setLoading(true);
         setLoadingError(false);
-        DatabaseAPI.getAllCollections().then((data) => {
+        LocalAPIProxy.getAllCollections().then((data) => {
             setLoading(false);
             setCollections(data);
         }).catch(() => {
@@ -63,7 +63,7 @@ function RawCollectiblesSaving({ rawCollectibles: collectibles }: RawCollectible
             setSelectedCollectionID(null)
             setSavingData(true);
             setSavingError(false);
-            DatabaseAPI.addCollectiblesIntoCollection(selectedCollectionID, collectibles).then((status) => {
+            LocalAPIProxy.addCollectiblesIntoCollection(selectedCollectionID, collectibles).then((status) => {
                 setStatus(status);
                 setSavingData(false)
             }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Collection } from "../Data/DatabaseModels/Colection";
 import { Collectible } from "../Data/DatabaseModels/Collectible";
-import { DatabaseAPI } from "../API/DatabaseAPI";
+import { LocalAPIProxy } from "../API/LocalAPIProxy";
 import CollectiblesEditingTable from "../Tables/EditationTable/CollectiblesEditingTable";
 import CollectionsEditingTable from "../Tables/EditationTable/CollectionsEditingTable";
 
@@ -39,7 +39,7 @@ function Editation() {
     const fetchCollectibles = useCallback(() => {
         if (showingCollectionCollectibles !== null) {
             setCollectiblesLoading(true);
-            DatabaseAPI.getCollectiblesInCollection(showingCollectionCollectibles.collectionID).then((collectibles) => {
+            LocalAPIProxy.getCollectiblesInCollection(showingCollectionCollectibles.collectionID).then((collectibles) => {
                 setCollectiblesLoading(false);
                 setCollectibles(collectibles)
 
@@ -52,7 +52,7 @@ function Editation() {
      */
     const fetchCollections = () => {
         setCollectionsLoading(true);
-        DatabaseAPI.getAllCollections().then((collections) => {
+        LocalAPIProxy.getAllCollections().then((collections) => {
             setCollectionsLoading(false);
             setCollections(collections);
         }
@@ -94,7 +94,7 @@ function Editation() {
             return null;
         });
 
-        DatabaseAPI.existsCollectionWithName(value).then((r) => {
+        LocalAPIProxy.existsCollectionWithName(value).then((r) => {
             if (value.length > 2) {
                 setCanSaveCollection(!r)
             } else {
@@ -104,17 +104,17 @@ function Editation() {
 
     }
     const saveItem = (edited: Collection) => {
-        DatabaseAPI.postCollectionUpdateRename(edited.collectionID, edited.name).then(() => {
+        LocalAPIProxy.postCollectionUpdateRename(edited.collectionID, edited.name).then(() => {
             cancel();
             fetchCollections();
         }
         )
     }
     const removeItem = (row: Collection) => {
-        DatabaseAPI.postCollectionUpdateDelete(row.collectionID).then(() => fetchCollections());
+        LocalAPIProxy.postCollectionUpdateDelete(row.collectionID).then(() => fetchCollections());
     }
     const merge = (collectionID: Number, intoCollectionID: Number) => {
-        DatabaseAPI.postCollectionUpdateMerge(collectionID, intoCollectionID).then(() => fetchCollections())
+        LocalAPIProxy.postCollectionUpdateMerge(collectionID, intoCollectionID).then(() => fetchCollections())
     }
     const swicthToCollectiblesEditation = (row: Collection) => {
         setShowingCollectionCollectibles(row);
@@ -127,7 +127,7 @@ function Editation() {
 
     const removeCollectible = (collectible: Collectible) => {
         if (showingCollectionCollectibles !== null) {
-            DatabaseAPI.postCollectibleDeletion(collectible.QNumber, showingCollectionCollectibles?.collectionID);
+            LocalAPIProxy.postCollectibleDeletion(collectible.QNumber, showingCollectionCollectibles?.collectionID);
             setCollectibles((prev) => prev.filter((c) => {
                 if (c.QNumber === collectible.QNumber) {
                     return false;
@@ -142,7 +142,7 @@ function Editation() {
         setCanSaveCollectible(false);
     }
     const saveCollectible = (collectible: Collectible) => {
-        DatabaseAPI.postCollectibleUpdateName(collectible.QNumber, collectible.name);
+        LocalAPIProxy.postCollectibleUpdateName(collectible.QNumber, collectible.name);
         cancleCollectibleAction();
         setCollectibles((prev) => prev.map((c) => {
             if (c.QNumber === collectible.QNumber) {

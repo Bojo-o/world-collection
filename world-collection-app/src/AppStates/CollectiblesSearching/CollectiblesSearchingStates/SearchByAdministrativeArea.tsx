@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
@@ -32,7 +32,7 @@ function SearchByAdministrativeArea({ handleNext }: SearchByAdministrativeAreaPr
      * @returns Found administrative areas.
      */
     const areaDataGetter = (searchWord: string) => {
-        return WikiDataAPI.searchForAdministrativeAreas(searchWord);
+        return WikiDataAPIProxy.searchForAdministrativeAreas(searchWord);
     }
     /**
      * Data getter for Search bar to search for administrative area exceptions, which locate in selected area.
@@ -41,7 +41,7 @@ function SearchByAdministrativeArea({ handleNext }: SearchByAdministrativeAreaPr
      */
     const subAreaDataGetter = (seachWord: string) => {
         let exceptionSubAreasQNumbers = exceptionSubAreas.map((type) => { return type.getQNumber() })
-        return WikiDataAPI.searchForSubAdministrativeAreasOfArea(seachWord, (area != null) ? area.getQNumber() : null, exceptionSubAreasQNumbers)
+        return WikiDataAPIProxy.searchForSubAdministrativeAreasOfArea(seachWord, (area != null) ? area.getQNumber() : null, exceptionSubAreasQNumbers)
     }
     const handleAddingArea = (data: SearchData) => {
         setArea(new Entity(data.QNumber, data.name))

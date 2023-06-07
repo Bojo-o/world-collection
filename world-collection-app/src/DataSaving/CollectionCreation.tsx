@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Collection } from "../Data/DatabaseModels/Colection";
-import { DatabaseAPI } from "../API/DatabaseAPI";
+import { LocalAPIProxy } from "../API/LocalAPIProxy";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 
 /**
@@ -39,7 +39,7 @@ function CollectionCreation({ collection, handleCancel }: CollectionCreationProp
     const saveCollection = () => {
         setSavingCollectionError(false)
         setSavingCollection(true)
-        DatabaseAPI.postCollectionCreation(value).then((status) => {
+        LocalAPIProxy.postCollectionCreation(value).then((status) => {
             setStatus(status);
             setSavingCollection(false)
             handleCancel()

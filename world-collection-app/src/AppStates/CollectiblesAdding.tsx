@@ -3,7 +3,7 @@ import { Marker, Popup } from "react-leaflet";
 import MapFlyToOption from "../Map/MapOptions/MapFlyToOption";
 import '../Map/Map.css';
 import SearchBar from "../SearchBar/SearchBar";
-import { WikiDataAPI } from "../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../API/WikiDataAPIProxy";
 import { SearchData } from "../Data/DataModels/SearchData";
 import { RawCollectible } from "../Data/CollectibleModels/RawCollectible";
 import './CollectiblesAdding.css'
@@ -40,7 +40,7 @@ function CollectiblesAdding() {
      * @returns Found collectibles.
      */
     const dataGetter = (searchWord: string) => {
-        return WikiDataAPI.searchForCollectible(searchWord);
+        return WikiDataAPIProxy.searchForCollectible(searchWord);
     }
     const handleClickedCollectible = (data: SearchData) => {
         fetchCollectibleData(data.QNumber);
@@ -57,7 +57,7 @@ function CollectiblesAdding() {
     const fetchCollectibleData = (QNumber: string) => {
         setLoading(true)
         setError(false)
-        WikiDataAPI.getCollectibleData(QNumber).then((data) => {
+        WikiDataAPIProxy.getCollectibleData(QNumber).then((data) => {
             setCollectible(data)
             setLoading(false)
         }).catch(() => {

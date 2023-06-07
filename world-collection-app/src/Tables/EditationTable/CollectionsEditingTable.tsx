@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Collection } from "../../Data/DatabaseModels/Colection";
 import Table from "../Table/Table";
 import IconsSelector from "../../CollectibleEditableComponents/Icons/IconsSelector";
-import { DatabaseAPI } from "../../API/DatabaseAPI";
+import { LocalAPIProxy } from "../../API/LocalAPIProxy";
 import React from "react";
 
 
@@ -68,7 +68,7 @@ function CollectionsEditingTable({ records: collections, edited, editItem, cance
     }
 
     const saveIconChange = (settedIcon: string) => {
-        return DatabaseAPI.postCollectiblesInCollectionUpdateIcon(edited!.collectionID, settedIcon);
+        return LocalAPIProxy.postCollectiblesInCollectionUpdateIcon(edited!.collectionID, settedIcon);
     }
     const renderBody = (currPage: number, rowsPerPage: number) => {
         return (

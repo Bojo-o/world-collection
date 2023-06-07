@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { DataTypeOfFilter, FilterIdentificationData } from "../../../Data/FilterModels/FilterIdentificationData";
 import { Entity } from "../../../Data/DataModels/Entity";
@@ -114,7 +114,7 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
             setLoadingFilters(true)
             setErrorForFetchingFilters(false);
 
-            WikiDataAPI.searchForFilters(filtersForType.getQNumber()).then(
+            WikiDataAPIProxy.searchForFilters(filtersForType.getQNumber()).then(
                 (data) => {
                     setLoadingFilters(false);
                     setRecomendedFilters(data);
@@ -129,7 +129,7 @@ function FiltersSelection({ superClass: filtersForType, handleNext, usedFilters,
             setLoadingAllFilters(true)
             setErrorForFetchingAllFilters(false);
 
-            WikiDataAPI.searchForFilters().then(
+            WikiDataAPIProxy.searchForFilters().then(
                 (data) => {
                     setLoadingAllFilters(false);
                     setAllFilters(data);

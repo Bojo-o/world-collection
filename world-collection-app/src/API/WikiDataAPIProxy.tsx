@@ -10,7 +10,7 @@ import { CollectibleBasicInfo } from "../Data/CollectibleModels/CollectibleBasic
 import { CollectibleDetail } from "../Data/CollectibleModels/CollectibleDetails";
 import { Fetch } from "./Fetch";
 
-// URLS CONSTANTS
+// API ENDPOINTS
 const searchCollectiblesTypes = "WikidataAPI/search/collectible_allowed_types";
 const searchPlacesOrCollectibles = "WikidataAPI/search/placesOrCollectibles";
 const searchAdministrativeAreas = "WikidataAPI/search/administrative_areas";
@@ -25,9 +25,9 @@ const getCollectibleDetails = "WikidataAPI/get/collectible_details";
 const getCollectibleWikipediaLink = "WikidataAPI/get/collectible_wikipedia_link";
 
 /**
- * Class for posting data to backend Wikidata API and then retriving data or status from backend Wikidata API.
+ * Class for obtaining data from backend Wikidata API.
  */
-export class WikiDataAPI {
+export class WikiDataAPIProxy {
     private static convertToListOfCollectibleModel(data: any[]): RawCollectible[] {
         let result: RawCollectible[] = data.map((d: any) => new RawCollectible(d));
         return result;
@@ -93,7 +93,7 @@ export class WikiDataAPI {
             property: property,
             data_type: "Quantity"
         }
-        const data = await Fetch.postAndFetch(getFilterData, JSON.stringify(params));
+        const data = await Fetch.Get(getFilterData, params);
         return this.convertToQuantityFilterDataModel(data);
     }
     /**
@@ -106,7 +106,7 @@ export class WikiDataAPI {
             property: property,
             data_type: "WikibaseItem"
         }
-        const data = await Fetch.postAndFetch(getFilterData, JSON.stringify(params));
+        const data = await Fetch.Get(getFilterData, params);
         return this.convertToWikibaseItemFilterDataModel(data);
     }
     /**
@@ -118,7 +118,7 @@ export class WikiDataAPI {
         let params = {
             search_word: searchWord
         }
-        const data = await Fetch.postAndFetch(searchCollectiblesTypes, JSON.stringify(params));
+        const data = await Fetch.Get(searchCollectiblesTypes, params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -134,7 +134,7 @@ export class WikiDataAPI {
             super_class: superClass,
             exception_classes: exceptionClasses
         }
-        const data = await Fetch.postAndFetch(searchCollectiblesTypes, JSON.stringify(params));
+        const data = await Fetch.Get(searchCollectiblesTypes, params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -146,7 +146,7 @@ export class WikiDataAPI {
         let params = {
             search_word: searchWord
         }
-        const data = await Fetch.postAndFetch(searchPlacesOrCollectibles, JSON.stringify(params));
+        const data = await Fetch.Get(searchPlacesOrCollectibles,params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -159,7 +159,7 @@ export class WikiDataAPI {
             search_word: searchWord,
 
         }
-        const data = await Fetch.postAndFetch(searchAdministrativeAreas, JSON.stringify(params));
+        const data = await Fetch.Get(searchAdministrativeAreas, params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -175,7 +175,7 @@ export class WikiDataAPI {
             located_in_area: superAdministrativeArea,
             not_located_in_areas: exceptionAdministrativeAreas
         }
-        const data = await Fetch.postAndFetch(searchAdministrativeAreas, JSON.stringify(params));
+        const data = await Fetch.Get(searchAdministrativeAreas, params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -188,7 +188,7 @@ export class WikiDataAPI {
         let params = {
             type: QNumberOfType
         }
-        const data = await Fetch.postAndFetch(getRecomendedFilters, JSON.stringify(params));
+        const data = await Fetch.Get(getRecomendedFilters, params);
         return this.convertToListOfFilterDataModel(data);
     }
     /**
@@ -207,7 +207,7 @@ export class WikiDataAPI {
             conflict_type_relation: wikibaseItemFilterData.getConflictTypesRelation(),
             none_values: wikibaseItemFilterData.getNoneValuesQNumbers()
         }
-        const data = await Fetch.postAndFetch(searchWikibaseItem, JSON.stringify(params));
+        const data = await Fetch.Get(searchWikibaseItem, params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -216,7 +216,7 @@ export class WikiDataAPI {
      * @returns List of found collectibles, which satisfies given parameters.
      */
     static async searchForCollectibles(params: CollectiblesSearchQueryData) {
-        const data = await Fetch.postAndFetch(searchCollectibles, JSON.stringify(params));
+        const data = await Fetch.Get(searchCollectibles, params);
         return this.convertToListOfCollectibleModel(data);
     }
     /**
@@ -228,7 +228,7 @@ export class WikiDataAPI {
         let params = {
             search_word: (searchWord === "") ? null : searchWord
         }
-        const data = await Fetch.postAndFetch(searchRegions, JSON.stringify(params));
+        const data = await Fetch.Get(searchRegions, params);
         return this.convertToListOfSearchDataModel(data);
     }
     /**
@@ -240,7 +240,7 @@ export class WikiDataAPI {
         let params = {
             collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleData, JSON.stringify(params));
+        const data = await Fetch.Get(getCollectibleData, params);
         return this.convertToCollectibleModel(data);
     }
     /**
@@ -252,7 +252,7 @@ export class WikiDataAPI {
         let params = {
             collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleBasicInfo, JSON.stringify(params));
+        const data = await Fetch.Get(getCollectibleBasicInfo, params);
         return this.convertToCollectibleBasicInfoModel(data);
     }
     /**
@@ -264,7 +264,7 @@ export class WikiDataAPI {
         let params = {
             collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleDetails, JSON.stringify(params));
+        const data = await Fetch.Get(getCollectibleDetails, params);
         return this.convertToListOFCollectibleDetailModel(data);
     }
     /**
@@ -276,7 +276,7 @@ export class WikiDataAPI {
         let params = {
             collectible_QNumber: collectibleQNumber
         }
-        const data = await Fetch.postAndFetch(getCollectibleWikipediaLink, JSON.stringify(params));
+        const data = await Fetch.Get(getCollectibleWikipediaLink, params);
         return this.convertToWikipediaLinkUrl(data);
     }
 }

@@ -38,7 +38,7 @@ def create_app(test_config=None):
     app.register_blueprint(WikidataAPI.API)
 
     # register database gateway to app
-    from .database.API import db_API
-    app.register_blueprint(db_API.bp_database_gateway)
+    from .API import WorldCollectionAPI
+    app.register_blueprint(WorldCollectionAPI.API)
 
     return app

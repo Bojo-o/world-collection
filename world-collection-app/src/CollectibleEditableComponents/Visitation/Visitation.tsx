@@ -3,7 +3,7 @@ import { DateWithPrecision } from "../../Data/TimeModels/DateWithPrecision";
 
 import { Collectible } from "../../Data/DatabaseModels/Collectible";
 import { DATEOPTIONS } from "../../Data/Enums/DateOption";
-import { DatabaseAPI } from "../../API/DatabaseAPI";
+import { LocalAPIProxy } from "../../API/LocalAPIProxy";
 import LoadingStatus from "../../Gadgets/LoadingStatus";
 import { DatePrecision } from "../../Data/Enums/DatePrecision";
 
@@ -59,7 +59,7 @@ function Visitation({ collectible, updateVisitation }: VisitationProps) {
         setSavingError(false);
         setSavingStatus(null);
 
-        DatabaseAPI.setCollectibleVisitation(collectible.QNumber, isVisited, (dateFrom == null) ? null : dateFrom.getPrecision().toString(), dateFrom, dateTo).then((status) => {
+        LocalAPIProxy.setCollectibleVisitation(collectible.QNumber, isVisited, (dateFrom == null) ? null : dateFrom.getPrecision().toString(), dateFrom, dateTo).then((status) => {
             setSaving(false);
             setSavingStatus(status);
 

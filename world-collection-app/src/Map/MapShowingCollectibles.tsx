@@ -23,7 +23,7 @@ function MapShowingCollectibles({ collectiblesToShow }: MapShowingCollectiblesPr
                 return (<>
                     {
                         collectiblesToShow.map((collectible, index) => {
-                            console.log(collectible)
+                            
                             return (<CollectibleMarker key={index} collectible={collectible} />)
                         })
                     }

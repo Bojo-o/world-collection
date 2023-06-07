@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../API/WikiDataAPIProxy";
 import { RawCollectible } from "../../Data/CollectibleModels/RawCollectible";
 import FoundResultsHandler from "../../DataSearching/FoundResultsHandler";
 import { CollectiblesSearchQueryData } from "../../Data/CollectibleSearching/ColectiblesSearchQueryData";
@@ -27,7 +27,7 @@ function CollectiblesPresenter({ dataForWikibaseAPI }: CollectiblesPresenterProp
 
     useEffect(() => {
         setLoading(true);
-        WikiDataAPI.searchForCollectibles(dataForWikibaseAPI).then((data) => {
+        WikiDataAPIProxy.searchForCollectibles(dataForWikibaseAPI).then((data) => {
             setLoading(false)
             setCollectibles(data);
         }).catch(() =>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
@@ -31,7 +31,7 @@ function SearchByRegion({ handleNext }: SearchByRegionProps) {
      */
     const regionDataGetter = (searchWord: string) => {
 
-        return WikiDataAPI.searchForRegions(searchWord);
+        return WikiDataAPIProxy.searchForRegions(searchWord);
     }
     const handleClickedRegion = (data: SearchData) => {
         setRegion(new Entity(data.QNumber, data.name))

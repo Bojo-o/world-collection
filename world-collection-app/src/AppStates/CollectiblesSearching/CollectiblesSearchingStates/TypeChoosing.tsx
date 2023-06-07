@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { Entity } from "../../../Data/DataModels/Entity";
 import { SearchData } from "../../../Data/DataModels/SearchData";
 import SearchBar from "../../../SearchBar/SearchBar";
@@ -58,7 +58,7 @@ function TypeChoosing({ handleNext, selectedType, selectedExceptionSubTypes }: T
      * @returns Found types/classes.
      */
     const typesDataGetter = (searchWord: string) => {
-        return WikiDataAPI.searchForTypesOfCollectibles(searchWord);
+        return WikiDataAPIProxy.searchForTypesOfCollectibles(searchWord);
     }
     /**
      * Data getter for Search bar to search for sub-types ofselected type.
@@ -67,7 +67,7 @@ function TypeChoosing({ handleNext, selectedType, selectedExceptionSubTypes }: T
      */
     const subTypesDataGetter = (searchWord: string) => {
         let exceptionSubTypesQNumbers = exceptionSubTypes.map((type) => { return type.getQNumber() })
-        return WikiDataAPI.searchForSubTypesOfTypesOfCollectibles(searchWord, (type == null) ? "" : type.getQNumber(), exceptionSubTypesQNumbers);
+        return WikiDataAPIProxy.searchForSubTypesOfTypesOfCollectibles(searchWord, (type == null) ? "" : type.getQNumber(), exceptionSubTypesQNumbers);
     }
 
     return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Marker, Popup } from "react-leaflet";
-import { WikiDataAPI } from "../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../API/WikiDataAPIProxy";
 import { CollectibleBasicInfo } from "../../Data/CollectibleModels/CollectibleBasicInfo";
 import { Collectible } from "../../Data/DatabaseModels/Collectible";
 import { getIcon } from "../MapFunc/GetIcon";
@@ -11,7 +11,7 @@ import { DateWithPrecision } from "../../Data/TimeModels/DateWithPrecision";
 import IconsSelector from "../../CollectibleEditableComponents/Icons/IconsSelector";
 import NotesEditation from "../../CollectibleEditableComponents/Notes/NotesEditation";
 import CollectibleDetails from "../../CollectibleDetails/CollectibleDetails";
-import { DatabaseAPI } from "../../API/DatabaseAPI";
+import { LocalAPIProxy } from "../../API/LocalAPIProxy";
 
 /**
  * Props neccesary for CollectibleMarker.
@@ -83,7 +83,7 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
 
     /** Save a new icon by invoking the right DatabaseAPI method. */
     const saveIcon = (settedIcon: string) => {
-        return DatabaseAPI.postCollectibleUpdateIcon(collectible.QNumber, settedIcon);
+        return LocalAPIProxy.postCollectibleUpdateIcon(collectible.QNumber, settedIcon);
     }
 
     const renderDateOfVisit = () => {
@@ -108,7 +108,7 @@ function CollectibleMarker({ collectible }: CollectibleMarkerProps) {
         const fetchCollectibleBasicInfo = () => {
             setErrorBasicInfo(false);
             setLoadingBasicInfo(true);
-            WikiDataAPI.getCollectibleBasicInfo(collectible.QNumber).then((data) => {
+            WikiDataAPIProxy.getCollectibleBasicInfo(collectible.QNumber).then((data) => {
                 setLoadingBasicInfo(false);
                 setBasicInfoOfCollectible(data);
             }).catch(() => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { CollectibleBasicInfo } from "../../../Data/CollectibleModels/CollectibleBasicInfo";
 import "../Marker.css"
 import LoadingStatus from "../../../Gadgets/LoadingStatus";
@@ -38,7 +38,7 @@ function RawCollectibleCard({ rawCollectible }: RawCollectibleCardProps) {
         const fetchCollectibleBasicInfo = () => {
             setErrorBasicInfo(false);
             setLoadingBasicInfo(true);
-            WikiDataAPI.getCollectibleBasicInfo(rawCollectible.QNumber).then((data) => {
+            WikiDataAPIProxy.getCollectibleBasicInfo(rawCollectible.QNumber).then((data) => {
                 setLoadingBasicInfo(false);
                 setBasicInfo(data);
             }).catch(() => {

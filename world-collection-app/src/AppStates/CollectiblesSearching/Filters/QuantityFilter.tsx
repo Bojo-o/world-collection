@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { QuantityValueData } from "../../../Data/FilterModels/QuantityFilterModel/QuantityValueData";
 import { QuantityFilterData, ValueRange } from "../../../Data/FilterModels/QuantityFilterModel/QuantityFilterData";
@@ -65,7 +65,7 @@ function QuantityFilter({ filterData: filter, handleAddFilterToAplied }: FilterP
             setLoadingValueType(true)
             setErrorForFetchingValueType(false);
 
-            WikiDataAPI.getQuantityFilterData(filter.PNumber).then(
+            WikiDataAPIProxy.getQuantityFilterData(filter.PNumber).then(
                 (data) => {
                     setLoadingValueType(false);
                     setFilterData(data);

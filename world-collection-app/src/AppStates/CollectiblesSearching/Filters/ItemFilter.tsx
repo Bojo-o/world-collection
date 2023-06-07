@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../../../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../../../API/WikiDataAPIProxy";
 import { AppliedFilterData } from "../../../Data/FilterModels/AppliedFilterData";
 import { WikibaseItemValueData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WikibaseItemValueData";
 import { WikibaseItemFilterData } from "../../../Data/FilterModels/WikibaseItemFilterModel/WIkibaseItemFilterData";
@@ -60,7 +60,7 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
      * @param searchWord Key word used for searching.
     */
     const valuesDataGetter = (searchWord: string) => {
-        return WikiDataAPI.searchForWikibaseItem(searchWord, filterConstraintData)
+        return WikiDataAPIProxy.searchForWikibaseItem(searchWord, filterConstraintData)
     }
 
     useEffect(() => {
@@ -71,7 +71,7 @@ function ItemFilter({ filterData: filter, handleAddFilterToAplied }: FilterProps
             setLoadingValueType(true)
             setErrorForFetchingValueType(false);
 
-            WikiDataAPI.getWikibaseItemFilterData(filter.PNumber).then(
+            WikiDataAPIProxy.getWikibaseItemFilterData(filter.PNumber).then(
                 (data) => {
                     setLoadingValueType(false);
                     setFilterConstraintData(data);

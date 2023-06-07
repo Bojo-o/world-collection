@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Collectible } from "../../Data/DatabaseModels/Collectible";
-import { DatabaseAPI } from "../../API/DatabaseAPI";
+import { LocalAPIProxy } from "../../API/LocalAPIProxy";
 import LoadingStatus from "../../Gadgets/LoadingStatus";
 import './NotesEditation.css';
 
@@ -35,7 +35,7 @@ function NotesEditation({ collectible, updateNotes }: NotesEditationProps) {
         setSaving(true);
         setSavingError(false);
         setSavingStatus(null);
-        DatabaseAPI.postCollectibleUpdateNotes(collectible.QNumber, notes).then((status) => {
+        LocalAPIProxy.postCollectibleUpdateNotes(collectible.QNumber, notes).then((status) => {
             setSaving(false);
             setSavingStatus(status);
             updateNotes(notes);

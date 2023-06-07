@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Circle } from 'react-leaflet';
-import { WikiDataAPI } from '../../../API/WikiDataAPI';
+import { WikiDataAPIProxy } from '../../../API/WikiDataAPIProxy';
 import { SearchData } from '../../../Data/DataModels/SearchData';
 import SearchBar from '../../../SearchBar/SearchBar';
 
@@ -54,7 +54,7 @@ function SearchByRadius({ handleNext: handleRadiusArea, handleBack }: SearchByRa
      * @returns Found places.
      */
     const placesDataGetter = (searchWord: string) => {
-        return WikiDataAPI.searchForCollectible(searchWord);
+        return WikiDataAPIProxy.searchForCollectible(searchWord);
     }
 
     const handleClickedPlace = (data: SearchData) => {

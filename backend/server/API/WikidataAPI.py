@@ -66,7 +66,7 @@ def process_query(query: str):
         return "Invalid query, query is somewhat corrupted"
 
 
-@API.route('/search/collectible_allowed_types', methods=['POST'])
+@API.route('/search/collectible_allowed_types', methods=['GET'])
 def search_for_classes():
     '''
     API route function seaching for allowed types of collectible.
@@ -87,7 +87,7 @@ def search_for_classes():
     JSON formatted str
         Data of found allowed types, which can be used as `super class` for collectible searching.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     search_word = None
     super_class = None
@@ -104,11 +104,11 @@ def search_for_classes():
 
     if search_word is not None and search_word != "":
         builder.set_searched_word(search_word)
-
+    
     return process_query(builder.build())
 
 
-@API.route('/search/placesOrCollectibles', methods=['POST'])
+@API.route('/search/placesOrCollectibles', methods=['GET'])
 def search_for_places_or_collectibles():
     '''
     API route function seaching for places of collectibles.
@@ -125,7 +125,10 @@ def search_for_places_or_collectibles():
     JSON formatted str
         Data of found collectibles or places.
     '''
-    data = json.loads(request.get_json())
+    
+    data = json.loads(request.args.get("data"))
+    
+    #data = json.loads(request.get_json())
     search_word = data["search_word"]
 
     if search_word is None:
@@ -137,7 +140,7 @@ def search_for_places_or_collectibles():
     return process_query(builder.build())
 
 
-@API.route('/get/collectible_data', methods=['POST'])
+@API.route('/get/collectible_data', methods=['GET'])
 def get_collectible_data():
     '''
     API route function, for obtaining data of collectible.
@@ -154,7 +157,7 @@ def get_collectible_data():
     JSON formatted str
         Data of collectible.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     Qnumber = data['collectible_QNumber']
     if Qnumber is None:
@@ -166,7 +169,7 @@ def get_collectible_data():
     return process_query(builder.build())
 
 
-@API.route('/search/regions', methods=['POST'])
+@API.route('/search/regions', methods=['GET'])
 def search_regions():
     '''
     API route function, for obtaining list of data of regions.
@@ -184,18 +187,18 @@ def search_regions():
         List of all data of found regions.
     '''
 
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     builder = SearchRegionQueryBuilder()
 
     search_word = data['search_word']
     if search_word is not None:
         builder.set_searched_word(search_word)
-
+    
     return process_query(builder.build())
 
 
-@API.route('/search/administrative_areas', methods=['POST'])
+@API.route('/search/administrative_areas', methods=['GET'])
 def search_for_administrative_areas():
     '''
     API route function, for obtaining list of recomended filters/properties from Wikidata.
@@ -219,7 +222,7 @@ def search_for_administrative_areas():
     JSON formatted str
         List of all data of found administrative areas.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     search_word = data["search_word"]
 
@@ -246,11 +249,11 @@ def search_for_administrative_areas():
 
     for item in not_located_in_areas:
         builder.add_not_located_in_area_resctriction(item)
-
+   
     return process_query(builder.build())
 
 
-@API.route('/get/recomended_filters', methods=['POST'])
+@API.route('/get/recomended_filters', methods=['GET'])
 def get_recomened_filters():
     '''
     API route function, for obtaining list of recomended filters/properties from Wikidata.
@@ -269,7 +272,7 @@ def get_recomened_filters():
     JSON formatted str
         List of all recomended filters, which might be used for provided type.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     type = data["type"]
     builder = FilterSearchQueryBuilder()
@@ -280,11 +283,11 @@ def get_recomened_filters():
             return json.dumps(data)
 
     builder.set_type_for_search_filter(type)
-
+   
     return process_query(builder.build())
 
 
-@API.route('/get/filter_data', methods=['POST'])
+@API.route('/get/filter_data', methods=['GET'])
 def get_filter_data():
     '''
     API route function, for obtaining filter/property data from Wikidata.
@@ -306,7 +309,7 @@ def get_filter_data():
         Data of filter/property from Wikidata.
         For each data type of property it return differently data. 
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     property = data['property']
     data_type = data['data_type']
@@ -343,7 +346,7 @@ def get_filter_data():
                 property, type, PROPERTY_CONSTRAINT_TYPE.VALUE_TYPE_CONSTRAINT)
             d["value_type_constraint"] = json.loads(
                 process_query(builder.build()))
-
+            
             return json.dumps(d)
 
         case DATATYPES.QUANTITY:
@@ -356,11 +359,12 @@ def get_filter_data():
             builder = FilterDataQueryBuilder(
                 property, type, PROPERTY_CONSTRAINT_TYPE.RANGE_CONSTRAINT)
             d["range"] = json.loads(process_query(builder.build()))
+            
             return json.dumps(d)
     return ""
 
 
-@API.route('/search/wikibase_item', methods=['POST'])
+@API.route('/search/wikibase_item', methods=['GET'])
 def search_wikibase_item():
     '''
     API route function searching for Wikibase item from Wikidata.
@@ -386,7 +390,7 @@ def search_wikibase_item():
     JSON formatted str
         Data on found satisfying Wikibase items from Wikidata.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     search_word: str = data["search_word"]
 
@@ -425,11 +429,11 @@ def search_wikibase_item():
 
     for none_value in none_values:
         builder.add_exception_constraint(none_value)
-
+    
     return process_query(builder.build())
 
 
-@API.route('/get/collectible_basic_info', methods=['POST'])
+@API.route('/get/collectible_basic_info', methods=['GET'])
 def get_collectible_basic_info():
     '''
     API route function for obtaining collectible`s base info from Wikidata.
@@ -446,7 +450,7 @@ def get_collectible_basic_info():
         Data about found wikipedia link.
     '''
 
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     collectible: str = data['collectible_QNumber']
 
@@ -454,11 +458,10 @@ def get_collectible_basic_info():
         return "Invalid request, `collectible_QNumber` parameter must be provided"
 
     builder = CollectibleBasicInfoQuery(collectible)
-
     return process_query(builder.build())
 
 
-@API.route('/get/collectible_details', methods=['POST'])
+@API.route('/get/collectible_details', methods=['GET'])
 def get_collectible_details():
     '''
     API route function for obtaining collectible`s details from Wikidata.
@@ -473,7 +476,7 @@ def get_collectible_details():
     JSON formatted str
         Data about found wikipedia link.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     collectible: str = data['collectible_QNumber']
 
@@ -481,11 +484,11 @@ def get_collectible_details():
         return "Invalid request, `collectible_QNumber` parameter must be provided"
 
     builder = CollectibleDetailsQuery(collectible)
-
+    
     return process_query(builder.build())
 
 
-@API.route('/get/collectible_wikipedia_link', methods=['POST'])
+@API.route('/get/collectible_wikipedia_link', methods=['GET'])
 def get_collectible_wikipedia_link():
     '''
     API route function for obtaining collectible`s link to wikipedia if exists.
@@ -500,7 +503,7 @@ def get_collectible_wikipedia_link():
     JSON formatted str
         Data about found wikipedia link.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     collectible: str = data['collectible_QNumber']
 
@@ -508,11 +511,11 @@ def get_collectible_wikipedia_link():
         return "Invalid request,`collectible_QNumber` parameter must be provided"
 
     builder = WikiPediaLinkQuery(collectible)
-
+   
     return process_query(builder.build())
 
 
-@API.route('/search/collectibles', methods=['POST'])
+@API.route('/search/collectibles', methods=['GET'])
 def search_for_collectibles():
     '''
     From provided input json data, it constructs query, which fetches all satysfying collectibles from Wikidata.
@@ -548,7 +551,7 @@ def search_for_collectibles():
     JSON formatted str
         Found collectibles data.
     '''
-    data = json.loads(request.get_json())
+    data = json.loads(request.args.get("data"))
 
     # type parsing
     super_class: str = data['type']
@@ -637,5 +640,5 @@ def search_for_collectibles():
                             property, comparison_operator, time_value)
         except:
             return "Invalid request,parameter `filter` was provided incorect"
-
+    
     return process_query(builder.build())

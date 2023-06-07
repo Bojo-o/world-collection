@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Collection } from '../Data/DatabaseModels/Colection';
 import { Collectible } from '../Data/DatabaseModels/Collectible';
-import { DatabaseAPI } from '../API/DatabaseAPI';
+import { LocalAPIProxy } from '../API/LocalAPIProxy';
 import MapShowingCollectibles from '../Map/MapShowingCollectibles';
 import './CollectionsOverview.css';
 import { useMediaQuery } from 'react-responsive';
@@ -31,7 +31,7 @@ function CollectionsOverview() {
     }
 
     const handleCollectionSelect = (collectionID: Number) => {
-        DatabaseAPI.getCollectiblesInCollection(collectionID).then((collectibles) => {
+        LocalAPIProxy.getCollectiblesInCollection(collectionID).then((collectibles) => {
             console.log(collectibles)
             setCollectiblesToShow(collectibles);
         })
@@ -64,7 +64,7 @@ function CollectionsOverview() {
     }
     useEffect(() => {
         setCollectionLoading(true);
-        DatabaseAPI.getAllCollections().then((collections) => {
+        LocalAPIProxy.getAllCollections().then((collections) => {
             setCollectionLoading(false);
             setCollections(collections);
             setCollectionsToShow(collections)

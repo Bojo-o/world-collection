@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WikiDataAPI } from "../API/WikiDataAPI";
+import { WikiDataAPIProxy } from "../API/WikiDataAPIProxy";
 import { CollectibleDetail } from "../Data/CollectibleModels/CollectibleDetails";
 import LoadingStatus from "../Gadgets/LoadingStatus";
 import './CollectibleDetail.css';
@@ -76,7 +76,7 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
 
     useEffect(() => {
         const fetchWikipediaLink = () => {
-            WikiDataAPI.getCollectibleWikipediaLink(collectibleQNumber).then((data) => {
+            WikiDataAPIProxy.getCollectibleWikipediaLink(collectibleQNumber).then((data) => {
                 if (data !== "") {
                     setWikipediaLink(data);
                 }
@@ -85,7 +85,7 @@ function CollectibleDetails({ QNumberOfCollectible: collectibleQNumber }: Collec
         const fetchDetails = () => {
             setLoading(true);
             setError(false);
-            WikiDataAPI.getCollectibleDetails(collectibleQNumber).then((data) => {
+            WikiDataAPIProxy.getCollectibleDetails(collectibleQNumber).then((data) => {
                 setLoading(false);
                 setDetails(data);
 

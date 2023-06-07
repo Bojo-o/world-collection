@@ -4,13 +4,13 @@ from flask import (
 
 import json
 
-from ..Database_operations import db_CRUD
+from ..database.Database_operations  import db_CRUD
 
-bp_database_gateway = Blueprint(
-    'DatabaseAPI', __name__, url_prefix='/DatabaseAPI')
+API = Blueprint(
+    'WorldCollectionAPI', __name__, url_prefix='/WorldCollectionAPI')
 
 
-@bp_database_gateway.route('/get/collections', methods=['POST'])
+@API.route('/get/collections', methods=['GET'])
 def get_collections():
     """
     Obtain data of all collections in database.
@@ -37,7 +37,7 @@ def get_collections():
     return json.dumps(data)
 
 
-@bp_database_gateway.route('/get/collectibles', methods=['POST'])
+@API.route('/get/collectibles', methods=['GET'])
 def get_collectibles_in_collection():
     """
     Obtain data of all collectibles in specific collection.
@@ -55,7 +55,7 @@ def get_collectibles_in_collection():
         If fetching was not successful.
     """
 
-    data = request.get_json()
+    data = json.loads(request.args.get("data"))
 
     collection_id = data["collectionID"]
 
@@ -69,7 +69,7 @@ def get_collectibles_in_collection():
     return result
 
 
-@bp_database_gateway.route('/get/exists_collections', methods=['POST'])
+@API.route('/get/exists_collections', methods=['GET'])
 def exists_collections():
     """
     Ask database if there exists collection with specific name.
@@ -86,7 +86,7 @@ def exists_collections():
     None
         If asking was not successful.
     """
-    data = request.get_json()
+    data = json.loads(request.args.get("data"))
 
     collection_name = data["name"]
 
@@ -100,7 +100,7 @@ def exists_collections():
     return result
 
 
-@bp_database_gateway.route('/post/collection_creation', methods=['POST'])
+@API.route('/post/create_collection', methods=['POST'])
 def create_collection():
     """
     Create a new collection.
@@ -125,7 +125,7 @@ def create_collection():
     return json.dumps({'status': "Succesfully created"})
 
 
-@bp_database_gateway.route('/post/collectibles', methods=['POST'])
+@API.route('/post/collectibles', methods=['POST'])
 def insert_collectibles_into_collection():
     """
     Create and insert all collectibles into collection.
@@ -161,7 +161,7 @@ def insert_collectibles_into_collection():
     return json.dumps({'status': "Succesfully saved"})
 
 
-@bp_database_gateway.route('/post/set_visit', methods=['POST'])
+@API.route('/update/set_visit', methods=['PUT'])
 def set_visit_of_collectible():
     """
     Update visitation of collectible.
@@ -206,7 +206,7 @@ def set_visit_of_collectible():
     return json.dumps({'status': "Error, visitation was not updated"})
 
 
-@bp_database_gateway.route('/post/collection_update_rename', methods=['POST'])
+@API.route('/update/collection_name', methods=['PUT'])
 def update_collection():
     """
     Update collection name.
@@ -232,7 +232,7 @@ def update_collection():
     return json.dumps({'status': "Error, collection name was not updated"})
 
 
-@bp_database_gateway.route('/post/collection_update_merge', methods=['POST'])
+@API.route('/update/collection_merge', methods=['PUT'])
 def merge_collection():
     """
     Merge one collection into other.
@@ -266,7 +266,7 @@ def merge_collection():
     return json.dumps({'status': "Error, collections were not merged"})
 
 
-@bp_database_gateway.route('/post/collection_update_delete', methods=['POST'])
+@API.route('/delete/collection', methods=['DELETE'])
 def delete_collection():
     """
     Delete collection from database.
@@ -291,7 +291,7 @@ def delete_collection():
     return json.dumps({'status': "Error, collection was not deleted"})
 
 
-@bp_database_gateway.route('/post/collectible_delete', methods=['POST'])
+@API.route('/delete/collectible', methods=['DELETE'])
 def delete_collectible():
     """
     Remove collectible from collection.
@@ -317,7 +317,7 @@ def delete_collectible():
     return json.dumps({'status': "Error, collectible was not deleted"})
 
 
-@bp_database_gateway.route('/post/collectible_update_name', methods=['POST'])
+@API.route('/update/collectible_name', methods=['PUT'])
 def update_collectible_name():
     """
     Update collectible name property .
@@ -343,7 +343,7 @@ def update_collectible_name():
     return json.dumps({'status': "Error, name was not updated"})
 
 
-@bp_database_gateway.route('/post/collectible_update_icon', methods=['POST'])
+@API.route('/update/collectible_icon', methods=['PUT'])
 def update_collectible_icon():
     """
     Update collectible icon property of collectible.
@@ -369,7 +369,7 @@ def update_collectible_icon():
     return json.dumps({'status': "Error, icon was not updated"})
 
 
-@bp_database_gateway.route('/post/collectibles_in_collection_update_icons', methods=['POST'])
+@API.route('/update/collectibles_in_collection_icons', methods=['PUT'])
 def update_collectibles_icons_in_collection():
     """
     Update collectible icon property for all collectibles in specific collection.
@@ -395,7 +395,7 @@ def update_collectibles_icons_in_collection():
     return json.dumps({'status': "Error, some icons were not updated"})
 
 
-@bp_database_gateway.route('/post/collectible_update_notes', methods=['POST'])
+@API.route('/update/collectible_notes', methods=['PUT'])
 def update_collectible_notes():
     """
     Update collectible notes property in database.
