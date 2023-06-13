@@ -5,7 +5,7 @@ test.describe("collectible card tests", () => {
     test.beforeEach(async ({ page }) => {
         // Mock API requests
         // collections
-        await page.route('http://localhost:3000/DatabaseAPI/get/collections', async route => {
+        await page.route('http://localhost:3000/WorldCollectionAPI/get/collections', async route => {
             const json =
                 collections
                 ;

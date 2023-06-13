@@ -5,14 +5,14 @@ test.describe("edit collections tests", () => {
     test.beforeEach(async ({ page }) => {
         // Mock API requests
         // collections
-        await page.route('http://localhost:3000/DatabaseAPI/get/collections', async route => {
+        await page.route('http://localhost:3000/WorldCollectionAPI/get/collections?data=%7B%7D', async route => {
             const json =
                 collections
                 ;
             await route.fulfill({ json });
         });
         // collectibles
-        await page.route('http://localhost:3000/DatabaseAPI/get/collectibles', async route => {
+        await page.route('http://localhost:3000/WorldCollectionAPI/get/collectibles?data=%7B%22collectionID%22%3A1%7D', async route => {
             const json =
                 collectibles
                 ;
