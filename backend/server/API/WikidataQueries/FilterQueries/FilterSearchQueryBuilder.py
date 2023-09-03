@@ -23,6 +23,7 @@ class FilterSearchQueryBuilder(QueryBuilder):
 
         self._super_classes = set()
         self._super_classes.add("Q2221906")
+        self._super_classes.add("Q618123")
 
         self._property_exception = set()
         self._property_exception.add("P17")

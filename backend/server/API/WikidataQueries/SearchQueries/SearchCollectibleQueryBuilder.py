@@ -1,7 +1,7 @@
 from .SearchByClassRestrictionQueryBuilder import SearchByClassRestrictionQueryBuilder, TYPES
 
 GEO_LOCATION: str = "Q2221906"  # geographic location
-
+GEO_FEATURE: str = "Q618123" # geographical feature
 
 class SearchCollectibleQueryBuilder(SearchByClassRestrictionQueryBuilder):
     '''
@@ -16,6 +16,8 @@ class SearchCollectibleQueryBuilder(SearchByClassRestrictionQueryBuilder):
         self.add_variable_into_select("?lon", "?long")
 
         self.add_super_class(GEO_LOCATION)
+        self.add_super_class(GEO_FEATURE)
+        
         self.set_recursive_searching(True)
 
     def create_more_restrictions(self):

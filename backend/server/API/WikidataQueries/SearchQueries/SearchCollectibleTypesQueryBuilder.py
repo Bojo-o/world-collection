@@ -1,6 +1,7 @@
 from .SearchByClassRestrictionQueryBuilder import SearchByClassRestrictionQueryBuilder, TYPES
 
 GEO_LOCATION: str = "Q2221906"  # geographic location
+GEO_FEATURE: str = "Q618123" # geographical feature
 
 
 class SearchCollectibleTypesQueryBuilder(SearchByClassRestrictionQueryBuilder):
@@ -17,6 +18,7 @@ class SearchCollectibleTypesQueryBuilder(SearchByClassRestrictionQueryBuilder):
             self.add_super_class(super_class)
         else:
             self.add_super_class(GEO_LOCATION)
+            self.add_super_class(GEO_FEATURE)
 
         if exceptions_classes is not None:
             for item in exceptions_classes:
